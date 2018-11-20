@@ -392,6 +392,13 @@
 <link href="#rfc.section.7.6" rel="Chapter" title="7.6 Cross-Domain Requests">
 <link href="#rfc.section.7.7" rel="Chapter" title="7.7 Content-Security Policy">
 <link href="#rfc.section.7.8" rel="Chapter" title="7.8 OAuth Implicit Grant Authorization Flow">
+<link href="#rfc.section.7.8.1" rel="Chapter" title="7.8.1 Threat: Interception of the Redirect URI">
+<link href="#rfc.section.7.8.2" rel="Chapter" title="7.8.2 Threat: Access Token Leak in Browser History">
+<link href="#rfc.section.7.8.3" rel="Chapter" title="7.8.3 Threat: Manipulation of Scripts">
+<link href="#rfc.section.7.8.4" rel="Chapter" title="7.8.4 Threat: Access Token Leak to Third Party Scripts">
+<link href="#rfc.section.7.8.5" rel="Chapter" title="7.8.5 Countermeasures">
+<link href="#rfc.section.7.8.6" rel="Chapter" title="7.8.6 Disadvantages of the Implicit Flow">
+<link href="#rfc.section.7.8.7" rel="Chapter" title="7.8.7 Historic Note">
 <link href="#rfc.section.7.9" rel="Chapter" title="7.9 Additional Security Considerations">
 <link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
 <link href="#rfc.references" rel="Chapter" title="9 References">
@@ -407,7 +414,7 @@
 
   <meta name="dct.creator" content="Parecki, A. and D. Waite" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-parecki-oauth-browser-based-apps-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-11-02" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-11-19" />
   <meta name="dct.abstract" content="OAuth 2.0 authorization requests from apps running entirely in a browser are unable to use a Client Secret during the process, since they have no way to keep a secret confidential. This specification details the security considerations that must be taken into account when developing browser-based applications, as well as best practices for how they can securely implement OAuth 2.0." />
   <meta name="description" content="OAuth 2.0 authorization requests from apps running entirely in a browser are unable to use a Client Secret during the process, since they have no way to keep a secret confidential. This specification details the security considerations that must be taken into account when developing browser-based applications, as well as best practices for how they can securely implement OAuth 2.0." />
 
@@ -431,12 +438,12 @@
 <td class="right">D. Waite</td>
 </tr>
 <tr>
-<td class="left">Expires: May 6, 2019</td>
+<td class="left">Expires: May 23, 2019</td>
 <td class="right">Ping Identity</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">November 02, 2018</td>
+<td class="right">November 19, 2018</td>
 </tr>
 
     	
@@ -452,7 +459,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 6, 2019.</p>
+<p>This Internet-Draft will expire on May 23, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -498,7 +505,21 @@
 </li>
 <li>7.8.   <a href="#rfc.section.7.8">OAuth Implicit Grant Authorization Flow</a>
 </li>
-<li>7.9.   <a href="#rfc.section.7.9">Additional Security Considerations</a>
+<ul><li>7.8.1.   <a href="#rfc.section.7.8.1">Threat: Interception of the Redirect URI</a>
+</li>
+<li>7.8.2.   <a href="#rfc.section.7.8.2">Threat: Access Token Leak in Browser History</a>
+</li>
+<li>7.8.3.   <a href="#rfc.section.7.8.3">Threat: Manipulation of Scripts</a>
+</li>
+<li>7.8.4.   <a href="#rfc.section.7.8.4">Threat: Access Token Leak to Third Party Scripts</a>
+</li>
+<li>7.8.5.   <a href="#rfc.section.7.8.5">Countermeasures</a>
+</li>
+<li>7.8.6.   <a href="#rfc.section.7.8.6">Disadvantages of the Implicit Flow</a>
+</li>
+<li>7.8.7.   <a href="#rfc.section.7.8.7">Historic Note</a>
+</li>
+</ul><li>7.9.   <a href="#rfc.section.7.9">Additional Security Considerations</a>
 </li>
 </ul><li>8.   <a href="#rfc.section.8">IANA Considerations</a>
 </li>
@@ -544,16 +565,17 @@
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#overview" id="overview">Overview</a>
 </h1>
-<p id="rfc.section.4.p.1">For authorizing users, the best current practice is to</p>
+<p id="rfc.section.4.p.1">For authorizing users within a browser-based application, the best current practice is to</p>
 <p></p>
 
 <ul>
 <li>Use the OAuth 2.0 authorization code flow with the PKCE extension</li>
 <li>Require the OAuth 2.0 state parameter</li>
-<li>Recommend exact matching of redirect URIs, and require the hostname of the redirect match the hostname of the URL the app was served from</li>
+<li>Recommend exact matching of redirect URIs, and require the hostname of the redirect URI match the hostname of the URL the app was served from</li>
 <li>Do not return access tokens in the front channel</li>
 </ul>
-<p id="rfc.section.4.p.3">Each of these is described in more detail in the sections below.</p>
+<p id="rfc.section.4.p.3">Previously it was recommended that browser-based applications use the OAuth 2.0 Implicit flow. That approach has several drawbacks, including the fact that access tokens are returned in the front-channel via the fragment part of the redirect URI, and as such are vulnerable to a variety of attacks where the access token can be intercepted or stolen. See <a href="#implicit_flow" class="xref">Section 7.8</a> for a deeper analysis of these attacks and the drawbacks of using the Implicit flow in browsers, many of which are described by <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<p id="rfc.section.4.p.4">Instead, browser-based apps can perform the OAuth 2.0 authorization code flow and make a POST request to the token endpoint to exchange an authorization code for an access token, just like other OAuth clients. This ensures that access tokens are not sent via the less secure front-channel, and are only returned over an HTTPS connection initiated from the application. Combined with PKCE, this enables the authorization server to ensure that authorization codes are useless even if intercepted in transport.</p>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> <a href="#first-party-applications" id="first-party-applications">First-Party Applications</a>
 </h1>
@@ -622,17 +644,44 @@
 <h1 id="rfc.section.7.8">
 <a href="#rfc.section.7.8">7.8.</a> <a href="#implicit_flow" id="implicit_flow">OAuth Implicit Grant Authorization Flow</a>
 </h1>
-<p id="rfc.section.7.8.p.1">The OAuth 2.0 Implicit grant authorization flow (defined in Section 4.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>) works by receiving an access token in the HTTP redirect (front-channel) immediately without the code exchange step. The Implicit Flow cannot be protected by PKCE <a href="#RFC7636" class="xref">[RFC7636]</a> (which is required according to <a href="#authorization_code_flow" class="xref">Section 6</a>), so clients and authorization servers MUST NOT use the Implicit Flow for browser-based apps.</p>
-<p id="rfc.section.7.8.p.2">There are several reasons the Implicit flow is disadvantageous compared to using the standard Authorization Code flow.</p>
+<p id="rfc.section.7.8.p.1">The OAuth 2.0 Implicit grant authorization flow (defined in Section 4.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>) works by receiving an access token in the HTTP redirect (front-channel) immediately without the code exchange step. In this case, the access token is returned in the fragment part of the redirect URI, providing an attacker with several opportunities to intercept and steal the access token. Several attacks on the implicit flow are described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, not all of which have sufficient mitigation strategies.</p>
+<h1 id="rfc.section.7.8.1">
+<a href="#rfc.section.7.8.1">7.8.1.</a> <a href="#threat-interception-of-the-redirect-uri" id="threat-interception-of-the-redirect-uri">Threat: Interception of the Redirect URI</a>
+</h1>
+<p id="rfc.section.7.8.1.p.1">If an attacker is able to cause the authorization response to be sent to a URI under his control, he will directly get access to the fragment carrying the access token.  A method of performing this attack is described in detail in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<h1 id="rfc.section.7.8.2">
+<a href="#rfc.section.7.8.2">7.8.2.</a> <a href="#threat-access-token-leak-in-browser-history" id="threat-access-token-leak-in-browser-history">Threat: Access Token Leak in Browser History</a>
+</h1>
+<p id="rfc.section.7.8.2.p.1">An attacker could obtain the access token from the browser's history.  The countermeasures recommended by <a href="#RFC6819" class="xref">[RFC6819]</a> are limited to using short expiration times for tokens, and indicating that browsers should not cache the response.  Neither of these fully prevent this attack, they only reduce the potential damage.</p>
+<h1 id="rfc.section.7.8.3">
+<a href="#rfc.section.7.8.3">7.8.3.</a> <a href="#threat-manipulation-of-scripts" id="threat-manipulation-of-scripts">Threat: Manipulation of Scripts</a>
+</h1>
+<p id="rfc.section.7.8.3.p.1">An attacker could modify the page or inject scripts into the browser via various means, including when the browser's HTTPS connection is being man-in-the-middled by for example a corporate network. While this type of attack is typically out of scope of basic security recommendations to prevent, in the case of browser-based apps it is much easier to perform this kind of attack, where an injected script can suddenly have access to everything on the page.</p>
+<h1 id="rfc.section.7.8.4">
+<a href="#rfc.section.7.8.4">7.8.4.</a> <a href="#threat-access-token-leak-to-third-party-scripts" id="threat-access-token-leak-to-third-party-scripts">Threat: Access Token Leak to Third Party Scripts</a>
+</h1>
+<p id="rfc.section.7.8.4.p.1">It is relatively common to use third-party scripts in browser-based apps, such as analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.  In these situations, the author of the application may not be able to be fully aware of the entirety of the code running in the application. When an access token is returned in the fragment, it is visible to any third-party scripts on the page.</p>
+<h1 id="rfc.section.7.8.5">
+<a href="#rfc.section.7.8.5">7.8.5.</a> <a href="#countermeasures" id="countermeasures">Countermeasures</a>
+</h1>
+<p id="rfc.section.7.8.5.p.1">In addition to the countermeasures described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, using the authorization code with PKCE avoids these attacks.</p>
+<p id="rfc.section.7.8.5.p.2">When PKCE is used, if an authorization code is stolen in transport, the attacker is unable to do anything with the authorization code.</p>
+<h1 id="rfc.section.7.8.6">
+<a href="#rfc.section.7.8.6">7.8.6.</a> <a href="#disadvantages-of-the-implicit-flow" id="disadvantages-of-the-implicit-flow">Disadvantages of the Implicit Flow</a>
+</h1>
+<p id="rfc.section.7.8.6.p.1">There are several additional reasons the Implicit flow is disadvantageous compared to using the standard Authorization Code flow.</p>
 <p></p>
 
 <ul>
 <li>OAuth 2.0 provides no mechanism for a client to verify that an access token was issued to it, which could lead to misuse and possible impersonation attacks if a malicious party hands off an access token it retrieved through some other means to the client.</li>
-<li>Supporting the implicit flow requires additional code, more upkeep and understanding of the related security considerations, while limiting the authorization server to just the authorization code flow simplifies the implementation.</li>
-<li>If the JavaScript application gets wrapped into a native app, then <a href="#RFC8252" class="xref">[RFC8252]</a> also requires the use of the authorization code flow.</li>
+<li>Supporting the implicit flow requires additional code, more upkeep and understanding of the related security considerations, while limiting the authorization server to just the authorization code flow reduces the attack surface of the implementation.</li>
+<li>If the JavaScript application gets wrapped into a native app, then <a href="#RFC8252" class="xref">[RFC8252]</a> also requires the use of the authorization code flow with PKCE anyway.</li>
 </ul>
-<p id="rfc.section.7.8.p.4">In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally signed. Performing OpenID Connect using the authorization code flow also provides the additional benefit of the client not needing to verify the JWT signature, as the token will have been fetched over an HTTPS connection directly from the authorization server. However, returning an id_token using the Implicit flow requires the client validate the JWT signature as malicious parties could otherwise craft and supply fraudulent id_tokens.</p>
-<p id="rfc.section.7.8.p.5">Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. Now with the Session History API (described in "Session history and navigation" of <a href="#HTML" class="xref">[HTML]</a>), browsers have a mechanism to modify the path component of the URL without triggering a page reload, so this overloaded use of the fragment portion is no longer needed.</p>
+<p id="rfc.section.7.8.6.p.3">In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally signed. Performing OpenID Connect using the authorization code flow also provides the additional benefit of the client not needing to verify the JWT signature, as the token will have been fetched over an HTTPS connection directly from the authorization server. However, returning an id_token using the Implicit flow requires the client validate the JWT signature as malicious parties could otherwise craft and supply fraudulent id_tokens.</p>
+<h1 id="rfc.section.7.8.7">
+<a href="#rfc.section.7.8.7">7.8.7.</a> <a href="#historic-note" id="historic-note">Historic Note</a>
+</h1>
+<p id="rfc.section.7.8.7.p.1">Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. Now with the Session History API (described in "Session history and navigation" of <a href="#HTML" class="xref">[HTML]</a>), browsers have a mechanism to modify the path component of the URL without triggering a page reload, so this overloaded use of the fragment portion is no longer needed.</p>
 <h1 id="rfc.section.7.9">
 <a href="#rfc.section.7.9">7.9.</a> <a href="#additional-security-considerations" id="additional-security-considerations">Additional Security Considerations</a>
 </h1>
@@ -655,6 +704,11 @@
 <td class="reference"><b id="Fetch">[Fetch]</b></td>
 <td class="top">
 <a>whatwg</a>, "<a>Fetch</a>", 2018.</td>
+</tr>
+<tr>
+<td class="reference"><b id="oauth-security-topics">[oauth-security-topics]</b></td>
+<td class="top">
+<a title="yes.com">Lodderstedt, T.</a>, <a title="Yubico">Bradley, J.</a>, <a title="Facebook">Labunets, A.</a> and <a title="yes.com">D. Fett</a>, "<a>OAuth 2.0 Security Best Current Practice</a>", November 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
