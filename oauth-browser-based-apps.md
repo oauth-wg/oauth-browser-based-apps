@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
 docname: draft-parecki-oauth-browser-based-apps-00
-date: 2018-11-02
+date: 2018-11-19
 
 ipr: trust200902
 area: OAuth
@@ -52,6 +52,22 @@ normative:
       name: whatwg
       ins: whatwg
     date: 2018
+  oauth-security-topics:
+    title: OAuth 2.0 Security Best Current Practice
+    author:
+    - name: Torsten Lodderstedt
+      ins: T. Lodderstedt
+      org: yes.com
+    - name: John Bradley
+      ins: J. Bradley
+      org: Yubico
+    - name: Andrey Labunets
+      ins: A. Labunets
+      org: Facebook
+    - name: Daniel Fett
+      ins: D. Fett
+      org: yes.com
+    date: November 2018
 
 informative:
   HTML:
@@ -122,14 +138,27 @@ the following terms:
 Overview
 ========
 
-For authorizing users, the best current practice is to
+For authorizing users within a browser-based application, the best current practice is to
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
 * Require the OAuth 2.0 state parameter
-* Recommend exact matching of redirect URIs, and require the hostname of the redirect match the hostname of the URL the app was served from
+* Recommend exact matching of redirect URIs, and require the hostname of the redirect URI match the hostname of the URL the app was served from
 * Do not return access tokens in the front channel
 
-Each of these is described in more detail in the sections below.
+Previously it was recommended that browser-based applications use the OAuth 2.0 Implicit
+flow. That approach has several drawbacks, including the fact that access tokens are
+returned in the front-channel via the fragment part of the redirect URI, and as such
+are vulnerable to a variety of attacks where the access token can be intercepted or
+stolen. See {{implicit_flow}} for a deeper analysis of these attacks and the drawbacks
+of using the Implicit flow in browsers, many of which are described by {{oauth-security-topics}}.
+
+Instead, browser-based apps can perform the OAuth 2.0 authorization code flow
+and make a POST request to the token endpoint to exchange an authorization code
+for an access token, just like other OAuth clients. This ensures that access tokens
+are not sent via the less secure front-channel, and are only returned over an HTTPS
+connection initiated from the application. Combined with PKCE, this enables the
+authorization server to ensure that authorization codes are useless even if
+intercepted in transport.
 
 
 First-Party Applications
@@ -329,13 +358,54 @@ OAuth Implicit Grant Authorization Flow   {#implicit_flow}
 
 The OAuth 2.0 Implicit grant authorization flow (defined in Section 4.2 of
 OAuth 2.0 {{RFC6749}}) works by receiving an access token in the HTTP redirect
-(front-channel) immediately without the code exchange step. The Implicit Flow
-cannot be protected by PKCE {{RFC7636}} (which is required according to
-{{authorization_code_flow}}), so clients and authorization servers MUST NOT
-use the Implicit Flow for browser-based apps.
+(front-channel) immediately without the code exchange step. In this case, the access
+token is returned in the fragment part of the redirect URI, providing an attacker
+with several opportunities to intercept and steal the access token. Several attacks
+on the implicit flow are described by {{RFC6819}} and {{oauth-security-topics}},
+not all of which have sufficient mitigation strategies.
 
-There are several reasons the Implicit flow is disadvantageous compared to using
-the standard Authorization Code flow.
+### Threat: Interception of the Redirect URI
+
+If an attacker is able to cause the authorization response to be sent to a URI under
+his control, he will directly get access to the fragment carrying the access token.
+A method of performing this attack is described in detail in {{oauth-security-topics}}.
+
+### Threat: Access Token Leak in Browser History
+
+An attacker could obtain the access token from the browser's history.
+The countermeasures recommended by {{RFC6819}} are limited to using short expiration
+times for tokens, and indicating that browsers should not cache the response.
+Neither of these fully prevent this attack, they only reduce the potential damage.
+
+### Threat: Manipulation of Scripts
+
+An attacker could modify the page or inject scripts into the browser via various
+means, including when the browser's HTTPS connection is being man-in-the-middled
+by for example a corporate network. While this type of attack is typically out of
+scope of basic security recommendations to prevent, in the case of browser-based
+apps it is much easier to perform this kind of attack, where an injected script
+can suddenly have access to everything on the page.
+
+### Threat: Access Token Leak to Third Party Scripts
+
+It is relatively common to use third-party scripts in browser-based apps, such as
+analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
+In these situations, the author of the application may not be able to be fully aware
+of the entirety of the code running in the application. When an access token is
+returned in the fragment, it is visible to any third-party scripts on the page.
+
+### Countermeasures
+
+In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
+using the authorization code with PKCE avoids these attacks.
+
+When PKCE is used, if an authorization code is stolen in transport, the attacker is
+unable to do anything with the authorization code.
+
+### Disadvantages of the Implicit Flow
+
+There are several additional reasons the Implicit flow is disadvantageous compared to
+using the standard Authorization Code flow.
 
 * OAuth 2.0 provides no mechanism for a client to verify that an access token was
   issued to it, which could lead to misuse and possible impersonation attacks if
@@ -343,10 +413,10 @@ the standard Authorization Code flow.
   to the client.
 * Supporting the implicit flow requires additional code, more upkeep and
   understanding of the related security considerations, while limiting the
-  authorization server to just the authorization code flow simplifies the
-  implementation.
+  authorization server to just the authorization code flow reduces the attack surface
+  of the implementation.
 * If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
-  also requires the use of the authorization code flow.
+  also requires the use of the authorization code flow with PKCE anyway.
 
 In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally
 signed. Performing OpenID Connect using the authorization code flow also provides
@@ -355,6 +425,8 @@ token will have been fetched over an HTTPS connection directly from the authoriz
 server. However, returning an id_token using the Implicit flow requires the client
 validate the JWT signature as malicious parties could otherwise craft and supply
 fraudulent id_tokens.
+
+### Historic Note
 
 Historically, the Implicit flow provided an advantage to single-page apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
