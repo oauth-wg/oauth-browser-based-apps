@@ -4,13 +4,13 @@
 
 Network Working Group                                         A. Parecki
 Internet-Draft                                                      Okta
-Intended status: Experimental                                   D. Waite
+Intended status: Best Current Practice                          D. Waite
 Expires: May 23, 2019                                      Ping Identity
                                                        November 19, 2018
 
 
                     OAuth 2.0 for Browser-Based Apps
-               draft-parecki-oauth-browser-based-apps-01
+               draft-parecki-oauth-browser-based-apps-02
 
 Abstract
 

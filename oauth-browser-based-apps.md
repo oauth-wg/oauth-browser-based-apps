@@ -1,12 +1,12 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-parecki-oauth-browser-based-apps-01
+docname: draft-parecki-oauth-browser-based-apps-02
 date: 2018-11-19
 
 ipr: trust200902
 area: OAuth
 kw: Internet-Draft
-cat: exp
+cat: bcp
 
 coding: us-ascii
 pi:
