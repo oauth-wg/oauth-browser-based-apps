@@ -94,7 +94,7 @@ Table of Contents
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  10
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  11
-   Appendix A.  Appendix A: Server Support Checklist . . . . . . . .  11
+   Appendix A.  Server Support Checklist . . . . . . . . . . . . . .  11
    Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  11
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
 
@@ -584,7 +584,7 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
 
    [HTML]     whatwg, "HTML", 2018.
 
-Appendix A.  Appendix A: Server Support Checklist
+Appendix A.  Server Support Checklist
 
    OAuth servers that support browser-based apps MUST:
 

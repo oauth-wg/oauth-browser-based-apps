@@ -452,7 +452,7 @@ This document does not require any IANA actions.
 
 --- back
 
-Appendix A: Server Support Checklist
+Server Support Checklist
 ====================================
 
 OAuth servers that support browser-based apps MUST:
