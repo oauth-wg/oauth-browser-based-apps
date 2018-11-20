@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -53,7 +53,7 @@
 	  font-family: verdana, helvetica, arial, sans-serif;
 	  font-size: 10pt;
 	  max-width: 55em;
-
+	  
 	  }
 	  cite {
 	  font-style: normal;
@@ -64,7 +64,7 @@
 	  dl {
 	  margin-left: 2em;
 	  }
-
+	
 	  ul.empty {
 	  list-style-type: none;
 	  }
@@ -193,7 +193,7 @@
 	  font-size: 9pt;
 	  margin-top: .5em;
 	  }
-
+	
 	  table.header {
 	  border-spacing: 1px;
 	  width: 95%;
@@ -205,7 +205,7 @@
 	  }
 	  td.topnowrap {
 	  vertical-align: top;
-	  white-space: nowrap;
+	  white-space: nowrap; 
 	  }
 	  table.header td {
 	  background-color: gray;
@@ -248,7 +248,7 @@
 	  ul p {
 	  margin-left: 0em;
 	  }
-
+	
 	  .comment {
 	  background-color: yellow;
 	  }
@@ -299,22 +299,22 @@
 	  font-size: 14pt;
 	  background-color: yellow;
 	  }
-
-
+	
+	
 	  @media print {
 	  .noprint {
 		display: none;
 	  }
-
+	
 	  a {
 		color: black;
 		text-decoration: none;
 	  }
-
+	
 	  table.header {
 		width: 90%;
 	  }
-
+	
 	  td.header {
 		width: 50%;
 		color: black;
@@ -322,44 +322,44 @@
 		vertical-align: top;
 		font-size: 12pt;
 	  }
-
+	
 	  ul.toc a::after {
 		content: leader('.') target-counter(attr(href), page);
 	  }
-
+	
 	  ul.ind li li a {
 		content: target-counter(attr(href), page);
 	  }
-
+	
 	  .print2col {
 		column-count: 2;
 		-moz-column-count: 2;
 		column-fill: auto;
 	  }
 	  }
-
+	
 	  @page {
 	  @top-left {
-		   content: "Internet-Draft";
-	  }
+		   content: "Internet-Draft"; 
+	  } 
 	  @top-right {
-		   content: "December 2010";
-	  }
+		   content: "December 2010"; 
+	  } 
 	  @top-center {
 		   content: "Abbreviated Title";
-	  }
+	  } 
 	  @bottom-left {
-		   content: "Doe";
-	  }
+		   content: "Doe"; 
+	  } 
 	  @bottom-center {
-		   content: "Expires June 2011";
-	  }
+		   content: "Expires June 2011"; 
+	  } 
 	  @bottom-right {
-		   content: "[Page " counter(page) "]";
+		   content: "[Page " counter(page) "]"; 
+	  } 
 	  }
-	  }
-
-	  @page:first {
+	
+	  @page:first { 
 		@top-left {
 		  content: normal;
 		}
@@ -402,7 +402,7 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.12.3 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.13.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Parecki, A. and D. Waite" />
@@ -417,7 +417,7 @@
 
   <table class="header">
     <tbody>
-
+    
     	<tr>
 <td class="left">Network Working Group</td>
 <td class="right">A. Parecki</td>
@@ -439,13 +439,13 @@
 <td class="right">November 02, 2018</td>
 </tr>
 
-
+    	
     </tbody>
   </table>
 
   <p class="title">OAuth 2.0 for Browser-Based Apps<br />
   <span class="filename">draft-parecki-oauth-browser-based-apps-00</span></p>
-
+  
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>OAuth 2.0 authorization requests from apps running entirely in a browser are unable to use a Client Secret during the process, since they have no way to keep a secret confidential. This specification details the security considerations that must be taken into account when developing browser-based applications, as well as best practices for how they can securely implement OAuth 2.0.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
@@ -457,7 +457,7 @@
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
-
+  
   <hr class="noprint" />
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
@@ -593,9 +593,9 @@
 <h1 id="rfc.section.7.2">
 <a href="#rfc.section.7.2">7.2.</a> <a href="#client_authentication" id="client_authentication">Client Authentication</a>
 </h1>
-<p id="rfc.section.7.2.p.1">Similar to native apps, a browser-based with native OAuth support is a public client. Since the application source code is delivered to the end-user's browser, it cannot contain provisioned secrets.</p>
+<p id="rfc.section.7.2.p.1">Since a browser-based application's source code is delivered to the end-user's browser, it cannot contain provisioned secrets. As such, a browser-based app with native OAuth support is considered a public client as defined by Section 2.1 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>.</p>
 <p id="rfc.section.7.2.p.2">Secrets that are statically included as part of an app distributed to multiple users should not be treated as confidential secrets, as one user may inspect their copy and learn the shared secret.  For this reason, and those stated in Section 5.3.1 of <a href="#RFC6819" class="xref">[RFC6819]</a>, it is NOT RECOMMENDED for authorization servers to require client authentication of browser-based applications using a shared secret, as this serves little value beyond client identification which is already provided by the client_id request parameter.</p>
-<p id="rfc.section.7.2.p.3">Authorization servers that still require a statically included shared secret for SPA clients MUST treat the client as a public client (as defined by Section 2.1 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>), and not accept the secret as proof of the client's identity.  Without additional measures, such clients are subject to client impersonation (see <a href="#client_impersonation" class="xref">Section 7.3</a> below).</p>
+<p id="rfc.section.7.2.p.3">Authorization servers that still require a statically included shared secret for SPA clients MUST treat the client as a public client, and not accept the secret as proof of the client's identity. Without additional measures, such clients are subject to client impersonation (see <a href="#client_impersonation" class="xref">Section 7.3</a> below).</p>
 <h1 id="rfc.section.7.3">
 <a href="#rfc.section.7.3">7.3.</a> <a href="#client_impersonation" id="client_impersonation">Client Impersonation</a>
 </h1>
@@ -712,16 +712,16 @@
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Aaron Parecki</span>
+	  <span class="fn">Aaron Parecki</span> 
 	  <span class="n hidden">
 		<span class="family-name">Parecki</span>
 	  </span>
 	</span>
 	<span class="org vcardline">Okta</span>
 	<span class="adr">
-
+	  
 	  <span class="vcardline">
-		<span class="locality"></span>
+		<span class="locality"></span> 
 		<span class="region"></span>
 		<span class="code"></span>
 	  </span>
@@ -735,16 +735,16 @@
 </div><div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">David Waite</span>
+	  <span class="fn">David Waite</span> 
 	  <span class="n hidden">
 		<span class="family-name">Waite</span>
 	  </span>
 	</span>
 	<span class="org vcardline">Ping Identity</span>
 	<span class="adr">
-
+	  
 	  <span class="vcardline">
-		<span class="locality"></span>
+		<span class="locality"></span> 
 		<span class="region"></span>
 		<span class="code"></span>
 	  </span>
