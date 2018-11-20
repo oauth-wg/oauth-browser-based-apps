@@ -477,9 +477,16 @@ Acknowledgements
 
 The authors would like to acknowledge the work of William Denniss and John Bradley,
 whose recommendation for native apps informed many of the best practices for
-browser-based applications. The authors would also like to acknowledge
-Hannes Tschofenig as well as all the attendees of the Internet Identity Workshop 27
+browser-based applications. The authors would also like to thank Hannes Tschofenig
+and Torsten Lodderstedt, as well as all the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed.
+
+The following individuals contributed ideas, feedback, and wording that shaped and
+formed the final specification:
+
+Annabelle Backman, Brock Allen, Daniel Fett, George Fletcher, Hannes Tschofenig,
+Joseph Heenan, Justin Richer, Karl McGuinness, Tomek Stojecki, Torsten Lodderstedt,
+and Vittorio Bertocci.
 
 
 --- fluff
