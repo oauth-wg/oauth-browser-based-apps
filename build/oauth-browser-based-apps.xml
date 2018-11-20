@@ -14,7 +14,7 @@
 <?rfc sortrefs="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc ipr="trust200902" docName="draft-parecki-oauth-browser-based-apps-00" category="exp">
+<rfc ipr="trust200902" docName="draft-parecki-oauth-browser-based-apps-01" category="exp">
 
   <front>
     <title>OAuth 2.0 for Browser-Based Apps</title>
@@ -519,10 +519,10 @@ session at which this BCP was originally proposed.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIABdn81sAA6VcW5PbuJV+x69A9TzETkmK7WQmk05tVXra9kxPfOl1t9eV
+H4sIACJr81sAA6VcW5PbuJV+x69A9TzETkmK7WQmk05tVXra9kxPfOl1t9eV
 pylIhFpIU6SWIFtWXP7v+51zABCkqI53dyoptygSPDjX71yg+XyuWteW9ly/
 v+jajX6xeKbXdaN/auq9t838J+NtoS92O6+KelWZLe4sGrNu5zvT2NW9m9cG
-z82X4f4l3T83uH/+7JkqTIv7Xzx7/uP8+fP5878o5XbNuW6bzrcvnj37y7MX
+z82X4f4l3T83uH/+7LkqTIv7Xzx7/uP8+fP5878o5XbNuW6bzrcvnj37y7MX
 CquY8HJ1vz/XV1Vrm8q285f0FrUy7bm2n3dKrerCVXfnuvNz41fOqZ07V1q3
 9epcH6zHn75u2sauffp82PYfFZFZN/TIHP/X2lX45mKhr2UffE32d2Gauhpc
 rxu8+P19a/iT3RpXnmtDt/0tsGGxqrf8Zde4c71p250//8Mf+JbhHdnLXy70
@@ -679,7 +679,7 @@ g/E8qbdHlyE/L9S3PqZCYir2xbZIIJEbcKDqe1D1ruYfMem2kwN7cYCGstDB
 IR+4TA/z7in3pzd8Qlx2ZqtfWiRrXtxC/oNTM7XnKbGh+8h+pkPUWX7QyRbp
 fDIXLY7cizo93ijd2yHxjE4mdkAT0tSEuoWp1Gtbubv8d0KoHhlgI9WosuQl
 /Phd+rU3/YlKyJt6p1/8WaXzPW1q5YL59GM41LiVBpWRwlJNAx1F9CTrsluv
-1f8AYLL75OxPAAA=
+1f8AMDzCDexPAAA=
 
 -->
 

@@ -10,7 +10,7 @@ Expires: May 23, 2019                                      Ping Identity
 
 
                     OAuth 2.0 for Browser-Based Apps
-               draft-parecki-oauth-browser-based-apps-00
+               draft-parecki-oauth-browser-based-apps-01
 
 Abstract
 
