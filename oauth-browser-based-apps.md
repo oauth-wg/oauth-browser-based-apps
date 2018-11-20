@@ -1,6 +1,6 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-parecki-oauth-browser-based-apps-00
+docname: draft-parecki-oauth-browser-based-apps-01
 date: 2018-11-19
 
 ipr: trust200902
