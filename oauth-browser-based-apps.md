@@ -232,9 +232,10 @@ one or more redirect URIs.
 Client Authentication   {#client_authentication}
 ---------------------
 
-Similar to native apps, a browser-based with native OAuth support is a public
-client. Since the application source code is delivered to the end-user's
-browser, it cannot contain provisioned secrets.
+Since a browser-based application's source code is delivered to the end-user's
+browser, it cannot contain provisioned secrets. As such, a browser-based app
+with native OAuth support is considered a public client as defined by Section 2.1
+of OAuth 2.0 {{RFC6749}}.
 
 Secrets that are statically included as part of an app distributed to
 multiple users should not be treated as confidential secrets, as one
@@ -246,8 +247,7 @@ client identification which is already provided by the client_id request paramet
 
 Authorization servers that still require a statically included shared
 secret for SPA clients MUST treat the client as a public
-client (as defined by Section 2.1 of OAuth 2.0 {{RFC6749}}), and not
-accept the secret as proof of the client's identity.  Without
+client, and not accept the secret as proof of the client's identity. Without
 additional measures, such clients are subject to client impersonation
 (see {{client_impersonation}} below).
 
