@@ -188,6 +188,13 @@ or use third-party identity providers. In contrast, the Password grant does not
 provide any built-in mechanism for these, and must be extended with custom code.
 
 
+Architectural Considerations
+============================
+
+In some cases, it may make sense to avoid the use of a strictly browser-based OAuth
+application entirely, instead using an architecture that can provide better security.
+
+
 Apps Served from the Same Domain as the API
 -------------------------------------------
 
@@ -202,6 +209,18 @@ in this case. Session authentication has the benefit of having fewer moving part
 and fewer attack vectors. OAuth and OpenID Connect were created primarily for
 third-party or federated access to APIs, so may not be the best solution in a
 same-domain scenario.
+
+JavaScript App with a Backend Component
+---------------------------------------
+
+Implementations MAY consider moving the authorization code exchange and handling of
+access and refresh tokens to a backend component in order to avoid the risks inherent
+in handling access tokens from a purely browser based app. In this case, the backend
+component can be a confidential client and can be secured accordingly.
+
+Security of the connection between code running in the browser and this backend
+component is assumed to utilize browser-level protection mechanisms. Details are out
+of scope of this document.
 
 
 Authorization Code Flow {#authorization_code_flow}
@@ -485,9 +504,9 @@ session at which this BCP was originally proposed.
 The following individuals contributed ideas, feedback, and wording that shaped and
 formed the final specification:
 
-Annabelle Backman, Brock Allen, Christian Mainka, Daniel Fett, George Fletcher,
-Hannes Tschofenig, Joseph Heenan, Justin Richer, Karl McGuinness, Tomek Stojecki,
-Torsten Lodderstedt, and Vittorio Bertocci.
+Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
+George Fletcher, Hannes Tschofenig, John Bradley, Joseph Heenan, Justin Richer,
+Karl McGuinness, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
