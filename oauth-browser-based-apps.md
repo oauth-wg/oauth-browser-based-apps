@@ -167,9 +167,9 @@ First-Party Applications
 While OAuth and OpenID Connect were initially created to allow third-party
 applications to access an API on behalf of a user, they have both proven to be
 useful in a first-party scenario as well. First-party apps are applications created
-by the same organization that provides the API being accessed by the applicaiton.
+by the same organization that provides the API being accessed by the application.
 
-For example, an web email client provided by the operator of the email account,
+For example, a web email client provided by the operator of the email account,
 or a mobile banking application created by bank itself. (Note that there is no
 requirement that the application actually be developed by the same company; a mobile
 banking application developed by a contractor that is branded as the bank's
@@ -226,7 +226,8 @@ the authorization code is the same one that initiated the flow.
 
 Browser-based apps MUST use the OAuth 2.0 "state" parameter to protect themselves
 against Cross-Site Request Forgery and authorization code swap attacks and MUST use
-a unique value for each authorization request.
+a unique value for each authorization request, and MUST verify the returned state
+in the authorization response matches the original state the app created.
 
 
 Handling the Authorization Code Redirect {#auth_code_redirect}
@@ -293,9 +294,9 @@ processed as if no previous request had been approved, unless the identity of
 the client can be proven.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
-HTTPS URIs without wildcard domains or paths, this exact match of registered
-absolute HTTPS URIs MAY be accepted by authorization servers as proof of
-identity of the client for the purpose of deciding whether to automatically
+HTTPS URIs without wildcard domains, paths, or query string components, this exact
+match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
+proof of identity of the client for the purpose of deciding whether to automatically
 process an authorization request when a previous request for the client_id
 has already been approved.
 
@@ -327,7 +328,7 @@ Cross-Domain Requests  {#cors}
 To complete the authorization code flow, the browser-based application will
 need to exchange the authorization code for an access token at the token endpoint.
 If the authorization server provides additional endpoints to the application, such
-as metadata URLs, dynamic registration, revocation, introspection, discovery or
+as metadata URLs, dynamic client registration, revocation, introspection, discovery or
 user info endpoints, these endpoints may also be accessed by the browser-based app.
 Since these requests will be made from a browser, authorization servers MUST support
 the necessary CORS headers (defined in {{Fetch}}) to allow the browser to make the
@@ -484,9 +485,9 @@ session at which this BCP was originally proposed.
 The following individuals contributed ideas, feedback, and wording that shaped and
 formed the final specification:
 
-Annabelle Backman, Brock Allen, Daniel Fett, George Fletcher, Hannes Tschofenig,
-Joseph Heenan, Justin Richer, Karl McGuinness, Tomek Stojecki, Torsten Lodderstedt,
-and Vittorio Bertocci.
+Annabelle Backman, Brock Allen, Christian Mainka, Daniel Fett, George Fletcher,
+Hannes Tschofenig, Joseph Heenan, Justin Richer, Karl McGuinness, Tomek Stojecki,
+Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
