@@ -200,16 +200,16 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    party applications to access an API on behalf of a user, they have
    both proven to be useful in a first-party scenario as well.  First-
    party apps are applications created by the same organization that
-   provides the API being accessed by the applicaiton.
+   provides the API being accessed by the application.
 
-   For example, an web email client provided by the operator of the
-   email account, or a mobile banking application created by bank
-   itself.  (Note that there is no requirement that the application
-   actually be developed by the same company; a mobile banking
-   application developed by a contractor that is branded as the bank's
-   application is still considered a first-party application.)  The
-   first-party app consideration is about the user's relationship to the
-   application and the service.
+   For example, a web email client provided by the operator of the email
+   account, or a mobile banking application created by bank itself.
+   (Note that there is no requirement that the application actually be
+   developed by the same company; a mobile banking application developed
+   by a contractor that is branded as the bank's application is still
+   considered a first-party application.)  The first-party app
+   consideration is about the user's relationship to the application and
+   the service.
 
    To conform to this best practice, first-party applications using
    OAuth or OpenID Connect MUST use an OAuth Authorization Code flow as
@@ -271,8 +271,8 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    Browser-based apps MUST use the OAuth 2.0 "state" parameter to
    protect themselves against Cross-Site Request Forgery and
    authorization code swap attacks and MUST use a unique value for each
-   authorization request.
-
+   authorization request, and MUST verify the returned state in the
+   authorization response matches the original state the app created.
 
 
 
@@ -349,12 +349,12 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    identity of the client can be proven.
 
    If authorization servers restrict redirect URIs to a fixed set of
-   absolute HTTPS URIs without wildcard domains or paths, this exact
-   match of registered absolute HTTPS URIs MAY be accepted by
-   authorization servers as proof of identity of the client for the
-   purpose of deciding whether to automatically process an authorization
-   request when a previous request for the client_id has already been
-   approved.
+   absolute HTTPS URIs without wildcard domains, paths, or query string
+   components, this exact match of registered absolute HTTPS URIs MAY be
+   accepted by authorization servers as proof of identity of the client
+   for the purpose of deciding whether to automatically process an
+   authorization request when a previous request for the client_id has
+   already been approved.
 
 7.4.  Cross-Site Request Forgery Protections
 
@@ -381,11 +381,11 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    application will need to exchange the authorization code for an
    access token at the token endpoint.  If the authorization server
    provides additional endpoints to the application, such as metadata
-   URLs, dynamic registration, revocation, introspection, discovery or
-   user info endpoints, these endpoints may also be accessed by the
-   browser-based app.  Since these requests will be made from a browser,
-   authorization servers MUST support the necessary CORS headers
-   (defined in [Fetch]) to allow the browser to make the request.
+   URLs, dynamic client registration, revocation, introspection,
+   discovery or user info endpoints, these endpoints may also be
+   accessed by the browser-based app.  Since these requests will be made
+   from a browser, authorization servers MUST support the necessary CORS
+
 
 
 
@@ -393,6 +393,9 @@ Parecki & Waite           Expires May 23, 2019                  [Page 7]
 
 Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
 
+
+   headers (defined in [Fetch]) to allow the browser to make the
+   request.
 
    This specification does not include guidelines for deciding whether a
    CORS policy for the token endpoint should be a wildcard origin or
@@ -439,9 +442,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    short expiration times for tokens, and indicating that browsers
    should not cache the response.  Neither of these fully prevent this
    attack, they only reduce the potential damage.
-
-
-
 
 
 
@@ -624,9 +624,10 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       November 2018
    The following individuals contributed ideas, feedback, and wording
    that shaped and formed the final specification:
 
-   Annabelle Backman, Brock Allen, Daniel Fett, George Fletcher, Hannes
-   Tschofenig, Joseph Heenan, Justin Richer, Karl McGuinness, Tomek
-   Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
+   Annabelle Backman, Brock Allen, Christian Mainka, Daniel Fett, George
+   Fletcher, Hannes Tschofenig, Joseph Heenan, Justin Richer, Karl
+   McGuinness, Tomek Stojecki, Torsten Lodderstedt, and Vittorio
+   Bertocci.
 
 Authors' Addresses
 
@@ -641,7 +642,6 @@ Authors' Addresses
    Ping Identity
 
    Email: david@alkaline-solutions.com
-
 
 
 
