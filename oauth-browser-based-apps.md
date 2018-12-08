@@ -397,6 +397,10 @@ The countermeasures recommended by {{RFC6819}} are limited to using short expira
 times for tokens, and indicating that browsers should not cache the response.
 Neither of these fully prevent this attack, they only reduce the potential damage.
 
+Additionally, many browsers now also sync browser history to cloud services and to
+multiple devices, providing an even wider attack surface to extract access tokens
+out of the URL.
+
 ### Threat: Manipulation of Scripts
 
 An attacker could modify the page or inject scripts into the browser via various
@@ -405,6 +409,13 @@ by for example a corporate network. While this type of attack is typically out o
 scope of basic security recommendations to prevent, in the case of browser-based
 apps it is much easier to perform this kind of attack, where an injected script
 can suddenly have access to everything on the page.
+
+The risk of a malicious script running on the page is far greater when the application
+uses a known standard way of obtaining access tokens, namely that the attacker can
+always look at the window.location to find an access token. This threat profile is
+very different compared to an attacker specifically targeting an individual application
+by knowing where or how an access token obtained via the authorization code flow may
+end up being stored.
 
 ### Threat: Access Token Leak to Third Party Scripts
 
@@ -431,6 +442,9 @@ using the standard Authorization Code flow.
   issued to it, which could lead to misuse and possible impersonation attacks if
   a malicious party hands off an access token it retrieved through some other means
   to the client.
+* Returning an access token in the front channel redirect gives the authorization
+  server little assurance that the access token will actually end up at the
+  application, since there are many ways this redirect may fail or be intercepted.
 * Supporting the implicit flow requires additional code, more upkeep and
   understanding of the related security considerations, while limiting the
   authorization server to just the authorization code flow reduces the attack surface
@@ -443,7 +457,7 @@ signed. Performing OpenID Connect using the authorization code flow also provide
 the additional benefit of the client not needing to verify the JWT signature, as the
 token will have been fetched over an HTTPS connection directly from the authorization
 server. However, returning an id_token using the Implicit flow requires the client
-validate the JWT signature as malicious parties could otherwise craft and supply
+validate the JWT signature, as malicious parties could otherwise craft and supply
 fraudulent id_tokens.
 
 ### Historic Note
