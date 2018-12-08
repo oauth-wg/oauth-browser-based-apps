@@ -210,17 +210,28 @@ and fewer attack vectors. OAuth and OpenID Connect were created primarily for
 third-party or federated access to APIs, so may not be the best solution in a
 same-domain scenario.
 
+
 Browser-Based App with a Backend Component
 ------------------------------------------
 
-Implementations MAY consider moving the authorization code exchange and handling of
-access and refresh tokens to a backend component in order to avoid the risks inherent
-in handling access tokens from a purely browser-based app. In this case, the backend
-component can be a confidential client and can be secured accordingly.
+To avoid the risks inherent in handling OAuth access tokens from a purely browser-based
+application, implementations may wish to move the authorization code exchange and
+handling of access and refresh tokens into a backend component.
 
-Security of the connection between code running in the browser and this backend
-component is assumed to utilize browser-level protection mechanisms. Details are out
-of scope of this document.
+The backend component essentially becomes a new authorization server for the code
+running in the browser, issuing its own tokens (e.g. a session cookie). Security of
+the connection between code running in the browser and this backend component is
+assumed to utilize browser-level protection mechanisms. Details are out of scope of
+this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/).
+
+In this scenario, the backend component may be a confidential client which is issued
+its own client secret. Despite this, there are still some ways in which this application
+is effectively a public client, as the end result is the application's code is still
+running in the browser and visible to the user. Some authorization servers may have
+different policies for public and confidential clients, and this type of hybrid
+approach does not provide all the assurances of confidential clients that an
+authorization server is expecting. Authorization servers may wish to treat this type
+of deployment as a public client.
 
 
 Authorization Code Flow {#authorization_code_flow}
