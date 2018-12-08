@@ -2,7 +2,7 @@
 
 
 
-Network Working Group                                         A. Parecki
+Open Authentication Protocol                                  A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
 Expires: June 11, 2019                                     Ping Identity

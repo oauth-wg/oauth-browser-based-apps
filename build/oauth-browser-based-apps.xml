@@ -35,8 +35,9 @@
 
     <date year="2018" month="December" day="08"/>
 
-    <area>OAuth</area>
-
+    <area>Security Area</area>
+    <workgroup>Open Authentication Protocol</workgroup>
+    
     <keyword>Internet-Draft</keyword>
 
     <abstract>
@@ -592,7 +593,7 @@ Karl McGuinness, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAL41DFwAA6VcW5Mbt5V+x69AjR8spUhGUmLHUWqrMhpZ1ji6zGrGUeXJ
+H4sIANs5DFwAA6VcW5Mbt5V+x69AjR8spUhGUmLHUWqrMhpZ1ji6zGrGUeXJ
 BbLBITLNBrfRPRSt0n/fcwMaaDbHyq4rKQ37ggYOzuU7N8znc9W5rrbP9fvz
 vtvoZ4sneu1b/aL1+2Db+QsTbKXPd7ugKr9qzBaerFqz7uY709rVnZt7A+/N
 l/L8Ep+fG3h+/uSZqkwHzz978vSH+dNn8yc/KOV27XPdtX3onj158ld4BEYx
