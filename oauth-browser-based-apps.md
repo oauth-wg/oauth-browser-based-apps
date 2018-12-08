@@ -210,12 +210,12 @@ and fewer attack vectors. OAuth and OpenID Connect were created primarily for
 third-party or federated access to APIs, so may not be the best solution in a
 same-domain scenario.
 
-JavaScript App with a Backend Component
----------------------------------------
+Browser-Based App with a Backend Component
+------------------------------------------
 
 Implementations MAY consider moving the authorization code exchange and handling of
 access and refresh tokens to a backend component in order to avoid the risks inherent
-in handling access tokens from a purely browser based app. In this case, the backend
+in handling access tokens from a purely browser-based app. In this case, the backend
 component can be a confidential client and can be secured accordingly.
 
 Security of the connection between code running in the browser and this backend
