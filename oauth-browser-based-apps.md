@@ -106,10 +106,10 @@ capabilities and supplemental specifications beyond the base OAuth 2.0 and
 OpenID Connect specifications to improve baseline security, such as {{RFC7636}},
 also known as PKCE.
 
-This specification addresses the similarities between implementing OAuth for native
-apps as well as browser-based apps, and includes additional considerations when
-running in a browser. This is primarily focused on OAuth, except where OpenID Connect
-provides additional considerations.
+OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
+OAuth for native apps as well as browser-based apps, and includes additional
+considerations when running in a browser. This is primarily focused on OAuth,
+except where OpenID Connect provides additional considerations.
 
 
 Notational Conventions
