@@ -273,6 +273,30 @@ Authorization servers MUST support one of the two redirect URI validation mechan
 as described above.
 
 
+Refresh Tokens
+==============
+
+Refresh tokens provide a way for applications to obtain a new access token when the
+initial access token expires. {{oauth-security-topics}} describes some additional
+requirements around refresh tokens on top of the recommendations of {{RFC6749}}.
+
+For public clients, the risk of a leaked refresh token is much greater than leaked
+access tokens, since an attacker can potentially continue using the stoken refresh
+token to obtain new access without being detectable by the authorization server.
+Additionally, browser-based applications provide many attack vectors by which a
+refresh token can be leaked. As such, these applications are considered a higher risk
+for handling refresh tokens.
+
+Authorization servers SHOULD NOT issue refresh tokens to browser-based applications.
+
+If an authorization server does choose to issue refresh tokens to browser-based
+applications, then it MUST issue a new refresh token with every access token refresh
+response. Doing this mitigates the risk of a leaked refresh token, as a
+leaked refresh token can be detected if both the attacker and the legitimate client
+attempt to use the same refresh token. Authorization servers MUST follow the
+additional refresh token replay mitigation techniques described in {{oauth-security-topics}}.
+
+
 Security Considerations
 =======================
 
