@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-parecki-oauth-browser-based-apps-02
-date: 2018-12-08
+docname: draft-ietf-oauth-browser-based-apps-00
+date: 2019-01-29
 
 ipr: trust200902
 area: OAuth
@@ -547,11 +547,9 @@ Acknowledgements
 The authors would like to acknowledge the work of William Denniss and John Bradley,
 whose recommendation for native apps informed many of the best practices for
 browser-based applications. The authors would also like to thank Hannes Tschofenig
-and Torsten Lodderstedt, as well as all the attendees of the Internet Identity Workshop 27
-session at which this BCP was originally proposed.
-
-The following individuals contributed ideas, feedback, and wording that shaped and
-formed the final specification:
+and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
+session at which this BCP was originally proposed, and the following individuals
+who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, John Bradley, Joseph Heenan, Justin Richer,

@@ -5,12 +5,12 @@
 Open Authentication Protocol                                  A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: June 11, 2019                                     Ping Identity
-                                                       December 08, 2018
+Expires: August 2, 2019                                    Ping Identity
+                                                        January 29, 2019
 
 
                     OAuth 2.0 for Browser-Based Apps
-               draft-parecki-oauth-browser-based-apps-02
+                 draft-ietf-oauth-browser-based-apps-00
 
 Abstract
 
@@ -36,11 +36,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 11, 2019.
+   This Internet-Draft will expire on August 2, 2019.
 
 Copyright Notice
 
-   Copyright (c) 2018 IETF Trust and the persons identified as the
+   Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 1]
+Parecki & Waite          Expires August 2, 2019                 [Page 1]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 2]
+Parecki & Waite          Expires August 2, 2019                 [Page 2]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    For native application developers using OAuth 2.0 and OpenID Connect,
@@ -165,9 +165,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 3]
+Parecki & Waite          Expires August 2, 2019                 [Page 3]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    o  Recommend exact matching of redirect URIs, and require the
@@ -221,9 +221,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 4]
+Parecki & Waite          Expires August 2, 2019                 [Page 4]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    authorization server the opportunity to prompt the user for multi-
@@ -277,9 +277,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 5]
+Parecki & Waite          Expires August 2, 2019                 [Page 5]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    different policies for public and confidential clients, and this type
@@ -333,9 +333,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 6]
+Parecki & Waite          Expires August 2, 2019                 [Page 6]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
 8.  Refresh Tokens
@@ -389,9 +389,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 7]
+Parecki & Waite          Expires August 2, 2019                 [Page 7]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    Secrets that are statically included as part of an app distributed to
@@ -445,9 +445,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 8]
+Parecki & Waite          Expires August 2, 2019                 [Page 8]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    along with the session data (e.g. along with "state") and MUST verify
@@ -501,9 +501,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                 [Page 9]
+Parecki & Waite          Expires August 2, 2019                 [Page 9]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
 9.8.1.  Threat: Interception of the Redirect URI
@@ -557,9 +557,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                [Page 10]
+Parecki & Waite          Expires August 2, 2019                [Page 10]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
 9.8.5.  Countermeasures
@@ -613,9 +613,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                [Page 11]
+Parecki & Waite          Expires August 2, 2019                [Page 11]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
 9.8.7.  Historic Note
@@ -669,9 +669,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
 
 
 
-Parecki & Waite           Expires June 11, 2019                [Page 12]
+Parecki & Waite          Expires August 2, 2019                [Page 12]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
    [RFC7636]  Sakimura, N., Ed., Bradley, J., and N. Agarwal, "Proof Key
@@ -711,12 +711,11 @@ Appendix B.  Acknowledgements
    The authors would like to acknowledge the work of William Denniss and
    John Bradley, whose recommendation for native apps informed many of
    the best practices for browser-based applications.  The authors would
-   also like to thank Hannes Tschofenig and Torsten Lodderstedt, as well
-   as all the attendees of the Internet Identity Workshop 27 session at
-   which this BCP was originally proposed.
-
-   The following individuals contributed ideas, feedback, and wording
-   that shaped and formed the final specification:
+   also like to thank Hannes Tschofenig and Torsten Lodderstedt, the
+   attendees of the Internet Identity Workshop 27 session at which this
+   BCP was originally proposed, and the following individuals who
+   contributed ideas, feedback, and wording that shaped and formed the
+   final specification:
 
    Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka,
    Daniel Fett, George Fletcher, Hannes Tschofenig, John Bradley, Joseph
@@ -725,9 +724,10 @@ Appendix B.  Acknowledgements
 
 
 
-Parecki & Waite           Expires June 11, 2019                [Page 13]
+
+Parecki & Waite          Expires August 2, 2019                [Page 13]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       December 2018
+Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
 
 Authors' Addresses
@@ -781,4 +781,4 @@ Authors' Addresses
 
 
 
-Parecki & Waite           Expires June 11, 2019                [Page 14]
+Parecki & Waite          Expires August 2, 2019                [Page 14]
