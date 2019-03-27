@@ -79,9 +79,11 @@ informative:
 
 --- abstract
 
-OAuth 2.0 authorization requests from apps running entirely in a browser are unable
-to use a Client Secret during the process, since they have no way to keep a secret
-confidential. This specification details the security considerations that must be
+OAuth 2.0 authorization requests from browser-based apps must be made using the 
+authorization code grant with the PKCE extension, and should not be issued a
+client secret when registered.
+
+This specification details the security considerations that must be
 taken into account when developing browser-based applications, as well as best
 practices for how they can securely implement OAuth 2.0.
 
@@ -130,9 +132,8 @@ the following terms:
 : In this document, "OAuth" refers to OAuth 2.0, {{RFC6749}}.
 
 "Browser-based application":
-: An application that runs entirely in a web browser, usually written in
-  JavaScript, where the source code is downloaded from a domain prior to execution.
-  Also sometimes referred to as a "single-page application", or "SPA".
+: An application that is dynamically downloaded and executed in a web browser, 
+  usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
 
 Overview
@@ -141,24 +142,27 @@ Overview
 For authorizing users within a browser-based application, the best current practice is to
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
-* Require the OAuth 2.0 state parameter
+* Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
 * Recommend exact matching of redirect URIs, and require the hostname of the redirect URI match the hostname of the URL the app was served from
 * Do not return access tokens in the front channel
 
-Previously it was recommended that browser-based applications use the OAuth 2.0 Implicit
-flow. That approach has several drawbacks, including the fact that access tokens are
+Since the publication of OAuth 2.0 RFC 6749, browsers have broadly adopted the concept of CORS, enabling the ability for JavaScript applications to make cross-domain requests. During the time RFC 6749 was originally being written, browsers did not have wide support, so it was not possible to require browsers to use the authorization code flow, so the implicit flow was developed instead.
+
+There are several drawbacks to the implicit flow, including the fact that access tokens are
 returned in the front-channel via the fragment part of the redirect URI, and as such
 are vulnerable to a variety of attacks where the access token can be intercepted or
 stolen. See {{implicit_flow}} for a deeper analysis of these attacks and the drawbacks
-of using the Implicit flow in browsers, many of which are described by {{oauth-security-topics}}.
+of using the implicit flow in browsers, many of which are described by {{oauth-security-topics}}.
 
-Instead, browser-based apps can perform the OAuth 2.0 authorization code flow
-and make a POST request to the token endpoint to exchange an authorization code
-for an access token, just like other OAuth clients. This ensures that access tokens
-are not sent via the less secure front-channel, and are only returned over an HTTPS
-connection initiated from the application. Combined with PKCE, this enables the
-authorization server to ensure that authorization codes are useless even if
-intercepted in transport.
+Now, thanks to the wide adoption of CORS, browser-based apps can perform the OAuth 2.0
+authorization code flow and make a POST request to the token endpoint to exchange an 
+authorization code for an access token, just like other OAuth clients. This ensures 
+that access tokens are not sent via the less secure front-channel, and are only 
+returned over an HTTPS connection initiated from the application. Combined with PKCE, 
+this enables the authorization server to ensure that authorization codes are useless 
+even if intercepted in transport.
+
+Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. Now with the Session History API (described in "Session history and navigation" of [HTML]), browsers have a mechanism to modify the path component of the URL without triggering a page reload, so this overloaded use of the fragment portion is no longer needed.
 
 
 First-Party Applications
@@ -166,7 +170,7 @@ First-Party Applications
 
 While OAuth and OpenID Connect were initially created to allow third-party
 applications to access an API on behalf of a user, they have both proven to be
-useful in a first-party scenario as well. First-party apps are applications created
+useful in a first-party scenario as well. First-party apps are applications where
 by the same organization that provides the API being accessed by the application.
 
 For example, a web email client provided by the operator of the email account,
@@ -192,16 +196,17 @@ Architectural Considerations
 ============================
 
 In some cases, it may make sense to avoid the use of a strictly browser-based OAuth
-application entirely, instead using an architecture that can provide better security.
+application entirely, and instead use an architecture that keeps OAuth access tokens
+out of the browser.
 
 
-Apps Served from the Same Domain as the API
+Apps Served from a Common Domain as the API
 -------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from the same domain as the API (resource server) being accessed, it is likely a
-better decision to avoid using OAuth entirely, and just use session authentication
-to communicate with the API.
+from a domain that can share cookies with the API's (resource server's) domain, it 
+is likely a better decision to avoid using OAuth entirely, and just use session 
+authentication to communicate with the API.
 
 OAuth and OpenID Connect provide very little benefit in this deployment scenario,
 so it is recommended to reconsider whether you need OAuth or OpenID Connect at all
@@ -218,14 +223,12 @@ To avoid the risks inherent in handling OAuth access tokens from a purely browse
 application, implementations may wish to move the authorization code exchange and
 handling of access and refresh tokens into a backend component.
 
-The backend component essentially becomes a new authorization server for the code
-running in the browser, issuing its own tokens (e.g. a session cookie). Security of
-the connection between code running in the browser and this backend component is
+Security of the connection between code running in the browser and this backend component is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/).
 
-In this scenario, the backend component may be a confidential client which is issued
-its own client secret. Despite this, there are still some ways in which this application
+In this scenario, the backend component may be a confidential client which has the 
+ability to authenticate itself. Despite this, there are still some ways in which this application
 is effectively a public client, as the end result is the application's code is still
 running in the browser and visible to the user. Some authorization servers may have
 different policies for public and confidential clients, and this type of hybrid
@@ -539,6 +542,22 @@ OAuth servers that support browser-based apps MUST:
 
 5.  Not assume that browser-based clients can keep a secret, and SHOULD NOT issue
     secrets to applications of this type.
+
+
+Document History
+================
+
+[[ To be removed from the final specification ]]
+
+-01
+
+* Incorporated feedback from Torsten Lodderstedt
+* Updated abstract
+* Clarified the definition of browser-based apps to not exclude applications cached in the browser, e.g. via Service Workers
+* Clarified use of the state parameter for CSRF protection
+* Added background information about the original reason the implicit flow was created due to lack of CORS support
+* Clarified the same-domain use case where the SPA and API share a cookie domain
+* Moved historic note about the fragment URL into the Overview
 
 
 Acknowledgements
