@@ -16,3 +16,11 @@ Convert XML to text or HTML
 
 https://xml2rfc.tools.ietf.org/
 
+
+Publishing
+----------
+
+https://www.ietf.org/standards/ids/
+
+https://datatracker.ietf.org/submit/
+

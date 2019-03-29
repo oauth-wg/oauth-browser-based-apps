@@ -5,21 +5,22 @@
 Open Authentication Protocol                                  A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: August 2, 2019                                    Ping Identity
-                                                        January 29, 2019
+Expires: September 28, 2019                                Ping Identity
+                                                          March 27, 2019
 
 
                     OAuth 2.0 for Browser-Based Apps
-                 draft-ietf-oauth-browser-based-apps-00
+                 draft-ietf-oauth-browser-based-apps-01
 
 Abstract
 
-   OAuth 2.0 authorization requests from apps running entirely in a
-   browser are unable to use a Client Secret during the process, since
-   they have no way to keep a secret confidential.  This specification
-   details the security considerations that must be taken into account
-   when developing browser-based applications, as well as best practices
-   for how they can securely implement OAuth 2.0.
+   OAuth 2.0 authorization requests from browser-based apps must be made
+   using the authorization code grant with the PKCE extension, and
+   should not be issued a client secret when registered.
+
+   This specification details the security considerations that must be
+   taken into account when developing browser-based applications, as
+   well as best practices for how they can securely implement OAuth 2.0.
 
 Status of This Memo
 
@@ -36,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 2, 2019.
+   This Internet-Draft will expire on September 28, 2019.
 
 Copyright Notice
 
@@ -49,46 +50,46 @@ Copyright Notice
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
 
 
 
-Parecki & Waite          Expires August 2, 2019                 [Page 1]
+Parecki & Waite        Expires September 28, 2019               [Page 1]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
 
 
+   include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Notational Conventions  . . . . . . . . . . . . . . . . . . .   3
    3.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   4.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   5.  First-Party Applications  . . . . . . . . . . . . . . . . . .   4
+   4.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   5.  First-Party Applications  . . . . . . . . . . . . . . . . . .   5
    6.  Architectural Considerations  . . . . . . . . . . . . . . . .   5
-     6.1.  Apps Served from the Same Domain as the API . . . . . . .   5
-     6.2.  Browser-Based App with a Backend Component  . . . . . . .   5
+     6.1.  Apps Served from a Common Domain as the API . . . . . . .   5
+     6.2.  Browser-Based App with a Backend Component  . . . . . . .   6
    7.  Authorization Code Flow . . . . . . . . . . . . . . . . . . .   6
      7.1.  Initiating the Authorization Request from a Browser-Based
            Application . . . . . . . . . . . . . . . . . . . . . . .   6
-     7.2.  Handling the Authorization Code Redirect  . . . . . . . .   6
+     7.2.  Handling the Authorization Code Redirect  . . . . . . . .   7
    8.  Refresh Tokens  . . . . . . . . . . . . . . . . . . . . . . .   7
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-     9.1.  Registration of Browser-Based Apps  . . . . . . . . . . .   7
-     9.2.  Client Authentication . . . . . . . . . . . . . . . . . .   7
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+     9.1.  Registration of Browser-Based Apps  . . . . . . . . . . .   8
+     9.2.  Client Authentication . . . . . . . . . . . . . . . . . .   8
      9.3.  Client Impersonation  . . . . . . . . . . . . . . . . . .   8
-     9.4.  Cross-Site Request Forgery Protections  . . . . . . . . .   8
-     9.5.  Authorization Server Mix-Up Mitigation  . . . . . . . . .   8
+     9.4.  Cross-Site Request Forgery Protections  . . . . . . . . .   9
+     9.5.  Authorization Server Mix-Up Mitigation  . . . . . . . . .   9
      9.6.  Cross-Domain Requests . . . . . . . . . . . . . . . . . .   9
-     9.7.  Content-Security Policy . . . . . . . . . . . . . . . . .   9
-     9.8.  OAuth Implicit Grant Authorization Flow . . . . . . . . .   9
+     9.7.  Content-Security Policy . . . . . . . . . . . . . . . . .  10
+     9.8.  OAuth Implicit Grant Authorization Flow . . . . . . . . .  10
        9.8.1.  Threat: Interception of the Redirect URI  . . . . . .  10
        9.8.2.  Threat: Access Token Leak in Browser History  . . . .  10
        9.8.3.  Threat: Manipulation of Scripts . . . . . . . . . . .  10
-       9.8.4.  Threat: Access Token Leak to Third Party Scripts  . .  10
+       9.8.4.  Threat: Access Token Leak to Third Party Scripts  . .  11
        9.8.5.  Countermeasures . . . . . . . . . . . . . . . . . . .  11
        9.8.6.  Disadvantages of the Implicit Flow  . . . . . . . . .  11
        9.8.7.  Historic Note . . . . . . . . . . . . . . . . . . . .  12
@@ -98,21 +99,26 @@ Table of Contents
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  12
      11.2.  Informative References . . . . . . . . . . . . . . . . .  13
    Appendix A.  Server Support Checklist . . . . . . . . . . . . . .  13
-   Appendix B.  Acknowledgements . . . . . . . . . . . . . . . . . .  13
+   Appendix B.  Document History . . . . . . . . . . . . . . . . . .  14
+   Appendix C.  Acknowledgements . . . . . . . . . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
+
+
+
+
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 2]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
 
 1.  Introduction
 
    This specification describes the current best practices for
    implementing OAuth 2.0 authorization flows in applications running
    entirely in a browser.
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 2]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
    For native application developers using OAuth 2.0 and OpenID Connect,
    an IETF BCP (best current practice) was published that guides
@@ -149,10 +155,20 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    "OAuth":  In this document, "OAuth" refers to OAuth 2.0, [RFC6749].
 
-   "Browser-based application":  An application that runs entirely in a
-      web browser, usually written in JavaScript, where the source code
-      is downloaded from a domain prior to execution.  Also sometimes
-      referred to as a "single-page application", or "SPA".
+   "Browser-based application":  An application that is dynamically
+      downloaded and executed in a web browser, usually written in
+      JavaScript.  Also sometimes referred to as a "single-page
+      application", or "SPA".
+
+
+
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 3]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
 
 4.  Overview
 
@@ -161,14 +177,8 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    o  Use the OAuth 2.0 authorization code flow with the PKCE extension
 
-   o  Require the OAuth 2.0 state parameter
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 3]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
+   o  Use the OAuth 2.0 state parameter to carry one-time use CSRF
+      tokens
 
    o  Recommend exact matching of redirect URIs, and require the
       hostname of the redirect URI match the hostname of the URL the app
@@ -176,30 +186,52 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    o  Do not return access tokens in the front channel
 
-   Previously it was recommended that browser-based applications use the
-   OAuth 2.0 Implicit flow.  That approach has several drawbacks,
-   including the fact that access tokens are returned in the front-
-   channel via the fragment part of the redirect URI, and as such are
-   vulnerable to a variety of attacks where the access token can be
-   intercepted or stolen.  See Section 9.8 for a deeper analysis of
-   these attacks and the drawbacks of using the Implicit flow in
-   browsers, many of which are described by [oauth-security-topics].
+   Since the publication of OAuth 2.0 RFC 6749, browsers have broadly
+   adopted the concept of CORS, enabling the ability for JavaScript
+   applications to make cross-domain requests.  During the time RFC 6749
+   was originally being written, browsers did not have wide support, so
+   it was not possible to require browsers to use the authorization code
+   flow, so the implicit flow was developed instead.
 
-   Instead, browser-based apps can perform the OAuth 2.0 authorization
-   code flow and make a POST request to the token endpoint to exchange
-   an authorization code for an access token, just like other OAuth
-   clients.  This ensures that access tokens are not sent via the less
-   secure front-channel, and are only returned over an HTTPS connection
-   initiated from the application.  Combined with PKCE, this enables the
-   authorization server to ensure that authorization codes are useless
-   even if intercepted in transport.
+   There are several drawbacks to the implicit flow, including the fact
+   that access tokens are returned in the front-channel via the fragment
+   part of the redirect URI, and as such are vulnerable to a variety of
+   attacks where the access token can be intercepted or stolen.  See
+   Section 9.8 for a deeper analysis of these attacks and the drawbacks
+   of using the implicit flow in browsers, many of which are described
+   by [oauth-security-topics].
+
+   Now, thanks to the wide adoption of CORS, browser-based apps can
+   perform the OAuth 2.0 authorization code flow and make a POST request
+   to the token endpoint to exchange an authorization code for an access
+   token, just like other OAuth clients.  This ensures that access
+   tokens are not sent via the less secure front-channel, and are only
+   returned over an HTTPS connection initiated from the application.
+   Combined with PKCE, this enables the authorization server to ensure
+   that authorization codes are useless even if intercepted in
+   transport.
+
+   Historically, the Implicit flow provided an advantage to single-page
+   apps since JavaScript could always arbitrarily read and manipulate
+   the fragment portion of the URL without triggering a page reload.
+   Now with the Session History API (described in "Session history and
+   navigation" of [HTML]), browsers have a mechanism to modify the path
+   component of the URL without triggering a page reload, so this
+   overloaded use of the fragment portion is no longer needed.
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 4]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
 
 5.  First-Party Applications
 
    While OAuth and OpenID Connect were initially created to allow third-
    party applications to access an API on behalf of a user, they have
    both proven to be useful in a first-party scenario as well.  First-
-   party apps are applications created by the same organization that
+   party apps are applications where by the same organization that
    provides the API being accessed by the application.
 
    For example, a web email client provided by the operator of the email
@@ -218,14 +250,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    It is strongly RECOMMENDED that applications use the Authorization
    Code flow over the Password grant for several reasons.  By
    redirecting to the authorization server, this provides the
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 4]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
-
    authorization server the opportunity to prompt the user for multi-
    factor authentication options, take advantage of single-sign-on
    sessions, or use third-party identity providers.  In contrast, the
@@ -235,21 +259,29 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 6.  Architectural Considerations
 
    In some cases, it may make sense to avoid the use of a strictly
-   browser-based OAuth application entirely, instead using an
-   architecture that can provide better security.
+   browser-based OAuth application entirely, and instead use an
+   architecture that keeps OAuth access tokens out of the browser.
 
-6.1.  Apps Served from the Same Domain as the API
+6.1.  Apps Served from a Common Domain as the API
 
    For simple system architectures, such as when the JavaScript
-   application is served from the same domain as the API (resource
-   server) being accessed, it is likely a better decision to avoid using
-   OAuth entirely, and just use session authentication to communicate
-   with the API.
+   application is served from a domain that can share cookies with the
+   API's (resource server's) domain, it is likely a better decision to
+   avoid using OAuth entirely, and just use session authentication to
+   communicate with the API.
 
    OAuth and OpenID Connect provide very little benefit in this
    deployment scenario, so it is recommended to reconsider whether you
    need OAuth or OpenID Connect at all in this case.  Session
    authentication has the benefit of having fewer moving parts and fewer
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 5]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    attack vectors.  OAuth and OpenID Connect were created primarily for
    third-party or federated access to APIs, so may not be the best
    solution in a same-domain scenario.
@@ -261,29 +293,19 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    the authorization code exchange and handling of access and refresh
    tokens into a backend component.
 
-   The backend component essentially becomes a new authorization server
-   for the code running in the browser, issuing its own tokens (e.g. a
-   session cookie).  Security of the connection between code running in
-   the browser and this backend component is assumed to utilize browser-
-   level protection mechanisms.  Details are out of scope of this
-   document, but many recommendations can be found at the OWASP
-   Foundation (https://www.owasp.org/).
+   Security of the connection between code running in the browser and
+   this backend component is assumed to utilize browser-level protection
+   mechanisms.  Details are out of scope of this document, but many
+   recommendations can be found at the OWASP Foundation
+   (https://www.owasp.org/).
 
    In this scenario, the backend component may be a confidential client
-   which is issued its own client secret.  Despite this, there are still
-   some ways in which this application is effectively a public client,
-   as the end result is the application's code is still running in the
-   browser and visible to the user.  Some authorization servers may have
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 5]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
-
-   different policies for public and confidential clients, and this type
-   of hybrid approach does not provide all the assurances of
+   which has the ability to authenticate itself.  Despite this, there
+   are still some ways in which this application is effectively a public
+   client, as the end result is the application's code is still running
+   in the browser and visible to the user.  Some authorization servers
+   may have different policies for public and confidential clients, and
+   this type of hybrid approach does not provide all the assurances of
    confidential clients that an authorization server is expecting.
    Authorization servers may wish to treat this type of deployment as a
    public client.
@@ -308,6 +330,14 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    client instance that exchanges the authorization code is the same one
    that initiated the flow.
 
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 6]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    Browser-based apps MUST use the OAuth 2.0 "state" parameter to
    protect themselves against Cross-Site Request Forgery and
    authorization code swap attacks and MUST use a unique value for each
@@ -326,17 +356,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    Authorization servers MUST support one of the two redirect URI
    validation mechanisms as described above.
-
-
-
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 6]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
 8.  Refresh Tokens
 
@@ -365,6 +384,16 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    additional refresh token replay mitigation techniques described in
    [oauth-security-topics].
 
+
+
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 7]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
 9.  Security Considerations
 
 9.1.  Registration of Browser-Based Apps
@@ -384,15 +413,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    end-user's browser, it cannot contain provisioned secrets.  As such,
    a browser-based app with native OAuth support is considered a public
    client as defined by Section 2.1 of OAuth 2.0 [RFC6749].
-
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 7]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
    Secrets that are statically included as part of an app distributed to
    multiple users should not be treated as confidential secrets, as one
@@ -422,6 +442,14 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    If authorization servers restrict redirect URIs to a fixed set of
    absolute HTTPS URIs without wildcard domains, paths, or query string
    components, this exact match of registered absolute HTTPS URIs MAY be
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 8]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    accepted by authorization servers as proof of identity of the client
    for the purpose of deciding whether to automatically process an
    authorization request when a previous request for the client_id has
@@ -442,14 +470,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    Clients MUST use a unique redirect URI for each authorization server
    used by the application.  The client MUST store the redirect URI
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 8]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
-
    along with the session data (e.g. along with "state") and MUST verify
    that the URI on which the authorization response was received exactly
    matches.
@@ -477,6 +497,15 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    authorization server security policy, such rejection is typically
    done based on the Origin request header.
 
+
+
+
+
+Parecki & Waite        Expires September 28, 2019               [Page 9]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
 9.7.  Content-Security Policy
 
    A browser-based application that wishes to use either long-lived
@@ -497,14 +526,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    Several attacks on the implicit flow are described by [RFC6819] and
    [oauth-security-topics], not all of which have sufficient mitigation
    strategies.
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                 [Page 9]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
 9.8.1.  Threat: Interception of the Redirect URI
 
@@ -532,6 +553,15 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    being man-in-the-middled by for example a corporate network.  While
    this type of attack is typically out of scope of basic security
    recommendations to prevent, in the case of browser-based apps it is
+
+
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 10]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    much easier to perform this kind of attack, where an injected script
    can suddenly have access to everything on the page.
 
@@ -552,15 +582,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    of the code running in the application.  When an access token is
    returned in the fragment, it is visible to any third-party scripts on
    the page.
-
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                [Page 10]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
 9.8.5.  Countermeasures
 
@@ -589,6 +610,14 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    o  Supporting the implicit flow requires additional code, more upkeep
       and understanding of the related security considerations, while
+
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 11]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
       limiting the authorization server to just the authorization code
       flow reduces the attack surface of the implementation.
 
@@ -605,18 +634,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
    Implicit flow requires the client validate the JWT signature, as
    malicious parties could otherwise craft and supply fraudulent
    id_tokens.
-
-
-
-
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                [Page 11]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
 9.8.7.  Historic Note
 
@@ -648,6 +665,15 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
 
    [Fetch]    whatwg, "Fetch", 2018.
 
+
+
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 12]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    [oauth-security-topics]
               Lodderstedt, T., Bradley, J., Labunets, A., and D. Fett,
               "OAuth 2.0 Security Best Current Practice", November 2018.
@@ -665,14 +691,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
               Threat Model and Security Considerations", RFC 6819,
               DOI 10.17487/RFC6819, January 2013,
               <https://www.rfc-editor.org/info/rfc6819>.
-
-
-
-
-Parecki & Waite          Expires August 2, 2019                [Page 12]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
 
    [RFC7636]  Sakimura, N., Ed., Bradley, J., and N. Agarwal, "Proof Key
               for Code Exchange by OAuth Public Clients", RFC 7636,
@@ -703,10 +721,42 @@ Appendix A.  Server Support Checklist
        allow browsers to make the authorization code exchange request.
        See Section 9.6
 
+
+
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 13]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
+
    5.  Not assume that browser-based clients can keep a secret, and
        SHOULD NOT issue secrets to applications of this type.
 
-Appendix B.  Acknowledgements
+Appendix B.  Document History
+
+   [[ To be removed from the final specification ]]
+
+   -01
+
+   o  Incorporated feedback from Torsten Lodderstedt
+
+   o  Updated abstract
+
+   o  Clarified the definition of browser-based apps to not exclude
+      applications cached in the browser, e.g. via Service Workers
+
+   o  Clarified use of the state parameter for CSRF protection
+
+   o  Added background information about the original reason the
+      implicit flow was created due to lack of CORS support
+
+   o  Clarified the same-domain use case where the SPA and API share a
+      cookie domain
+
+   o  Moved historic note about the fragment URL into the Overview
+
+Appendix C.  Acknowledgements
 
    The authors would like to acknowledge the work of William Denniss and
    John Bradley, whose recommendation for native apps informed many of
@@ -722,15 +772,19 @@ Appendix B.  Acknowledgements
    Heenan, Justin Richer, Karl McGuinness, Tomek Stojecki, Torsten
    Lodderstedt, and Vittorio Bertocci.
 
-
-
-
-Parecki & Waite          Expires August 2, 2019                [Page 13]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps        January 2019
-
-
 Authors' Addresses
+
+
+
+
+
+
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 14]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2019
+
 
    Aaron Parecki
    Okta
@@ -781,4 +835,6 @@ Authors' Addresses
 
 
 
-Parecki & Waite          Expires August 2, 2019                [Page 14]
+
+
+Parecki & Waite        Expires September 28, 2019              [Page 15]
