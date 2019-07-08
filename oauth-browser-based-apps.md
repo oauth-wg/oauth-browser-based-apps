@@ -218,39 +218,37 @@ same-domain scenario.
 Apps Served from a Dynamic Application Server
 ---------------------------------------------
 
-```
-+-------------+
-|             |
-|Authorization|
-|   Server    |
-|             |
-+-------------+
+    +-------------+
+    |             |
+    |Authorization|
+    |   Server    |
+    |             |
+    +-------------+
 
-   ^     +
-   |(A)  |(B)
-   |     |
-   +     v
+       ^     +
+       |(A)  |(B)
+       |     |
+       +     v
 
-+-------------+             +--------------+
-|             | +---------> |              |
-| Application |   (C)       |   Resource   |
-|   Server    |             |    Server    |
-|             | <---------+ |              |
-+-------------+   (D)       +--------------+
+    +-------------+             +--------------+
+    |             | +---------> |              |
+    | Application |   (C)       |   Resource   |
+    |   Server    |             |    Server    |
+    |             | <---------+ |              |
+    +-------------+   (D)       +--------------+
 
-    ^    +
-    |    |
-    |    | browser
-    |    | cookie
-    |    |
-    +    v
+        ^    +
+        |    |
+        |    | browser
+        |    | cookie
+        |    |
+        +    v
 
-+-------------+
-|             |
-|   Browser   |
-|             |
-+-------------+
-```
+    +-------------+
+    |             |
+    |   Browser   |
+    |             |
+    +-------------+
 
 In this architecture, the JavaScript code is loaded from a dynamic Application Server 
 that also has the ability to execute code itself. This enables the ability to keep
@@ -288,27 +286,25 @@ authorization servers may wish to limit the capabilities of these clients to mit
 Apps Served from a Static Web Server
 ------------------------------------
 
-```
-                      +---------------+           +--------------+
-                      |               |           |              |
-                      | Authorization |           |   Resource   |
-                      |    Server     |           |    Server    |
-                      |               |           |              |
-                      +---------------+           +--------------+
+                          +---------------+           +--------------+
+                          |               |           |              |
+                          | Authorization |           |   Resource   |
+                          |    Server     |           |    Server    |
+                          |               |           |              |
+                          +---------------+           +--------------+
 
-                             ^     +                 ^     +
-                             |     |                 |     |
-                             |(B)  |(C)              |(D)  |(E)
-                             |     |                 |     |
-                             |     |                 |     |
-                             +     v                 +     v
+                                 ^     +                 ^     +
+                                 |     |                 |     |
+                                 |(B)  |(C)              |(D)  |(E)
+                                 |     |                 |     |
+                                 |     |                 |     |
+                                 +     v                 +     v
 
-+-----------------+         +-------------------------------+
-|                 |   (A)   |                               |
-| Static Web Host | +-----> |           Browser             |
-|                 |         |                               |
-+-----------------+         +-------------------------------+
-```
+    +-----------------+         +-------------------------------+
+    |                 |   (A)   |                               |
+    | Static Web Host | +-----> |           Browser             |
+    |                 |         |                               |
+    +-----------------+         +-------------------------------+
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A). The application then runs in the browser, and is considered a public
