@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-01
-date: 2019-03-27
+docname: draft-ietf-oauth-browser-based-apps-02
+date: 2019-07-08
 
 ipr: trust200902
 area: OAuth
@@ -139,30 +139,23 @@ the following terms:
 Overview
 ========
 
-For authorizing users within a browser-based application, the best current practice is to
+At the time that OAuth 2.0 RFC 6749 was created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was the principal motivation for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+
+However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
+
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow assures that even if an authorization code is intercepted, it is unusable by an attacker.
+
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE. 
+
+Applications should:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
 * Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
-* Recommend exact matching of redirect URIs, and require the hostname of the redirect URI match the hostname of the URL the app was served from
-* Do not return access tokens in the front channel
+* Register one or more redirect URIs, and not vary the redirect URI per authorization request
 
-Since the publication of OAuth 2.0 RFC 6749, browsers have broadly adopted the concept of CORS, enabling the ability for JavaScript applications to make cross-domain requests. During the time RFC 6749 was originally being written, browsers did not have wide support, so it was not possible to require browsers to use the authorization code flow, so the implicit flow was developed instead.
+OAuth 2.0 servers should:
 
-There are several drawbacks to the implicit flow, including the fact that access tokens are
-returned in the front-channel via the fragment part of the redirect URI, and as such
-are vulnerable to a variety of attacks where the access token can be intercepted or
-stolen. See {{implicit_flow}} for a deeper analysis of these attacks and the drawbacks
-of using the implicit flow in browsers, many of which are described by {{oauth-security-topics}}.
-
-Now, thanks to the wide adoption of CORS, browser-based apps can perform the OAuth 2.0
-authorization code flow and make a POST request to the token endpoint to exchange an 
-authorization code for an access token, just like other OAuth clients. This ensures 
-that access tokens are not sent via the less secure front-channel, and are only 
-returned over an HTTPS connection initiated from the application. Combined with PKCE, 
-this enables the authorization server to ensure that authorization codes are useless 
-even if intercepted in transport.
-
-Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. Now with the Session History API (described in "Session history and navigation" of [HTML]), browsers have a mechanism to modify the path component of the URL without triggering a page reload, so this overloaded use of the fragment portion is no longer needed.
+* Require exact matching of registered redirect URIs
 
 
 First-Party Applications
@@ -266,14 +259,7 @@ in the authorization response matches the original state the app created.
 Handling the Authorization Code Redirect {#auth_code_redirect}
 ----------------------------------------
 
-Authorization servers SHOULD require an exact match of a registered redirect URI.
-
-If an authorization server wishes to provide some flexibility in redirect URI usage
-to clients, it MAY require that only the hostname component of the redirect URI match
-the hostname of the URL the application is served from.
-
-Authorization servers MUST support one of the two redirect URI validation mechanisms
-as described above.
+Authorization servers MUST require an exact match of a registered redirect URI.
 
 
 Refresh Tokens
@@ -531,8 +517,7 @@ OAuth servers that support browser-based apps MUST:
 
 1.  Require "https" scheme redirect URIs.
 
-2.  Require exact matching on redirect URIs or matching the hostname the application
-    is served from.
+2.  Require exact matching of registered redirect URIs.
 
 3.  Support PKCE {{RFC7636}}. Required to protect authorization code
     grants sent to public clients. See {{auth_code_request}}
@@ -548,6 +533,12 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-02
+
+* Rewrote overview section incorporating feedback from Leo Tohill
+* Updated summary recommendation bullet points to split out application and server requirements
+* Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching
 
 -01
 
@@ -572,7 +563,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, John Bradley, Joseph Heenan, Justin Richer,
-Karl McGuinness, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
+Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
