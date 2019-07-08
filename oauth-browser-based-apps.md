@@ -174,7 +174,7 @@ application is still considered a first-party application.) The first-party app
 consideration is about the user's relationship to the application and the service.
 
 To conform to this best practice, first-party applications using OAuth or OpenID
-Connect MUST use an OAuth Authorization Code flow as described later in this
+Connect MUST use the OAuth Authorization Code flow as described later in this
 document or use the OAuth Password grant.
 
 It is strongly RECOMMENDED that applications use the Authorization Code flow over
@@ -185,21 +185,27 @@ or use third-party identity providers. In contrast, the Password grant does not
 provide any built-in mechanism for these, and must be extended with custom code.
 
 
-Architectural Considerations
-============================
 
-In some cases, it may make sense to avoid the use of a strictly browser-based OAuth
-application entirely, and instead use an architecture that keeps OAuth access tokens
-out of the browser.
+Application Architecture Patterns
+=================================
+
+There are three primary architectural patterns available when building browser-based
+applications.
+
+* JavaScript served from a common domain as the resource server
+* JavaScript served from a dynamic application server
+* JavaScript served from a static web server
+
+These three architectures have different use cases and considerations.
 
 
-Apps Served from a Common Domain as the API
--------------------------------------------
+Apps Served from a Common Domain as the Resource Server
+-------------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the API's (resource server's) domain, it 
+from a domain that can share cookies with the domain of the API (resource server), it 
 is likely a better decision to avoid using OAuth entirely, and just use session 
-authentication to communicate with the API.
+authentication to communicate directly with the API.
 
 OAuth and OpenID Connect provide very little benefit in this deployment scenario,
 so it is recommended to reconsider whether you need OAuth or OpenID Connect at all
@@ -209,24 +215,117 @@ third-party or federated access to APIs, so may not be the best solution in a
 same-domain scenario.
 
 
-Browser-Based App with a Backend Component
-------------------------------------------
+Apps Served from a Dynamic Application Server
+---------------------------------------------
 
-To avoid the risks inherent in handling OAuth access tokens from a purely browser-based
-application, implementations may wish to move the authorization code exchange and
-handling of access and refresh tokens into a backend component.
+```
++-------------+
+|             |
+|Authorization|
+|   Server    |
+|             |
++-------------+
 
-Security of the connection between code running in the browser and this backend component is
+   ^     +
+   |(A)  |(B)
+   |     |
+   +     v
+
++-------------+             +--------------+
+|             | +---------> |              |
+| Application |   (C)       |   Resource   |
+|   Server    |             |    Server    |
+|             | <---------+ |              |
++-------------+   (D)       +--------------+
+
+    ^    +
+    |    |
+    |    | browser
+    |    | cookie
+    |    |
+    +    v
+
++-------------+
+|             |
+|   Browser   |
+|             |
++-------------+
+```
+
+In this architecture, the JavaScript code is loaded from a dynamic Application Server 
+that also has the ability to execute code itself. This enables the ability to keep
+all of the steps involved in obtaining an access token outside of the JavaScript 
+application.
+
+(Common examples of this architecture are an Angular front-end with a .NET backend, or
+a React front-end with a Spring Boot backend.)
+
+The Application Server SHOULD be considered a confidential client, and issued its own client
+secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate
+a request request for an access token. Upon handling the redirect from the Authorization
+Server, the Application Server will request an access token using the authorization code
+returned (A), which will be returned to the Application Server (B). The Application Server 
+utilizes its own session with the browser to store the access token.
+
+When the JavaScript application in the browser wants to make a request to the Resource Server, 
+it MUST instead make the request to the Application Server, and the Application Server will 
+make the request with the access token to the Resource Server (C), and forward the response (D)
+back to the browser.
+
+Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/),
-such as setting an HTTP-only secure cookie to authenticate the session between the
-browser and backend component.
+such as setting an HTTP-only and Secure cookie to authenticate the session between the
+browser and Application Server.
 
-In this scenario, the backend component is likely a confidential client which is issued 
-its own client secret. Note that in this model, the access token obtained by the backend
-component will be delivered to the browser for use by the SPA, so is more exposed
-than in the classic confidential client model. Some authorization servers may wish to
-limit the capabilities of these clients due to mitigate risk.
+In this scenario, the session between the browser and Application Server MAY be either a
+session cookie provided by the Application Server, OR the access token itself. Note that
+if the access token is used as the session identifier, this exposes the access token 
+to the end user even if it is not available to the JavaScript application, so some
+authorization servers may wish to limit the capabilities of these clients to mitigate risk.
+
+
+Apps Served from a Static Web Server
+------------------------------------
+
+```
+                      +---------------+           +--------------+
+                      |               |           |              |
+                      | Authorization |           |   Resource   |
+                      |    Server     |           |    Server    |
+                      |               |           |              |
+                      +---------------+           +--------------+
+
+                             ^     +                 ^     +
+                             |     |                 |     |
+                             |(B)  |(C)              |(D)  |(E)
+                             |     |                 |     |
+                             |     |                 |     |
+                             +     v                 +     v
+
++-----------------+         +-------------------------------+
+|                 |   (A)   |                               |
+| Static Web Host | +-----> |           Browser             |
+|                 |         |                               |
++-----------------+         +-------------------------------+
+```
+
+In this architecture, the JavaScript code is first loaded from a static web host into
+the browser (A). The application then runs in the browser, and is considered a public
+client since it has no ability to be issued a client secret.
+
+The code in the browser then initiates the authorization code flow with the PKCE
+extension (described in {{authorization_code_flow}}) (B) above, and obtains an
+access token via a POST request (C). The JavaScript app is then responsible for storing
+the access token securely using appropriate browser APIs.
+
+When the JavaScript application in the browser wants to make a request to the Resource Server,
+it can include the access token in the request (D) and make the request directly.
+
+In this scenario, the Authorization Server and Resource Server MUST support
+the necessary CORS headers to enable the JavaScript code to make this POST request
+from the domain on which the script is executing. (See {{cors}} for additional details.)
+
 
 
 Authorization Code Flow {#authorization_code_flow}
@@ -539,6 +638,7 @@ Document History
 * Updated summary recommendation bullet points to split out application and server requirements
 * Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching
 * Updated section 6.2 to drop reference of SPA with a backend component being a public client
+* Expanded the architecture section to explicitly mention three architectural patterns available to JS apps
 
 -01
 
