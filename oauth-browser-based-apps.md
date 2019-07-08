@@ -218,16 +218,15 @@ handling of access and refresh tokens into a backend component.
 
 Security of the connection between code running in the browser and this backend component is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
-this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/).
+this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/),
+such as setting an HTTP-only secure cookie to authenticate the session between the
+browser and backend component.
 
-In this scenario, the backend component may be a confidential client which has the 
-ability to authenticate itself. Despite this, there are still some ways in which this application
-is effectively a public client, as the end result is the application's code is still
-running in the browser and visible to the user. Some authorization servers may have
-different policies for public and confidential clients, and this type of hybrid
-approach does not provide all the assurances of confidential clients that an
-authorization server is expecting. Authorization servers may wish to treat this type
-of deployment as a public client.
+In this scenario, the backend component is likely a confidential client which is issued 
+its own client secret. Note that in this model, the access token obtained by the backend
+component will be delivered to the browser for use by the SPA, so is more exposed
+than in the classic confidential client model. Some authorization servers may wish to
+limit the capabilities of these clients due to mitigate risk.
 
 
 Authorization Code Flow {#authorization_code_flow}
@@ -539,6 +538,7 @@ Document History
 * Rewrote overview section incorporating feedback from Leo Tohill
 * Updated summary recommendation bullet points to split out application and server requirements
 * Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching
+* Updated section 6.2 to drop reference of SPA with a backend component being a public client
 
 -01
 
