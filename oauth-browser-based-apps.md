@@ -79,7 +79,7 @@ informative:
 
 --- abstract
 
-OAuth 2.0 authorization requests from browser-based apps must be made using the 
+OAuth 2.0 authorization requests from browser-based apps must be made using the
 authorization code grant with the PKCE extension, and should not be issued a
 client secret when registered.
 
@@ -132,7 +132,7 @@ the following terms:
 : In this document, "OAuth" refers to OAuth 2.0, {{RFC6749}}.
 
 "Browser-based application":
-: An application that is dynamically downloaded and executed in a web browser, 
+: An application that is dynamically downloaded and executed in a web browser,
   usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
 
@@ -145,7 +145,7 @@ However, there are several drawbacks to the implicit flow, generally involving v
 
 In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow assures that even if an authorization code is intercepted, it is unusable by an attacker.
 
-For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE. 
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
 Applications should:
 
@@ -164,7 +164,7 @@ First-Party Applications
 While OAuth and OpenID Connect were initially created to allow third-party
 applications to access an API on behalf of a user, they have both proven to be
 useful in a first-party scenario as well. First-party apps are applications where
-by the same organization that provides the API being accessed by the application.
+the same organization provides both the API and the application.
 
 For example, a web email client provided by the operator of the email account,
 or a mobile banking application created by bank itself. (Note that there is no
@@ -203,8 +203,8 @@ Apps Served from a Common Domain as the Resource Server
 -------------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server), it 
-is likely a better decision to avoid using OAuth entirely, and just use session 
+from a domain that can share cookies with the domain of the API (resource server), it
+may be a better decision to avoid using OAuth entirely, and instead use session
 authentication to communicate directly with the API.
 
 OAuth and OpenID Connect provide very little benefit in this deployment scenario,
@@ -250,9 +250,9 @@ Apps Served from a Dynamic Application Server
     |             |
     +-------------+
 
-In this architecture, the JavaScript code is loaded from a dynamic Application Server 
+In this architecture, the JavaScript code is loaded from a dynamic Application Server
 that also has the ability to execute code itself. This enables the ability to keep
-all of the steps involved in obtaining an access token outside of the JavaScript 
+all of the steps involved in obtaining an access token outside of the JavaScript
 application.
 
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
@@ -260,13 +260,13 @@ a React front-end with a Spring Boot backend.)
 
 The Application Server SHOULD be considered a confidential client, and issued its own client
 secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate
-a request request for an access token. Upon handling the redirect from the Authorization
+a request for an access token. Upon handling the redirect from the Authorization
 Server, the Application Server will request an access token using the authorization code
-returned (A), which will be returned to the Application Server (B). The Application Server 
+returned (A), which will be returned to the Application Server (B). The Application Server
 utilizes its own session with the browser to store the access token.
 
-When the JavaScript application in the browser wants to make a request to the Resource Server, 
-it MUST instead make the request to the Application Server, and the Application Server will 
+When the JavaScript application in the browser wants to make a request to the Resource Server,
+it MUST instead make the request to the Application Server, and the Application Server will
 make the request with the access token to the Resource Server (C), and forward the response (D)
 back to the browser.
 
@@ -278,7 +278,7 @@ browser and Application Server.
 
 In this scenario, the session between the browser and Application Server MAY be either a
 session cookie provided by the Application Server, OR the access token itself. Note that
-if the access token is used as the session identifier, this exposes the access token 
+if the access token is used as the session identifier, this exposes the access token
 to the end user even if it is not available to the JavaScript application, so some
 authorization servers may wish to limit the capabilities of these clients to mitigate risk.
 
@@ -327,9 +327,9 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
-Public browser-based apps needing user authorization create an authorization
-request URI with the authorization code grant type per Section 4.1 of
-OAuth 2.0 {{RFC6749}}, using a redirect URI capable of being received by the app.
+Public browser-based apps that use the authorization code grant type described in
+Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
+described in this section.
 
 
 Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
@@ -364,8 +364,8 @@ initial access token expires. {{oauth-security-topics}} describes some additiona
 requirements around refresh tokens on top of the recommendations of {{RFC6749}}.
 
 For public clients, the risk of a leaked refresh token is much greater than leaked
-access tokens, since an attacker can potentially continue using the stoken refresh
-token to obtain new access without being detectable by the authorization server.
+access tokens, since an attacker can potentially continue using the stolen refresh
+token to obtain new access tokens without being detectable by the authorization server.
 Additionally, browser-based applications provide many attack vectors by which a
 refresh token can be leaked. As such, these applications are considered a higher risk
 for handling refresh tokens.
@@ -475,10 +475,7 @@ This specification does not include guidelines for deciding whether a CORS polic
 for the token endpoint should be a wildcard origin or more restrictive. Note,
 however, that the browser will attempt to GET or POST to the API endpoint before
 knowing any CORS policy; it simply hides the succeeding or failing result from
-JavaScript if the policy does not allow sharing. If POSTs in particular from
-unsupported single-page applications are to be rejected as errors per authorization
-server security policy, such rejection is typically done based on the Origin
-request header.
+JavaScript if the policy does not allow sharing.
 
 
 Content-Security Policy   {#csp}
@@ -628,6 +625,12 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+current draft
+
+* Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections
+* Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments
+* Minor typo corrections
+
 -02
 
 * Rewrote overview section incorporating feedback from Leo Tohill
@@ -658,8 +661,8 @@ session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
-George Fletcher, Hannes Tschofenig, John Bradley, Joseph Heenan, Justin Richer,
-Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
+George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
+Justin Richer, Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
