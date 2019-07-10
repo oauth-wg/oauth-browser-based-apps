@@ -579,10 +579,16 @@ fraudulent id_tokens.
 
 Historically, the Implicit flow provided an advantage to single-page apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
-URL without triggering a page reload. Now with the Session History API (described in
-"Session history and navigation" of {{HTML}}), browsers have a mechanism to modify
-the path component of the URL without triggering a page reload, so this overloaded
-use of the fragment portion is no longer needed.
+URL without triggering a page reload. This was necessary in order to remove the
+access token from the URL after it was obtained by the app.
+
+Modern browsers now have the Session History API (described in "Session history and
+navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
+component of the URL without triggering a page reload. This means modern browser-based apps can
+use the unmodified OAuth 2.0 authorization code flow, since they have the ability to
+remove the authorization code from the query string without triggering a page reload
+thanks to the Session History API.
+
 
 
 Additional Security Considerations
@@ -627,6 +633,7 @@ Document History
 
 current draft
 
+* Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified authorization code flow
 * Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections
 * Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments
 * Minor typo corrections
