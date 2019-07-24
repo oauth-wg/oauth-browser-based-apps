@@ -79,10 +79,6 @@ informative:
 
 --- abstract
 
-OAuth 2.0 authorization requests from browser-based apps must be made using the
-authorization code grant with the PKCE extension, and should not be issued a
-client secret when registered.
-
 This specification details the security considerations that must be
 taken into account when developing browser-based applications, as well as best
 practices for how they can securely implement OAuth 2.0.
@@ -101,12 +97,8 @@ This document is formally known as {{RFC8252}} or BCP 212, but nicknamed "AppAut
 the OpenID Foundation-sponsored set of libraries that assist developers in adopting
 these practices.
 
-AppAuth steers developers away from performing user authorization via embedding user
-agents such as browser controls into native apps, instead insisting that an external
-agent (such as the system browser) be used. The RFC continues on to promote
-capabilities and supplemental specifications beyond the base OAuth 2.0 and
-OpenID Connect specifications to improve baseline security, such as {{RFC7636}},
-also known as PKCE.
+{{RFC8252}} makes specific recommendations for how to securely implement OAuth in native
+applications, including incorporating additional OAuth extensions where needed.
 
 OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
 OAuth for native apps as well as browser-based apps, and includes additional
@@ -161,8 +153,8 @@ OAuth 2.0 servers should:
 First-Party Applications
 ========================
 
-While OAuth and OpenID Connect were initially created to allow third-party
-applications to access an API on behalf of a user, they have both proven to be
+While OAuth was initially created to allow third-party
+applications to access an API on behalf of a user, it has proven to be
 useful in a first-party scenario as well. First-party apps are applications where
 the same organization provides both the API and the application.
 
@@ -207,16 +199,16 @@ from a domain that can share cookies with the domain of the API (resource server
 may be a better decision to avoid using OAuth entirely, and instead use session
 authentication to communicate directly with the API.
 
-OAuth and OpenID Connect provide very little benefit in this deployment scenario,
-so it is recommended to reconsider whether you need OAuth or OpenID Connect at all
+OAuth provides very little benefit in this deployment scenario,
+so it is recommended to reconsider whether you need OAuth at all
 in this case. Session authentication has the benefit of having fewer moving parts
-and fewer attack vectors. OAuth and OpenID Connect were created primarily for
+and fewer attack vectors. OAuth was created primarily for
 third-party or federated access to APIs, so may not be the best solution in a
 same-domain scenario.
 
 
-Apps Served from a Dynamic Application Server
----------------------------------------------
+JavaScript Applications with a Backend
+--------------------------------------
 
     +-------------+
     |             |
@@ -283,8 +275,8 @@ to the end user even if it is not available to the JavaScript application, so so
 authorization servers may wish to limit the capabilities of these clients to mitigate risk.
 
 
-Apps Served from a Static Web Server
-------------------------------------
+JavaScript Applications without a Backend
+-----------------------------------------
 
                           +---------------+           +--------------+
                           |               |           |              |
@@ -636,6 +628,9 @@ current draft
 * Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified authorization code flow
 * Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections
 * Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments
+* Updated abstract to not be limited to public clients, since the later sections talk about confidential clients
+* Removed references to avoiding OpenID Connect for same-domain architectures
+* Updated headers to better describe architectures (Apps Served from a Static Web Server -> JavaScript Applications without a Backend)
 * Minor typo corrections
 
 -02
