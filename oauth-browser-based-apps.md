@@ -184,9 +184,9 @@ Application Architecture Patterns
 There are three primary architectural patterns available when building browser-based
 applications.
 
-* JavaScript served from a common domain as the resource server
-* JavaScript served from a dynamic application server
-* JavaScript served from a static web server
+* a JavaScript application served from a common domain as the resource server
+* a JavaScript application with a backend
+* a JavaScript application with no backend, accessing resource servers directly
 
 These three architectures have different use cases and considerations.
 
@@ -195,16 +195,30 @@ Apps Served from a Common Domain as the Resource Server
 -------------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server), it
-may be a better decision to avoid using OAuth entirely, and instead use session
-authentication to communicate directly with the API.
+from a domain that can share cookies with the domain of the API (resource server), 
+OAuth adds additional attack vectors that could be avoided with a different solution.
 
-OAuth provides very little benefit in this deployment scenario,
-so it is recommended to reconsider whether you need OAuth at all
-in this case. Session authentication has the benefit of having fewer moving parts
-and fewer attack vectors. OAuth was created primarily for
-third-party or federated access to APIs, so may not be the best solution in a
-same-domain scenario.
+In particular, using any redirect-based mechanism of obtaining an access token
+enables the redirect-based attacks described in {{oauth-security-topics}}, but if 
+the application, AS and API share a domain, then it is unnecessary to use a redirect
+mechanism to communicate between them.
+
+An additional concern with handling access tokens in a browser is that there is no
+secure storage mechanism where JavaScript code can keep the access token to be later
+used in an API request. Using an OAuth flow results in the JavaScript code getting an 
+access token, needing to store it somewhere, and then retrieve it to make an API request. 
+Instead, it is more secure to use an HTTP-only cookie between the JavaScript application 
+and API so that the JavaScript code can't access the cookie value itself.
+
+In this situation, it is best to avoid letting the JavaScript code ever see the 
+access token, and instead use a mechanism such as the "JavaScript Applications with a Backend"
+pattern described below, to keep access tokens out of the browser.
+
+If your JavaScript application has no backend, but still shares a domain with the resource
+server, then it may be best to avoid using OAuth entirely.
+
+OAuth was created primarily for third-party or federated access to APIs, 
+so it may not be the best solution in a same-domain scenario.
 
 
 JavaScript Applications with a Backend
@@ -631,6 +645,7 @@ current draft
 * Updated abstract to not be limited to public clients, since the later sections talk about confidential clients
 * Removed references to avoiding OpenID Connect for same-domain architectures
 * Updated headers to better describe architectures (Apps Served from a Static Web Server -> JavaScript Applications without a Backend)
+* Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario
 * Minor typo corrections
 
 -02
