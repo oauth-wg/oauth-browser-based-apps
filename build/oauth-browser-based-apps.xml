@@ -14,7 +14,7 @@
 <?rfc sortrefs="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc ipr="trust200902" docName="draft-ietf-oauth-browser-based-apps-02" category="bcp">
+<rfc ipr="trust200902" docName="draft-ietf-oauth-browser-based-apps-03" category="bcp">
 
   <front>
     <title>OAuth 2.0 for Browser-Based Apps</title>
@@ -33,7 +33,7 @@
       </address>
     </author>
 
-    <date year="2019" month="July" day="08"/>
+    <date year="2019" month="July" day="24"/>
 
     <area>Security Area</area>
     <workgroup>Open Authentication Protocol</workgroup>
@@ -42,10 +42,6 @@
 
     <abstract>
 
-
-<t>OAuth 2.0 authorization requests from browser-based apps must be made using the 
-authorization code grant with the PKCE extension, and should not be issued a
-client secret when registered.</t>
 
 <t>This specification details the security considerations that must be
 taken into account when developing browser-based applications, as well as best
@@ -72,12 +68,8 @@ This document is formally known as <xref target="RFC8252"/> or BCP 212, but nick
 the OpenID Foundation-sponsored set of libraries that assist developers in adopting
 these practices.</t>
 
-<t>AppAuth steers developers away from performing user authorization via embedding user
-agents such as browser controls into native apps, instead insisting that an external
-agent (such as the system browser) be used. The RFC continues on to promote
-capabilities and supplemental specifications beyond the base OAuth 2.0 and
-OpenID Connect specifications to improve baseline security, such as <xref target="RFC7636"/>,
-also known as PKCE.</t>
+<t><xref target="RFC8252"/> makes specific recommendations for how to securely implement OAuth in native
+applications, including incorporating additional OAuth extensions where needed.</t>
 
 <t>OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
 OAuth for native apps as well as browser-based apps, and includes additional
@@ -101,7 +93,7 @@ the following terms:</t>
   <t hangText='&quot;OAuth&quot;:'>
   In this document, "OAuth" refers to OAuth 2.0, <xref target="RFC6749"/>.</t>
   <t hangText='&quot;Browser-based application&quot;:'>
-  An application that is dynamically downloaded and executed in a web browser, 
+  An application that is dynamically downloaded and executed in a web browser,
 usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".</t>
 </list></t>
 
@@ -124,7 +116,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
   <t>Register one or more redirect URIs, and not vary the redirect URI per authorization request</t>
 </list></t>
 
-<t>OAuth 2.0 servers should:</t>
+<t>OAuth 2.0 servers must:</t>
 
 <t><list style="symbols">
   <t>Require exact matching of registered redirect URIs</t>
@@ -133,10 +125,10 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
 </section>
 <section anchor="first-party-applications" title="First-Party Applications">
 
-<t>While OAuth and OpenID Connect were initially created to allow third-party
-applications to access an API on behalf of a user, they have both proven to be
+<t>While OAuth was initially created to allow third-party
+applications to access an API on behalf of a user, it has proven to be
 useful in a first-party scenario as well. First-party apps are applications where
-by the same organization that provides the API being accessed by the application.</t>
+the same organization provides both the API and the application.</t>
 
 <t>For example, a web email client provided by the operator of the email account,
 or a mobile banking application created by bank itself. (Note that there is no
@@ -163,9 +155,9 @@ provide any built-in mechanism for these, and must be extended with custom code.
 applications.</t>
 
 <t><list style="symbols">
-  <t>JavaScript served from a common domain as the resource server</t>
-  <t>JavaScript served from a dynamic application server</t>
-  <t>JavaScript served from a static web server</t>
+  <t>a JavaScript application served from a common domain as the resource server</t>
+  <t>a JavaScript application with a backend</t>
+  <t>a JavaScript application with no backend, accessing resource servers directly</t>
 </list></t>
 
 <t>These three architectures have different use cases and considerations.</t>
@@ -173,19 +165,33 @@ applications.</t>
 <section anchor="apps-served-from-a-common-domain-as-the-resource-server" title="Apps Served from a Common Domain as the Resource Server">
 
 <t>For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server), it 
-is likely a better decision to avoid using OAuth entirely, and just use session 
-authentication to communicate directly with the API.</t>
+from a domain that can share cookies with the domain of the API (resource server), 
+OAuth adds additional attack vectors that could be avoided with a different solution.</t>
 
-<t>OAuth and OpenID Connect provide very little benefit in this deployment scenario,
-so it is recommended to reconsider whether you need OAuth or OpenID Connect at all
-in this case. Session authentication has the benefit of having fewer moving parts
-and fewer attack vectors. OAuth and OpenID Connect were created primarily for
-third-party or federated access to APIs, so may not be the best solution in a
-same-domain scenario.</t>
+<t>In particular, using any redirect-based mechanism of obtaining an access token
+enables the redirect-based attacks described in <xref target="oauth-security-topics"/>, but if 
+the application, AS and API share a domain, then it is unnecessary to use a redirect
+mechanism to communicate between them.</t>
+
+<t>An additional concern with handling access tokens in a browser is that there is no
+secure storage mechanism where JavaScript code can keep the access token to be later
+used in an API request. Using an OAuth flow results in the JavaScript code getting an 
+access token, needing to store it somewhere, and then retrieve it to make an API request. 
+Instead, it is more secure to use an HTTP-only cookie between the JavaScript application 
+and API so that the JavaScript code can't access the cookie value itself.</t>
+
+<t>In this situation, it is best to avoid letting the JavaScript code ever see the 
+access token, and instead use a mechanism such as the "JavaScript Applications with a Backend"
+pattern described below, to keep access tokens out of the browser.</t>
+
+<t>If your JavaScript application has no backend, but still shares a domain with the resource
+server, then it may be best to avoid using OAuth entirely.</t>
+
+<t>OAuth was created primarily for third-party or federated access to APIs, 
+so it may not be the best solution in a same-domain scenario.</t>
 
 </section>
-<section anchor="apps-served-from-a-dynamic-application-server" title="Apps Served from a Dynamic Application Server">
+<section anchor="javascript-applications-with-a-backend" title="JavaScript Applications with a Backend">
 
 <figure><artwork><![CDATA[
 +-------------+
@@ -221,9 +227,9 @@ same-domain scenario.</t>
 +-------------+
 ]]></artwork></figure>
 
-<t>In this architecture, the JavaScript code is loaded from a dynamic Application Server 
+<t>In this architecture, the JavaScript code is loaded from a dynamic Application Server
 that also has the ability to execute code itself. This enables the ability to keep
-all of the steps involved in obtaining an access token outside of the JavaScript 
+all of the steps involved in obtaining an access token outside of the JavaScript
 application.</t>
 
 <t>(Common examples of this architecture are an Angular front-end with a .NET backend, or
@@ -231,13 +237,13 @@ a React front-end with a Spring Boot backend.)</t>
 
 <t>The Application Server SHOULD be considered a confidential client, and issued its own client
 secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate
-a request request for an access token. Upon handling the redirect from the Authorization
+a request for an access token. Upon handling the redirect from the Authorization
 Server, the Application Server will request an access token using the authorization code
-returned (A), which will be returned to the Application Server (B). The Application Server 
+returned (A), which will be returned to the Application Server (B). The Application Server
 utilizes its own session with the browser to store the access token.</t>
 
-<t>When the JavaScript application in the browser wants to make a request to the Resource Server, 
-it MUST instead make the request to the Application Server, and the Application Server will 
+<t>When the JavaScript application in the browser wants to make a request to the Resource Server,
+it MUST instead make the request to the Application Server, and the Application Server will
 make the request with the access token to the Resource Server (C), and forward the response (D)
 back to the browser.</t>
 
@@ -249,12 +255,12 @@ browser and Application Server.</t>
 
 <t>In this scenario, the session between the browser and Application Server MAY be either a
 session cookie provided by the Application Server, OR the access token itself. Note that
-if the access token is used as the session identifier, this exposes the access token 
+if the access token is used as the session identifier, this exposes the access token
 to the end user even if it is not available to the JavaScript application, so some
 authorization servers may wish to limit the capabilities of these clients to mitigate risk.</t>
 
 </section>
-<section anchor="apps-served-from-a-static-web-server" title="Apps Served from a Static Web Server">
+<section anchor="javascript-applications-without-a-backend" title="JavaScript Applications without a Backend">
 
 <figure><artwork><![CDATA[
                       +---------------+           +--------------+
@@ -298,9 +304,9 @@ from the domain on which the script is executing. (See <xref target="cors"/> for
 </section>
 <section anchor="authorization_code_flow" title="Authorization Code Flow">
 
-<t>Public browser-based apps needing user authorization create an authorization
-request URI with the authorization code grant type per Section 4.1 of
-OAuth 2.0 <xref target="RFC6749"/>, using a redirect URI capable of being received by the app.</t>
+<t>Public browser-based apps that use the authorization code grant type described in
+Section 4.1 of OAuth 2.0 <xref target="RFC6749"/> MUST also follow these additional requirements
+described in this section.</t>
 
 <section anchor="auth_code_request" title="Initiating the Authorization Request from a Browser-Based Application">
 
@@ -332,8 +338,8 @@ initial access token expires. <xref target="oauth-security-topics"/> describes s
 requirements around refresh tokens on top of the recommendations of <xref target="RFC6749"/>.</t>
 
 <t>For public clients, the risk of a leaked refresh token is much greater than leaked
-access tokens, since an attacker can potentially continue using the stoken refresh
-token to obtain new access without being detectable by the authorization server.
+access tokens, since an attacker can potentially continue using the stolen refresh
+token to obtain new access tokens without being detectable by the authorization server.
 Additionally, browser-based applications provide many attack vectors by which a
 refresh token can be leaked. As such, these applications are considered a higher risk
 for handling refresh tokens.</t>
@@ -435,10 +441,7 @@ request.</t>
 for the token endpoint should be a wildcard origin or more restrictive. Note,
 however, that the browser will attempt to GET or POST to the API endpoint before
 knowing any CORS policy; it simply hides the succeeding or failing result from
-JavaScript if the policy does not allow sharing. If POSTs in particular from
-unsupported single-page applications are to be rejected as errors per authorization
-server security policy, such rejection is typically done based on the Origin
-request header.</t>
+JavaScript if the policy does not allow sharing.</t>
 
 </section>
 <section anchor="csp" title="Content-Security Policy">
@@ -477,6 +480,8 @@ Neither of these fully prevent this attack, they only reduce the potential damag
 <t>Additionally, many browsers now also sync browser history to cloud services and to
 multiple devices, providing an even wider attack surface to extract access tokens
 out of the URL.</t>
+
+<t>This is discussed in more detail in Section 4.3.2 of <xref target="oauth-security-topics"/>.</t>
 
 </section>
 <section anchor="threat-manipulation-of-scripts" title="Threat: Manipulation of Scripts">
@@ -548,10 +553,15 @@ fraudulent id_tokens.</t>
 
 <t>Historically, the Implicit flow provided an advantage to single-page apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
-URL without triggering a page reload. Now with the Session History API (described in
-"Session history and navigation" of <xref target="HTML"/>), browsers have a mechanism to modify
-the path component of the URL without triggering a page reload, so this overloaded
-use of the fragment portion is no longer needed.</t>
+URL without triggering a page reload. This was necessary in order to remove the
+access token from the URL after it was obtained by the app.</t>
+
+<t>Modern browsers now have the Session History API (described in "Session history and
+navigation" of <xref target="HTML"/>), which provides a mechanism to modify the path and query string
+component of the URL without triggering a page reload. This means modern browser-based apps can
+use the unmodified OAuth 2.0 authorization code flow, since they have the ability to
+remove the authorization code from the query string without triggering a page reload
+thanks to the Session History API.</t>
 
 </section>
 </section>
@@ -620,7 +630,7 @@ to follow these best practices when creating an OAuth 2.0 Browser-Based applicat
     <author initials="D." surname="Fett" fullname="Daniel Fett">
       <organization>yes.com</organization>
     </author>
-    <date year="2018" month="November"/>
+    <date year="2019" month="July"/>
   </front>
 </reference>
 
@@ -663,6 +673,20 @@ secrets to applications of this type.</t>
 
 <t>[[ To be removed from the final specification ]]</t>
 
+<t>-03</t>
+
+<t><list style="symbols">
+  <t>Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified authorization code flow</t>
+  <t>Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections</t>
+  <t>Softened "is likely a better decision to avoid using OAuth entirely" to "it may be&#8230;" for common-domain deployments</t>
+  <t>Updated abstract to not be limited to public clients, since the later sections talk about confidential clients</t>
+  <t>Removed references to avoiding OpenID Connect for same-domain architectures</t>
+  <t>Updated headers to better describe architectures (Apps Served from a Static Web Server -&gt; JavaScript Applications without a Backend)</t>
+  <t>Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario</t>
+  <t>Referenced Security BCP in implicit flow attacks where possible</t>
+  <t>Minor typo corrections</t>
+</list></t>
+
 <t>-02</t>
 
 <t><list style="symbols">
@@ -696,8 +720,8 @@ session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:</t>
 
 <t>Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
-George Fletcher, Hannes Tschofenig, John Bradley, Joseph Heenan, Justin Richer,
-Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.</t>
+George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
+Justin Richer, Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.</t>
 
 </section>
 
@@ -705,223 +729,231 @@ Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio B
   </back>
 
 <!-- ##markdown-source:
-H4sIACLJI10AA71d63fbxpX/Pn/FHOVDpZZkbbd51N3dU1myY6V+aCW5Pj09
-3RwQGIqIQICLh2gm8f++93fvzGAGBGQn3V2fxJZAYDBz32/O53PV5m1hnuq3
-p1271k8Wj/SqqvWzuto1pp4/SxqT6dPttlFZlZbJhu7M6mTVznPTruZVQg/N
-l/bmJW6eJ3Tz/NETlSUt3fzk0eM/zR99PX/0jVL5tn6q27pr2iePHv2Jbklq
-k9g3q7vdU31RtqYuTTs/xytUmrRP9TLdKpVWWV7ePtVdM0+aNM/VNn+qtG6r
-9Knem4Z+bKq6rc2q8b/vN/2vCtusajwyp/+1zkv65HShL2kH6V3O1+Rwp0ld
-ldH1qqYXv71rE/7NbJK8eKoT3PaXrdy2SKsNf9jV+VO9bttt8/T3v+db4juC
-l58v9Pskb03w6vPkPs+Cq/ziSzq3vshMSWjahzvIcPdfkuIuKfLSzJuq6Nq8
-Kht+lSqrepO0+b3Bma9enD15/PhP9sevvv6j//Ebf/Xrr/7wlf3xmydfPsGP
-Z9eX/C/BWUjkrCL8lK2+NimdtN3ry6rIU9lVD2E6pj3Q6/zO6PemafmqPfjr
-RXiJz/htVd0WZkboT6PnT7Nko58lNVFHsAChLbz24ArnSan/ZrK8/TFcgWAf
-XeQlXlc/5kWR0CHrbVUngCV/LGR8blKzWZoa9PwVXX9h2nQdAYevHIDC4Xa3
-TtrdbbiJ4IrnlG/oV2GpxoJ43lbbPG2iN/Wc6hHxjCCqz7q6Bnou6yRt89RM
-4uWmqhtCpH5VZZnBj1mEoZvFyCcMI+IlT+tuse+qdUniIskKsw9X+W4xuMor
-/L1b5mkVY7nMarPXr5JlR6zfDFA9uMyLvEhSs6yquyGqc1MADe0A18Glg1MI
-6N9U9x67kFPlKmSflzevX0UIwIV/GdNqPp/rZNm0wJZSPVJl0fxHJkFdm//u
-CLmNXtXVRkeSVkPS6g2JU700epNkhuQjxEW7NlrFy5AANfq2Tog8djm9CLdc
-/vXsuTYfiBIaumWmkzLTzbrqikyXFa+ZN02H96i0yEFZRJW1oRXWBhu7zYlA
-apMtlLpZ541utibNV3kqb8xMS3Kq4Tc5aqZt0LuIsvgWfJa07gCqTe5o2bxs
-K52kadWV9kWZuTcFcQEd7OD4hX1bQ7tv9M4UBf5dQr5sLRc0rM/W1Q47oR2Q
-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
+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
+q5X6P6qDZFFeegAA
 
 -->
 
