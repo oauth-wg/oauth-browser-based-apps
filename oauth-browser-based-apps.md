@@ -139,13 +139,13 @@ In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), wh
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
-Applications should:
+Applications MUST:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
 * Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
 * Register one or more redirect URIs, and not vary the redirect URI per authorization request
 
-OAuth 2.0 servers must:
+OAuth 2.0 servers MUST:
 
 * Require exact matching of registered redirect URIs
 
@@ -166,16 +166,16 @@ application is still considered a first-party application.) The first-party app
 consideration is about the user's relationship to the application and the service.
 
 To conform to this best practice, first-party applications using OAuth or OpenID
-Connect MUST use the OAuth Authorization Code flow as described later in this
-document or use the OAuth Password grant.
+Connect MUST use the OAuth Authorization Code flow as described later in this document.
 
-It is strongly RECOMMENDED that applications use the Authorization Code flow over
-the Password grant for several reasons. By redirecting to the authorization server,
+The Resource Owner Password Grant MUST NOT be used, as described in 
+{{oauth-security-topics}} section 3.4.
+
+By using the Authorization Code flow and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
 or use third-party identity providers. In contrast, the Password grant does not
 provide any built-in mechanism for these, and must be extended with custom code.
-
 
 
 Application Architecture Patterns
@@ -638,6 +638,10 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+current draft
+
+* Disallow the use of the Password Grant
 
 -03
 
