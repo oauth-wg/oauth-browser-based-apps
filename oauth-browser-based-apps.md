@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-02
-date: 2019-07-08
+docname: draft-ietf-oauth-browser-based-apps-03
+date: 2019-07-24
 
 ipr: trust200902
 area: OAuth
@@ -67,7 +67,7 @@ normative:
     - name: Daniel Fett
       ins: D. Fett
       org: yes.com
-    date: November 2018
+    date: July 2019
 
 informative:
   HTML:
@@ -145,7 +145,7 @@ Applications should:
 * Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
 * Register one or more redirect URIs, and not vary the redirect URI per authorization request
 
-OAuth 2.0 servers should:
+OAuth 2.0 servers must:
 
 * Require exact matching of registered redirect URIs
 
@@ -522,6 +522,8 @@ Additionally, many browsers now also sync browser history to cloud services and 
 multiple devices, providing an even wider attack surface to extract access tokens
 out of the URL.
 
+This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
+
 ### Threat: Manipulation of Scripts
 
 An attacker could modify the page or inject scripts into the browser via various
@@ -637,7 +639,7 @@ Document History
 
 [[ To be removed from the final specification ]]
 
-current draft
+-03
 
 * Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified authorization code flow
 * Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections
@@ -646,6 +648,7 @@ current draft
 * Removed references to avoiding OpenID Connect for same-domain architectures
 * Updated headers to better describe architectures (Apps Served from a Static Web Server -> JavaScript Applications without a Backend)
 * Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario
+* Referenced Security BCP in implicit flow attacks where possible
 * Minor typo corrections
 
 -02
