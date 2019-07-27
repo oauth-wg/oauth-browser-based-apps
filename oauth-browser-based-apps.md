@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
 docname: draft-ietf-oauth-browser-based-apps-03
-date: 2019-07-24
+date: 2019-07-26
 
 ipr: trust200902
 area: OAuth
@@ -142,7 +142,7 @@ For this reason, and from other lessons learned, the current best practice for b
 Applications MUST:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
-* Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
+* Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE
 * Register one or more redirect URIs, and not vary the redirect URI per authorization request
 
 OAuth 2.0 authorization servers MUST:
@@ -351,10 +351,12 @@ and exchanged for an access token by a malicious client, by providing the
 authorization server with a way to verify the same client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
-Browser-based apps MUST use the OAuth 2.0 "state" parameter to protect themselves
-against Cross-Site Request Forgery and authorization code swap attacks and MUST use
-a unique value for each authorization request, and MUST verify the returned state
-in the authorization response matches the original state the app created.
+Browser-based apps MUST use a unique value for the the OAuth 2.0 "state" parameter 
+on each request, and MUST verify the returned state in the authorization response
+matches the original state the app created. 
+
+Browser-based apps MUST follow the recommendations in {{oauth-security-topics}} 
+section 3.1 to protect themselves during redirect flows.
 
 
 Handling the Authorization Code Redirect {#auth_code_redirect}
@@ -363,7 +365,7 @@ Handling the Authorization Code Redirect {#auth_code_redirect}
 Authorization servers MUST require an exact match of a registered redirect URI.
 
 
-Refresh Tokens
+Refresh Tokens {#refresh_tokens}
 ==============
 
 Refresh tokens provide a way for applications to obtain a new access token when the
@@ -630,7 +632,7 @@ This document does not require any IANA actions.
 Server Support Checklist
 ====================================
 
-OAuth servers that support browser-based apps MUST:
+OAuth authorization servers that support browser-based apps MUST:
 
 1.  Require "https" scheme redirect URIs.
 
@@ -645,6 +647,11 @@ OAuth servers that support browser-based apps MUST:
 5.  Not assume that browser-based clients can keep a secret, and SHOULD NOT issue
     secrets to applications of this type.
 
+6.  Not support the Resource Owner Password grant for browser-based clients.
+
+7.  Follow the {{oauth-security-topics}} recommendations on refresh tokens, as well
+    as the additional requirements described in {{refresh_tokens}}.
+
 
 Document History
 ================
@@ -656,6 +663,8 @@ current draft
 * Disallow the use of the Password Grant
 * Add PKCE support to summary list for authorization server requirements
 * Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token
+* Updated recommendations on using state to reflect the Security BCP
+* Updated server support checklist to reflect latest changes
 
 -03
 
