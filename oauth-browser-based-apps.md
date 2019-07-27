@@ -145,9 +145,10 @@ Applications MUST:
 * Use the OAuth 2.0 state parameter to carry one-time use CSRF tokens
 * Register one or more redirect URIs, and not vary the redirect URI per authorization request
 
-OAuth 2.0 servers MUST:
+OAuth 2.0 authorization servers MUST:
 
 * Require exact matching of registered redirect URIs
+* Support the PKCE extension
 
 
 First-Party Applications
@@ -642,6 +643,7 @@ Document History
 current draft
 
 * Disallow the use of the Password Grant
+* Add PKCE support to summary list for authorization server requirements
 
 -03
 
