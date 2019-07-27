@@ -367,24 +367,35 @@ Refresh Tokens
 ==============
 
 Refresh tokens provide a way for applications to obtain a new access token when the
-initial access token expires. {{oauth-security-topics}} describes some additional
-requirements around refresh tokens on top of the recommendations of {{RFC6749}}.
+initial access token expires. With public clients, the risk of a leaked refresh token 
+is potentially greater than leaked access tokens, since an attacker may be able to 
+continue using the stolen refresh token to obtain new access tokens without being 
+detectable by the authorization server.
 
-For public clients, the risk of a leaked refresh token is much greater than leaked
-access tokens, since an attacker can potentially continue using the stolen refresh
-token to obtain new access tokens without being detectable by the authorization server.
-Additionally, browser-based applications provide many attack vectors by which a
-refresh token can be leaked. As such, these applications are considered a higher risk
-for handling refresh tokens.
+Browser-based applications provide an attacker with several opportunities by which a
+refresh token can be leaked, just as with access tokens. As such, these applications 
+are considered a higher risk for handling refresh tokens.
 
-Authorization servers SHOULD NOT issue refresh tokens to browser-based applications.
+{{oauth-security-topics}} describes some additional requirements around refresh tokens 
+on top of the recommendations of {{RFC6749}}. Applications and authorization servers 
+conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}} 
+around refresh tokens.
 
-If an authorization server does choose to issue refresh tokens to browser-based
-applications, then it MUST issue a new refresh token with every access token refresh
-response. Doing this mitigates the risk of a leaked refresh token, as a
-leaked refresh token can be detected if both the attacker and the legitimate client
-attempt to use the same refresh token. Authorization servers MUST follow the
-additional refresh token replay mitigation techniques described in {{oauth-security-topics}}.
+In particular, authorization servers:
+
+* MUST rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section X)
+* MUST set a maximum lifetime on refresh tokens
+* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token
+
+For example:
+
+* A user authorizes an application, issuing an access token that lasts 1 hour, and a refresh token that lasts 24 hours
+* After 1 hour, the initial access token expires, so the application uses the refresh token to get a new access token
+* The authorization server returns a new access token that lasts 1 hour, and a new refresh token that lasts 23 hours
+* This continues until 24 hours pass from the initial authorization
+* At this point, when the application attempts to use the refresh token after 24 hours, the request will fail and the application will have to involve the user in a new authorization request
+
+By limiting the overall refresh token lifetime to the lifetime of the initial refresh token, this ensures a stolen refresh token cannot be used indefinitely.
 
 
 Security Considerations
@@ -644,6 +655,7 @@ current draft
 
 * Disallow the use of the Password Grant
 * Add PKCE support to summary list for authorization server requirements
+* Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token
 
 -03
 
