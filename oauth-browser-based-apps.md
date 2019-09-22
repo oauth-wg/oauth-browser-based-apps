@@ -175,7 +175,7 @@ By using the Authorization Code flow and redirecting the user to the authorizati
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
 or use third-party identity providers. In contrast, the Password grant does not
-provide any built-in mechanism for these, and must be extended with custom code.
+provide any built-in mechanism for these, and would instead be extended with custom code.
 
 
 Application Architecture Patterns
@@ -364,8 +364,8 @@ Refresh Tokens {#refresh_tokens}
 
 Refresh tokens provide a way for applications to obtain a new access token when the
 initial access token expires. With public clients, the risk of a leaked refresh token 
-is potentially greater than leaked access tokens, since an attacker may be able to 
-continue using the stolen refresh token to obtain new access tokens without being 
+is greater than leaked access tokens, since an attacker may be able to 
+continue using the stolen refresh token to obtain new access tokens potentially without being 
 detectable by the authorization server.
 
 Browser-based applications provide an attacker with several opportunities by which a
@@ -379,9 +379,9 @@ around refresh tokens.
 
 In particular, authorization servers:
 
-* MUST rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section X)
-* MUST set a maximum lifetime on refresh tokens
-* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token
+* MUST rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
+* MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
+* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
 For example:
 
