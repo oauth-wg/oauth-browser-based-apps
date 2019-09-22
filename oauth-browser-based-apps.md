@@ -458,7 +458,9 @@ Cross-Site Request Forgery Protections   {#csrf_protection}
 Section 5.3.5 of {{RFC6819}} recommends using the "state" parameter to
 link client requests and responses to prevent CSRF (Cross-Site Request Forgery)
 attacks. To conform to this best practice, use of the "state" parameter is
-REQUIRED, as described in {{auth_code_request}}.
+REQUIRED, as described in {{auth_code_request}}, unless the application has
+a method of ensuring the authorization server supports PKCE, since PKCE also
+prevents CSRF attacks.
 
 
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
@@ -574,7 +576,7 @@ using the standard Authorization Code flow.
   a malicious party hands off an access token it retrieved through some other means
   to the client.
 * Returning an access token in the front channel redirect gives the authorization
-  server little assurance that the access token will actually end up at the
+  server no assurance that the access token will actually end up at the
   application, since there are many ways this redirect may fail or be intercepted.
 * Supporting the implicit flow requires additional code, more upkeep and
   understanding of the related security considerations, while limiting the
@@ -584,12 +586,14 @@ using the standard Authorization Code flow.
   also requires the use of the authorization code flow with PKCE anyway.
 
 In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally
-signed. Performing OpenID Connect using the authorization code flow also provides
-the additional benefit of the client not needing to verify the JWT signature, as the
-token will have been fetched over an HTTPS connection directly from the authorization
-server. However, returning an id_token using the Implicit flow requires the client
+signed. Returning an id_token using the Implicit flow (response_type=id_token) requires the client
 validate the JWT signature, as malicious parties could otherwise craft and supply
-fraudulent id_tokens.
+fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides
+the benefit of the client not needing to verify the JWT signature, as the ID token will 
+have been fetched over an HTTPS connection directly from the authorization server. Additionally,
+in many cases an application will request both an ID token and an access token, so it is
+simplier and provides fewer attack vectors to obtain both via the authorization code flow.
+
 
 ### Historic Note
 
@@ -604,7 +608,6 @@ component of the URL without triggering a page reload. This means modern browser
 use the unmodified OAuth 2.0 authorization code flow, since they have the ability to
 remove the authorization code from the query string without triggering a page reload
 thanks to the Session History API.
-
 
 
 Additional Security Considerations
@@ -652,13 +655,15 @@ Document History
 
 [[ To be removed from the final specification ]]
 
-current draft
+-04
 
 * Disallow the use of the Password Grant
 * Add PKCE support to summary list for authorization server requirements
-* Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token
+* Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token, and to bring it in line with the Security BCP
 * Updated recommendations on using state to reflect the Security BCP
 * Updated server support checklist to reflect latest changes
+* Updated the same-domain JS architecture section to emphasize the architecture rather than domain
+* Editorial clarifications in the section that talks about OpenID Connect ID tokens
 
 -03
 
