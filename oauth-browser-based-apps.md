@@ -185,15 +185,15 @@ Application Architecture Patterns
 There are three primary architectural patterns available when building browser-based
 applications.
 
-* a JavaScript application served from a common domain as the resource server
-* a JavaScript application with a backend
 * a JavaScript application with no backend, accessing resource servers directly
+* a JavaScript application with a backend
+* a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies
 
 These three architectures have different use cases and considerations.
 
 
-Apps Served from a Common Domain as the Resource Server
--------------------------------------------------------
+Browser-Based Apps that Can Share Data with the Resource Server
+---------------------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
 from a domain that can share cookies with the domain of the API (resource server), 
@@ -208,18 +208,13 @@ An additional concern with handling access tokens in a browser is that there is 
 secure storage mechanism where JavaScript code can keep the access token to be later
 used in an API request. Using an OAuth flow results in the JavaScript code getting an 
 access token, needing to store it somewhere, and then retrieve it to make an API request. 
-Instead, it is more secure to use an HTTP-only cookie between the JavaScript application 
+Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application 
 and API so that the JavaScript code can't access the cookie value itself.
 
-In this situation, it is best to avoid letting the JavaScript code ever see the 
-access token, and instead use a mechanism such as the "JavaScript Applications with a Backend"
-pattern described below, to keep access tokens out of the browser.
-
-If your JavaScript application has no backend, but still shares a domain with the resource
-server, then it may be best to avoid using OAuth entirely.
-
-OAuth was created primarily for third-party or federated access to APIs, 
-so it may not be the best solution in a same-domain scenario.
+OAuth was originally created for third-party or federated access to APIs, so it may not be
+the best solution in a common-domain deployment. That said, using OAuth even in a common-domain
+architecture does mean you can more easily rearchitect things later, such as if you were 
+to later add a new domain to the system.
 
 
 JavaScript Applications with a Backend
