@@ -138,7 +138,7 @@ In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), wh
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
-Applications MUST:
+Browser-based applications MUST:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
 * Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE
