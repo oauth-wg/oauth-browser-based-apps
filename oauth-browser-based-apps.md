@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-03
-date: 2019-07-26
+docname: draft-ietf-oauth-browser-based-apps-04
+date: 2019-09-22
 
 ipr: trust200902
 area: OAuth
@@ -79,9 +79,8 @@ informative:
 
 --- abstract
 
-This specification details the security considerations that must be
-taken into account when developing browser-based applications, as well as best
-practices for how they can securely implement OAuth 2.0.
+This specification details the security considerations and best practices that must be
+taken into account when developing browser-based applications that use OAuth 2.0.
 
 --- middle
 
