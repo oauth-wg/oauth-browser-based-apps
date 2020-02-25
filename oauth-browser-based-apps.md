@@ -39,19 +39,15 @@ normative:
     - name: Mike West
       ins: M. West
       org: Google, Inc
-    - name: Adam Barth
-      ins: A. Barth
-      org: Google, Inc
-    - name: Dan Veditz
-      ins: D. Veditz
-      org: Mozilla Corporation
-    date: December 2016
+    date: October 2018
+    url: https://www.w3.org/TR/CSP3/
   Fetch:
     title: Fetch
     author:
       name: whatwg
       ins: whatwg
     date: 2018
+    url: https://fetch.spec.whatwg.org/
   oauth-security-topics:
     title: OAuth 2.0 Security Best Current Practice
     author:
@@ -68,14 +64,15 @@ normative:
       ins: D. Fett
       org: yes.com
     date: July 2019
-
+    url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
 informative:
   HTML:
     title: HTML
     author:
       name: whatwg
       ins: whatwg
-    date: 2018
+    date: 2020
+    url: https://html.spec.whatwg.org/
 
 --- abstract
 
@@ -100,7 +97,7 @@ these practices.
 applications, including incorporating additional OAuth extensions where needed.
 
 OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
-OAuth for native apps as well as browser-based apps, and includes additional
+OAuth for native apps and browser-based apps, and includes additional
 considerations when running in a browser. This is primarily focused on OAuth,
 except where OpenID Connect provides additional considerations.
 
@@ -130,11 +127,11 @@ the following terms:
 Overview
 ========
 
-At the time that OAuth 2.0 RFC 6749 was created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was the principal motivation for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 {{RFC6749}} and RF{{C6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was the principal motivation for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow assures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
@@ -158,7 +155,7 @@ applications to access an API on behalf of a user, it has proven to be
 useful in a first-party scenario as well. First-party apps are applications where
 the same organization provides both the API and the application.
 
-For example, a web email client provided by the operator of the email account,
+Examples of first-party applications are a web email client provided by the operator of the email account,
 or a mobile banking application created by bank itself. (Note that there is no
 requirement that the application actually be developed by the same company; a mobile
 banking application developed by a contractor that is branded as the bank's
@@ -169,9 +166,8 @@ To conform to this best practice, first-party applications using OAuth or OpenID
 Connect MUST use the OAuth Authorization Code flow as described later in this document.
 
 The Resource Owner Password Grant MUST NOT be used, as described in 
-{{oauth-security-topics}} section 3.4.
-
-By using the Authorization Code flow and redirecting the user to the authorization server,
+{{oauth-security-topics}} section 3.4. Instead, by using the Authorization Code flow 
+and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
 or use third-party identity providers. In contrast, the Password grant does not
@@ -184,9 +180,9 @@ Application Architecture Patterns
 There are three primary architectural patterns available when building browser-based
 applications.
 
-* a JavaScript application with no backend, accessing resource servers directly
-* a JavaScript application with a backend
 * a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies
+* a JavaScript application with a backend
+* a JavaScript application with no backend, accessing resource servers directly
 
 These three architectures have different use cases and considerations.
 
@@ -273,7 +269,7 @@ back to the browser.
 
 Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
-this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/),
+this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
 such as setting an HTTP-only and Secure cookie to authenticate the session between the
 browser and Application Server.
 
@@ -536,17 +532,17 @@ This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 
 ### Threat: Manipulation of Scripts
 
-An attacker could modify the page or inject scripts into the browser via various
+An attacker could modify the page or inject scripts into the browser through various
 means, including when the browser's HTTPS connection is being man-in-the-middled
-by for example a corporate network. While this type of attack is typically out of
+by, for example, a corporate network. While this type of attack is typically out of
 scope of basic security recommendations to prevent, in the case of browser-based
 apps it is much easier to perform this kind of attack, where an injected script
 can suddenly have access to everything on the page.
 
-The risk of a malicious script running on the page is far greater when the application
+The risk of a malicious script running on the page may be amplified when the application
 uses a known standard way of obtaining access tokens, namely that the attacker can
-always look at the window.location to find an access token. This threat profile is
-very different compared to an attacker specifically targeting an individual application
+always look at the `window.location` variable to find an access token. This threat profile
+is different from an attacker specifically targeting an individual application
 by knowing where or how an access token obtained via the authorization code flow may
 end up being stored.
 
