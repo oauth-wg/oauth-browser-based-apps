@@ -85,15 +85,13 @@ Introduction {#introduction}
 ============
 
 This specification describes the current best practices for implementing OAuth 2.0
-authorization flows in applications running entirely in a browser.
+authorization flows in applications executing in a browser.
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
 This document is formally known as {{RFC8252}} or BCP 212, but nicknamed "AppAuth" after
 the OpenID Foundation-sponsored set of libraries that assist developers in adopting
-these practices.
-
-{{RFC8252}} makes specific recommendations for how to securely implement OAuth in native
+these practices. {{RFC8252}} makes specific recommendations for how to securely implement OAuth in native
 applications, including incorporating additional OAuth extensions where needed.
 
 OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
@@ -117,7 +115,7 @@ In addition to the terms defined in referenced specifications, this document use
 the following terms:
 
 "OAuth":
-: In this document, "OAuth" refers to OAuth 2.0, {{RFC6749}}.
+: In this document, "OAuth" refers to OAuth 2.0, {{RFC6749}} and {{RFC6750}}.
 
 "Browser-based application":
 : An application that is dynamically downloaded and executed in a web browser,
@@ -127,7 +125,7 @@ the following terms:
 Overview
 ========
 
-At the time that OAuth 2.0 {{RFC6749}} and RF{{C6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was the principal motivation for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
@@ -138,8 +136,8 @@ For this reason, and from other lessons learned, the current best practice for b
 Browser-based applications MUST:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
-* Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE
-* Register one or more redirect URIs, and not vary the redirect URI per authorization request
+* Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter or the OpenID Connect nonce parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE
+* Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
 OAuth 2.0 authorization servers MUST:
 
@@ -163,7 +161,8 @@ application is still considered a first-party application.) The first-party app
 consideration is about the user's relationship to the application and the service.
 
 To conform to this best practice, first-party applications using OAuth or OpenID
-Connect MUST use the OAuth Authorization Code flow as described later in this document.
+Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow) 
+as described later in this document.
 
 The Resource Owner Password Grant MUST NOT be used, as described in 
 {{oauth-security-topics}} section 3.4. Instead, by using the Authorization Code flow 
@@ -267,7 +266,8 @@ secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant
 a request for an access token. Upon handling the redirect from the Authorization
 Server, the Application Server will request an access token using the authorization code
 returned (A), which will be returned to the Application Server (B). The Application Server
-utilizes its own session with the browser to store the access token.
+stores this access token itself and establishes its own cookie-based session with the Browser application.
+The Application Server can store the access token either server-side, or in the cookie itself.
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it MUST instead make the request to the Application Server, and the Application Server will
@@ -311,10 +311,11 @@ JavaScript Applications without a Backend
     +-----------------+         +-------------------------------+
 
 In this architecture, the JavaScript code is first loaded from a static web host into
-the browser (A). The application then runs in the browser, and is considered a public
-client since it has no ability to maintain a client secret.
+the browser (A), and the application then runs in the browser. This application is considered a public
+client, since there is no way to issue it a client secret and there is no other secure
+client authentication mechanism available in the browser.
 
-The code in the browser then initiates the authorization code flow with the PKCE
+The code in the browser initiates the authorization code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
 access token via a POST request (C). The JavaScript app is then responsible for storing
 the access token (and optional refresh token) securely using appropriate browser APIs.
@@ -348,9 +349,9 @@ and exchanged for an access token by a malicious client, by providing the
 authorization server with a way to verify the same client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
-Browser-based apps MUST use a unique value for the OAuth 2.0 "state" parameter 
-on each request, and MUST verify the returned state in the authorization response
-matches the original state the app created. 
+Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be
+accomplished by either using PKCE, using a unique value for the OAuth 2.0 "state" parameter 
+on each request, or by using the OpenID Connect "nonce" parameter.
 
 Browser-based apps MUST follow the recommendations in {{oauth-security-topics}} 
 section 3.1 to protect themselves during redirect flows.
@@ -446,8 +447,8 @@ without user consent or interaction, except when the identity of the
 client can be assured.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
-HTTPS URIs without wildcard domains, paths, or query string components, this exact
-match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
+HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components, 
+this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
 proof of identity of the client for the purpose of deciding whether to automatically
 process an authorization request when a previous request for the client_id
 has already been approved.
@@ -456,12 +457,13 @@ has already been approved.
 Cross-Site Request Forgery Protections   {#csrf_protection}
 --------------------------------------
 
-Section 5.3.5 of {{RFC6819}} recommends using the "state" parameter to
-link client requests and responses to prevent CSRF (Cross-Site Request Forgery)
-attacks. To conform to this best practice, use of the "state" parameter is
-REQUIRED, as described in {{auth_code_request}}, unless the application has
-a method of ensuring the authorization server supports PKCE, since PKCE also
-prevents CSRF attacks.
+Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.
+Clients can accomplish this by either ensuring the authorization server supports
+PKCE and relying on the CSRF protection that PKCE provides, or using the "state"
+parameter to carry one-time-use CSRF tokens as described in {{auth_code_request}}, 
+or if the client is also an OpenID Connect client, using the OpenID Connect "nonce" parameter.
+
+See Section 2.1 of {{oauth-security-topics}} for additional details.
 
 
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
@@ -505,24 +507,28 @@ strong Content Security Policy can limit the potential attack vectors for malici
 JavaScript to be executed on the page.
 
 
-OAuth Implicit Grant Authorization Flow   {#implicit_flow}
----------------------------------------
+OAuth Implicit Flow   {#implicit_flow}
+-------------------
 
-The OAuth 2.0 Implicit grant authorization flow (defined in Section 4.2 of
+The OAuth 2.0 Implicit flow (defined in Section 4.2 of
 OAuth 2.0 {{RFC6749}}) works by receiving an access token in the HTTP redirect
 (front-channel) immediately without the code exchange step. In this case, the access
 token is returned in the fragment part of the redirect URI, providing an attacker
-with several opportunities to intercept and steal the access token. Several attacks
-on the implicit flow are described by {{RFC6819}} and {{oauth-security-topics}},
-not all of which have sufficient mitigation strategies.
+with several opportunities to intercept and steal the access token.
 
-### Threat: Interception of the Redirect URI
+### Attacks on the Implicit Flow
+
+Many attacks on the implicit flow described by {{RFC6819}} and {{oauth-security-topics}}
+do not have sufficient mitigation strategies. The following sections describe the specific
+attacks that cannot be mitigated while continuing to use the implicit flow.
+
+#### Threat: Interception of the Redirect URI
 
 If an attacker is able to cause the authorization response to be sent to a URI under
-his control, he will directly get access to the fragment carrying the access token.
-A method of performing this attack is described in detail in {{oauth-security-topics}}.
+their control, they will directly get access to the fragment carrying the access token.
+Several methods of performing this attack are described in detail in {{oauth-security-topics}}.
 
-### Threat: Access Token Leak in Browser History
+#### Threat: Access Token Leak in Browser History
 
 An attacker could obtain the access token from the browser's history.
 The countermeasures recommended by {{RFC6819}} are limited to using short expiration
@@ -535,7 +541,7 @@ out of the URL.
 
 This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 
-### Threat: Manipulation of Scripts
+#### Threat: Manipulation of Scripts
 
 An attacker could modify the page or inject scripts into the browser through various
 means, including when the browser's HTTPS connection is being man-in-the-middled
@@ -551,7 +557,7 @@ is different from an attacker specifically targeting an individual application
 by knowing where or how an access token obtained via the authorization code flow may
 end up being stored.
 
-### Threat: Access Token Leak to Third Party Scripts
+#### Threat: Access Token Leak to Third Party Scripts
 
 It is relatively common to use third-party scripts in browser-based apps, such as
 analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
@@ -562,7 +568,8 @@ returned in the fragment, it is visible to any third-party scripts on the page.
 ### Countermeasures
 
 In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
-using the authorization code with PKCE avoids these attacks.
+using the authorization code with PKCE extension prevents the attacks described above by
+avoiding returning the access token in the redirect URI at all.
 
 When PKCE is used, if an authorization code is stolen in transport, the attacker is
 unable to do anything with the authorization code.
@@ -656,6 +663,13 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-05
+
+* Incorporated editorial and substantive feedback from Mike Jones
+* Added references to "nonce" as another way to prevent CSRF attacks
+* Updated headers in the Implicit Flow section to better represent the relationship between the paragraphs
+
+
 -04
 
 * Disallow the use of the Password Grant
@@ -709,7 +723,8 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
+Justin Richer, Karl McGuinness, Leo Tohill, Mike Jones, Tomek Stojecki, 
+Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
