@@ -395,14 +395,11 @@
 <link href="#rfc.section.9.5" rel="Chapter" title="9.5 Authorization Server Mix-Up Mitigation">
 <link href="#rfc.section.9.6" rel="Chapter" title="9.6 Cross-Domain Requests">
 <link href="#rfc.section.9.7" rel="Chapter" title="9.7 Content-Security Policy">
-<link href="#rfc.section.9.8" rel="Chapter" title="9.8 OAuth Implicit Grant Authorization Flow">
-<link href="#rfc.section.9.8.1" rel="Chapter" title="9.8.1 Threat: Interception of the Redirect URI">
-<link href="#rfc.section.9.8.2" rel="Chapter" title="9.8.2 Threat: Access Token Leak in Browser History">
-<link href="#rfc.section.9.8.3" rel="Chapter" title="9.8.3 Threat: Manipulation of Scripts">
-<link href="#rfc.section.9.8.4" rel="Chapter" title="9.8.4 Threat: Access Token Leak to Third Party Scripts">
-<link href="#rfc.section.9.8.5" rel="Chapter" title="9.8.5 Countermeasures">
-<link href="#rfc.section.9.8.6" rel="Chapter" title="9.8.6 Disadvantages of the Implicit Flow">
-<link href="#rfc.section.9.8.7" rel="Chapter" title="9.8.7 Historic Note">
+<link href="#rfc.section.9.8" rel="Chapter" title="9.8 OAuth Implicit Flow">
+<link href="#rfc.section.9.8.1" rel="Chapter" title="9.8.1 Attacks on the Implicit Flow">
+<link href="#rfc.section.9.8.2" rel="Chapter" title="9.8.2 Countermeasures">
+<link href="#rfc.section.9.8.3" rel="Chapter" title="9.8.3 Disadvantages of the Implicit Flow">
+<link href="#rfc.section.9.8.4" rel="Chapter" title="9.8.4 Historic Note">
 <link href="#rfc.section.9.9" rel="Chapter" title="9.9 Additional Security Considerations">
 <link href="#rfc.section.10" rel="Chapter" title="10 IANA Considerations">
 <link href="#rfc.references" rel="Chapter" title="11 References">
@@ -414,14 +411,14 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.30.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.40.1 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Parecki, A. and D. Waite" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-oauth-browser-based-apps-04" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-09-22" />
-  <meta name="dct.abstract" content="This specification details the security considerations and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0." />
-  <meta name="description" content="This specification details the security considerations and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-oauth-browser-based-apps-05" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-02-28" />
+  <meta name="dct.abstract" content="This specification details the security considerations and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0. " />
+  <meta name="description" content="This specification details the security considerations and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0. " />
 
 </head>
 
@@ -443,12 +440,12 @@
 <td class="right">D. Waite</td>
 </tr>
 <tr>
-<td class="left">Expires: March 25, 2020</td>
+<td class="left">Expires: August 31, 2020</td>
 <td class="right">Ping Identity</td>
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">September 22, 2019</td>
+<td class="right">February 28, 2020</td>
 </tr>
 
     	
@@ -456,7 +453,7 @@
   </table>
 
   <p class="title">OAuth 2.0 for Browser-Based Apps<br />
-  <span class="filename">draft-ietf-oauth-browser-based-apps-04</span></p>
+  <span class="filename">draft-ietf-oauth-browser-based-apps-05</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This specification details the security considerations and best practices that must be taken into account when developing browser-based applications that use OAuth 2.0.</p>
@@ -464,9 +461,9 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 25, 2020.</p>
+<p>This Internet-Draft will expire on August 31, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
   
@@ -516,21 +513,15 @@
 </li>
 <li>9.7.   <a href="#rfc.section.9.7">Content-Security Policy</a>
 </li>
-<li>9.8.   <a href="#rfc.section.9.8">OAuth Implicit Grant Authorization Flow</a>
+<li>9.8.   <a href="#rfc.section.9.8">OAuth Implicit Flow</a>
 </li>
-<ul><li>9.8.1.   <a href="#rfc.section.9.8.1">Threat: Interception of the Redirect URI</a>
+<ul><li>9.8.1.   <a href="#rfc.section.9.8.1">Attacks on the Implicit Flow</a>
 </li>
-<li>9.8.2.   <a href="#rfc.section.9.8.2">Threat: Access Token Leak in Browser History</a>
+<li>9.8.2.   <a href="#rfc.section.9.8.2">Countermeasures</a>
 </li>
-<li>9.8.3.   <a href="#rfc.section.9.8.3">Threat: Manipulation of Scripts</a>
+<li>9.8.3.   <a href="#rfc.section.9.8.3">Disadvantages of the Implicit Flow</a>
 </li>
-<li>9.8.4.   <a href="#rfc.section.9.8.4">Threat: Access Token Leak to Third Party Scripts</a>
-</li>
-<li>9.8.5.   <a href="#rfc.section.9.8.5">Countermeasures</a>
-</li>
-<li>9.8.6.   <a href="#rfc.section.9.8.6">Disadvantages of the Implicit Flow</a>
-</li>
-<li>9.8.7.   <a href="#rfc.section.9.8.7">Historic Note</a>
+<li>9.8.4.   <a href="#rfc.section.9.8.4">Historic Note</a>
 </li>
 </ul><li>9.9.   <a href="#rfc.section.9.9">Additional Security Considerations</a>
 </li>
@@ -557,10 +548,9 @@
   <h1 id="rfc.section.1">
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
-<p id="rfc.section.1.p.1">This specification describes the current best practices for implementing OAuth 2.0 authorization flows in applications running entirely in a browser.</p>
-<p id="rfc.section.1.p.2">For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP (best current practice) was published that guides integration of these technologies.  This document is formally known as <a href="#RFC8252" class="xref">[RFC8252]</a> or BCP 212, but nicknamed "AppAuth" after the OpenID Foundation-sponsored set of libraries that assist developers in adopting these practices.</p>
-<p><a href="#RFC8252" class="xref">[RFC8252]</a> makes specific recommendations for how to securely implement OAuth in native applications, including incorporating additional OAuth extensions where needed.</p>
-<p id="rfc.section.1.p.4">OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing OAuth for native apps as well as browser-based apps, and includes additional considerations when running in a browser. This is primarily focused on OAuth, except where OpenID Connect provides additional considerations.</p>
+<p id="rfc.section.1.p.1">This specification describes the current best practices for implementing OAuth 2.0 authorization flows in applications executing in a browser.</p>
+<p id="rfc.section.1.p.2">For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP (best current practice) was published that guides integration of these technologies.  This document is formally known as <a href="#RFC8252" class="xref">[RFC8252]</a> or BCP 212, but nicknamed "AppAuth" after the OpenID Foundation-sponsored set of libraries that assist developers in adopting these practices. <a href="#RFC8252" class="xref">[RFC8252]</a> makes specific recommendations for how to securely implement OAuth in native applications, including incorporating additional OAuth extensions where needed.</p>
+<p id="rfc.section.1.p.3">OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing OAuth for native apps and browser-based apps, and includes additional considerations when running in a browser. This is primarily focused on OAuth, except where OpenID Connect provides additional considerations.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#notational-conventions" id="notational-conventions">Notational Conventions</a>
 </h1>
@@ -573,24 +563,24 @@
 
 <dl>
 <dt>"OAuth":</dt>
-<dd style="margin-left: 8">In this document, "OAuth" refers to OAuth 2.0, <a href="#RFC6749" class="xref">[RFC6749]</a>.</dd>
+<dd style="margin-left: 8">In this document, "OAuth" refers to OAuth 2.0, <a href="#RFC6749" class="xref">[RFC6749]</a> and <a href="#RFC6750" class="xref">[RFC6750]</a>.</dd>
 <dt>"Browser-based application":</dt>
 <dd style="margin-left: 8">An application that is dynamically downloaded and executed in a web browser, usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".</dd>
 </dl>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#overview" id="overview">Overview</a>
 </h1>
-<p id="rfc.section.4.p.1">At the time that OAuth 2.0 RFC 6749 was created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was the principal motivation for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.</p>
+<p id="rfc.section.4.p.1">At the time that OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a> and <a href="#RFC6750" class="xref">[RFC6750]</a> were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.</p>
 <p id="rfc.section.4.p.2">However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See <a href="#implicit_flow" class="xref">Section 9.8</a> for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
-<p id="rfc.section.4.p.3">In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow assures that even if an authorization code is intercepted, it is unusable by an attacker.</p>
+<p id="rfc.section.4.p.3">In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.</p>
 <p id="rfc.section.4.p.4">For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.</p>
 <p id="rfc.section.4.p.5">Browser-based applications MUST:</p>
 <p></p>
 
 <ul>
 <li>Use the OAuth 2.0 authorization code flow with the PKCE extension</li>
-<li>Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE</li>
-<li>Register one or more redirect URIs, and not vary the redirect URI per authorization request</li>
+<li>Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter or the OpenID Connect nonce parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE</li>
+<li>Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests</li>
 </ul>
 <p id="rfc.section.4.p.7">OAuth 2.0 authorization servers MUST:</p>
 <p></p>
@@ -603,10 +593,9 @@
 <a href="#rfc.section.5">5.</a> <a href="#first-party-applications" id="first-party-applications">First-Party Applications</a>
 </h1>
 <p id="rfc.section.5.p.1">While OAuth was initially created to allow third-party applications to access an API on behalf of a user, it has proven to be useful in a first-party scenario as well. First-party apps are applications where the same organization provides both the API and the application.</p>
-<p id="rfc.section.5.p.2">For example, a web email client provided by the operator of the email account, or a mobile banking application created by bank itself. (Note that there is no requirement that the application actually be developed by the same company; a mobile banking application developed by a contractor that is branded as the bank's application is still considered a first-party application.) The first-party app consideration is about the user's relationship to the application and the service.</p>
-<p id="rfc.section.5.p.3">To conform to this best practice, first-party applications using OAuth or OpenID Connect MUST use the OAuth Authorization Code flow as described later in this document.</p>
-<p id="rfc.section.5.p.4">The Resource Owner Password Grant MUST NOT be used, as described in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> section 3.4.</p>
-<p id="rfc.section.5.p.5">By using the Authorization Code flow and redirecting the user to the authorization server, this provides the authorization server the opportunity to prompt the user for multi-factor authentication options, take advantage of single-sign-on sessions, or use third-party identity providers. In contrast, the Password grant does not provide any built-in mechanism for these, and would instead be extended with custom code.</p>
+<p id="rfc.section.5.p.2">Examples of first-party applications are a web email client provided by the operator of the email account, or a mobile banking application created by bank itself. (Note that there is no requirement that the application actually be developed by the same company; a mobile banking application developed by a contractor that is branded as the bank's application is still considered a first-party application.) The first-party app consideration is about the user's relationship to the application and the service.</p>
+<p id="rfc.section.5.p.3">To conform to this best practice, first-party applications using OAuth or OpenID Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow) as described later in this document.</p>
+<p id="rfc.section.5.p.4">The Resource Owner Password Grant MUST NOT be used, as described in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> section 3.4. Instead, by using the Authorization Code flow and redirecting the user to the authorization server, this provides the authorization server the opportunity to prompt the user for multi-factor authentication options, take advantage of single-sign-on sessions, or use third-party identity providers. In contrast, the Password grant does not provide any built-in mechanism for these, and would instead be extended with custom code.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#application-architecture-patterns" id="application-architecture-patterns">Application Architecture Patterns</a>
 </h1>
@@ -614,18 +603,19 @@
 <p></p>
 
 <ul>
-<li>a JavaScript application with no backend, accessing resource servers directly</li>
-<li>a JavaScript application with a backend</li>
 <li>a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies</li>
+<li>a JavaScript application with a backend</li>
+<li>a JavaScript application with no backend, accessing resource servers directly</li>
 </ul>
 <p id="rfc.section.6.p.3">These three architectures have different use cases and considerations.</p>
 <h1 id="rfc.section.6.1">
 <a href="#rfc.section.6.1">6.1.</a> <a href="#browser-based-apps-that-can-share-data-with-the-resource-server" id="browser-based-apps-that-can-share-data-with-the-resource-server">Browser-Based Apps that Can Share Data with the Resource Server</a>
 </h1>
 <p id="rfc.section.6.1.p.1">For simple system architectures, such as when the JavaScript application is served from a domain that can share cookies with the domain of the API (resource server), OAuth adds additional attack vectors that could be avoided with a different solution.</p>
-<p id="rfc.section.6.1.p.2">In particular, using any redirect-based mechanism of obtaining an access token enables the redirect-based attacks described in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, but if the application, AS and API share a domain, then it is unnecessary to use a redirect mechanism to communicate between them.</p>
-<p id="rfc.section.6.1.p.3">An additional concern with handling access tokens in a browser is that there is no secure storage mechanism where JavaScript code can keep the access token to be later used in an API request. Using an OAuth flow results in the JavaScript code getting an access token, needing to store it somewhere, and then retrieve it to make an API request.  Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application and API so that the JavaScript code can't access the cookie value itself.</p>
-<p id="rfc.section.6.1.p.4">OAuth was originally created for third-party or federated access to APIs, so it may not be the best solution in a common-domain deployment. That said, using OAuth even in a common-domain architecture does mean you can more easily rearchitect things later, such as if you were to later add a new domain to the system.</p>
+<p id="rfc.section.6.1.p.2">In particular, using any redirect-based mechanism of obtaining an access token enables the redirect-based attacks described in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, but if the application, authorization server and resource server share a domain, then it is unnecessary to use a redirect mechanism to communicate between them.</p>
+<p id="rfc.section.6.1.p.3">An additional concern with handling access tokens in a browser is that as of the date of this publication, there is no secure storage mechanism where JavaScript code can keep the access token to be later used in an API request. Using an OAuth flow results in the JavaScript code getting an access token, needing to store it somewhere, and then retrieve it to make an API request.</p>
+<p id="rfc.section.6.1.p.4">Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application and API so that the JavaScript code can't access the cookie value itself. Additionally, the SameSite cookie attribute can be used to prevent CSRF attacks, or alternatively, the application and API could be written to use anti-CSRF tokens.</p>
+<p id="rfc.section.6.1.p.5">OAuth was originally created for third-party or federated access to APIs, so it may not be the best solution in a common-domain deployment. That said, using OAuth even in a common-domain architecture does mean you can more easily rearchitect things later, such as if you were to later add a new domain to the system.</p>
 <h1 id="rfc.section.6.2">
 <a href="#rfc.section.6.2">6.2.</a> <a href="#javascript-applications-with-a-backend" id="javascript-applications-with-a-backend">JavaScript Applications with a Backend</a>
 </h1>
@@ -663,11 +653,12 @@
 +-------------+
 </pre>
 <p id="rfc.section.6.2.p.1">In this architecture, the JavaScript code is loaded from a dynamic Application Server that also has the ability to execute code itself. This enables the ability to keep all of the steps involved in obtaining an access token outside of the JavaScript application.</p>
-<p id="rfc.section.6.2.p.2">(Common examples of this architecture are an Angular front-end with a .NET backend, or a React front-end with a Spring Boot backend.)</p>
-<p id="rfc.section.6.2.p.3">The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate a request for an access token. Upon handling the redirect from the Authorization Server, the Application Server will request an access token using the authorization code returned (A), which will be returned to the Application Server (B). The Application Server utilizes its own session with the browser to store the access token.</p>
-<p id="rfc.section.6.2.p.4">When the JavaScript application in the browser wants to make a request to the Resource Server, it MUST instead make the request to the Application Server, and the Application Server will make the request with the access token to the Resource Server (C), and forward the response (D) back to the browser.</p>
-<p id="rfc.section.6.2.p.5">Security of the connection between code running in the browser and this Application Server is assumed to utilize browser-level protection mechanisms. Details are out of scope of this document, but many recommendations can be found at the OWASP Foundation (https://www.owasp.org/), such as setting an HTTP-only and Secure cookie to authenticate the session between the browser and Application Server.</p>
-<p id="rfc.section.6.2.p.6">In this scenario, the session between the browser and Application Server MAY be either a session cookie provided by the Application Server, OR the access token itself. Note that if the access token is used as the session identifier, this exposes the access token to the end user even if it is not available to the JavaScript application, so some authorization servers may wish to limit the capabilities of these clients to mitigate risk.</p>
+<p id="rfc.section.6.2.p.2">In this case, the Application Server performs the OAuth flow itself, and keeps the access token and refresh token stored internally, creating a separate session with the browser-based app via a traditional browser cookie.</p>
+<p id="rfc.section.6.2.p.3">(Common examples of this architecture are an Angular front-end with a .NET backend, or a React front-end with a Spring Boot backend.)</p>
+<p id="rfc.section.6.2.p.4">The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate a request for an access token. Upon handling the redirect from the Authorization Server, the Application Server will request an access token using the authorization code returned (A), which will be returned to the Application Server (B). The Application Server stores this access token itself and establishes its own cookie-based session with the Browser application.  The Application Server can store the access token either server-side, or in the cookie itself.</p>
+<p id="rfc.section.6.2.p.5">When the JavaScript application in the browser wants to make a request to the Resource Server, it MUST instead make the request to the Application Server, and the Application Server will make the request with the access token to the Resource Server (C), and forward the response (D) back to the browser.</p>
+<p id="rfc.section.6.2.p.6">Security of the connection between code running in the browser and this Application Server is assumed to utilize browser-level protection mechanisms. Details are out of scope of this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/), such as setting an HTTP-only and Secure cookie to authenticate the session between the browser and Application Server.</p>
+<p id="rfc.section.6.2.p.7">In this scenario, the session between the browser and Application Server MAY be either a session cookie provided by the Application Server, OR the access token itself. Note that if the access token is used as the session identifier, this exposes the access token to the end user even if it is not available to the JavaScript application, so some authorization servers may wish to limit the capabilities of these clients to mitigate risk.</p>
 <h1 id="rfc.section.6.3">
 <a href="#rfc.section.6.3">6.3.</a> <a href="#javascript-applications-without-a-backend" id="javascript-applications-without-a-backend">JavaScript Applications without a Backend</a>
 </h1>
@@ -692,8 +683,8 @@
 |                 |         |                               |
 +-----------------+         +-------------------------------+
 </pre>
-<p id="rfc.section.6.3.p.1">In this architecture, the JavaScript code is first loaded from a static web host into the browser (A). The application then runs in the browser, and is considered a public client since it has no ability to be issued a client secret.</p>
-<p id="rfc.section.6.3.p.2">The code in the browser then initiates the authorization code flow with the PKCE extension (described in <a href="#authorization_code_flow" class="xref">Section 7</a>) (B) above, and obtains an access token via a POST request (C). The JavaScript app is then responsible for storing the access token securely using appropriate browser APIs.</p>
+<p id="rfc.section.6.3.p.1">In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. This application is considered a public client, since there is no way to issue it a client secret and there is no other secure client authentication mechanism available in the browser.</p>
+<p id="rfc.section.6.3.p.2">The code in the browser initiates the authorization code flow with the PKCE extension (described in <a href="#authorization_code_flow" class="xref">Section 7</a>) (B) above, and obtains an access token via a POST request (C). The JavaScript app is then responsible for storing the access token (and optional refresh token) securely using appropriate browser APIs.</p>
 <p id="rfc.section.6.3.p.3">When the JavaScript application in the browser wants to make a request to the Resource Server, it can include the access token in the request (D) and make the request directly.</p>
 <p id="rfc.section.6.3.p.4">In this scenario, the Authorization Server and Resource Server MUST support the necessary CORS headers to enable the JavaScript code to make this POST request from the domain on which the script is executing. (See <a href="#cors" class="xref">Section 9.6</a> for additional details.)</p>
 <h1 id="rfc.section.7">
@@ -705,7 +696,7 @@
 </h1>
 <p id="rfc.section.7.1.p.1">Public browser-based apps MUST implement the Proof Key for Code Exchange (PKCE <a href="#RFC7636" class="xref">[RFC7636]</a>) extension to OAuth, and authorization servers MUST support PKCE for such clients.</p>
 <p id="rfc.section.7.1.p.2">The PKCE extension prevents an attack where the authorization code is intercepted and exchanged for an access token by a malicious client, by providing the authorization server with a way to verify the same client instance that exchanges the authorization code is the same one that initiated the flow.</p>
-<p id="rfc.section.7.1.p.3">Browser-based apps MUST use a unique value for the the OAuth 2.0 "state" parameter on each request, and MUST verify the returned state in the authorization response matches the original state the app created.</p>
+<p id="rfc.section.7.1.p.3">Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be accomplished by either using PKCE, using a unique value for the OAuth 2.0 "state" parameter on each request, or by using the OpenID Connect "nonce" parameter.</p>
 <p id="rfc.section.7.1.p.4">Browser-based apps MUST follow the recommendations in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> section 3.1 to protect themselves during redirect flows.</p>
 <h1 id="rfc.section.7.2">
 <a href="#rfc.section.7.2">7.2.</a> <a href="#auth_code_redirect" id="auth_code_redirect">Handling the Authorization Code Redirect</a>
@@ -716,7 +707,7 @@
 </h1>
 <p id="rfc.section.8.p.1">Refresh tokens provide a way for applications to obtain a new access token when the initial access token expires. With public clients, the risk of a leaked refresh token is greater than leaked access tokens, since an attacker may be able to continue using the stolen refresh token to obtain new access tokens potentially without being detectable by the authorization server.</p>
 <p id="rfc.section.8.p.2">Browser-based applications provide an attacker with several opportunities by which a refresh token can be leaked, just as with access tokens. As such, these applications are considered a higher risk for handling refresh tokens.</p>
-<p><a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> describes some additional requirements around refresh tokens on top of the recommendations of <a href="#RFC6749" class="xref">[RFC6749]</a>. Applications and authorization servers conforming to this BCP MUST also follow the recommendations in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> around refresh tokens.</p>
+<p id="rfc.section.8.p.3">Authorization servers may choose whether or not to issue refresh tokens to browser-based applications. <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> describes some additional requirements around refresh tokens on top of the recommendations of <a href="#RFC6749" class="xref">[RFC6749]</a>. Applications and authorization servers conforming to this BCP MUST also follow the recommendations in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> around refresh tokens if refresh tokens are issued to browser-based apps.</p>
 <p id="rfc.section.8.p.4">In particular, authorization servers:</p>
 <p></p>
 
@@ -753,12 +744,13 @@
 <h1 id="rfc.section.9.3">
 <a href="#rfc.section.9.3">9.3.</a> <a href="#client_impersonation" id="client_impersonation">Client Impersonation</a>
 </h1>
-<p id="rfc.section.9.3.p.1">As stated in Section 10.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>, the authorization server SHOULD NOT process authorization requests automatically without user consent or interaction, except when the identity of the client can be assured. Even when the user has previously approved an authorization request for a given client_id, the request SHOULD be processed as if no previous request had been approved, unless the identity of the client can be proven.</p>
-<p id="rfc.section.9.3.p.2">If authorization servers restrict redirect URIs to a fixed set of absolute HTTPS URIs without wildcard domains, paths, or query string components, this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as proof of identity of the client for the purpose of deciding whether to automatically process an authorization request when a previous request for the client_id has already been approved.</p>
+<p id="rfc.section.9.3.p.1">As stated in Section 10.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>, the authorization server SHOULD NOT process authorization requests automatically without user consent or interaction, except when the identity of the client can be assured.</p>
+<p id="rfc.section.9.3.p.2">If authorization servers restrict redirect URIs to a fixed set of absolute HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components, this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as proof of identity of the client for the purpose of deciding whether to automatically process an authorization request when a previous request for the client_id has already been approved.</p>
 <h1 id="rfc.section.9.4">
 <a href="#rfc.section.9.4">9.4.</a> <a href="#csrf_protection" id="csrf_protection">Cross-Site Request Forgery Protections</a>
 </h1>
-<p id="rfc.section.9.4.p.1">Section 5.3.5 of <a href="#RFC6819" class="xref">[RFC6819]</a> recommends using the "state" parameter to link client requests and responses to prevent CSRF (Cross-Site Request Forgery) attacks. To conform to this best practice, use of the "state" parameter is REQUIRED, as described in <a href="#auth_code_request" class="xref">Section 7.1</a>, unless the application has a method of ensuring the authorization server supports PKCE, since PKCE also prevents CSRF attacks.</p>
+<p id="rfc.section.9.4.p.1">Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.  Clients can accomplish this by either ensuring the authorization server supports PKCE and relying on the CSRF protection that PKCE provides, or using the "state" parameter to carry one-time-use CSRF tokens as described in <a href="#auth_code_request" class="xref">Section 7.1</a>, or if the client is also an OpenID Connect client, using the OpenID Connect "nonce" parameter.</p>
+<p id="rfc.section.9.4.p.2">See Section 2.1 of <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> for additional details.</p>
 <h1 id="rfc.section.9.5">
 <a href="#rfc.section.9.5">9.5.</a> <a href="#auth_server_mixup" id="auth_server_mixup">Authorization Server Mix-Up Mitigation</a>
 </h1>
@@ -774,37 +766,41 @@
 </h1>
 <p id="rfc.section.9.7.p.1">A browser-based application that wishes to use either long-lived refresh tokens or privileged scopes SHOULD restrict its JavaScript execution to a set of statically hosted scripts via a Content Security Policy (<a href="#CSP2" class="xref">[CSP2]</a>) or similar mechanism. A strong Content Security Policy can limit the potential attack vectors for malicious JavaScript to be executed on the page.</p>
 <h1 id="rfc.section.9.8">
-<a href="#rfc.section.9.8">9.8.</a> <a href="#implicit_flow" id="implicit_flow">OAuth Implicit Grant Authorization Flow</a>
+<a href="#rfc.section.9.8">9.8.</a> <a href="#implicit_flow" id="implicit_flow">OAuth Implicit Flow</a>
 </h1>
-<p id="rfc.section.9.8.p.1">The OAuth 2.0 Implicit grant authorization flow (defined in Section 4.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>) works by receiving an access token in the HTTP redirect (front-channel) immediately without the code exchange step. In this case, the access token is returned in the fragment part of the redirect URI, providing an attacker with several opportunities to intercept and steal the access token. Several attacks on the implicit flow are described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, not all of which have sufficient mitigation strategies.</p>
+<p id="rfc.section.9.8.p.1">The OAuth 2.0 Implicit flow (defined in Section 4.2 of OAuth 2.0 <a href="#RFC6749" class="xref">[RFC6749]</a>) works by receiving an access token in the HTTP redirect (front-channel) immediately without the code exchange step. In this case, the access token is returned in the fragment part of the redirect URI, providing an attacker with several opportunities to intercept and steal the access token.</p>
 <h1 id="rfc.section.9.8.1">
-<a href="#rfc.section.9.8.1">9.8.1.</a> <a href="#threat-interception-of-the-redirect-uri" id="threat-interception-of-the-redirect-uri">Threat: Interception of the Redirect URI</a>
+<a href="#rfc.section.9.8.1">9.8.1.</a> <a href="#attacks-on-the-implicit-flow" id="attacks-on-the-implicit-flow">Attacks on the Implicit Flow</a>
 </h1>
-<p id="rfc.section.9.8.1.p.1">If an attacker is able to cause the authorization response to be sent to a URI under his control, he will directly get access to the fragment carrying the access token.  A method of performing this attack is described in detail in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<p id="rfc.section.9.8.1.p.1">Many attacks on the implicit flow described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> do not have sufficient mitigation strategies. The following sections describe the specific attacks that cannot be mitigated while continuing to use the implicit flow.</p>
+<h1 id="rfc.section.9.8.1.1">
+<a href="#rfc.section.9.8.1.1">9.8.1.1.</a> <a href="#threat-interception-of-the-redirect-uri" id="threat-interception-of-the-redirect-uri">Threat: Interception of the Redirect URI</a>
+</h1>
+<p id="rfc.section.9.8.1.1.p.1">If an attacker is able to cause the authorization response to be sent to a URI under their control, they will directly get access to the fragment carrying the access token.  Several methods of performing this attack are described in detail in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<h1 id="rfc.section.9.8.1.2">
+<a href="#rfc.section.9.8.1.2">9.8.1.2.</a> <a href="#threat-access-token-leak-in-browser-history" id="threat-access-token-leak-in-browser-history">Threat: Access Token Leak in Browser History</a>
+</h1>
+<p id="rfc.section.9.8.1.2.p.1">An attacker could obtain the access token from the browser's history.  The countermeasures recommended by <a href="#RFC6819" class="xref">[RFC6819]</a> are limited to using short expiration times for tokens, and indicating that browsers should not cache the response.  Neither of these fully prevent this attack, they only reduce the potential damage.</p>
+<p id="rfc.section.9.8.1.2.p.2">Additionally, many browsers now also sync browser history to cloud services and to multiple devices, providing an even wider attack surface to extract access tokens out of the URL.</p>
+<p id="rfc.section.9.8.1.2.p.3">This is discussed in more detail in Section 4.3.2 of <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<h1 id="rfc.section.9.8.1.3">
+<a href="#rfc.section.9.8.1.3">9.8.1.3.</a> <a href="#threat-manipulation-of-scripts" id="threat-manipulation-of-scripts">Threat: Manipulation of Scripts</a>
+</h1>
+<p id="rfc.section.9.8.1.3.p.1">An attacker could modify the page or inject scripts into the browser through various means, including when the browser's HTTPS connection is being man-in-the-middled by, for example, a corporate network. While this type of attack is typically out of scope of basic security recommendations to prevent, in the case of browser-based apps it is much easier to perform this kind of attack, where an injected script can suddenly have access to everything on the page.</p>
+<p id="rfc.section.9.8.1.3.p.2">The risk of a malicious script running on the page may be amplified when the application uses a known standard way of obtaining access tokens, namely that the attacker can always look at the <samp>window.location</samp> variable to find an access token. This threat profile is different from an attacker specifically targeting an individual application by knowing where or how an access token obtained via the authorization code flow may end up being stored.</p>
+<h1 id="rfc.section.9.8.1.4">
+<a href="#rfc.section.9.8.1.4">9.8.1.4.</a> <a href="#threat-access-token-leak-to-third-party-scripts" id="threat-access-token-leak-to-third-party-scripts">Threat: Access Token Leak to Third Party Scripts</a>
+</h1>
+<p id="rfc.section.9.8.1.4.p.1">It is relatively common to use third-party scripts in browser-based apps, such as analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.  In these situations, the author of the application may not be able to be fully aware of the entirety of the code running in the application. When an access token is returned in the fragment, it is visible to any third-party scripts on the page.</p>
 <h1 id="rfc.section.9.8.2">
-<a href="#rfc.section.9.8.2">9.8.2.</a> <a href="#threat-access-token-leak-in-browser-history" id="threat-access-token-leak-in-browser-history">Threat: Access Token Leak in Browser History</a>
+<a href="#rfc.section.9.8.2">9.8.2.</a> <a href="#countermeasures" id="countermeasures">Countermeasures</a>
 </h1>
-<p id="rfc.section.9.8.2.p.1">An attacker could obtain the access token from the browser's history.  The countermeasures recommended by <a href="#RFC6819" class="xref">[RFC6819]</a> are limited to using short expiration times for tokens, and indicating that browsers should not cache the response.  Neither of these fully prevent this attack, they only reduce the potential damage.</p>
-<p id="rfc.section.9.8.2.p.2">Additionally, many browsers now also sync browser history to cloud services and to multiple devices, providing an even wider attack surface to extract access tokens out of the URL.</p>
-<p id="rfc.section.9.8.2.p.3">This is discussed in more detail in Section 4.3.2 of <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>.</p>
+<p id="rfc.section.9.8.2.p.1">In addition to the countermeasures described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, using the authorization code with PKCE extension prevents the attacks described above by avoiding returning the access token in the redirect URI at all.</p>
+<p id="rfc.section.9.8.2.p.2">When PKCE is used, if an authorization code is stolen in transport, the attacker is unable to do anything with the authorization code.</p>
 <h1 id="rfc.section.9.8.3">
-<a href="#rfc.section.9.8.3">9.8.3.</a> <a href="#threat-manipulation-of-scripts" id="threat-manipulation-of-scripts">Threat: Manipulation of Scripts</a>
+<a href="#rfc.section.9.8.3">9.8.3.</a> <a href="#disadvantages-of-the-implicit-flow" id="disadvantages-of-the-implicit-flow">Disadvantages of the Implicit Flow</a>
 </h1>
-<p id="rfc.section.9.8.3.p.1">An attacker could modify the page or inject scripts into the browser via various means, including when the browser's HTTPS connection is being man-in-the-middled by for example a corporate network. While this type of attack is typically out of scope of basic security recommendations to prevent, in the case of browser-based apps it is much easier to perform this kind of attack, where an injected script can suddenly have access to everything on the page.</p>
-<p id="rfc.section.9.8.3.p.2">The risk of a malicious script running on the page is far greater when the application uses a known standard way of obtaining access tokens, namely that the attacker can always look at the window.location to find an access token. This threat profile is very different compared to an attacker specifically targeting an individual application by knowing where or how an access token obtained via the authorization code flow may end up being stored.</p>
-<h1 id="rfc.section.9.8.4">
-<a href="#rfc.section.9.8.4">9.8.4.</a> <a href="#threat-access-token-leak-to-third-party-scripts" id="threat-access-token-leak-to-third-party-scripts">Threat: Access Token Leak to Third Party Scripts</a>
-</h1>
-<p id="rfc.section.9.8.4.p.1">It is relatively common to use third-party scripts in browser-based apps, such as analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.  In these situations, the author of the application may not be able to be fully aware of the entirety of the code running in the application. When an access token is returned in the fragment, it is visible to any third-party scripts on the page.</p>
-<h1 id="rfc.section.9.8.5">
-<a href="#rfc.section.9.8.5">9.8.5.</a> <a href="#countermeasures" id="countermeasures">Countermeasures</a>
-</h1>
-<p id="rfc.section.9.8.5.p.1">In addition to the countermeasures described by <a href="#RFC6819" class="xref">[RFC6819]</a> and <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a>, using the authorization code with PKCE avoids these attacks.</p>
-<p id="rfc.section.9.8.5.p.2">When PKCE is used, if an authorization code is stolen in transport, the attacker is unable to do anything with the authorization code.</p>
-<h1 id="rfc.section.9.8.6">
-<a href="#rfc.section.9.8.6">9.8.6.</a> <a href="#disadvantages-of-the-implicit-flow" id="disadvantages-of-the-implicit-flow">Disadvantages of the Implicit Flow</a>
-</h1>
-<p id="rfc.section.9.8.6.p.1">There are several additional reasons the Implicit flow is disadvantageous compared to using the standard Authorization Code flow.</p>
+<p id="rfc.section.9.8.3.p.1">There are several additional reasons the Implicit flow is disadvantageous compared to using the standard Authorization Code flow.</p>
 <p></p>
 
 <ul>
@@ -813,12 +809,12 @@
 <li>Supporting the implicit flow requires additional code, more upkeep and understanding of the related security considerations, while limiting the authorization server to just the authorization code flow reduces the attack surface of the implementation.</li>
 <li>If the JavaScript application gets wrapped into a native app, then <a href="#RFC8252" class="xref">[RFC8252]</a> also requires the use of the authorization code flow with PKCE anyway.</li>
 </ul>
-<p id="rfc.section.9.8.6.p.3">In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally signed. Returning an id_token using the Implicit flow (response_type=id_token) requires the client validate the JWT signature, as malicious parties could otherwise craft and supply fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides the benefit of the client not needing to verify the JWT signature, as the ID token will have been fetched over an HTTPS connection directly from the authorization server. Additionally, in many cases an application will request both an ID token and an access token, so it is simplier and provides fewer attack vectors to obtain both via the authorization code flow.</p>
-<h1 id="rfc.section.9.8.7">
-<a href="#rfc.section.9.8.7">9.8.7.</a> <a href="#historic-note" id="historic-note">Historic Note</a>
+<p id="rfc.section.9.8.3.p.3">In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally signed. Returning an id_token using the Implicit flow (response_type=id_token) requires the client validate the JWT signature, as malicious parties could otherwise craft and supply fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides the benefit of the client not needing to verify the JWT signature, as the ID token will have been fetched over an HTTPS connection directly from the authorization server. Additionally, in many cases an application will request both an ID token and an access token, so it is simplier and provides fewer attack vectors to obtain both via the authorization code flow.</p>
+<h1 id="rfc.section.9.8.4">
+<a href="#rfc.section.9.8.4">9.8.4.</a> <a href="#historic-note" id="historic-note">Historic Note</a>
 </h1>
-<p id="rfc.section.9.8.7.p.1">Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. This was necessary in order to remove the access token from the URL after it was obtained by the app.</p>
-<p id="rfc.section.9.8.7.p.2">Modern browsers now have the Session History API (described in "Session history and navigation" of <a href="#HTML" class="xref">[HTML]</a>), which provides a mechanism to modify the path and query string component of the URL without triggering a page reload. This means modern browser-based apps can use the unmodified OAuth 2.0 authorization code flow, since they have the ability to remove the authorization code from the query string without triggering a page reload thanks to the Session History API.</p>
+<p id="rfc.section.9.8.4.p.1">Historically, the Implicit flow provided an advantage to single-page apps since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. This was necessary in order to remove the access token from the URL after it was obtained by the app.</p>
+<p id="rfc.section.9.8.4.p.2">Modern browsers now have the Session History API (described in "Session history and navigation" of <a href="#HTML" class="xref">[HTML]</a>), which provides a mechanism to modify the path and query string component of the URL without triggering a page reload. This means modern browser-based apps can use the unmodified OAuth 2.0 authorization code flow, since they have the ability to remove the authorization code from the query string without triggering a page reload thanks to the Session History API.</p>
 <h1 id="rfc.section.9.9">
 <a href="#rfc.section.9.9">9.9.</a> <a href="#additional-security-considerations" id="additional-security-considerations">Additional Security Considerations</a>
 </h1>
@@ -835,7 +831,7 @@
 <tr>
 <td class="reference"><b id="CSP2">[CSP2]</b></td>
 <td class="top">
-<a title="Google, Inc">West, M.</a>, <a title="Google, Inc">Barth, A.</a> and <a title="Mozilla Corporation">D. Veditz</a>, "<a>Content Security Policy</a>", December 2016.</td>
+<a title="Google, Inc">West, M.</a>, "<a>Content Security Policy</a>", October 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="Fetch">[Fetch]</b></td>
@@ -858,6 +854,11 @@
 <a>Hardt, D.</a>, "<a href="https://tools.ietf.org/html/rfc6749">The OAuth 2.0 Authorization Framework</a>", RFC 6749, DOI 10.17487/RFC6749, October 2012.</td>
 </tr>
 <tr>
+<td class="reference"><b id="RFC6750">[RFC6750]</b></td>
+<td class="top">
+<a>Jones, M.</a> and <a>D. Hardt</a>, "<a href="https://tools.ietf.org/html/rfc6750">The OAuth 2.0 Authorization Framework: Bearer Token Usage</a>", RFC 6750, DOI 10.17487/RFC6750, October 2012.</td>
+</tr>
+<tr>
 <td class="reference"><b id="RFC6819">[RFC6819]</b></td>
 <td class="top">
 <a>Lodderstedt, T.</a>, <a>McGloin, M.</a> and <a>P. Hunt</a>, "<a href="https://tools.ietf.org/html/rfc6819">OAuth 2.0 Threat Model and Security Considerations</a>", RFC 6819, DOI 10.17487/RFC6819, January 2013.</td>
@@ -878,7 +879,7 @@
 <table><tbody><tr>
 <td class="reference"><b id="HTML">[HTML]</b></td>
 <td class="top">
-<a>whatwg</a>, "<a>HTML</a>", 2018.</td>
+<a>whatwg</a>, "<a>HTML</a>", 2020.</td>
 </tr></tbody></table>
 <h1 id="rfc.appendix.A">
 <a href="#rfc.appendix.A">Appendix A.</a> <a href="#server-support-checklist" id="server-support-checklist">Server Support Checklist</a>
@@ -901,7 +902,15 @@
 <a href="#rfc.appendix.B">Appendix B.</a> <a href="#document-history" id="document-history">Document History</a>
 </h1>
 <p id="rfc.section.B.p.1">[[ To be removed from the final specification ]]</p>
-<p id="rfc.section.B.p.2">-04</p>
+<p id="rfc.section.B.p.2">-05</p>
+<p></p>
+
+<ul>
+<li>Incorporated editorial and substantive feedback from Mike Jones</li>
+<li>Added references to "nonce" as another way to prevent CSRF attacks</li>
+<li>Updated headers in the Implicit Flow section to better represent the relationship between the paragraphs</li>
+</ul>
+<p id="rfc.section.B.p.4">-04</p>
 <p></p>
 
 <ul>
@@ -913,7 +922,7 @@
 <li>Updated the same-domain JS architecture section to emphasize the architecture rather than domain</li>
 <li>Editorial clarifications in the section that talks about OpenID Connect ID tokens</li>
 </ul>
-<p id="rfc.section.B.p.4">-03</p>
+<p id="rfc.section.B.p.6">-03</p>
 <p></p>
 
 <ul>
@@ -927,7 +936,7 @@
 <li>Referenced Security BCP in implicit flow attacks where possible</li>
 <li>Minor typo corrections</li>
 </ul>
-<p id="rfc.section.B.p.6">-02</p>
+<p id="rfc.section.B.p.8">-02</p>
 <p></p>
 
 <ul>
@@ -937,7 +946,7 @@
 <li>Updated section 6.2 to drop reference of SPA with a backend component being a public client</li>
 <li>Expanded the architecture section to explicitly mention three architectural patterns available to JS apps</li>
 </ul>
-<p id="rfc.section.B.p.8">-01</p>
+<p id="rfc.section.B.p.10">-01</p>
 <p></p>
 
 <ul>
@@ -953,7 +962,7 @@
 <a href="#rfc.appendix.C">Appendix C.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a>
 </h1>
 <p id="rfc.section.C.p.1">The authors would like to acknowledge the work of William Denniss and John Bradley, whose recommendation for native apps informed many of the best practices for browser-based applications. The authors would also like to thank Hannes Tschofenig and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27 session at which this BCP was originally proposed, and the following individuals who contributed ideas, feedback, and wording that shaped and formed the final specification:</p>
-<p id="rfc.section.C.p.2">Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin Richer, Karl McGuinness, Leo Tohill, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.</p>
+<p id="rfc.section.C.p.2">Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin Richer, Karl McGuinness, Leo Tohill, Mike Jones, Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.</p>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
