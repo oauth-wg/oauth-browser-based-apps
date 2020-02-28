@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-04
-date: 2019-09-22
+docname: draft-ietf-oauth-browser-based-apps-05
+date: 2020-02-28
 
 ipr: trust200902
 area: OAuth
@@ -30,6 +30,7 @@ author:
 normative:
   RFC2119:
   RFC6749:
+  RFC6750:
   RFC6819:
   RFC7636:
   RFC8252:
