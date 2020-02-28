@@ -196,15 +196,18 @@ OAuth adds additional attack vectors that could be avoided with a different solu
 
 In particular, using any redirect-based mechanism of obtaining an access token
 enables the redirect-based attacks described in {{oauth-security-topics}}, but if 
-the application, AS and API share a domain, then it is unnecessary to use a redirect
-mechanism to communicate between them.
+the application, authorization server and resource server share a domain, then it is 
+unnecessary to use a redirect mechanism to communicate between them.
 
-An additional concern with handling access tokens in a browser is that there is no
+An additional concern with handling access tokens in a browser is that as of the date of this publication, there is no
 secure storage mechanism where JavaScript code can keep the access token to be later
 used in an API request. Using an OAuth flow results in the JavaScript code getting an 
 access token, needing to store it somewhere, and then retrieve it to make an API request. 
+
 Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application 
-and API so that the JavaScript code can't access the cookie value itself.
+and API so that the JavaScript code can't access the cookie value itself. Additionally, the SameSite
+cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
+and API could be written to use anti-CSRF tokens.
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
 the best solution in a common-domain deployment. That said, using OAuth even in a common-domain
@@ -251,6 +254,10 @@ In this architecture, the JavaScript code is loaded from a dynamic Application S
 that also has the ability to execute code itself. This enables the ability to keep
 all of the steps involved in obtaining an access token outside of the JavaScript
 application.
+
+In this case, the Application Server performs the OAuth flow itself, and keeps the 
+access token and refresh token stored internally, creating a separate session with
+the browser-based app via a traditional browser cookie.
 
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
 a React front-end with a Spring Boot backend.)
@@ -305,12 +312,12 @@ JavaScript Applications without a Backend
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A). The application then runs in the browser, and is considered a public
-client since it has no ability to be issued a client secret.
+client since it has no ability to maintain a client secret.
 
 The code in the browser then initiates the authorization code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
 access token via a POST request (C). The JavaScript app is then responsible for storing
-the access token securely using appropriate browser APIs.
+the access token (and optional refresh token) securely using appropriate browser APIs.
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it can include the access token in the request (D) and make the request directly.
@@ -341,7 +348,7 @@ and exchanged for an access token by a malicious client, by providing the
 authorization server with a way to verify the same client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
-Browser-based apps MUST use a unique value for the the OAuth 2.0 "state" parameter 
+Browser-based apps MUST use a unique value for the OAuth 2.0 "state" parameter 
 on each request, and MUST verify the returned state in the authorization response
 matches the original state the app created. 
 
@@ -368,10 +375,11 @@ Browser-based applications provide an attacker with several opportunities by whi
 refresh token can be leaked, just as with access tokens. As such, these applications 
 are considered a higher risk for handling refresh tokens.
 
-{{oauth-security-topics}} describes some additional requirements around refresh tokens 
+Authorization servers may choose whether or not to issue refresh tokens to browser-based
+applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens 
 on top of the recommendations of {{RFC6749}}. Applications and authorization servers 
 conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}} 
-around refresh tokens.
+around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
