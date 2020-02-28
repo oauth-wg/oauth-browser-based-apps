@@ -443,10 +443,7 @@ Client Impersonation   {#client_impersonation}
 As stated in Section 10.2 of OAuth 2.0 {{RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
 without user consent or interaction, except when the identity of the
-client can be assured. Even when the user has previously approved an
-authorization request for a given client_id, the request SHOULD be
-processed as if no previous request had been approved, unless the identity of
-the client can be proven.
+client can be assured.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
 HTTPS URIs without wildcard domains, paths, or query string components, this exact
