@@ -137,7 +137,7 @@ For this reason, and from other lessons learned, the current best practice for b
 Browser-based applications MUST:
 
 * Use the OAuth 2.0 authorization code flow with the PKCE extension
-* Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter or the OpenID Connect nonce parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE
+* Protect themselves against CSRF attacks by ensuring the authorization server supports PKCE, or by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
 * Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
 OAuth 2.0 authorization servers MUST:
@@ -351,11 +351,14 @@ authorization server with a way to verify the same client instance that exchange
 the authorization code is the same one that initiated the flow.
 
 Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be
-accomplished by either using PKCE, using a unique value for the OAuth 2.0 "state" parameter 
-on each request, or by using the OpenID Connect "nonce" parameter.
+accomplished by any of the below:
+
+* using PKCE, and confirming that the authorization server supports PKCE
+* if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
+* using a unique value for the OAuth 2.0 "state" parameter 
 
 Browser-based apps MUST follow the recommendations in {{oauth-security-topics}} 
-section 3.1 to protect themselves during redirect flows.
+Section 2.1 to protect themselves during redirect flows.
 
 
 Handling the Authorization Code Redirect {#auth_code_redirect}
@@ -460,9 +463,9 @@ Cross-Site Request Forgery Protections   {#csrf_protection}
 
 Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.
 Clients can accomplish this by either ensuring the authorization server supports
-PKCE and relying on the CSRF protection that PKCE provides, or using the "state"
-parameter to carry one-time-use CSRF tokens as described in {{auth_code_request}}, 
-or if the client is also an OpenID Connect client, using the OpenID Connect "nonce" parameter.
+PKCE and relying on the CSRF protection that PKCE provides, or if the client is also an 
+OpenID Connect client, using the OpenID Connect "nonce" parameter, or by using the 
+"state" parameter to carry one-time-use CSRF tokens as described in {{auth_code_request}}.
 
 See Section 2.1 of {{oauth-security-topics}} for additional details.
 
