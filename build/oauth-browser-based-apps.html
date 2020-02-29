@@ -579,7 +579,7 @@
 
 <ul>
 <li>Use the OAuth 2.0 authorization code flow with the PKCE extension</li>
-<li>Protect themselves against CSRF attacks by using the OAuth 2.0 state parameter or the OpenID Connect nonce parameter to carry one-time use CSRF tokens, or by ensuring the authorization server supports PKCE</li>
+<li>Protect themselves against CSRF attacks by ensuring the authorization server supports PKCE, or by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens</li>
 <li>Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests</li>
 </ul>
 <p id="rfc.section.4.p.7">OAuth 2.0 authorization servers MUST:</p>
@@ -696,8 +696,15 @@
 </h1>
 <p id="rfc.section.7.1.p.1">Public browser-based apps MUST implement the Proof Key for Code Exchange (PKCE <a href="#RFC7636" class="xref">[RFC7636]</a>) extension to OAuth, and authorization servers MUST support PKCE for such clients.</p>
 <p id="rfc.section.7.1.p.2">The PKCE extension prevents an attack where the authorization code is intercepted and exchanged for an access token by a malicious client, by providing the authorization server with a way to verify the same client instance that exchanges the authorization code is the same one that initiated the flow.</p>
-<p id="rfc.section.7.1.p.3">Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be accomplished by either using PKCE, using a unique value for the OAuth 2.0 "state" parameter on each request, or by using the OpenID Connect "nonce" parameter.</p>
-<p id="rfc.section.7.1.p.4">Browser-based apps MUST follow the recommendations in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> section 3.1 to protect themselves during redirect flows.</p>
+<p id="rfc.section.7.1.p.3">Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be accomplished by any of the below:</p>
+<p></p>
+
+<ul>
+<li>using PKCE, and confirming that the authorization server supports PKCE</li>
+<li>if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter</li>
+<li>using a unique value for the OAuth 2.0 "state" parameter</li>
+</ul>
+<p id="rfc.section.7.1.p.5">Browser-based apps MUST follow the recommendations in <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> Section 2.1 to protect themselves during redirect flows.</p>
 <h1 id="rfc.section.7.2">
 <a href="#rfc.section.7.2">7.2.</a> <a href="#auth_code_redirect" id="auth_code_redirect">Handling the Authorization Code Redirect</a>
 </h1>
@@ -749,7 +756,7 @@
 <h1 id="rfc.section.9.4">
 <a href="#rfc.section.9.4">9.4.</a> <a href="#csrf_protection" id="csrf_protection">Cross-Site Request Forgery Protections</a>
 </h1>
-<p id="rfc.section.9.4.p.1">Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.  Clients can accomplish this by either ensuring the authorization server supports PKCE and relying on the CSRF protection that PKCE provides, or using the "state" parameter to carry one-time-use CSRF tokens as described in <a href="#auth_code_request" class="xref">Section 7.1</a>, or if the client is also an OpenID Connect client, using the OpenID Connect "nonce" parameter.</p>
+<p id="rfc.section.9.4.p.1">Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.  Clients can accomplish this by either ensuring the authorization server supports PKCE and relying on the CSRF protection that PKCE provides, or if the client is also an OpenID Connect client, using the OpenID Connect "nonce" parameter, or by using the "state" parameter to carry one-time-use CSRF tokens as described in <a href="#auth_code_request" class="xref">Section 7.1</a>.</p>
 <p id="rfc.section.9.4.p.2">See Section 2.1 of <a href="#oauth-security-topics" class="xref">[oauth-security-topics]</a> for additional details.</p>
 <h1 id="rfc.section.9.5">
 <a href="#rfc.section.9.5">9.5.</a> <a href="#auth_server_mixup" id="auth_server_mixup">Authorization Server Mix-Up Mitigation</a>
