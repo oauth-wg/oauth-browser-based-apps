@@ -144,6 +144,9 @@ OAuth 2.0 authorization servers MUST:
 
 * Require exact matching of registered redirect URIs
 * Support the PKCE extension
+* If issuing refresh tokens to browser-based apps, then:
+* Rotate refresh tokens on each use
+* Set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
 
 
 First-Party Applications
@@ -529,7 +532,7 @@ attacks that cannot be mitigated while continuing to use the implicit flow.
 #### Threat: Interception of the Redirect URI
 
 If an attacker is able to cause the authorization response to be sent to a URI under
-their control, they will directly get access to the fragment carrying the access token.
+their control, they will directly get access to the authorization response including the access token.
 Several methods of performing this attack are described in detail in {{oauth-security-topics}}.
 
 #### Threat: Access Token Leak in Browser History
@@ -573,7 +576,7 @@ returned in the fragment, it is visible to any third-party scripts on the page.
 
 In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
 using the authorization code with PKCE extension prevents the attacks described above by
-avoiding returning the access token in the redirect URI at all.
+avoiding returning the access token in the redirect response at all.
 
 When PKCE is used, if an authorization code is stolen in transport, the attacker is
 unable to do anything with the authorization code.
@@ -583,11 +586,11 @@ unable to do anything with the authorization code.
 There are several additional reasons the Implicit flow is disadvantageous compared to
 using the standard Authorization Code flow.
 
-* OAuth 2.0 provides no mechanism for a client to verify that an access token was
-  issued to it, which could lead to misuse and possible impersonation attacks if
+* OAuth 2.0 provides no mechanism for a client to verify that a particular access token was
+  intended for that client, which could lead to misuse and possible impersonation attacks if
   a malicious party hands off an access token it retrieved through some other means
   to the client.
-* Returning an access token in the front channel redirect gives the authorization
+* Returning an access token in the front-channel redirect gives the authorization
   server no assurance that the access token will actually end up at the
   application, since there are many ways this redirect may fail or be intercepted.
 * Supporting the implicit flow requires additional code, more upkeep and
@@ -667,12 +670,16 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-06
+
+* Added refresh token requirements to AS summary
+* Editorial clarifications
+
 -05
 
 * Incorporated editorial and substantive feedback from Mike Jones
 * Added references to "nonce" as another way to prevent CSRF attacks
 * Updated headers in the Implicit Flow section to better represent the relationship between the paragraphs
-
 
 -04
 
