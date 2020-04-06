@@ -5,12 +5,12 @@
 Open Authentication Protocol                                  A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: August 31, 2020                                   Ping Identity
-                                                       February 28, 2020
+Expires: October 7, 2020                                   Ping Identity
+                                                          April 05, 2020
 
 
                     OAuth 2.0 for Browser-Based Apps
-                 draft-ietf-oauth-browser-based-apps-05
+                 draft-ietf-oauth-browser-based-apps-06
 
 Abstract
 
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 31, 2020.
+   This Internet-Draft will expire on October 7, 2020.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 1]
+Parecki & Waite          Expires October 7, 2020                [Page 1]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 Table of Contents
@@ -88,7 +88,7 @@ Table of Contents
        9.8.2.  Countermeasures . . . . . . . . . . . . . . . . . . .  15
        9.8.3.  Disadvantages of the Implicit Flow  . . . . . . . . .  15
        9.8.4.  Historic Note . . . . . . . . . . . . . . . . . . . .  16
-     9.9.  Additional Security Considerations  . . . . . . . . . . .  16
+     9.9.  Additional Security Considerations  . . . . . . . . . . .  17
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  17
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 2]
+Parecki & Waite          Expires October 7, 2020                [Page 2]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
    integration of these technologies.  This document is formally known
@@ -165,9 +165,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 3]
+Parecki & Waite          Expires October 7, 2020                [Page 3]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
    token in the URL.  See Section 9.8 for an analysis of these attacks
@@ -206,11 +206,26 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
    o  Support the PKCE extension
 
+   o  If issuing refresh tokens to browser-based apps, then:
+
+   o  Rotate refresh tokens on each use
+
+   o  Set a maximum lifetime on refresh tokens or expire if they are not
+      used in some amount of time
+
 5.  First-Party Applications
 
    While OAuth was initially created to allow third-party applications
    to access an API on behalf of a user, it has proven to be useful in a
    first-party scenario as well.  First-party apps are applications
+
+
+
+Parecki & Waite          Expires October 7, 2020                [Page 4]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
    where the same organization provides both the API and the
    application.
 
@@ -218,14 +233,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    by the operator of the email account, or a mobile banking application
    created by bank itself.  (Note that there is no requirement that the
    application actually be developed by the same company; a mobile
-
-
-
-Parecki & Waite          Expires August 31, 2020                [Page 4]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
-
    banking application developed by a contractor that is branded as the
    bank's application is still considered a first-party application.)
    The first-party app consideration is about the user's relationship to
@@ -268,19 +275,18 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    domain of the API (resource server), OAuth adds additional attack
    vectors that could be avoided with a different solution.
 
+
+
+Parecki & Waite          Expires October 7, 2020                [Page 5]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
    In particular, using any redirect-based mechanism of obtaining an
    access token enables the redirect-based attacks described in
    [oauth-security-topics], but if the application, authorization server
    and resource server share a domain, then it is unnecessary to use a
    redirect mechanism to communicate between them.
-
-
-
-
-Parecki & Waite          Expires August 31, 2020                [Page 5]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
 
    An additional concern with handling access tokens in a browser is
    that as of the date of this publication, there is no secure storage
@@ -327,15 +333,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-
-
-
-
-
-
-Parecki & Waite          Expires August 31, 2020                [Page 6]
+Parecki & Waite          Expires October 7, 2020                [Page 6]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
    +-------------+
@@ -389,9 +389,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 7]
+Parecki & Waite          Expires October 7, 2020                [Page 7]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
    access token.  Upon handling the redirect from the Authorization
@@ -445,9 +445,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 8]
+Parecki & Waite          Expires October 7, 2020                [Page 8]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
                          +---------------+           +--------------+
@@ -501,9 +501,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020                [Page 9]
+Parecki & Waite          Expires October 7, 2020                [Page 9]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 7.1.  Initiating the Authorization Request from a Browser-Based
@@ -557,9 +557,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020               [Page 10]
+Parecki & Waite          Expires October 7, 2020               [Page 10]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
    Authorization servers may choose whether or not to issue refresh
@@ -613,9 +613,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020               [Page 11]
+Parecki & Waite          Expires October 7, 2020               [Page 11]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 9.1.  Registration of Browser-Based Apps
@@ -669,9 +669,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020               [Page 12]
+Parecki & Waite          Expires October 7, 2020               [Page 12]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 9.4.  Cross-Site Request Forgery Protections
@@ -725,9 +725,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-Parecki & Waite          Expires August 31, 2020               [Page 13]
+Parecki & Waite          Expires October 7, 2020               [Page 13]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 9.7.  Content-Security Policy
@@ -759,8 +759,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
    If an attacker is able to cause the authorization response to be sent
    to a URI under their control, they will directly get access to the
-   fragment carrying the access token.  Several methods of performing
-   this attack are described in detail in [oauth-security-topics].
+   authorization response including the access token.  Several methods
+   of performing this attack are described in detail in
+   [oauth-security-topics].
 
 9.8.1.2.  Threat: Access Token Leak in Browser History
 
@@ -780,10 +781,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
 
 
 
-
-Parecki & Waite          Expires August 31, 2020               [Page 14]
+Parecki & Waite          Expires October 7, 2020               [Page 14]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
 9.8.1.3.  Threat: Manipulation of Scripts
@@ -819,7 +819,7 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    In addition to the countermeasures described by [RFC6819] and
    [oauth-security-topics], using the authorization code with PKCE
    extension prevents the attacks described above by avoiding returning
-   the access token in the redirect URI at all.
+   the access token in the redirect response at all.
 
    When PKCE is used, if an authorization code is stolen in transport,
    the attacker is unable to do anything with the authorization code.
@@ -830,19 +830,22 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    disadvantageous compared to using the standard Authorization Code
    flow.
 
-   o  OAuth 2.0 provides no mechanism for a client to verify that an
-      access token was issued to it, which could lead to misuse and
-      possible impersonation attacks if a malicious party hands off an
-      access token it retrieved through some other means to the client.
+   o  OAuth 2.0 provides no mechanism for a client to verify that a
+      particular access token was intended for that client, which could
+      lead to misuse and possible impersonation attacks if a malicious
 
 
 
-Parecki & Waite          Expires August 31, 2020               [Page 15]
+
+Parecki & Waite          Expires October 7, 2020               [Page 15]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
 
 
-   o  Returning an access token in the front channel redirect gives the
+      party hands off an access token it retrieved through some other
+      means to the client.
+
+   o  Returning an access token in the front-channel redirect gives the
       authorization server no assurance that the access token will
       actually end up at the application, since there are many ways this
       redirect may fail or be intercepted.
@@ -885,19 +888,20 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    string without triggering a page reload thanks to the Session History
    API.
 
+
+
+
+
+
+Parecki & Waite          Expires October 7, 2020               [Page 16]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
 9.9.  Additional Security Considerations
 
    The OWASP Foundation (https://www.owasp.org/) maintains a set of
    security recommendations and best practices for web applications, and
-
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 16]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
-
    it is RECOMMENDED to follow these best practices when creating an
    OAuth 2.0 Browser-Based application.
 
@@ -941,18 +945,18 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
               DOI 10.17487/RFC7636, September 2015,
               <https://www.rfc-editor.org/info/rfc7636>.
 
+
+
+
+
+Parecki & Waite          Expires October 7, 2020               [Page 17]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
    [RFC8252]  Denniss, W. and J. Bradley, "OAuth 2.0 for Native Apps",
               BCP 212, RFC 8252, DOI 10.17487/RFC8252, October 2017,
               <https://www.rfc-editor.org/info/rfc8252>.
-
-
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 17]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
 
 11.2.  Informative References
 
@@ -987,11 +991,24 @@ Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
 
+   -06
+
+   o  Added refresh token requirements to AS summary
+
+   o  Editorial clarifications
+
    -05
 
    o  Incorporated editorial and substantive feedback from Mike Jones
 
    o  Added references to "nonce" as another way to prevent CSRF attacks
+
+
+
+Parecki & Waite          Expires October 7, 2020               [Page 18]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
 
    o  Updated headers in the Implicit Flow section to better represent
       the relationship between the paragraphs
@@ -1002,13 +1019,6 @@ Appendix B.  Document History
 
    o  Add PKCE support to summary list for authorization server
       requirements
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 18]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
 
    o  Rewrote refresh token section to allow refresh tokens if they are
       time-limited, rotated on each use, and requiring that the rotated
@@ -1047,6 +1057,15 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    o  Updated headers to better describe architectures (Apps Served from
       a Static Web Server -> JavaScript Applications without a Backend)
 
+
+
+
+
+Parecki & Waite          Expires October 7, 2020               [Page 19]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
    o  Expanded "same-domain architecture" section to better explain the
       problems that OAuth has in this scenario
 
@@ -1057,14 +1076,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
    -02
 
    o  Rewrote overview section incorporating feedback from Leo Tohill
-
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 19]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
 
    o  Updated summary recommendation bullet points to split out
       application and server requirements
@@ -1103,6 +1114,14 @@ Appendix C.  Acknowledgements
    John Bradley, whose recommendation for native apps informed many of
    the best practices for browser-based applications.  The authors would
    also like to thank Hannes Tschofenig and Torsten Lodderstedt, the
+
+
+
+Parecki & Waite          Expires October 7, 2020               [Page 20]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          April 2020
+
+
    attendees of the Internet Identity Workshop 27 session at which this
    BCP was originally proposed, and the following individuals who
    contributed ideas, feedback, and wording that shaped and formed the
@@ -1113,14 +1132,6 @@ Appendix C.  Acknowledgements
    John Bradley, Joseph Heenan, Justin Richer, Karl McGuinness, Leo
    Tohill, Mike Jones, Tomek Stojecki, Torsten Lodderstedt, and Vittorio
    Bertocci.
-
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 20]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps       February 2020
-
 
 Authors' Addresses
 
@@ -1162,15 +1173,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-Parecki & Waite          Expires August 31, 2020               [Page 21]
+Parecki & Waite          Expires October 7, 2020               [Page 21]
