@@ -221,62 +221,50 @@ to later add a new domain to the system.
 JavaScript Applications with a Backend
 --------------------------------------
 
-    +-------------+
-    |             |
-    |Authorization|
-    |   Server    |
-    |             |
-    +-------------+
+    +-------------+  +--------------+ +---------------+
+    |             |  |              | |               |
+    |Authorization|  |    Token     | |   Resource    |
+    |  Endpoint   |  |   Endpoint   | |    Server     |
+    |             |  |              | |               |
+    +-------------+  +--------------+ +---------------+
 
-       ^     +
-       |(A)  |(B)
-       |     |
-       +     v
+           ^                ^                   ^
+           |             (D)|                (G)|
+           |                v                   v
+           |
+           |         +--------------------------------+
+           |         |                                |
+           |         |          Application           |
+        (B)|         |            Server              |
+           |         |                                |
+           |         +--------------------------------+
+           |
+           |           ^     ^     +          ^    +
+           |        (A)|  (C)|  (E)|       (F)|    |(H)
+           v           v     +     v          +    v
 
-    +-------------+             +--------------+
-    |             | +---------> |              |
-    | Application |   (C)       |   Resource   |
-    |   Server    |             |    Server    |
-    |             | <---------+ |              |
-    +-------------+   (D)       +--------------+
+    +-------------------------------------------------+
+    |                                                 |
+    |                   Browser                       |
+    |                                                 |
+    +-------------------------------------------------+
 
-        ^    +
-        |    |
-        |    | browser
-        |    | cookie
-        |    |
-        +    v
-
-    +-------------+
-    |             |
-    |   Browser   |
-    |             |
-    +-------------+
-
-In this architecture, the JavaScript code is loaded from a dynamic Application Server
-that also has the ability to execute code itself. This enables the ability to keep
+In this architecture, the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
 all of the steps involved in obtaining an access token outside of the JavaScript
 application.
 
-In this case, the Application Server performs the OAuth flow itself, and keeps the 
-access token and refresh token stored internally, creating a separate session with
-the browser-based app via a traditional browser cookie.
+In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a 
+traditional browser cookie (E).
+
+When the JavaScript application in the browser wants to make a request to the Resource Server,
+it instead makes the request to the Application Server (F), and the Application Server will
+make the request with the access token to the Resource Server (H), and forward the response (H)
+back to the browser.
 
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
 a React front-end with a Spring Boot backend.)
 
-The Application Server SHOULD be considered a confidential client, and issued its own client
-secret. The Application Server SHOULD use the OAuth 2.0 authorization code grant to initiate
-a request for an access token. Upon handling the redirect from the Authorization
-Server, the Application Server will request an access token using the authorization code
-returned (A), which will be returned to the Application Server (B). The Application Server
-stores this access token itself and establishes its own cookie-based session with the Browser application.
-The Application Server can store the access token either server-side, or in the cookie itself.
-
-When the JavaScript application in the browser wants to make a request to the Resource Server,
-it MUST instead make the request to the Application Server, and the Application Server will
-make the request with the access token to the Resource Server (C), and forward the response (D)
-back to the browser.
+The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. 
 
 Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
@@ -284,11 +272,13 @@ this document, but many recommendations can be found in the OWASP Cheat Sheet se
 such as setting an HTTP-only and Secure cookie to authenticate the session between the
 browser and Application Server.
 
-In this scenario, the session between the browser and Application Server MAY be either a
-session cookie provided by the Application Server, OR the access token itself. Note that
-if the access token is used as the session identifier, this exposes the access token
-to the end user even if it is not available to the JavaScript application, so some
-authorization servers may wish to limit the capabilities of these clients to mitigate risk.
+In this scenario, the session between the browser and Application Server SHOULD be a
+session cookie provided by the Application Server.
+
+TODO: security considerations around things like Server Side Request Forgery or logging the cookies
+
+TODO: Add another description of the alternative architecture where access tokens are passed to JS and the JS app makes API calls directly. https://mailarchive.ietf.org/arch/msg/oauth/sl-g6zYSpJW3sYqrR0peadUw54U/
+
 
 
 JavaScript Applications without a Backend
