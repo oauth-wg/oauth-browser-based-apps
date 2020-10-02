@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-06
-date: 2020-04-05
+docname: draft-ietf-oauth-browser-based-apps-07
+date: 2020-10-02
 
 ipr: trust200902
 area: OAuth
@@ -398,6 +398,9 @@ For example:
 * At this point, when the application attempts to use the refresh token after 24 hours, the request will fail and the application will have to involve the user in a new authorization request
 
 By limiting the overall refresh token lifetime to the lifetime of the initial refresh token, this ensures a stolen refresh token cannot be used indefinitely.
+
+Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based apps compared to other public clients.
+
 
 
 Security Considerations
