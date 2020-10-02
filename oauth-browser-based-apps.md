@@ -134,19 +134,22 @@ In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), wh
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
-Browser-based applications MUST:
+Browser-based applications:
 
-* Use the OAuth 2.0 authorization code flow with the PKCE extension
-* Protect themselves against CSRF attacks by ensuring the authorization server supports PKCE, or by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
-* Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
+* MUST use the OAuth 2.0 authorization code flow with the PKCE extension when obtaining an access token
+* MUST Protect themselves against CSRF attacks by either:
+  * ensuring the authorization server supports PKCE, or 
+  * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
+* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
-OAuth 2.0 authorization servers MUST:
+OAuth 2.0 authorization servers:
 
-* Require exact matching of registered redirect URIs
-* Support the PKCE extension
+* MUST Require exact matching of registered redirect URIs
+* MUST Support the PKCE extension
+* MUST NOT issue access tokens in the authorization response
 * If issuing refresh tokens to browser-based apps, then:
-* Rotate refresh tokens on each use
-* Set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
+  * SHOULD rotate refresh tokens on each use, and
+  * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
 
 
 First-Party Applications
@@ -275,10 +278,11 @@ browser and Application Server.
 In this scenario, the session between the browser and Application Server SHOULD be a
 session cookie provided by the Application Server.
 
+<!--
 TODO: security considerations around things like Server Side Request Forgery or logging the cookies
 
 TODO: Add another description of the alternative architecture where access tokens are passed to JS and the JS app makes API calls directly. https://mailarchive.ietf.org/arch/msg/oauth/sl-g6zYSpJW3sYqrR0peadUw54U/
-
+-->
 
 
 JavaScript Applications without a Backend
@@ -335,7 +339,7 @@ Initiating the Authorization Request from a Browser-Based Application {#auth_cod
 ---------------------------------------------------------------------
 
 Public browser-based apps MUST implement the Proof Key for Code Exchange
-(PKCE {{RFC7636}}) extension to OAuth, and authorization servers MUST support
+(PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
 PKCE for such clients.
 
 The PKCE extension prevents an attack where the authorization code is intercepted
@@ -347,8 +351,8 @@ Browser-based apps MUST prevent CSRF attacks against their redirect URI. This ca
 accomplished by any of the below:
 
 * using PKCE, and confirming that the authorization server supports PKCE
-* if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
 * using a unique value for the OAuth 2.0 "state" parameter 
+* if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
 
 Browser-based apps MUST follow the recommendations in {{oauth-security-topics}} 
 Section 2.1 to protect themselves during redirect flows.
@@ -508,10 +512,14 @@ OAuth Implicit Flow   {#implicit_flow}
 -------------------
 
 The OAuth 2.0 Implicit flow (defined in Section 4.2 of
-OAuth 2.0 {{RFC6749}}) works by receiving an access token in the HTTP redirect
-(front-channel) immediately without the code exchange step. In this case, the access
+OAuth 2.0 {{RFC6749}}) works by the authorization server issuing an access token in the
+authorization response (front-channel) without the code exchange step. In this case, the access
 token is returned in the fragment part of the redirect URI, providing an attacker
 with several opportunities to intercept and steal the access token.
+
+Authorization servers MUST NOT issue access tokens in the authorization response, and MUST issue
+access tokens only from the token endpoint.
+
 
 ### Attacks on the Implicit Flow
 
@@ -591,7 +599,7 @@ using the standard Authorization Code flow.
   also requires the use of the authorization code flow with PKCE anyway.
 
 In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally
-signed. Returning an id_token using the Implicit flow (response_type=id_token) requires the client
+signed. Returning an id_token using the Implicit flow (`response_type=id_token`) requires the client
 validate the JWT signature, as malicious parties could otherwise craft and supply
 fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides
 the benefit of the client not needing to verify the JWT signature, as the ID token will 
@@ -659,6 +667,11 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-07
+
+* Clarify PKCE requirements apply only to issuing access tokens
+* Editorial clarifications
 
 -06
 
