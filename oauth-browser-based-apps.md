@@ -385,7 +385,7 @@ around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
-* MUST rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
+* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -671,6 +671,7 @@ Document History
 -07
 
 * Clarify PKCE requirements apply only to issuing access tokens
+* Change "MUST" to "SHOULD" for refresh token rotation
 * Editorial clarifications
 
 -06
