@@ -172,7 +172,8 @@ Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flo
 as described later in this document.
 
 The Resource Owner Password Grant MUST NOT be used, as described in 
-{{oauth-security-topics}} section 3.4. Instead, by using the Authorization Code flow 
+{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
+
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
@@ -385,7 +386,7 @@ around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
-* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
+* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.13.2)
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
