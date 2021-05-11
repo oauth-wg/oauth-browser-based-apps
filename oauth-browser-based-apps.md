@@ -552,11 +552,11 @@ This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 #### Threat: Manipulation of Scripts
 
 An attacker could modify the page or inject scripts into the browser through various
-means, including when the browser's HTTPS connection is being man-in-the-middled
-by, for example, a corporate network. While this type of attack is typically out of
-scope of basic security recommendations to prevent, in the case of browser-based
-apps it is much easier to perform this kind of attack, where an injected script
-can suddenly have access to everything on the page.
+means, including when the browser's HTTPS connection is being intercepted by, for
+example, a corporate network. While man-in-the-middle attacks are typically out of scope
+of basic security recommendations to prevent, in the case of browser-based apps they are
+much easier to perform. An injected script can enable an attacker to have access to everything
+on the page.
 
 The risk of a malicious script running on the page may be amplified when the application
 uses a known standard way of obtaining access tokens, namely that the attacker can
