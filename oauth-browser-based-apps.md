@@ -330,7 +330,7 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
-Public browser-based apps that use the authorization code grant type described in
+Browser-based apps that are public clients and use the authorization code grant type described in
 Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
 described in this section.
 
@@ -338,7 +338,7 @@ described in this section.
 Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
 ---------------------------------------------------------------------
 
-Public browser-based apps MUST implement the Proof Key for Code Exchange
+Browser-based apps that are public clients MUST implement the Proof Key for Code Exchange
 (PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
 PKCE for such clients.
 
