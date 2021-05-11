@@ -184,7 +184,6 @@ as described later in this document.
 
 The Resource Owner Password Grant MUST NOT be used, as described in 
 {{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
-
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
