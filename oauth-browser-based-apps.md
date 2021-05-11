@@ -267,7 +267,7 @@ back to the browser.
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
 a React front-end with a Spring Boot backend.)
 
-The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. 
+The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
 
 In this scenario, the session between the browser and Application Server SHOULD be a
 session cookie provided by the Application Server.
