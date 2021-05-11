@@ -526,7 +526,7 @@ access tokens only from the token endpoint.
 
 ### Attacks on the Implicit Flow
 
-Many attacks on the implicit flow described by {{RFC6819}} and {{oauth-security-topics}}
+Many attacks on the implicit flow described by {{RFC6819}} and Section 4.1.2 of {{oauth-security-topics}}
 do not have sufficient mitigation strategies. The following sections describe the specific
 attacks that cannot be mitigated while continuing to use the implicit flow.
 
