@@ -295,7 +295,7 @@ JavaScript Applications without a Backend
                           |               |           |              |
                           +---------------+           +--------------+
 
-                                 ^     +                 ^     +
+                                 ^     ^                 ^     +
                                  |     |                 |     |
                                  |(B)  |(C)              |(D)  |(E)
                                  |     |                 |     |
