@@ -324,7 +324,8 @@ TODO: Add sentence referencing the section about service worker pattern in a fut
 -->
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
-it can include the access token in the request (D) and make the request directly.
+it can interact with the Resource Server directly. It includes the access token in the request (D)
+and receives the Resource Server's response (E).
 
 In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make this POST request
