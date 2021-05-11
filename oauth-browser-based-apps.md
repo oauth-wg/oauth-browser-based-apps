@@ -485,13 +485,20 @@ See Section 2.1 of {{oauth-security-topics}} for additional details.
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
 --------------------------------------
 
-The security considerations around the authorization server mix-up that
-are referenced in Section 8.10 of {{RFC8252}} also apply to browser-based apps.
+Authorization server mix-up attacks mark a severe threat to every client that supports
+at least two authorization servers. To conform to this BCP such clients MUST apply
+countermeasures to defend against mix-up attacks.
 
-Clients MUST use a unique redirect URI for each authorization server used by the
-application. The client MUST store the redirect URI along with the session data
-(e.g. along with "state") and MUST verify that the URI on which the authorization
-response was received exactly matches.
+It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
+of the authorization response. This can be achieved either by using the "iss" response
+parameter, as defined in {{oauth-iss-auth-resp}}, or by using the "iss" Claim of the ID token
+when OpenID Connect is used.
+
+Alternative countermeasures, such as using distinct redirect URIs for each issuer, SHOULD
+only be used if identifying the issuer as described is not possible.
+
+Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
+and the countermeasures mentioned above.
 
 
 Cross-Domain Requests  {#cors}
