@@ -613,7 +613,7 @@ simplier and provides fewer attack vectors to obtain both via the authorization 
 
 ### Historic Note
 
-Historically, the Implicit flow provided an advantage to single-page apps since
+Historically, the Implicit flow provided an advantage to browser-based apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
 URL without triggering a page reload. This was necessary in order to remove the
 access token from the URL after it was obtained by the app.
