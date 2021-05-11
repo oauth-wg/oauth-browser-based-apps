@@ -362,6 +362,7 @@ Handling the Authorization Code Redirect {#auth_code_redirect}
 ----------------------------------------
 
 Authorization servers MUST require an exact match of a registered redirect URI.
+As described in {{oauth-security-topics}} Section 4.1.1. this helps to prevent attacks targeting the authorization code.
 
 
 Refresh Tokens {#refresh_tokens}
