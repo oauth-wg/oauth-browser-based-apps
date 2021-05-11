@@ -66,6 +66,17 @@ normative:
       org: yes.com
     date: April 2021
     url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
+  oauth-iss-auth-resp:
+    title: OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response
+    author:
+    - name: Karsten Meyer zu Selhausen
+      ins: K. Meyer zu Selhausen
+      org: Hackmanit
+    - name: Daniel Fett
+      ins: D. Fett
+      org: yes.com
+    date: January 2021
+    url: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp
 informative:
   HTML:
     title: HTML
