@@ -64,7 +64,7 @@ normative:
     - name: Daniel Fett
       ins: D. Fett
       org: yes.com
-    date: July 2019
+    date: April 2021
     url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
 informative:
   HTML:
