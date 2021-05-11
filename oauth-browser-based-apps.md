@@ -530,7 +530,7 @@ Many attacks on the implicit flow described by {{RFC6819}} and {{oauth-security-
 do not have sufficient mitigation strategies. The following sections describe the specific
 attacks that cannot be mitigated while continuing to use the implicit flow.
 
-#### Threat: Interception of the Redirect URI
+#### Threat: Manipulation of the Redirect URI
 
 If an attacker is able to cause the authorization response to be sent to a URI under
 their control, they will directly get access to the authorization response including the access token.
