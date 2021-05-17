@@ -306,7 +306,7 @@ JavaScript Applications without a Backend
                           |               |           |              |
                           +---------------+           +--------------+
 
-                                 ^     +                 ^     +
+                                 ^     ^                 ^     +
                                  |     |                 |     |
                                  |(B)  |(C)              |(D)  |(E)
                                  |     |                 |     |
@@ -326,11 +326,17 @@ client authentication mechanism available in the browser.
 
 The code in the browser initiates the authorization code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
-access token via a POST request (C). The JavaScript app is then responsible for storing
-the access token (and optional refresh token) securely using appropriate browser APIs.
+access token via a POST request (C). The JavaScript application is then responsible for storing
+the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
+As of the date of this publication there is no browser API that allows to store tokens in a completely
+secure way.
+<!--
+TODO: Add sentence referencing the section about service worker pattern in a future draft?
+-->
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
-it can include the access token in the request (D) and make the request directly.
+it can interact with the Resource Server directly. It includes the access token in the request (D)
+and receives the Resource Server's response (E).
 
 In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make this POST request
