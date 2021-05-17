@@ -64,8 +64,19 @@ normative:
     - name: Daniel Fett
       ins: D. Fett
       org: yes.com
-    date: July 2019
+    date: April 2021
     url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
+  oauth-iss-auth-resp:
+    title: OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response
+    author:
+    - name: Karsten Meyer zu Selhausen
+      ins: K. Meyer zu Selhausen
+      org: Hackmanit
+    - name: Daniel Fett
+      ins: D. Fett
+      org: yes.com
+    date: January 2021
+    url: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp
 informative:
   HTML:
     title: HTML
@@ -172,7 +183,7 @@ Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flo
 as described later in this document.
 
 The Resource Owner Password Grant MUST NOT be used, as described in 
-{{oauth-security-topics}} section 3.4. Instead, by using the Authorization Code flow 
+{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single-sign-on sessions,
@@ -385,7 +396,7 @@ around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
-* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
+* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.13.2)
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -473,13 +484,20 @@ See Section 2.1 of {{oauth-security-topics}} for additional details.
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
 --------------------------------------
 
-The security considerations around the authorization server mix-up that
-are referenced in Section 8.10 of {{RFC8252}} also apply to browser-based apps.
+Authorization server mix-up attacks mark a severe threat to every client that supports
+at least two authorization servers. To conform to this BCP such clients MUST apply
+countermeasures to defend against mix-up attacks.
 
-Clients MUST use a unique redirect URI for each authorization server used by the
-application. The client MUST store the redirect URI along with the session data
-(e.g. along with "state") and MUST verify that the URI on which the authorization
-response was received exactly matches.
+It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
+of the authorization response. This can be achieved either by using the "iss" response
+parameter, as defined in {{oauth-iss-auth-resp}}, or by using the "iss" Claim of the ID token
+when OpenID Connect is used.
+
+Alternative countermeasures, such as using distinct redirect URIs for each issuer, SHOULD
+only be used if identifying the issuer as described is not possible.
+
+Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
+and the countermeasures mentioned above.
 
 
 Cross-Domain Requests  {#cors}
