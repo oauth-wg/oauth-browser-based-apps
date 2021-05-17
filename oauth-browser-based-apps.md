@@ -222,8 +222,7 @@ used in an API request. Using an OAuth flow results in the JavaScript code getti
 access token, needing to store it somewhere, and then retrieve it to make an API request. 
 
 Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application 
-and API so that the JavaScript code can't access the cookie value itself. Additionally, the SameSite
-cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
+and API so that the JavaScript code can't access the cookie value itself. The Secure cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the SameSite cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
 and API could be written to use anti-CSRF tokens.
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
