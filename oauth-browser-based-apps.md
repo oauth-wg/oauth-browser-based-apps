@@ -364,7 +364,7 @@ PKCE for such clients.
 
 The PKCE extension prevents an attack where the authorization code is intercepted
 and exchanged for an access token by a malicious client, by providing the
-authorization server with a way to verify the same client instance that exchanges
+authorization server with a way to verify the client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
 Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
@@ -373,9 +373,6 @@ accomplished by any of the below:
 * using PKCE, and confirming that the authorization server supports PKCE
 * using a unique value for the OAuth 2.0 "state" parameter
 * if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
-
-Browser-based applications MUST follow the recommendations in {{oauth-security-topics}}
-Section 2.1 to protect themselves during redirect flows.
 
 
 Handling the Authorization Code Redirect {#auth_code_redirect}
