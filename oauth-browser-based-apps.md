@@ -187,7 +187,7 @@ Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flo
 as described later in this document.
 
 The resource owner password credentials grant MUST NOT be used, as described in
-{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow
+{{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code flow
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single sign-on sessions,
@@ -216,7 +216,7 @@ from a domain that can share cookies with the domain of the API (resource server
 OAuth adds additional attack vectors that could be avoided with a different solution.
 
 In particular, using any redirect-based mechanism of obtaining an access token
-enables the redirect-based attacks described in {{oauth-security-topics}}, but if
+enables the redirect-based attacks described in {{oauth-security-topics}} Section 4, but if
 the application, authorization server and resource server share a domain, then it is
 unnecessary to use a redirect mechanism to communicate between them.
 
@@ -406,7 +406,7 @@ around refresh tokens if refresh tokens are issued to browser-based applications
 
 In particular, authorization servers:
 
-* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} section 4.13.2
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.13.2
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
@@ -432,7 +432,7 @@ Security Considerations
 Registration of Browser-Based Apps   {#client_registration}
 ----------------------------------
 
-Browser-based applications are considered public clients as defined by section 2.1
+Browser-based applications are considered public clients as defined by Section 2.1
 of OAuth 2.0 {{RFC6749}}, and MUST be registered with the authorization server as
 such. Authorization servers MUST record the client type in the client registration
 details in order to identify and process requests accordingly.
@@ -743,7 +743,7 @@ Document History
 * Rewrote overview section incorporating feedback from Leo Tohill
 * Updated summary recommendation bullet points to split out application and server requirements
 * Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching
-* Updated section 6.2 to drop reference of SPA with a backend component being a public client
+* Updated Section 6.2 to drop reference of SPA with a backend component being a public client
 * Expanded the architecture section to explicitly mention three architectural patterns available to JS apps
 
 -01
