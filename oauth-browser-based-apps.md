@@ -266,7 +266,7 @@ JavaScript Applications with a Backend
     |                                                 |
     +-------------------------------------------------+
 
-In this architecture, the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
+In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
 all of the steps involved in obtaining an access token outside of the JavaScript
 application.
 
