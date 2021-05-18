@@ -404,6 +404,7 @@ In particular, authorization servers:
 
 * MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} section 4.13.2
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
+* MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
 For example:
