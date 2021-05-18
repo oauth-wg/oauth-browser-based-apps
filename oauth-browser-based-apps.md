@@ -179,11 +179,11 @@ application is still considered a first-party application.) The first-party app
 consideration is about the user's relationship to the application and the service.
 
 To conform to this best practice, first-party applications using OAuth or OpenID
-Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow) 
+Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
 as described later in this document.
 
-The resource owner password credentials grant MUST NOT be used, as described in 
-{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
+The resource owner password credentials grant MUST NOT be used, as described in
+{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single sign-on sessions,
@@ -208,26 +208,26 @@ Browser-Based Apps that Can Share Data with the Resource Server
 ---------------------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server), 
+from a domain that can share cookies with the domain of the API (resource server),
 OAuth adds additional attack vectors that could be avoided with a different solution.
 
 In particular, using any redirect-based mechanism of obtaining an access token
-enables the redirect-based attacks described in {{oauth-security-topics}}, but if 
-the application, authorization server and resource server share a domain, then it is 
+enables the redirect-based attacks described in {{oauth-security-topics}}, but if
+the application, authorization server and resource server share a domain, then it is
 unnecessary to use a redirect mechanism to communicate between them.
 
 An additional concern with handling access tokens in a browser is that as of the date of this publication, there is no
 secure storage mechanism where JavaScript code can keep the access token to be later
-used in an API request. Using an OAuth flow results in the JavaScript code getting an 
-access token, needing to store it somewhere, and then retrieve it to make an API request. 
+used in an API request. Using an OAuth flow results in the JavaScript code getting an
+access token, needing to store it somewhere, and then retrieve it to make an API request.
 
-Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application 
+Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application
 and API so that the JavaScript code can't access the cookie value itself. The Secure cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the SameSite cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
 and API could be written to use anti-CSRF tokens.
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
 the best solution in a common-domain deployment. That said, using OAuth even in a common-domain
-architecture does mean you can more easily rearchitect things later, such as if you were 
+architecture does mean you can more easily rearchitect things later, such as if you were
 to later add a new domain to the system.
 
 
@@ -266,7 +266,7 @@ In this architecture, the JavaScript code is loaded from a dynamic Application S
 all of the steps involved in obtaining an access token outside of the JavaScript
 application.
 
-In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a 
+In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
 traditional browser cookie (E).
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
@@ -367,10 +367,10 @@ Browser-based apps MUST prevent CSRF attacks against their redirect URI. This ca
 accomplished by any of the below:
 
 * using PKCE, and confirming that the authorization server supports PKCE
-* using a unique value for the OAuth 2.0 "state" parameter 
+* using a unique value for the OAuth 2.0 "state" parameter
 * if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
 
-Browser-based apps MUST follow the recommendations in {{oauth-security-topics}} 
+Browser-based apps MUST follow the recommendations in {{oauth-security-topics}}
 Section 2.1 to protect themselves during redirect flows.
 
 
@@ -385,19 +385,19 @@ Refresh Tokens {#refresh_tokens}
 ==============
 
 Refresh tokens provide a way for applications to obtain a new access token when the
-initial access token expires. With public clients, the risk of a leaked refresh token 
-is greater than leaked access tokens, since an attacker may be able to 
-continue using the stolen refresh token to obtain new access tokens potentially without being 
+initial access token expires. With public clients, the risk of a leaked refresh token
+is greater than leaked access tokens, since an attacker may be able to
+continue using the stolen refresh token to obtain new access tokens potentially without being
 detectable by the authorization server.
 
 Browser-based applications provide an attacker with several opportunities by which a
-refresh token can be leaked, just as with access tokens. As such, these applications 
+refresh token can be leaked, just as with access tokens. As such, these applications
 are considered a higher risk for handling refresh tokens.
 
 Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens 
-on top of the recommendations of {{RFC6749}}. Applications and authorization servers 
-conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}} 
+applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens
+on top of the recommendations of {{RFC6749}}. Applications and authorization servers
+conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
 around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
@@ -468,7 +468,7 @@ without user consent or interaction, except when the identity of the
 client can be assured.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
-HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components, 
+HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components,
 this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
 proof of identity of the client for the purpose of deciding whether to automatically
 process an authorization request when a previous request for the client_id
@@ -480,8 +480,8 @@ Cross-Site Request Forgery Protections   {#csrf_protection}
 
 Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.
 Clients can accomplish this by either ensuring the authorization server supports
-PKCE and relying on the CSRF protection that PKCE provides, or if the client is also an 
-OpenID Connect client, using the OpenID Connect "nonce" parameter, or by using the 
+PKCE and relying on the CSRF protection that PKCE provides, or if the client is also an
+OpenID Connect client, using the OpenID Connect "nonce" parameter, or by using the
 "state" parameter to carry one-time-use CSRF tokens as described in {{auth_code_request}}.
 
 See Section 2.1 of {{oauth-security-topics}} for additional details.
@@ -629,7 +629,7 @@ In OpenID Connect, the id_token is sent in a known format (as a JWT), and digita
 signed. Returning an id_token using the Implicit flow (`response_type=id_token`) requires the client
 validate the JWT signature, as malicious parties could otherwise craft and supply
 fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides
-the benefit of the client not needing to verify the JWT signature, as the ID token will 
+the benefit of the client not needing to verify the JWT signature, as the ID token will
 have been fetched over an HTTPS connection directly from the authorization server. Additionally,
 in many cases an application will request both an ID token and an access token, so it is
 simplier and provides fewer attack vectors to obtain both via the authorization code flow.
@@ -765,7 +765,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Leo Tohill, Mike Jones, Tomek Stojecki, 
+Justin Richer, Karl McGuinness, Leo Tohill, Mike Jones, Tomek Stojecki,
 Torsten Lodderstedt, and Vittorio Bertocci.
 
 
