@@ -111,6 +111,10 @@ OAuth for native apps and browser-based apps, and includes additional
 considerations when running in a browser. This is primarily focused on OAuth,
 except where OpenID Connect provides additional considerations.
 
+Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
+{{oauth-security-topics}} and browser-based apps are expected to follow those recommendations
+as well. This draft expands on and further restricts various recommendations in {{oauth-security-topics}}.
+
 
 Notational Conventions
 ======================
