@@ -64,8 +64,19 @@ normative:
     - name: Daniel Fett
       ins: D. Fett
       org: yes.com
-    date: July 2019
+    date: April 2021
     url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
+  oauth-iss-auth-resp:
+    title: OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response
+    author:
+    - name: Karsten Meyer zu Selhausen
+      ins: K. Meyer zu Selhausen
+      org: Hackmanit
+    - name: Daniel Fett
+      ins: D. Fett
+      org: yes.com
+    date: January 2021
+    url: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp
 informative:
   HTML:
     title: HTML
@@ -172,7 +183,7 @@ Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flo
 as described later in this document.
 
 The resource owner password credentials grant MUST NOT be used, as described in 
-{{oauth-security-topics}} section 3.4. Instead, by using the Authorization Code flow 
+{{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single sign-on sessions,
@@ -211,8 +222,7 @@ used in an API request. Using an OAuth flow results in the JavaScript code getti
 access token, needing to store it somewhere, and then retrieve it to make an API request. 
 
 Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application 
-and API so that the JavaScript code can't access the cookie value itself. Additionally, the SameSite
-cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
+and API so that the JavaScript code can't access the cookie value itself. The Secure cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the SameSite cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
 and API could be written to use anti-CSRF tokens.
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
@@ -267,16 +277,16 @@ back to the browser.
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
 a React front-end with a Spring Boot backend.)
 
-The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. 
+The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
+
+In this scenario, the session between the browser and Application Server SHOULD be a
+session cookie provided by the Application Server.
 
 Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
 such as setting an HTTP-only and Secure cookie to authenticate the session between the
 browser and Application Server.
-
-In this scenario, the session between the browser and Application Server SHOULD be a
-session cookie provided by the Application Server.
 
 <!--
 TODO: security considerations around things like Server Side Request Forgery or logging the cookies
@@ -295,7 +305,7 @@ JavaScript Applications without a Backend
                           |               |           |              |
                           +---------------+           +--------------+
 
-                                 ^     +                 ^     +
+                                 ^     ^                 ^     +
                                  |     |                 |     |
                                  |(B)  |(C)              |(D)  |(E)
                                  |     |                 |     |
@@ -316,10 +326,16 @@ client authentication mechanism available in the browser.
 The code in the browser initiates the authorization code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
 access token via a POST request (C). The JavaScript application is then responsible for storing
-the access token (and optional refresh token) securely using appropriate browser APIs.
+the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
+As of the date of this publication there is no browser API that allows to store tokens in a completely
+secure way.
+<!--
+TODO: Add sentence referencing the section about service worker pattern in a future draft?
+-->
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
-it can include the access token in the request (D) and make the request directly.
+it can interact with the Resource Server directly. It includes the access token in the request (D)
+and receives the Resource Server's response (E).
 
 In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make this POST request
@@ -330,7 +346,7 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
-Public browser-based apps that use the authorization code grant type described in
+Browser-based apps that are public clients and use the authorization code grant type described in
 Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
 described in this section.
 
@@ -338,7 +354,7 @@ described in this section.
 Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
 ---------------------------------------------------------------------
 
-Public browser-based apps MUST implement the Proof Key for Code Exchange
+Browser-based apps that are public clients MUST implement the Proof Key for Code Exchange
 (PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
 PKCE for such clients.
 
@@ -362,6 +378,7 @@ Handling the Authorization Code Redirect {#auth_code_redirect}
 ----------------------------------------
 
 Authorization servers MUST require an exact match of a registered redirect URI.
+As described in {{oauth-security-topics}} Section 4.1.1. this helps to prevent attacks targeting the authorization code.
 
 
 Refresh Tokens {#refresh_tokens}
@@ -385,7 +402,7 @@ around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
-* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.12)
+* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.13.2)
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -473,13 +490,20 @@ See Section 2.1 of {{oauth-security-topics}} for additional details.
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
 --------------------------------------
 
-The security considerations around the authorization server mix-up that
-are referenced in Section 8.10 of {{RFC8252}} also apply to browser-based apps.
+Authorization server mix-up attacks mark a severe threat to every client that supports
+at least two authorization servers. To conform to this BCP such clients MUST apply
+countermeasures to defend against mix-up attacks.
 
-Clients MUST use a unique redirect URI for each authorization server used by the
-application. The client MUST store the redirect URI along with the session data
-(e.g. along with "state") and MUST verify that the URI on which the authorization
-response was received exactly matches.
+It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
+of the authorization response. This can be achieved either by using the "iss" response
+parameter, as defined in {{oauth-iss-auth-resp}}, or by using the "iss" Claim of the ID token
+when OpenID Connect is used.
+
+Alternative countermeasures, such as using distinct redirect URIs for each issuer, SHOULD
+only be used if identifying the issuer as described is not possible.
+
+Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
+and the countermeasures mentioned above.
 
 
 Cross-Domain Requests  {#cors}
@@ -526,11 +550,11 @@ access tokens only from the token endpoint.
 
 ### Attacks on the Implicit Flow
 
-Many attacks on the implicit flow described by {{RFC6819}} and {{oauth-security-topics}}
+Many attacks on the implicit flow described by {{RFC6819}} and Section 4.1.2 of {{oauth-security-topics}}
 do not have sufficient mitigation strategies. The following sections describe the specific
 attacks that cannot be mitigated while continuing to use the implicit flow.
 
-#### Threat: Interception of the Redirect URI
+#### Threat: Manipulation of the Redirect URI
 
 If an attacker is able to cause the authorization response to be sent to a URI under
 their control, they will directly get access to the authorization response including the access token.
@@ -552,11 +576,11 @@ This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 #### Threat: Manipulation of Scripts
 
 An attacker could modify the page or inject scripts into the browser through various
-means, including when the browser's HTTPS connection is being man-in-the-middled
-by, for example, a corporate network. While this type of attack is typically out of
-scope of basic security recommendations to prevent, in the case of browser-based
-apps it is much easier to perform this kind of attack, where an injected script
-can suddenly have access to everything on the page.
+means, including when the browser's HTTPS connection is being intercepted by, for
+example, a corporate network. While man-in-the-middle attacks are typically out of scope
+of basic security recommendations to prevent, in the case of browser-based apps they are
+much easier to perform. An injected script can enable an attacker to have access to everything
+on the page.
 
 The risk of a malicious script running on the page may be amplified when the application
 uses a known standard way of obtaining access tokens, namely that the attacker can
