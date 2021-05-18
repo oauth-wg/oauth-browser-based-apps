@@ -159,7 +159,7 @@ OAuth 2.0 authorization servers:
 * MUST Support the PKCE extension
 * MUST NOT issue access tokens in the authorization response
 * If issuing refresh tokens to browser-based apps, then:
-  * SHOULD rotate refresh tokens on each use, and
+  * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
   * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
 
 
@@ -402,7 +402,7 @@ around refresh tokens if refresh tokens are issued to browser-based apps.
 
 In particular, authorization servers:
 
-* SHOULD rotate refresh tokens on each use, in order to be able to detect a stolen refresh token if one is replayed (described in {{oauth-security-topics}} section 4.13.2)
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} section 4.13.2
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -698,7 +698,6 @@ Document History
 -07
 
 * Clarify PKCE requirements apply only to issuing access tokens
-* Change "MUST" to "SHOULD" for refresh token rotation
 * Editorial clarifications
 
 -06
