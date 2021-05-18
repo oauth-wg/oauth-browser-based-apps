@@ -141,17 +141,17 @@ the following terms:
 Overview
 ========
 
-At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
-For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code flow with PKCE.
 
 Browser-based applications:
 
-* MUST use the OAuth 2.0 authorization code flow with the PKCE extension when obtaining an access token
+* MUST use the OAuth 2.0 Authorization Code flow with the PKCE extension when obtaining an access token
 * MUST Protect themselves against CSRF attacks by either:
   * ensuring the authorization server supports PKCE, or
   * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
@@ -327,7 +327,7 @@ the browser (A), and the application then runs in the browser. This application 
 client, since there is no way to issue it a client secret and there is no other secure
 client authentication mechanism available in the browser.
 
-The code in the browser initiates the authorization code flow with the PKCE
+The code in the browser initiates the Authorization Code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
 access token via a POST request (C). The JavaScript application is then responsible for storing
 the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
@@ -350,7 +350,7 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
-Browser-based applications that are public clients and use the authorization code grant type described in
+Browser-based applications that are public clients and use the Authorization Code grant type described in
 Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
 described in this section.
 
@@ -511,7 +511,7 @@ and the countermeasures mentioned above.
 Cross-Domain Requests  {#cors}
 ---------------------
 
-To complete the authorization code flow, the browser-based application will
+To complete the Authorization Code flow, the browser-based application will
 need to exchange the authorization code for an access token at the token endpoint.
 If the authorization server provides additional endpoints to the application, such
 as metadata URLs, dynamic client registration, revocation, introspection, discovery or
@@ -588,7 +588,7 @@ The risk of a malicious script running on the page may be amplified when the app
 uses a known standard way of obtaining access tokens, namely that the attacker can
 always look at the `window.location` variable to find an access token. This threat profile
 is different from an attacker specifically targeting an individual application
-by knowing where or how an access token obtained via the authorization code flow may
+by knowing where or how an access token obtained via the Authorization Code flow may
 end up being stored.
 
 #### Threat: Access Token Leak to Third-Party Scripts
@@ -602,7 +602,7 @@ returned in the fragment, it is visible to any third-party scripts on the page.
 ### Countermeasures
 
 In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
-using the authorization code with PKCE extension prevents the attacks described above by
+using the Authorization Code flow with PKCE extension prevents the attacks described above by
 avoiding returning the access token in the redirect response at all.
 
 When PKCE is used, if an authorization code is stolen in transport, the attacker is
@@ -622,19 +622,19 @@ using the standard Authorization Code flow.
   application, since there are many ways this redirect may fail or be intercepted.
 * Supporting the implicit flow requires additional code, more upkeep and
   understanding of the related security considerations, while limiting the
-  authorization server to just the authorization code flow reduces the attack surface
+  authorization server to just the Authorization Code flow reduces the attack surface
   of the implementation.
 * If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
-  also requires the use of the authorization code flow with PKCE anyway.
+  also requires the use of the Authorization Code flow with PKCE anyway.
 
 In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally
 signed. Returning an id_token using the Implicit flow (`response_type=id_token`) requires the client
 validate the JWT signature, as malicious parties could otherwise craft and supply
-fraudulent id_tokens. Performing OpenID Connect using the authorization code flow provides
+fraudulent id_tokens. Performing OpenID Connect using the Authorization Code flow provides
 the benefit of the client not needing to verify the JWT signature, as the ID token will
 have been fetched over an HTTPS connection directly from the authorization server. Additionally,
 in many cases an application will request both an ID token and an access token, so it is
-simplier and provides fewer attack vectors to obtain both via the authorization code flow.
+simplier and provides fewer attack vectors to obtain both via the Authorization Code flow.
 
 
 ### Historic Note
@@ -647,7 +647,7 @@ access token from the URL after it was obtained by the app.
 Modern browsers now have the Session History API (described in "Session history and
 navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
 component of the URL without triggering a page reload. This means modern browser-based apps can
-use the unmodified OAuth 2.0 authorization code flow, since they have the ability to
+use the unmodified OAuth 2.0 Authorization Code flow, since they have the ability to
 remove the authorization code from the query string without triggering a page reload
 thanks to the Session History API.
 
