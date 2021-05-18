@@ -153,12 +153,12 @@ Browser-based applications:
   * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
 * MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
-OAuth 2.0 authorization servers:
+OAuth 2.0 authorization servers supporting browser-based applications:
 
 * MUST Require exact matching of registered redirect URIs
 * MUST Support the PKCE extension
 * MUST NOT issue access tokens in the authorization response
-* If issuing refresh tokens to browser-based apps, then:
+* If issuing refresh tokens to browser-based applications, then:
   * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
   * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
 
@@ -346,7 +346,7 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
-Browser-based apps that are public clients and use the authorization code grant type described in
+Browser-based applications that are public clients and use the authorization code grant type described in
 Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
 described in this section.
 
@@ -354,7 +354,7 @@ described in this section.
 Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
 ---------------------------------------------------------------------
 
-Browser-based apps that are public clients MUST implement the Proof Key for Code Exchange
+Browser-based applications that are public clients MUST implement the Proof Key for Code Exchange
 (PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
 PKCE for such clients.
 
@@ -363,14 +363,14 @@ and exchanged for an access token by a malicious client, by providing the
 authorization server with a way to verify the same client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
-Browser-based apps MUST prevent CSRF attacks against their redirect URI. This can be
+Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
 accomplished by any of the below:
 
 * using PKCE, and confirming that the authorization server supports PKCE
 * using a unique value for the OAuth 2.0 "state" parameter
 * if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
 
-Browser-based apps MUST follow the recommendations in {{oauth-security-topics}}
+Browser-based applications MUST follow the recommendations in {{oauth-security-topics}}
 Section 2.1 to protect themselves during redirect flows.
 
 
@@ -398,7 +398,7 @@ Authorization servers may choose whether or not to issue refresh tokens to brows
 applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens
 on top of the recommendations of {{RFC6749}}. Applications and authorization servers
 conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
-around refresh tokens if refresh tokens are issued to browser-based apps.
+around refresh tokens if refresh tokens are issued to browser-based applications.
 
 In particular, authorization servers:
 
@@ -417,7 +417,7 @@ For example:
 
 By limiting the overall refresh token lifetime to the lifetime of the initial refresh token, this ensures a stolen refresh token cannot be used indefinitely.
 
-Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based apps compared to other public clients.
+Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
 
 
 
