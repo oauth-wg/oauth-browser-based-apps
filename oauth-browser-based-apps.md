@@ -137,7 +137,7 @@ the following terms:
 Overview
 ========
 
-At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front-channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
@@ -182,12 +182,12 @@ To conform to this best practice, first-party applications using OAuth or OpenID
 Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow) 
 as described later in this document.
 
-The Resource Owner Password Grant MUST NOT be used, as described in 
+The resource owner password credentials grant MUST NOT be used, as described in 
 {{oauth-security-topics}} section 2.4. Instead, by using the Authorization Code flow 
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
-multi-factor authentication options, take advantage of single-sign-on sessions,
-or use third-party identity providers. In contrast, the Password grant does not
+multi-factor authentication options, take advantage of single sign-on sessions,
+or use third-party identity providers. In contrast, the resource owner password credentials grant does not
 provide any built-in mechanism for these, and would instead be extended with custom code.
 
 
@@ -271,7 +271,7 @@ traditional browser cookie (E).
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it instead makes the request to the Application Server (F), and the Application Server will
-make the request with the access token to the Resource Server (H), and forward the response (H)
+make the request with the access token to the Resource Server (G), and forward the response (H)
 back to the browser.
 
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
@@ -525,7 +525,7 @@ knowing any CORS policy; it simply hides the succeeding or failing result from
 JavaScript if the policy does not allow sharing.
 
 
-Content-Security Policy   {#csp}
+Content Security Policy   {#csp}
 -----------------------
 
 A browser-based application that wishes to use either long-lived refresh tokens or
@@ -589,7 +589,7 @@ is different from an attacker specifically targeting an individual application
 by knowing where or how an access token obtained via the authorization code flow may
 end up being stored.
 
-#### Threat: Access Token Leak to Third Party Scripts
+#### Threat: Access Token Leak to Third-Party Scripts
 
 It is relatively common to use third-party scripts in browser-based apps, such as
 analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
@@ -637,7 +637,7 @@ simplier and provides fewer attack vectors to obtain both via the authorization 
 
 ### Historic Note
 
-Historically, the Implicit flow provided an advantage to single-page apps since
+Historically, the Implicit flow provided an advantage to browser-based apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
 URL without triggering a page reload. This was necessary in order to remove the
 access token from the URL after it was obtained by the app.
