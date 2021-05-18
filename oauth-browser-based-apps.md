@@ -137,11 +137,11 @@ the following terms:
 Overview
 ========
 
-At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front-channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the authorization code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front-channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 authorization code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less secure front channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 authorization code flow with PKCE.
 
@@ -149,7 +149,7 @@ Browser-based applications:
 
 * MUST use the OAuth 2.0 authorization code flow with the PKCE extension when obtaining an access token
 * MUST Protect themselves against CSRF attacks by either:
-  * ensuring the authorization server supports PKCE, or 
+  * ensuring the authorization server supports PKCE, or
   * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
 * MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
@@ -540,7 +540,7 @@ OAuth Implicit Flow   {#implicit_flow}
 
 The OAuth 2.0 Implicit flow (defined in Section 4.2 of
 OAuth 2.0 {{RFC6749}}) works by the authorization server issuing an access token in the
-authorization response (front-channel) without the code exchange step. In this case, the access
+authorization response (front channel) without the code exchange step. In this case, the access
 token is returned in the fragment part of the redirect URI, providing an attacker
 with several opportunities to intercept and steal the access token.
 
