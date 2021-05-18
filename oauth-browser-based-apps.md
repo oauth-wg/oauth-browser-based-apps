@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-07
-date: 2020-10-02
+docname: draft-ietf-oauth-browser-based-apps-08
+date: 2021-05-17
 
 ipr: trust200902
 area: OAuth
@@ -697,9 +697,19 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-08
+
+* Added a note to use the "Secure" cookie attribute in addition to SameSite etc
+* Updates to bring this draft in sync with the latest Security BCP
+* Updated text for mix-up countermeasures to reference the new "iss" extension
+* Changed "SHOULD" for refresh token rotation to MUST either use rotation or sender-constraining to match the Security BCP
+* Fixed references to other specs and extensions
+* Editorial improvements in descriptions of the different architectures
+
 -07
 
 * Clarify PKCE requirements apply only to issuing access tokens
+* Change "MUST" to "SHOULD" for refresh token rotation
 * Editorial clarifications
 
 -06
@@ -766,8 +776,8 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Leo Tohill, Mike Jones, Tomek Stojecki,
-Torsten Lodderstedt, and Vittorio Bertocci.
+Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
+Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
 
 
 --- fluff
