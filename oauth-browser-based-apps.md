@@ -34,6 +34,19 @@ normative:
   RFC6819:
   RFC7636:
   RFC8252:
+  draft-ietf-httpbis-rfc6265bis:
+    title: "Cookies: HTTP State Management Mechanism"
+    date: October 2021
+    url: https://tools.ietf.org/id/draft-ietf-httpbis-rfc6265bis-09.html
+    author:
+    - name: L. Chen
+      org: Google LLC
+    - name: S. Englehardt
+      org: Mozilla
+    - name: M. West
+      org: Google LLC
+    - name: J. Wilander
+      org: Apple, Inc
   CSP2:
     title: Content Security Policy
     author:
@@ -226,8 +239,8 @@ used in an API request. Using an OAuth flow results in the JavaScript code getti
 access token, needing to store it somewhere, and then retrieve it to make an API request.
 
 Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application
-and API so that the JavaScript code can't access the cookie value itself. The Secure cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the SameSite cookie attribute can be used to prevent CSRF attacks, or alternatively, the application
-and API could be written to use anti-CSRF tokens.
+and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter CSRF attacks,
+but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
 the best solution in a common-domain deployment. That said, using OAuth even in a common-domain
