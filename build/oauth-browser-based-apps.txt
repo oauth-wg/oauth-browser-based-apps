@@ -2,15 +2,15 @@
 
 
 
-Open Authentication Protocol                                  A. Parecki
+Network Working Group                                         A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 18 November 2021                                  Ping Identity
-                                                             17 May 2021
+Expires: 8 September 2022                                  Ping Identity
+                                                            7 March 2022
 
 
                     OAuth 2.0 for Browser-Based Apps
-                 draft-ietf-oauth-browser-based-apps-08
+                 draft-ietf-oauth-browser-based-apps-09
 
 Abstract
 
@@ -33,11 +33,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 November 2021.
+   This Internet-Draft will expire on 8 September 2022.
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -45,17 +45,17 @@ Copyright Notice
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 1]
+Parecki & Waite         Expires 8 September 2022                [Page 1]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 Table of Contents
@@ -93,7 +93,7 @@ Table of Contents
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  17
      11.2.  Informative References . . . . . . . . . . . . . . . . .  18
-   Appendix A.  Server Support Checklist . . . . . . . . . . . . . .  18
+   Appendix A.  Server Support Checklist . . . . . . . . . . . . . .  19
    Appendix B.  Document History . . . . . . . . . . . . . . . . . .  19
    Appendix C.  Acknowledgements . . . . . . . . . . . . . . . . . .  22
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 2]
+Parecki & Waite         Expires 8 September 2022                [Page 2]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
    For native application developers using OAuth 2.0 and OpenID Connect,
@@ -165,9 +165,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 3]
+Parecki & Waite         Expires 8 September 2022                [Page 3]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 4.  Overview
@@ -221,9 +221,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 4]
+Parecki & Waite         Expires 8 September 2022                [Page 4]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
    OAuth 2.0 authorization servers supporting browser-based
@@ -277,9 +277,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 5]
+Parecki & Waite         Expires 8 September 2022                [Page 5]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 6.  Application Architecture Patterns
@@ -290,7 +290,7 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    *  a JavaScript application that has methods of sharing data with
       resource servers, such as using common-domain cookies
 
-   *  a JavaScript application with a backend
+   *  a JavaScript application with a backend component
 
    *  a JavaScript application with no backend, accessing resource
       servers directly
@@ -323,26 +323,36 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    access the cookie value itself.  The Secure cookie attribute should
    be used to ensure the cookie is not included in unencrypted HTTP
    requests.  Additionally, the SameSite cookie attribute can be used to
-   prevent CSRF attacks, or alternatively, the application and API could
-   be written to use anti-CSRF tokens.
-
-
-
-
-
-
-
-
-Parecki & Waite         Expires 18 November 2021                [Page 6]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
+   counter CSRF attacks, but should not be considered the extent of the
+   CSRF protection, as described in [draft-ietf-httpbis-rfc6265bis]
 
    OAuth was originally created for third-party or federated access to
    APIs, so it may not be the best solution in a common-domain
-   deployment.  That said, using OAuth even in a common-domain
-   architecture does mean you can more easily rearchitect things later,
-   such as if you were to later add a new domain to the system.
+   deployment.  That said, there are still some advantages in using
+   OAuth even in a common-domain architecture:
+
+
+
+Parecki & Waite         Expires 8 September 2022                [Page 6]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
+
+   *  Allows more flexibility in the future, such as if you were to
+      later add a new domain to the system.  With OAuth already in
+      place, adding a new domain wouldn't require any additional
+      rearchitecting.
+
+   *  Being able to take advantage of existing library support rather
+      than writing bespoke code for the integration.
+
+   *  Centralizing login and multifactor support, account management,
+      and recovery at the OAuth server, rather than making it part of
+      the application logic.
+
+   Using OAuth for browser-based apps in a first-party same-domain
+   scenario provides these advantages, and can be accomplished by either
+   of the two architectural patterns described below.
 
 6.2.  JavaScript Applications with a Backend
 
@@ -374,25 +384,25 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    |                                                 |
    +-------------------------------------------------+
 
+
+
+
+
+
+Parecki & Waite         Expires 8 September 2022                [Page 7]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
+
    In this architecture, commonly referred to as "backend for frontend"
    or "BFF", the JavaScript code is loaded from a dynamic Application
    Server (A) that also has the ability to execute code itself.  This
    enables the ability to keep all of the steps involved in obtaining an
    access token outside of the JavaScript application.
 
-
-
-
-
-
-
-
-
-
-Parecki & Waite         Expires 18 November 2021                [Page 7]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
+   Note that this application backend is not the Resource Server, it is
+   still considered part of the OAuth client and would be accessing data
+   at a separate resource server.
 
    In this case, the Application Server initiates the OAuth flow itself,
    by redirecting the browser to the authorization endpoint (B).  When
@@ -419,7 +429,7 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    confidential clients can be found in [oauth-security-topics]
    Section 2.1.1.
 
-   In this scenario, the session between the browser and Application
+   In this scenario, the connection between the browser and Application
    Server SHOULD be a session cookie provided by the Application Server.
 
    Security of the connection between code running in the browser and
@@ -435,19 +445,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-
-
-
-
-
-
-
-
-
-
-Parecki & Waite         Expires 18 November 2021                [Page 8]
+Parecki & Waite         Expires 8 September 2022                [Page 8]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
                          +---------------+           +--------------+
@@ -501,9 +501,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021                [Page 9]
+Parecki & Waite         Expires 8 September 2022                [Page 9]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 7.  Authorization Code Flow
@@ -557,9 +557,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 10]
+Parecki & Waite         Expires 8 September 2022               [Page 10]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
    Browser-based applications provide an attacker with several
@@ -613,9 +613,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 11]
+Parecki & Waite         Expires 8 September 2022               [Page 11]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
    By limiting the overall refresh token lifetime to the lifetime of the
@@ -669,9 +669,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 12]
+Parecki & Waite         Expires 8 September 2022               [Page 12]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 9.3.  Client Impersonation
@@ -725,9 +725,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 13]
+Parecki & Waite         Expires 8 September 2022               [Page 13]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 9.6.  Cross-Domain Requests
@@ -781,9 +781,9 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 14]
+Parecki & Waite         Expires 8 September 2022               [Page 14]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 9.8.1.  Attacks on the Implicit Flow
@@ -830,16 +830,16 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    The risk of a malicious script running on the page may be amplified
    when the application uses a known standard way of obtaining access
    tokens, namely that the attacker can always look at the
-   "window.location" variable to find an access token.  This threat
+   window.location variable to find an access token.  This threat
    profile is different from an attacker specifically targeting an
    individual application by knowing where or how an access token
    obtained via the Authorization Code flow may end up being stored.
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 15]
+Parecki & Waite         Expires 8 September 2022               [Page 15]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
 9.8.1.4.  Threat: Access Token Leak to Third-Party Scripts
@@ -893,16 +893,16 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 16]
+Parecki & Waite         Expires 8 September 2022               [Page 16]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
 
-   In OpenID Connect, the id_token is sent in a known format (as a JWT),
-   and digitally signed.  Returning an id_token using the Implicit flow
-   ("response_type=id_token") requires the client validate the JWT
+   In OpenID Connect, the ID Token is sent in a known format (as a JWT),
+   and digitally signed.  Returning an ID token using the Implicit flow
+   (response_type=id_token) requires the client validate the JWT
    signature, as malicious parties could otherwise craft and supply
-   fraudulent id_tokens.  Performing OpenID Connect using the
+   fraudulent ID tokens.  Performing OpenID Connect using the
    Authorization Code flow provides the benefit of the client not
    needing to verify the JWT signature, as the ID token will have been
    fetched over an HTTPS connection directly from the authorization
@@ -944,15 +944,21 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
    [CSP2]     West, M., "Content Security Policy", October 2018.
 
-   [Fetch]    whatwg, "Fetch", 2018.
 
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 17]
+
+Parecki & Waite         Expires 8 September 2022               [Page 17]
 
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
 
+
+   [draft-ietf-httpbis-rfc6265bis]
+              Chen, L., Englehardt, S., West, M., and J. Wilander,
+              "Cookies: HTTP State Management Mechanism", October 2021.
+
+   [Fetch]    whatwg, ., "Fetch", 2018.
 
    [oauth-iss-auth-resp]
               Meyer zu Selhausen, K. and D. Fett, "OAuth 2.0
@@ -993,7 +999,16 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
 11.2.  Informative References
 
-   [HTML]     whatwg, "HTML", 2020.
+   [HTML]     whatwg, ., "HTML", 2020.
+
+
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 18]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
 
 Appendix A.  Server Support Checklist
 
@@ -1002,13 +1017,6 @@ Appendix A.  Server Support Checklist
    1.  Require "https" scheme redirect URIs.
 
    2.  Require exact matching of registered redirect URIs.
-
-
-
-Parecki & Waite         Expires 18 November 2021               [Page 18]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
 
    3.  Support PKCE [RFC7636].  Required to protect authorization code
        grants sent to public clients.  See Section 7.1
@@ -1031,6 +1039,16 @@ Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
 
+   -09
+
+   *  Provide additional context for the same-domain architecture
+      pattern
+
+   *  Added reference to draft-ietf-httpbis-rfc6265bis to clarify that
+      SameSite is not the only CSRF protection measure needed
+
+   *  Editorial improvements
+
    -08
 
    *  Added a note to use the "Secure" cookie attribute in addition to
@@ -1040,6 +1058,13 @@ Appendix B.  Document History
 
    *  Updated text for mix-up countermeasures to reference the new "iss"
       extension
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 19]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
 
    *  Changed "SHOULD" for refresh token rotation to MUST either use
       rotation or sender-constraining to match the Security BCP
@@ -1058,13 +1083,6 @@ Appendix B.  Document History
    *  Editorial clarifications
 
    -06
-
-
-
-Parecki & Waite         Expires 18 November 2021               [Page 19]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
 
    *  Added refresh token requirements to AS summary
 
@@ -1096,6 +1114,14 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
    *  Updated server support checklist to reflect latest changes
 
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 20]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
+
    *  Updated the same-domain JS architecture section to emphasize the
       architecture rather than domain
 
@@ -1113,14 +1139,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
    *  Softened "is likely a better decision to avoid using OAuth
       entirely" to "it may be..." for common-domain deployments
-
-
-
-
-Parecki & Waite         Expires 18 November 2021               [Page 20]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
 
    *  Updated abstract to not be limited to public clients, since the
       later sections talk about confidential clients
@@ -1151,6 +1169,15 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
    *  Updated Section 6.2 to drop reference of SPA with a backend
       component being a public client
 
+
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 21]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
+
    *  Expanded the architecture section to explicitly mention three
       architectural patterns available to JS apps
 
@@ -1170,13 +1197,6 @@ Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
 
    *  Clarified the same-domain use case where the SPA and API share a
       cookie domain
-
-
-
-Parecki & Waite         Expires 18 November 2021               [Page 21]
-
-Internet-Draft      OAuth 2.0 for Browser-Based Apps            May 2021
-
 
    *  Moved historic note about the fragment URL into the Overview
 
@@ -1201,14 +1221,21 @@ Authors' Addresses
 
    Aaron Parecki
    Okta
-
    Email: aaron@parecki.com
    URI:   https://aaronparecki.com
 
 
+
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 22]
+
+Internet-Draft      OAuth 2.0 for Browser-Based Apps          March 2022
+
+
    David Waite
    Ping Identity
-
    Email: david@alkaline-solutions.com
 
 
@@ -1229,4 +1256,33 @@ Authors' Addresses
 
 
 
-Parecki & Waite         Expires 18 November 2021               [Page 22]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Parecki & Waite         Expires 8 September 2022               [Page 23]
