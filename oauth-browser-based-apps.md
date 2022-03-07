@@ -1,7 +1,7 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-08
-date: 2021-05-17
+docname: draft-ietf-oauth-browser-based-apps-09
+date: 2022-03-07
 
 ipr: trust200902
 area: OAuth
@@ -716,6 +716,12 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-09
+
+* Provide additional context for the same-domain architecture pattern
+* Added reference to draft-ietf-httpbis-rfc6265bis to clarify that SameSite is not the only CSRF protection measure needed
+* Editorial improvements
 
 -08
 
