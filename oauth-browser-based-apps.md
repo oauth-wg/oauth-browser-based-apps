@@ -4,7 +4,8 @@ docname: draft-ietf-oauth-browser-based-apps-09
 date: 2022-03-07
 
 ipr: trust200902
-area: OAuth
+area: Security
+workgroup: Web Authorization Protocol
 kw: Internet-Draft
 cat: bcp
 
