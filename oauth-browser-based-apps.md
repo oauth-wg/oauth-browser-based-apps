@@ -243,9 +243,14 @@ and API so that the JavaScript code can't access the cookie value itself. The `S
 but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
-the best solution in a common-domain deployment. That said, using OAuth even in a common-domain
-architecture does mean you can more easily rearchitect things later, such as if you were
-to later add a new domain to the system.
+the best solution in a common-domain deployment. That said, there are still some advantages
+in using OAuth even in a common-domain architecture:
+
+* Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
+* Being able to take advantage of existing library support rather than writing bespoke code for the integration. 
+* Centralizing login and multifactor support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
+
+Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by either of the two architectural patterns described below.
 
 
 JavaScript Applications with a Backend
