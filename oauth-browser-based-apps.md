@@ -202,7 +202,7 @@ There are three primary architectural patterns available when building browser-b
 applications.
 
 * a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies
-* a JavaScript application with a backend
+* a JavaScript application with a backend component
 * a JavaScript application with no backend, accessing resource servers directly
 
 These three architectures have different use cases and considerations.
@@ -269,6 +269,8 @@ JavaScript Applications with a Backend
 In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
 all of the steps involved in obtaining an access token outside of the JavaScript
 application.
+
+Note that this application backend is not the Resource Server, it is still considered part of the OAuth client and would be accessing data at a separate resource server.
 
 In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
 traditional browser cookie (E).
