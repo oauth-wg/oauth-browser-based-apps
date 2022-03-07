@@ -629,10 +629,10 @@ using the standard Authorization Code flow.
 * If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
   also requires the use of the Authorization Code flow with PKCE anyway.
 
-In OpenID Connect, the id_token is sent in a known format (as a JWT), and digitally
-signed. Returning an id_token using the Implicit flow (`response_type=id_token`) requires the client
+In OpenID Connect, the ID Token is sent in a known format (as a JWT), and digitally
+signed. Returning an ID token using the Implicit flow (`response_type=id_token`) requires the client
 validate the JWT signature, as malicious parties could otherwise craft and supply
-fraudulent id_tokens. Performing OpenID Connect using the Authorization Code flow provides
+fraudulent ID tokens. Performing OpenID Connect using the Authorization Code flow provides
 the benefit of the client not needing to verify the JWT signature, as the ID token will
 have been fetched over an HTTPS connection directly from the authorization server. Additionally,
 in many cases an application will request both an ID token and an access token, so it is
