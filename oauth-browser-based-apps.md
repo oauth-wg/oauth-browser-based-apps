@@ -212,21 +212,23 @@ provide any built-in mechanism for these, and would instead be extended with cus
 Application Architecture Patterns
 =================================
 
-There are three primary architectural patterns available when building browser-based
+Here are the main architectural patterns available when building browser-based
 applications.
 
-* a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies
-* a JavaScript application with a backend component
-* a JavaScript application with no backend, accessing resource servers directly
+* single-domain, not using OAuth
+* a JavaScript application accessing resource servers 
+  * either directly
+  * or through a service worker
+* a JavaScript application with a stateful backend component for storing tokens (BFF)
 
-These three architectures have different use cases and considerations.
+These architectures have different use cases and considerations.
 
 
-Browser-Based Apps that Can Share Data with the Resource Server
----------------------------------------------------------------
+Single-Domain Browser-Based Apps
+--------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server),
+from a domain that can share cookies with the domain of the API (resource server) and the authorization server,
 OAuth adds additional attack vectors that could be avoided with a different solution.
 
 In particular, using any redirect-based mechanism of obtaining an access token
@@ -234,13 +236,13 @@ enables the redirect-based attacks described in {{oauth-security-topics}} Sectio
 the application, authorization server and resource server share a domain, then it is
 unnecessary to use a redirect mechanism to communicate between them.
 
-An additional concern with handling access tokens in a browser is that as of the date of this publication, there is no
-secure storage mechanism where JavaScript code can keep the access token to be later
-used in an API request. Using an OAuth flow results in the JavaScript code getting an
-access token, needing to store it somewhere, and then retrieve it to make an API request.
+[//]: # (I suggest we remove that paragraph completely, as we discuss that in the part describing Local Storage)
+An additional concern with handling access tokens in a browser is that 
+in case of successful XSS attack, tokens could be read and further used or transmitted by the injected code if no 
+secure storage mechanism is in place.  
 
-Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application
-and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter CSRF attacks,
+It could as such be considered to use an HTTP-only cookie between the JavaScript application
+and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
 but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
@@ -250,12 +252,14 @@ in using OAuth even in a common-domain architecture:
 * Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
 * Being able to take advantage of existing library support rather than writing bespoke code for the integration. 
 * Centralizing login and multifactor support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
+* Splitting of responsibilities between authenticating a user and serving resources 
 
-Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by either of the two architectural patterns described below.
+Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
 
+<!-- Changed the wording here to try to be consistent and call it BFF everywhere (backend/application server/BFF where used interchangeably -->
 
-JavaScript Applications with a Backend
---------------------------------------
+JavaScript Applications with a stateful BFF
+-------------------------------------------
 
     +-------------+  +--------------+ +---------------+
     |             |  |              | |               |
@@ -270,9 +274,8 @@ JavaScript Applications with a Backend
            |
            |         +--------------------------------+
            |         |                                |
-           |         |          Application           |
-        (B)|         |            Server              |
-           |         |                                |
+           |         |   Backend for Frontend (BFF)   |
+        (B)|         |                                |
            |         +--------------------------------+
            |
            |           ^     ^     +          ^    +
@@ -285,13 +288,14 @@ JavaScript Applications with a Backend
     |                                                 |
     +-------------------------------------------------+
 
+[//]: # (I think we should remove that part of JS code: where that code is coming from doesn't matter, what the BFF is doing does.)
 In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
-all of the steps involved in obtaining an access token outside of the JavaScript
+the call to actually get an access token outside the JavaScript
 application.
 
-Note that this application backend is not the Resource Server, it is still considered part of the OAuth client and would be accessing data at a separate resource server.
+Note that this BFF is not the Resource Server, it is still considered part of the OAuth client and would be accessing data at a separate resource server.
 
-In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
+In this case, the BFF initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
 traditional browser cookie (E).
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
@@ -307,11 +311,57 @@ The Application Server SHOULD be considered a confidential client, and issued it
 In this scenario, the connection between the browser and Application Server SHOULD be a
 session cookie provided by the Application Server.
 
+### Security considerations
 Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
 such as setting an HTTP-only and `Secure` cookie to authenticate the session between the
 browser and Application Server.
+
+#### Leaking authorization code with XSS to spoof a session (Cookie Baking) 
+
+As an authorization code is still reaching the frontend, it could be intercepted in case of successful XSS attack, which could lead to complete owning of the session by the attacker. An example of such attack would be to leak the authorization code to the attacker, who could then start a session on its side and restart the complete user authorization flow in parallel to avoid detection.
+
+                                                                   Resource  Authentication
+     User  Attacker       Frontend            BFF            server     server
+      |       |  browse     |                 |               |           |                            
+      | -------------------->                 |               |           |                            
+      |       |  XSS        |                 |               |           |                            
+      |       | ------------>                 |               |           |                            
+      |       |             |                 | authorize     |           |                            
+      |       |             | -------------------------------------------->                            
+      |       |             | authorization code              |           |                            
+      |       |             | <- - - - - - - - - - - - - - - - - - - - - -                            
+      |       |  XSS leak   |                 |               |           |                            
+      |       | <- - - - - -                  |               |           |                            
+      |       | ------------------------------>               |           |                            
+      |       |             |                 |  /token       |           |                            
+      |       |             |                 | -------------------------->                            
+      |       |             |                 | <- - - - - - - - -  - - -                              
+      |       | httponly cookie               |               |           |                            
+      |       | <- - - - - - - - - - - - -  -                 |           |                            
+    This first cookie gets stolen. This allows calling random endpoints. 
+    User doesn't see that, as we start the authentication flow from scratch.           
+      |       |             |----.                            |           |                            
+      |       |             |    |   restart (redirect to /)  |           |                            
+      |       |             |<---'                            |           |                            
+      |       |             |                 |  authorize    |           | 
+      |       |             | -------------------------------------------->  No login screen,
+      |       |             | authorization code                          |   session still
+      |       |             | <- - - - - - - - - - - - - - - - - - - - - -    present.                      
+      |       |             | auth code       |               |           |                            
+      |       |             | ---------------->               |           |                            
+      |       |             |                 |  /token       |           |                            
+      |       |             |                 | -------------------------->                            
+      |       |             |                 | <- - - - - - - - - - - - -                              
+      |       |             | httponly cookie |               |           |                            
+      |       |             | <- - - - - - -  -               |           |                            
+      |       |             | rest call (with cookie)         |           |                            
+      |       |             | ---------------->               |           |                            
+      |       |             |                 | rest call with token      |                            
+      |       |             |                 | -------------------------->                            
+     User  Attacker       Frontend            BFF           Resource  Authentication
+                                                                  server     server
 
 <!--
 TODO: security considerations around things like Server Side Request Forgery or logging the cookies
@@ -320,8 +370,9 @@ TODO: Add another description of the alternative architecture where access token
 -->
 
 
-JavaScript Applications without a Backend
------------------------------------------
+JavaScript Applications accessing resource servers directly
+-----------------------------------------------------------
+<!-- TODO: move to second position for attention? -->
 
                           +---------------+           +--------------+
                           |               |           |              |
@@ -345,28 +396,65 @@ JavaScript Applications without a Backend
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
-client, since there is no way to issue it a client secret and there is no other secure
-client authentication mechanism available in the browser.
+client, since there is no way to issue it a client secret and authentication is handled by the application, 
+not by the browser.
 
 The code in the browser initiates the Authorization Code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
-access token via a POST request (C). The JavaScript application is then responsible for storing
+access token via a POST request (C). 
+
+The application is then responsible for storing
 the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
-As of the date of this publication there is no browser API that allows to store tokens in a completely
-secure way.
-<!--
-TODO: Add sentence referencing the section about service worker pattern in a future draft?
--->
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it can interact with the Resource Server directly. It includes the access token in the request (D)
 and receives the Resource Server's response (E).
 
 In this scenario, the Authorization Server and Resource Server MUST support
-the necessary CORS headers to enable the JavaScript code to make this POST request
+the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
+### Tokens in Local or Session Storage
+In case of successful XSS attack, the injected code has full access to stored tokens and can leak them to the attacker.
 
+Remarks and mitigations:
+* As a general rule, XSS will lead to full compromise of the application and all precautions MUST be taken against it.
+* The application SHOULD be designed to restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
+* To avoid information disclosure from ID Tokens, the application SHOULD be designed to not have any claim that isn't used by the frontend.
+* The application designer SHOULD consider not having refresh tokens at all to avoid the risk of giving prolonged access to the attacker.
+
+### Tokens Securely Handled by a Service worker
+In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and passing them to the resource API.
+
+Service workers are inherently safe from XSS, because the browser APIs allowing to register one take an origin-constrained URL.
+They can thus be used as a safe store for tokens.
+
+Service workers can also be used to intercept calls from the frontend. As such, they can completely isolate calls to the authorization server from XSS attack surface.
+
+                                                             Resource               Authorization           
+      User       Application    Service Worker                server                   server 
+       |   browse     |               |                          |                        |      
+       | ------------>|               |                          |          /authorize    |      
+       |              |------------------------------------------------------------------->      
+       |              |               |              redirect + authorization code        |      
+       |              |               < - - - - - - - - - - - - - - - - - - - - - - - - - |      
+       |              |               |              auth code                            |
+       |              |               | --------------->                      /token      |      
+       |              |               | -------------------------------------------------->      
+       |              |  rest call    | <- - - - - - - - - - - - - - - - - - - - - - - - -|      
+       |              |--------------->   rest call with token   |                        |      
+       |              |               | ------------------------>|                        |      
+       |              |               |                          |                        |       
+      User       Application    Service Worker                Resource               Authorization  
+                                                               server                   server
+
+#### Security Considerations
+* The service worker implementation MUST initiate the token request itself.
+* The service worker MUST not transmit tokens or authorization codes to the frontend application. 
+* The service worker MUST intercept the authorization code when it arrives. This makes this OAuth browser flow the only known one that can protect against authorization code leaks and exploits.
+* The service worker MUST sanitize /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials.
+
+### 
 
 Authorization Code Flow {#authorization_code_flow}
 =======================
