@@ -500,8 +500,8 @@ is greater than leaked access tokens, since an attacker may be able to
 continue using the stolen refresh token to obtain new access tokens potentially without being
 detectable by the authorization server.
 
-Browser-based applications provide an attacker with several opportunities by which a
-refresh token can be leaked, just as with access tokens. As such, these applications
+Javascript-accessible storage mechanisms like _Local Storage_ provide an attacker with several opportunities by which a
+refresh token can be leaked, just as with access tokens. As such, these mechanisms
 are considered a higher risk for handling refresh tokens.
 
 Authorization servers may choose whether or not to issue refresh tokens to browser-based
