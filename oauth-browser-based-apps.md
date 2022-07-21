@@ -320,7 +320,9 @@ browser and Application Server.
 
 #### Leaking authorization code with XSS to spoof a session (Cookie Baking) 
 
-As an authorization code is still reaching the frontend, it could be intercepted in case of successful XSS attack, which could lead to complete owning of the session by the attacker. An example of such attack would be to leak the authorization code to the attacker, who could then start a session on its side and restart the complete user authorization flow in parallel to avoid detection.
+When implementing a BFF for securing the authorization flow, in order to avoid all leaks in case of succesful XSS, the OAuth 2.0 Authorization Code grant with PKCE flow MUST be initiated from the BFF, and not from the frontend part of the application: as an authorization code is still reaching the frontend, it could be intercepted in the case of a successful XSS attack. If the PKCE *code verifier* is kept on the frontend rather than in the BFF itself, this could lead to complete owning of the session by the attacker. In other words, the BFF is not only responsible for keeping the _tokens_ safe, but also to keep all parts of the authorization flow separate from the web application.
+
+An example of such attack would be to leak the authorization code to the attacker, who could then start a session on its side and restart the complete user authorization flow in parallel to avoid detection.
 
                                                                    Resource  Authentication
      User  Attacker       Frontend            BFF            server     server
@@ -362,6 +364,8 @@ As an authorization code is still reaching the frontend, it could be intercepted
       |       |             |                 | -------------------------->                            
      User  Attacker       Frontend            BFF           Resource  Authentication
                                                                   server     server
+
+Mitigation: moving the `authorize` call to the BFF (and as such all PKCE secrets) makes this attack vector inoperative: in case of XSS, the *authorization code* can still be stolen, but isn't usable by the attacker.  
 
 <!--
 TODO: security considerations around things like Server Side Request Forgery or logging the cookies
@@ -450,6 +454,7 @@ Service workers can also be used to intercept calls from the frontend. As such, 
 
 #### Security Considerations
 * The service worker implementation MUST initiate the token request itself.
+* ***********TODO: CODE verifier 
 * The service worker MUST not transmit tokens or authorization codes to the frontend application. 
 * The service worker MUST intercept the authorization code when it arrives. This makes this OAuth browser flow the only known one that can protect against authorization code leaks and exploits.
 * The service worker MUST sanitize /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials.
