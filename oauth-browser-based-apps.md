@@ -453,13 +453,11 @@ Service workers can also be used to intercept calls from the frontend. As such, 
                                                                server                   server
 
 #### Security Considerations
-* The service worker implementation MUST initiate the token request itself.
-* ***********TODO: CODE verifier 
-* The service worker MUST not transmit tokens or authorization codes to the frontend application. 
-* The service worker MUST intercept the authorization code when it arrives. This makes this OAuth browser flow the only known one that can protect against authorization code leaks and exploits.
-* The service worker MUST sanitize /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials.
-
-### 
+* The service worker MUST initiate the OAuth 2.0 Authorization Code grant with PKCE itself.
+* The service worker MUST intercept the authorization code when the *authorization server* redirects to the application. This makes this architecture completely safe from token or session leaks in case of XSS.
+* The service worker implementation MUST then initiate the token request itself.
+* The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application. 
+* The service worker MUST block /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
 
 Authorization Code Flow {#authorization_code_flow}
 =======================
