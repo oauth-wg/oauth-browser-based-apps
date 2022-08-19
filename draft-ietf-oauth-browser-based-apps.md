@@ -248,7 +248,7 @@ the best solution in a common-domain deployment. That said, there are still some
 in using OAuth even in a common-domain architecture:
 
 * Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
-* Being able to take advantage of existing library support rather than writing bespoke code for the integration. 
+* Being able to take advantage of existing library support rather than writing bespoke code for the integration.
 * Centralizing login and multifactor support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
 
 Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by either of the two architectural patterns described below.
