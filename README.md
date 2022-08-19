@@ -2,10 +2,10 @@
 
 This is the working area for the IETF [OAUTH Working Group](https://datatracker.ietf.org/wg/oauth/documents/) Internet-Draft, "OAuth 2.0 for Browser-Based Apps".
 
-* [Editor's Copy](https://oauth-wg.github.io/oauth-browser-based-apps/#go.draft-ietf-oauth-browser-based-apps.html)
+* [Editor's Copy](https://drafts.oauth.net/oauth-browser-based-apps/draft-ietf-oauth-browser-based-apps.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-oauth-browser-based-apps)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps)
-* [Compare Editor's Copy to Working Group Draft](https://oauth-wg.github.io/oauth-browser-based-apps/#go.draft-ietf-oauth-browser-based-apps.diff)
+<!-- * [Compare Editor's Copy to Working Group Draft](https://oauth-wg.github.io/oauth-browser-based-apps/#go.draft-ietf-oauth-browser-based-apps.diff) -->
 
 
 ## Contributing
