@@ -1,6 +1,6 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
-docname: draft-ietf-oauth-browser-based-apps-09
+docname: draft-ietf-oauth-browser-based-apps-latest
 date: 2022-03-07
 
 ipr: trust200902
