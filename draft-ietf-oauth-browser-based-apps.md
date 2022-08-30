@@ -320,8 +320,8 @@ TODO: Add another description of the alternative architecture where access token
 -->
 
 
-JavaScript Applications without a Backend
------------------------------------------
+JavaScript Applications accessing resource servers directly
+-----------------------------------------------------------
 
                           +---------------+           +--------------+
                           |               |           |              |
@@ -345,25 +345,22 @@ JavaScript Applications without a Backend
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
-client, since there is no way to issue it a client secret and there is no other secure
-client authentication mechanism available in the browser.
+client, since there is no way to issue it a client secret and authentication is handled by the application,
+not by the browser.
 
 The code in the browser initiates the Authorization Code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
-access token via a POST request (C). The JavaScript application is then responsible for storing
+access token via a POST request (C).
+
+The application is then responsible for storing
 the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
-As of the date of this publication there is no browser API that allows to store tokens in a completely
-secure way.
-<!--
-TODO: Add sentence referencing the section about service worker pattern in a future draft?
--->
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it can interact with the Resource Server directly. It includes the access token in the request (D)
 and receives the Resource Server's response (E).
 
 In this scenario, the Authorization Server and Resource Server MUST support
-the necessary CORS headers to enable the JavaScript code to make this POST request
+the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
 
@@ -412,8 +409,8 @@ is greater than leaked access tokens, since an attacker may be able to
 continue using the stolen refresh token to obtain new access tokens potentially without being
 detectable by the authorization server.
 
-Browser-based applications provide an attacker with several opportunities by which a
-refresh token can be leaked, just as with access tokens. As such, these applications
+Javascript-accessible storage mechanisms like _Local Storage_ provide an attacker with several opportunities by which a
+refresh token can be leaked, just as with access tokens. As such, these mechanisms
 are considered a higher risk for handling refresh tokens.
 
 Authorization servers may choose whether or not to issue refresh tokens to browser-based
