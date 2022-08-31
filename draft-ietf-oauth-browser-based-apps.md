@@ -362,6 +362,14 @@ In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
+### Tokens in Local or Session Storage
+In case of successful XSS attack, the injected code has full access to stored tokens and can leak them to the attacker.
+
+Remarks and mitigations:
+* As a general rule, XSS will lead to full compromise of the application and all precautions MUST be taken against it.
+* The application SHOULD be designed to restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
+* To avoid information disclosure from ID Tokens, the application SHOULD be designed to not have any claim that isn't used by the frontend.
+* The application designer SHOULD consider not having refresh tokens at all to avoid the risk of giving prolonged access to the attacker.
 
 
 Authorization Code Flow {#authorization_code_flow}
