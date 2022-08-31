@@ -320,8 +320,6 @@ Additionally, cookies MUST be protected from leakage by other means, such as log
 This architecture protects against tokens leakage from the browser, but creates a CSRF attack vector:
 once the user is authenticated, the BFF proxy will automatically add tokens to calls to the resource server.
 
-Cookies must be protected, not only from the browser itself using
-
 <!--
 TODO: Add another description of the alternative architecture where access tokens are passed to JS and the JS app makes API calls directly. https://mailarchive.ietf.org/arch/msg/oauth/sl-g6zYSpJW3sYqrR0peadUw54U/
 -->
