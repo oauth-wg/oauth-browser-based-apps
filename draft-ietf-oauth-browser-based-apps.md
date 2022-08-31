@@ -345,8 +345,7 @@ JavaScript Applications accessing resource servers directly
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
-client, since there is no way to issue it a client secret and authentication is handled by the application,
-not by the browser.
+client, since there is no way to issue it a client secret in this model.
 
 The code in the browser initiates the Authorization Code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
