@@ -382,24 +382,25 @@ In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/We
 Service workers are inherently safe from XSS, because the browser APIs allowing to register one take an origin-constrained URL.
 They can thus be used as a safe store for tokens.
 
-Service workers can also be used to intercept calls from the frontend. As such, they can completely isolate calls to the authorization server from XSS attack surface.
+In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it can completely isolate calls to the authorization server from XSS attack surface.
 
-                                                             Resource               Authorization
-      User       Application    Service Worker                server                   server
-       |   browse     |               |                          |                        |
-       | ------------>|               |                          |          /authorize    |
-       |              |------------------------------------------------------------------->
-       |              |               |              redirect + authorization code        |
-       |              |               < - - - - - - - - - - - - - - - - - - - - - - - - - |
-       |              |               |              auth code                            |
-       |              |               | --------------->                      /token      |
-       |              |               | -------------------------------------------------->
-       |              |  rest call    | <- - - - - - - - - - - - - - - - - - - - - - - - -|
-       |              |--------------->   rest call with token   |                        |
-       |              |               | ------------------------>|                        |
-       |              |               |                          |                        |
-      User       Application    Service Worker                Resource               Authorization
-                                                               server                   server
+                                                                     Resource               Authorization
+      User       Application        Service Worker                    server                   server
+       |   browse     |                   |                              |                        |
+       | ------------>|                   |                              |                        |
+       |              |------------------->                              |        /authorize      |
+       |              |                   -------------------------------------------------------->
+       |              |                   |                  redirect + authorization code        |
+       |              |                   < - - - - - - - - - - - - - - - - - - - - - - - - - - - |
+       |              |                   |                  auth code                            |
+       |              |                   | ------------------->                      /token      |
+       |              |                   | ------------------------------------------------------>
+       |              | resource request  | <- - - - - - - - - - - - - - - - - - - - - - - - - - -|
+       |              |-------------------> resource request with token  |                        |
+       |              |                   | ---------------------------->|                        |
+       |              |                   |                              |                        |
+      User       Application    Service Worker                       Resource               Authorization
+                                                                      server                   server
 
 #### Security Considerations
 * The service worker MUST initiate the OAuth 2.0 Authorization Code grant with PKCE itself.
