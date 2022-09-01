@@ -212,21 +212,23 @@ provide any built-in mechanism for these, and would instead be extended with cus
 Application Architecture Patterns
 =================================
 
-There are three primary architectural patterns available when building browser-based
+Here are the main architectural patterns available when building browser-based
 applications.
 
-* a JavaScript application that has methods of sharing data with resource servers, such as using common-domain cookies
-* a JavaScript application with a backend component
-* a JavaScript application with no backend, accessing resource servers directly
+* single-domain, not using OAuth
+* a JavaScript application accessing resource servers
+  * either directly
+  * or through a service worker
+* a JavaScript application with a stateful backend component for storing tokens and handling all authentication flows (BFF proxy)
 
-These three architectures have different use cases and considerations.
+These architectures have different use cases and considerations.
 
 
-Browser-Based Apps that Can Share Data with the Resource Server
----------------------------------------------------------------
+Single-Domain Browser-Based Apps (not using OAuth)
+--------------------------------------------------
 
 For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server),
+from a domain that can share cookies with the domain of the API (resource server) and the authorization server,
 OAuth adds additional attack vectors that could be avoided with a different solution.
 
 In particular, using any redirect-based mechanism of obtaining an access token
@@ -234,13 +236,12 @@ enables the redirect-based attacks described in {{oauth-security-topics}} Sectio
 the application, authorization server and resource server share a domain, then it is
 unnecessary to use a redirect mechanism to communicate between them.
 
-An additional concern with handling access tokens in a browser is that as of the date of this publication, there is no
-secure storage mechanism where JavaScript code can keep the access token to be later
-used in an API request. Using an OAuth flow results in the JavaScript code getting an
-access token, needing to store it somewhere, and then retrieve it to make an API request.
+An additional concern with handling access tokens in a browser is that
+in case of successful XSS attack, tokens could be read and further used or transmitted by the injected code if no
+secure storage mechanism is in place.
 
-Instead, a more secure design is to use an HTTP-only cookie between the JavaScript application
-and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter CSRF attacks,
+It could as such be considered to use an HTTP-only cookie between the JavaScript application
+and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
 but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
@@ -250,12 +251,12 @@ in using OAuth even in a common-domain architecture:
 * Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
 * Being able to take advantage of existing library support rather than writing bespoke code for the integration.
 * Centralizing login and multifactor support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
+* Splitting of responsibilities between authenticating a user and serving resources
 
-Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by either of the two architectural patterns described below.
+Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
 
-
-JavaScript Applications with a Backend
---------------------------------------
+Backend For Frontend (BFF) Proxy
+--------------------------------
 
     +-------------+  +--------------+ +---------------+
     |             |  |              | |               |
@@ -268,12 +269,11 @@ JavaScript Applications with a Backend
            |             (D)|                (G)|
            |                v                   v
            |
-           |         +--------------------------------+
-           |         |                                |
-           |         |          Application           |
-        (B)|         |            Server              |
-           |         |                                |
-           |         +--------------------------------+
+           |         +--------------------------------------+
+           |         |                                      |
+           |         |   Backend for Frontend Proxy (BFF)   |
+        (B)|         |                                      |
+           |         +--------------------------------------+
            |
            |           ^     ^     +          ^    +
            |        (A)|  (C)|  (E)|       (F)|    |(H)
@@ -285,13 +285,14 @@ JavaScript Applications with a Backend
     |                                                 |
     +-------------------------------------------------+
 
-In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that also has the ability to execute code itself. This enables the ability to keep
-all of the steps involved in obtaining an access token outside of the JavaScript
+In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that has the ability to execute code and handle the full authentication flow itself. This enables the ability to keep
+the call to actually get an access token outside the JavaScript
 application.
 
-Note that this application backend is not the Resource Server, it is still considered part of the OAuth client and would be accessing data at a separate resource server.
+Note that this BFF is not the Resource Server, it is the OAuth client and would be accessing data at a separate resource server.
 
-In this case, the Application Server initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret. The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
+In this case, the BFF initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier.
+The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
 traditional browser cookie (E).
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
@@ -307,15 +308,19 @@ The Application Server SHOULD be considered a confidential client, and issued it
 In this scenario, the connection between the browser and Application Server SHOULD be a
 session cookie provided by the Application Server.
 
+### Security considerations
 Security of the connection between code running in the browser and this Application Server is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
 such as setting an HTTP-only and `Secure` cookie to authenticate the session between the
 browser and Application Server.
 
-<!--
-TODO: security considerations around things like Server Side Request Forgery or logging the cookies
+Additionally, cookies MUST be protected from leakage by other means, such as logs.
 
+This architecture protects against tokens leakage from the browser, but creates a CSRF attack vector:
+once the user is authenticated, the BFF proxy will automatically add tokens to calls to the resource server.
+
+<!--
 TODO: Add another description of the alternative architecture where access tokens are passed to JS and the JS app makes API calls directly. https://mailarchive.ietf.org/arch/msg/oauth/sl-g6zYSpJW3sYqrR0peadUw54U/
 -->
 

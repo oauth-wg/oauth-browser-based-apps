@@ -19,3 +19,4 @@ draft-ietf-oauth-browser-based-apps.xml
 package-lock.json
 report.xml
 .DS_Store
+/.idea/
