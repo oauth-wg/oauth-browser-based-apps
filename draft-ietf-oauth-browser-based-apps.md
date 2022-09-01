@@ -373,7 +373,7 @@ In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/We
 Service workers are inherently safe from XSS, because the browser APIs allowing to register one take an origin-constrained URL.
 They can thus be used as a safe store for tokens.
 
-In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it can completely isolate calls to the authorization server from XSS attack surface.
+In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it completely isolates calls to the authorization server from XSS attack surface, as all tokens and PKCE secrets are safely kept there without any access from other JavaScript contexts. The service worker is then solely responsible for adding authentication headers to calls to the resource server.
 
                                                                      Resource               Authorization
       User       Application        Service Worker                    server                   server
