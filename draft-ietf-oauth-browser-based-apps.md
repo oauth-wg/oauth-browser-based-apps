@@ -377,29 +377,30 @@ Remarks and mitigations:
 * The application designer SHOULD consider not having refresh tokens at all to avoid the risk of giving prolonged access to the attacker.
 
 ### Tokens Securely Handled by a Service worker
-In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and passing them to the resource API.
+In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and making requests to the resource server.
 
-Service workers are inherently safe from XSS, because the browser APIs allowing to register one take an origin-constrained URL.
-They can thus be used as a safe store for tokens.
+Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker. This makes service workers inherently safe from XSS, thus they can be used as a safe store for tokens.
 
-In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it completely isolates calls to the authorization server from XSS attack surface, as all tokens and PKCE secrets are safely kept there without any access from other JavaScript contexts. The service worker is then solely responsible for adding authentication headers to calls to the resource server.
+In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it completely isolates calls to the authorization server from XSS attack surface, as all tokens are safely kept in the service worker context without any access from other JavaScript contexts. The service worker is then solely responsible for adding the token in the authorization header to calls to the resource server.
 
                                                                      Resource               Authorization
       User       Application        Service Worker                    server                   server
        |   browse     |                   |                              |                        |
        | ------------>|                   |                              |                        |
-       |              |------------------->                              |        /authorize      |
+       |              |------------------->                              |           /authorize   |
        |              |                   -------------------------------------------------------->
-       |              |                   |                  redirect + authorization code        |
+       |              |                   |                 redirect w/ authorization code        |
        |              |                   < - - - - - - - - - - - - - - - - - - - - - - - - - - - |
-       |              |                   |                  auth code                            |
-       |              |                   | ------------------->                      /token      |
+       |              |                   |                              |                        |
+       |              |                   |  token request w/ auth code  |               /token   |
        |              |                   | ------------------------------------------------------>
-       |              | resource request  | <- - - - - - - - - - - - - - - - - - - - - - - - - - -|
+       |              |                   | <- - - - - - - - - - - - - - - - - - - - - - - - - - -|
+       |              |                   |                              |                        |
+       |              | resource request  |                              |                        |
        |              |-------------------> resource request with token  |                        |
        |              |                   | ---------------------------->|                        |
        |              |                   |                              |                        |
-      User       Application    Service Worker                       Resource               Authorization
+      User       Application        Service Worker                   Resource               Authorization
                                                                       server                   server
 
 #### Security Considerations
@@ -408,6 +409,7 @@ In this architecture, a service worker intercepts calls from the frontend to the
 * The service worker implementation MUST then initiate the token request itself.
 * The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application.
 * The service worker MUST block /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
+
 
 Authorization Code Flow {#authorization_code_flow}
 =======================
