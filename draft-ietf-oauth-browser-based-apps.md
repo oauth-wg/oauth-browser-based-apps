@@ -239,7 +239,7 @@ An additional concern with handling access tokens in a browser is that
 in case of successful XSS attack, tokens could be read and further used or transmitted by the injected code if no
 secure storage mechanism is in place.
 
-It could as such be considered to use an HTTP-only cookie between the JavaScript application
+As such, it could be considered to use an HTTP-only cookie between the JavaScript application
 and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
 but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
 
