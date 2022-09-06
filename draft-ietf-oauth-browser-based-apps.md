@@ -1,7 +1,6 @@
 ---
 title: OAuth 2.0 for Browser-Based Apps
 docname: draft-ietf-oauth-browser-based-apps-latest
-date: 2022-03-07
 
 ipr: trust200902
 area: Security
@@ -761,6 +760,12 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-10
+
+* Revised the names of the architectural patterns
+* Added a new pattern using a service worker as the OAuth client to manage tokens
+* Added some considerations when storing tokens in Local or Session Storage
+
 -09
 
 * Provide additional context for the same-domain architecture pattern
@@ -847,7 +852,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
-Tomek Stojecki, Torsten Lodderstedt, and Vittorio Bertocci.
+Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 
 --- fluff
