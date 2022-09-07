@@ -366,16 +366,17 @@ In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
+All precautions MUST be taken to prevent XSS attacks.
+
+In general, cross-site scripting (XSS) attacks are a huge risk, and can lead to full compromise of the application. If tokens are ever stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can store the token, with slightly different security considerations of each.
+
 ### Tokens in Local or Session Storage
-In case of successful XSS attack, the injected code has full access to stored tokens and can leak them to the attacker.
 
-Remarks and mitigations:
-* As a general rule, XSS will lead to full compromise of the application and all precautions MUST be taken against it.
-* The application SHOULD be designed to restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
-* To avoid information disclosure from ID Tokens, the application SHOULD be designed to not have any claim that isn't used by the frontend.
-* The application designer SHOULD consider not having refresh tokens at all to avoid the risk of giving prolonged access to the attacker.
+If the JavaScript in the DOM will be making requests directly to the resource server, it will need to store the tokens somewhere accessible to the DOM. In the case of a successful XSS attack, the injected code will have full access to the stored tokens and can exfiltrate them to the attacker.
 
-### Tokens Securely Handled by a Service worker
+
+### Service Worker as the OAuth Client
+
 In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and making requests to the resource server.
 
 Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker. This makes service workers inherently safe from XSS, thus they can be used as a safe store for tokens.
@@ -402,12 +403,28 @@ In this architecture, a service worker intercepts calls from the frontend to the
       User       Application        Service Worker                   Resource               Authorization
                                                                       server                   server
 
-#### Security Considerations
+#### Implementation Guidelines
+
 * The service worker MUST initiate the OAuth 2.0 Authorization Code grant with PKCE itself.
-* The service worker MUST intercept the authorization code when the *authorization server* redirects to the application. This makes this architecture completely safe from token or session leaks in case of XSS.
+* The service worker MUST intercept the authorization code when the *authorization server* redirects to the application.
 * The service worker implementation MUST then initiate the token request itself.
 * The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application.
-* The service worker MUST block /token or /authorize calls initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
+* The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
+
+#### Security Considerations
+
+A successful XSS attack on an application using this Service Worker pattern would be unable to exfiltrate existing tokens stored by the application.
+
+However, an XSS attack would still result in the attacker being able to initiate a new OAuth flow, and/or unregister the Service Worker.
+
+
+### Security Considerations
+
+To limit the risk of token exfiltration:
+
+* The authorization server SHOULD restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
+* To avoid information disclosure from ID Tokens, the authorization server SHOULD NOT include any ID token claims that aren't used by the frontend.
+* Refresh tokens should be used in accordance with the guidance in {{refresh_tokens}}.
 
 
 Authorization Code Flow {#authorization_code_flow}
