@@ -222,6 +222,10 @@ applications.
 
 These architectures have different use cases and considerations.
 
+General Security Considerations
+-------------------------------
+For all known architectures, all precautions MUST be taken to prevent XSS attacks.
+In general, cross-site scripting (XSS) attacks are a huge risk, and can lead to full compromise of the application.
 
 Single-Domain Browser-Based Apps (not using OAuth)
 --------------------------------------------------
@@ -366,14 +370,16 @@ In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
-All precautions MUST be taken to prevent XSS attacks.
-
-In general, cross-site scripting (XSS) attacks are a huge risk, and can lead to full compromise of the application. If tokens are ever stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can store the token, with slightly different security considerations of each.
+Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can store the token, with different security considerations of each.
 
 ### Tokens in Local or Session Storage
 
-If the JavaScript in the DOM will be making requests directly to the resource server, it will need to store the tokens somewhere accessible to the DOM. In the case of a successful XSS attack, the injected code will have full access to the stored tokens and can exfiltrate them to the attacker.
-
+<!--
+TODO: describe alternatives where tokens are handled by a Web Worker, or by a closure.
+PRO: relative safety
+CON: on their own, they don't protect from getting a token from other Javascript code
+-->
+If the JavaScript in the DOM will be making requests directly to the resource server, the simplest mechanism is to store the tokens somewhere accessible to the DOM. In the case of a successful XSS attack, the injected code will have full access to the stored tokens and can exfiltrate them to the attacker.
 
 ### Service Worker as the OAuth Client
 
