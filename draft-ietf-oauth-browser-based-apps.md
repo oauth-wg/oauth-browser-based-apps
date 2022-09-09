@@ -416,13 +416,13 @@ In this architecture, a service worker intercepts calls from the frontend to the
 * The service worker implementation MUST then initiate the token request itself.
 * The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application.
 * The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
-* The application MUST register the service worker before starting any other part of the Javascript application.
+* The application MUST register the Service Worker before running any code interacting with the user.
 
 #### Security Considerations
 
 A successful XSS attack on an application using this Service Worker pattern would be unable to exfiltrate existing tokens stored by the application.
 
-However, in case of additional vulnerabilities leading to the Service Worker not being registered, an XSS attack would still result in the attacker being able to initiate a new OAuth flow. Therefore, the Service Worker must be registered before any other part of the application starts, where the attack surface for XSS is. Starting the Service worker before the rest of the application, and the fact that [there is no way to unregister a Service Worker from an active client](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), effectively mitigate against that risk. As registering the Service Worker is the first action after navigation, unregistering it is ineffective.
+To guarantee application integrity, the Service Worker registration must happen as first step of the application start, without any user interaction: in case of additional vulnerabilities leading to the Service Worker not being registered, an XSS attack would still result in the attacker being able to initiate a new OAuth flow. Therefore, the Service Worker must be registered before any user-interacting part of the application starts, where the attack surface for XSS is. Starting the Service worker before the rest of the application, and the fact that [there is no way to unregister a Service Worker from an active client](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), effectively mitigate against that risk. As registering the Service Worker is the first action after navigation, unregistering it is ineffective.
 
 ### Security Considerations
 
