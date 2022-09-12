@@ -374,7 +374,7 @@ The Token Mediating Backend SHOULD cache tokens it obtains from the authorizatio
 
 The frontend SHOULD NOT persist tokens in local storage or similar mechanisms; instead, the frontend SHOULD store tokens only in memory, and make a new request to the backend if no tokens exist. This provides fewer attack vectors for token exfiltration should an XSS attack be successful.
 
-Editor's Note: A method of implementing this architecture is described by the {{tmi-bff}} draft, although it is currently an expired draft and was not adopted by the OAuth Working Group.
+Editor's Note: A method of implementing this architecture is described by the {{tmi-bff}} draft, although it is currently an expired individual draft and has not been proposed for adoption to the OAuth Working Group.
 
 <!-- TODO: Reference TMI BFF if the draft is picked up again https://www.ietf.org/archive/id/draft-bertocci-oauth2-tmi-bff-01.html -->
 
