@@ -382,7 +382,7 @@ If the JavaScript in the DOM will be making requests directly to the resource se
 
 In this scenario, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and making requests to the resource server.
 
-Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker. This makes service workers inherently safe from XSS, thus they can be used as a safe store for tokens.
+Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker. This makes service workers the most secure place to store tokens, as an XSS attack is unable to exfiltrate the tokens.
 
 In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it completely isolates calls to the authorization server from XSS attack surface, as all tokens are safely kept in the service worker context without any access from other JavaScript contexts. The service worker is then solely responsible for adding the token in the authorization header to calls to the resource server.
 
@@ -417,13 +417,16 @@ In this architecture, a service worker intercepts calls from the frontend to the
 
 #### Security Considerations
 
-A successful XSS attack on an application using this Service Worker pattern would be unable to exfiltrate existing tokens stored by the application.
+A successful XSS attack on an application using this Service Worker pattern would be unable to exfiltrate existing tokens stored by the application. However, an XSS attacker may still be able to cause the Service Worker to make authenticated requests to the resource server including the user's legitimate token.
 
-To avoid being discarded, the Service Worker registration must happen as first step of the application start, without any user interaction: in case of additional vulnerabilities leading to the Service Worker not being registered, an XSS attack would still result in the attacker being able to initiate a new OAuth flow. Therefore, the Service Worker must be registered before any user-interacting part of the application runs, where the attack surface for XSS is. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active client](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), effectively mitigate against that risk. As registering the Service Worker is the first action after navigation, unregistering it is ineffective.
+In case of a vulnerability leading to the Service Worker not being registered, an XSS attack would result in the attacker being able to initiate a new OAuth flow to obtain new tokens itself.
+
+To prevent the Service Worker from being unregistered, the Service Worker registration must happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
+
 
 ### Security Considerations
 
-To limit the risk of token exfiltration:
+Regardless of the particular architecture chosen, these additional security considerations limit the risk of token exfiltration:
 
 * The authorization server SHOULD restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
 * To avoid information disclosure from ID Tokens, the authorization server SHOULD NOT include any ID token claims that aren't used by the frontend.
