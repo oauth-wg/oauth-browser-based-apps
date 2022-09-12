@@ -288,40 +288,37 @@ Backend For Frontend (BFF) Proxy
     |                                                 |
     +-------------------------------------------------+
 
-In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic Application Server (A) that has the ability to execute code and handle the full authentication flow itself. This enables the ability to keep
-the call to actually get an access token outside the JavaScript
-application.
+In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic BFF Proxy (A) that has the ability to execute code and handle the full authentication flow itself. This enables the ability to keep
+the call to actually get an access token outside the JavaScript application.
 
-Note that this BFF is not the Resource Server, it is the OAuth client and would be accessing data at a separate resource server.
+Note that this BFF Proxy is not the Resource Server, it is the OAuth client and would be accessing data at a separate resource server.
 
-In this case, the BFF initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier.
-The application server then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
+In this case, the BFF Proxy initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier.
+The BFF Proxy then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
 traditional browser cookie (E).
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
-it instead makes the request to the Application Server (F), and the Application Server will
+it instead makes the request to the BFF Proxy (F), and the BFF Proxy will
 make the request with the access token to the Resource Server (G), and forward the response (H)
 back to the browser.
 
 (Common examples of this architecture are an Angular front-end with a .NET backend, or
 a React front-end with a Spring Boot backend.)
 
-The Application Server SHOULD be considered a confidential client, and issued its own client secret. The Application Server SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
+The BFF Proxy SHOULD be considered a confidential client, and issued its own client secret. The BFF Proxy SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
 
-In this scenario, the connection between the browser and Application Server SHOULD be a
-session cookie provided by the Application Server.
+In this scenario, the connection between the browser and BFF Proxy SHOULD be a
+session cookie provided by the BFF Proxy.
 
 ### Security considerations
-Security of the connection between code running in the browser and this Application Server is
+
+Security of the connection between code running in the browser and this BFF Proxy is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
 this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
 such as setting an HTTP-only and `Secure` cookie to authenticate the session between the
-browser and Application Server.
+browser and BFF Proxy. Additionally, cookies MUST be protected from leakage by other means, such as logs.
 
-Additionally, cookies MUST be protected from leakage by other means, such as logs.
-
-This architecture protects against tokens leakage from the browser, but creates a CSRF attack vector:
-once the user is authenticated, the BFF proxy will automatically add tokens to calls to the resource server.
+In this architecture, tokens are never sent to the front-end and are never accessible by any JavaScript code, so it fully protects against XSS attackers stealing tokens. However, an XSS attacker may still be able to make authenticated requests to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server.
 
 <!--
 TODO: Add another description of the alternative architecture where access tokens are passed to JS and the JS app makes API calls directly. https://mailarchive.ietf.org/arch/msg/oauth/sl-g6zYSpJW3sYqrR0peadUw54U/
