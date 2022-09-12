@@ -224,17 +224,15 @@ Here are the main architectural patterns available when building browser-based
 applications.
 
 * single-domain, not using OAuth
-* a JavaScript application accessing resource servers
-  * either directly
-  * or through a service worker
-* a JavaScript application with a stateful backend component for storing tokens and handling all authentication flows (BFF proxy)
+* a JavaScript application obtaining access tokens
+  * via JavaScript code executed in the DOM
+  * through a service worker
+* a JavaScript application with a stateful backend component
+  * storing tokens and proxying all requests (BFF Proxy)
+  * obtaining tokens and passing them to the frontend (Token Mediating Backend)
 
 These architectures have different use cases and considerations.
 
-General Security Considerations
--------------------------------
-For all known architectures, all precautions MUST be taken to prevent XSS attacks.
-In general, cross-site scripting (XSS) attacks are a huge risk, and can lead to full compromise of the application.
 
 Single-Domain Browser-Based Apps (not using OAuth)
 --------------------------------------------------
@@ -266,6 +264,7 @@ in using OAuth even in a common-domain architecture:
 * Splitting of responsibilities between authenticating a user and serving resources
 
 Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
+
 
 Backend For Frontend (BFF) Proxy
 --------------------------------
@@ -385,8 +384,10 @@ If the backend caches tokens from the authorization server, it presents scopes e
 
 
 
-JavaScript Applications accessing resource servers directly
------------------------------------------------------------
+JavaScript Applications obtaining tokens directly
+-------------------------------------------------
+
+This section describes the architecture of a JavaScript application obtaining tokens from the authorization itself, with no intermediate proxy server.
 
                           +---------------+           +--------------+
                           |               |           |              |
@@ -429,7 +430,7 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 
 Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can store the token, with different security considerations of each.
 
-### Tokens in Local or Session Storage
+### Storing Tokens in Local or Session Storage
 
 If the JavaScript in the DOM will be making requests directly to the resource server, the simplest mechanism is to store the tokens somewhere accessible to the DOM.
 
@@ -559,11 +560,21 @@ Authorization servers MAY set different policies around refresh token issuance, 
 Security Considerations
 =======================
 
+Cross-Site Scripting Attacks (XSS) {#cross-site-scripting}
+----------------------------------
 
-Reducing the Risk of Token Exfiltration {#token-exfiltration}
----------------------------------------
+For all known architectures, all precautions MUST be taken to prevent cross-site scripting (XSS) attacks.
+In general, XSS attacks are a huge risk, and can lead to full compromise of the application.
 
-If tokens are ever accessible to the browser or to any JavaScript code, there is always a risk of token exfiltration. The particular risk may change depending on the architecture chosen. Regardless of the particular architecture chosen, these additional security considerations limit the risk of token exfiltration:
+If tokens are handled or accessible by the browser, there is a risk that a XSS attack can lead to token exfiltration.
+
+Even if tokens are never sent to the frontend and are never accessible by any JavaScript code, an XSS attacker may still be able to make authenticated requests to the resource server by mimicking legitimate code in the DOM. For example, the attacker may make a request to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. In the Service Worker example, the attacker may make an API call to the Service Worker which will then turn around and make a request to the resource server with the legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server to steal or modify data.
+
+
+Reducing the Impact of Token Exfiltration {#token-exfiltration}
+-----------------------------------------
+
+If tokens are ever accessible to the browser or to any JavaScript code, there is always a risk of token exfiltration. The particular risk may change depending on the architecture chosen. Regardless of the particular architecture chosen, these additional security considerations limit the impact of token exfiltration:
 
 * The authorization server SHOULD restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
 * To avoid information disclosure from ID Tokens, the authorization server SHOULD NOT include any ID token claims that aren't used by the frontend.
@@ -846,6 +857,7 @@ Document History
 * Added a new architecture pattern: Token Mediating Backend
 * Revised and added clarifications for teh Service Worker pattern
 * Editorial improvements in descriptions of the different architectures
+* Rephrased headers
 
 -10
 
@@ -939,7 +951,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
-Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+Philippe De Ryck, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 
 --- fluff
