@@ -841,6 +841,12 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-11
+
+* Added a new architecture pattern: Token Mediating Backend
+* Revised and added clarifications for teh Service Worker pattern
+* Editorial improvements in descriptions of the different architectures
+
 -10
 
 * Revised the names of the architectural patterns
