@@ -481,15 +481,6 @@ In case of a vulnerability leading to the Service Worker not being registered, a
 To prevent the Service Worker from being unregistered, the Service Worker registration must happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
 
 
-### Security Considerations
-
-Regardless of the particular architecture chosen, these additional security considerations limit the risk of token exfiltration:
-
-* The authorization server SHOULD restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
-* To avoid information disclosure from ID Tokens, the authorization server SHOULD NOT include any ID token claims that aren't used by the frontend.
-* Refresh tokens should be used in accordance with the guidance in {{refresh_tokens}}.
-
-
 Authorization Code Flow {#authorization_code_flow}
 =======================
 
@@ -569,10 +560,20 @@ Security Considerations
 =======================
 
 
+Reducing the Risk of Token Exfiltration {#token-exfiltration}
+---------------------------------------
+
+If tokens are ever accessible to the browser or to any JavaScript code, there is always a risk of token exfiltration. The particular risk may change depending on the architecture chosen. Regardless of the particular architecture chosen, these additional security considerations limit the risk of token exfiltration:
+
+* The authorization server SHOULD restrict access tokens to strictly needed resources, to avoid escalating the scope of the attack.
+* To avoid information disclosure from ID Tokens, the authorization server SHOULD NOT include any ID token claims that aren't used by the frontend.
+* Refresh tokens should be used in accordance with the guidance in {{refresh_tokens}}.
+
+
 Registration of Browser-Based Apps   {#client_registration}
 ----------------------------------
 
-Browser-based applications are considered public clients as defined by Section 2.1
+Browser-based applications (with no backend) are considered public clients as defined by Section 2.1
 of OAuth 2.0 {{RFC6749}}, and MUST be registered with the authorization server as
 such. Authorization servers MUST record the client type in the client registration
 details in order to identify and process requests accordingly.
