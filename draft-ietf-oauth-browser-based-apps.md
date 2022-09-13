@@ -247,7 +247,7 @@ the application, authorization server and resource server share a domain, then i
 unnecessary to use a redirect mechanism to communicate between them.
 
 An additional concern with handling access tokens in a browser is that
-in case of successful XSS attack, tokens could be read and further used or transmitted by the injected code if no
+in case of successful cross-site scripting (XSS) attack, tokens could be read and further used or transmitted by the injected code if no
 secure storage mechanism is in place.
 
 As such, it could be considered to use an HTTP-only cookie between the JavaScript application
