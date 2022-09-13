@@ -224,12 +224,12 @@ Here are the main architectural patterns available when building browser-based
 applications.
 
 * single-domain, not using OAuth
-* a JavaScript application obtaining access tokens
-  * via JavaScript code executed in the DOM
-  * through a service worker
 * a JavaScript application with a stateful backend component
   * storing tokens and proxying all requests (BFF Proxy)
   * obtaining tokens and passing them to the frontend (Token Mediating Backend)
+* a JavaScript application obtaining access tokens
+  * via JavaScript code executed in the DOM
+  * through a service worker
 
 These architectures have different use cases and considerations.
 
@@ -856,7 +856,7 @@ Document History
 -11
 
 * Added a new architecture pattern: Token Mediating Backend
-* Revised and added clarifications for teh Service Worker pattern
+* Revised and added clarifications for the Service Worker pattern
 * Editorial improvements in descriptions of the different architectures
 * Rephrased headers
 
