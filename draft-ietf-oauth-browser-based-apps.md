@@ -169,17 +169,17 @@ However, there are several drawbacks to the Implicit flow, generally involving v
 
 In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less-secure front channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
-For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code flow with PKCE.
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code flow with PKCE. There are various architectural patterns for deploying browser-based apps, both with and without a corresponding server-side component, each with their own trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain apps.
 
-Browser-based applications:
+In summary, browser-based applications using the Authorization Code flow:
 
-* MUST use the OAuth 2.0 Authorization Code flow with the PKCE extension when obtaining an access token
+* MUST use PKCE ({{RFC7636}}) when obtaining an access token
 * MUST Protect themselves against CSRF attacks by either:
   * ensuring the authorization server supports PKCE, or
   * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
 * MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
 
-OAuth 2.0 authorization servers supporting browser-based applications:
+In summary, OAuth 2.0 authorization servers supporting browser-based applications using the Authorization Code flow:
 
 * MUST Require exact matching of registered redirect URIs
 * MUST Support the PKCE extension
@@ -187,6 +187,7 @@ OAuth 2.0 authorization servers supporting browser-based applications:
 * If issuing refresh tokens to browser-based applications, then:
   * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
   * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
+  * when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time
 
 
 First-Party Applications
@@ -322,7 +323,7 @@ session cookie provided by the BFF Proxy.
 
 Security of the connection between code running in the browser and this BFF Proxy is
 assumed to utilize browser-level protection mechanisms. Details are out of scope of
-this document, but many recommendations can be found in the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org/),
+this document, but many recommendations can be found in the OWASP Cheat Sheet series (<https://cheatsheetseries.owasp.org>),
 such as setting an HTTP-only and `Secure` cookie to authenticate the session between the
 browser and BFF Proxy. Additionally, cookies MUST be protected from leakage by other means, such as logs.
 
@@ -388,7 +389,7 @@ In the case of a successful XSS attack, the attacker may be able to access the t
 JavaScript Applications obtaining tokens directly
 -------------------------------------------------
 
-This section describes the architecture of a JavaScript application obtaining tokens from the authorization itself, with no intermediate proxy server.
+This section describes the architecture of a JavaScript application obtaining tokens from the authorization itself, with no intermediate proxy server and no backend component.
 
                           +---------------+           +--------------+
                           |               |           |              |
