@@ -829,22 +829,24 @@ Server Support Checklist
 
 OAuth authorization servers that support browser-based apps MUST:
 
-1.  Require "https" scheme redirect URIs.
-
-2.  Require exact matching of registered redirect URIs.
-
-3.  Support PKCE {{RFC7636}}. Required to protect authorization code
+1.  Support PKCE {{RFC7636}}. Required to protect authorization code
     grants sent to public clients. See {{auth_code_request}}
 
-4.  Support cross-domain requests at the token endpoint in order to allow browsers
+2.  NOT support the Resource Owner Password grant for browser-based clients.
+
+3.  NOT support the Implicit grant for browser-based clients.
+
+4.  Require "https" scheme redirect URIs.
+
+5.  Require exact matching of registered redirect URIs.
+
+6.  Support cross-domain requests at the token endpoint in order to allow browsers
     to make the authorization code exchange request. See {{cors}}
 
-5.  Not assume that browser-based clients can keep a secret, and SHOULD NOT issue
+7.  Not assume that browser-based clients can keep a secret, and SHOULD NOT issue
     secrets to applications of this type.
 
-6.  Not support the Resource Owner Password grant for browser-based clients.
-
-7.  Follow the {{oauth-security-topics}} recommendations on refresh tokens, as well
+8.  Follow the {{oauth-security-topics}} recommendations on refresh tokens, as well
     as the additional requirements described in {{refresh_tokens}}.
 
 
@@ -852,6 +854,10 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-12
+
+* Revised overview and server support checklist to bring them up to date with the rest of the draft
 
 -11
 
