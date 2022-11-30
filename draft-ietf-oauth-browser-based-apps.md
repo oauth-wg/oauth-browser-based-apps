@@ -990,7 +990,7 @@ and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
-Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett,
+Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
 Philippe De Ryck, Sean Kelleher, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
