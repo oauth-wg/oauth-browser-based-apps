@@ -37,7 +37,7 @@ normative:
   draft-ietf-httpbis-rfc6265bis:
     title: "Cookies: HTTP State Management Mechanism"
     date: October 2021
-    url: https://tools.ietf.org/id/draft-ietf-httpbis-rfc6265bis-09.html
+    target: https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis
     author:
     - name: L. Chen
       org: Google LLC
@@ -47,21 +47,21 @@ normative:
       org: Google LLC
     - name: J. Wilander
       org: Apple, Inc
-  CSP2:
+  CSP3:
     title: Content Security Policy
     author:
     - name: Mike West
       ins: M. West
       org: Google, Inc
     date: October 2018
-    url: https://www.w3.org/TR/CSP3/
+    target: https://www.w3.org/TR/CSP3/
   Fetch:
     title: Fetch
     author:
       name: whatwg
       ins: whatwg
     date: 2018
-    url: https://fetch.spec.whatwg.org/
+    target: https://fetch.spec.whatwg.org/
   oauth-security-topics:
     title: OAuth 2.0 Security Best Current Practice
     author:
@@ -78,7 +78,7 @@ normative:
       ins: D. Fett
       org: yes.com
     date: April 2021
-    url: https://tools.ietf.org/html/draft-ietf-oauth-security-topics
+    target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
   oauth-iss-auth-resp:
     title: OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response
     author:
@@ -89,7 +89,7 @@ normative:
       ins: D. Fett
       org: yes.com
     date: January 2021
-    url: https://tools.ietf.org/html/draft-ietf-oauth-iss-auth-resp
+    target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-iss-auth-resp
 informative:
   HTML:
     title: HTML
@@ -97,7 +97,7 @@ informative:
       name: whatwg
       ins: whatwg
     date: 2020
-    url: https://html.spec.whatwg.org/
+    target: https://html.spec.whatwg.org/
   tmi-bff:
     title: Token Mediating and session Information Backend For Frontend
     author:
@@ -106,14 +106,14 @@ informative:
     - name: B. Cambpell
       org: Ping
     date: April 2021
-    url: https://www.ietf.org/archive/id/draft-bertocci-oauth2-tmi-bff-01.html
+    target: https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01
   WebCrypto:
     title: Web Cryptography API
     author:
     - name: Daniel Huigens
       org: Proton AG
     date: November 2022
-    url:
+    target: https://w3c.github.io/webcrypto/
 
 --- abstract
 
@@ -580,8 +580,8 @@ There are a number of storage options available to browser-based applications, a
 
 The Cookie API is an older mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern since in that pattern the tokens are never accessible to the browser-based code.)
 
-Service Worker Token Storage {#token-storage-service-worker}
-----------------------------
+Token Storage in a Service Worker {#token-storage-service-worker}
+-------------------=-------------
 
 Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks. This is described in {{service-worker}}. This, like the other unencrypted options, do not provide any protection against exfiltration from the filesystem.
 
@@ -743,7 +743,7 @@ Content Security Policy   {#csp}
 
 A browser-based application that wishes to use either long-lived refresh tokens or
 privileged scopes SHOULD restrict its JavaScript execution to a set of statically
-hosted scripts via a Content Security Policy ({{CSP2}}) or similar mechanism. A
+hosted scripts via a Content Security Policy ({{CSP3}}) or similar mechanism. A
 strong Content Security Policy can limit the potential attack vectors for malicious
 JavaScript to be executed on the page.
 
