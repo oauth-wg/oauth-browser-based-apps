@@ -107,6 +107,13 @@ informative:
       org: Ping
     date: April 2021
     url: https://www.ietf.org/archive/id/draft-bertocci-oauth2-tmi-bff-01.html
+  WebCrypto:
+    title: Web Cryptography API
+    author:
+    - name: Daniel Huigens
+      org: Proton AG
+    date: November 2022
+    url:
 
 --- abstract
 
@@ -573,11 +580,22 @@ There are a number of storage options available to browser-based applications, a
 
 The Cookie API is an older mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern since in that pattern the tokens are never accessible to the browser-based code.)
 
+Service Worker Token Storage {#token-storage-service-worker}
+----------------------------
+
 Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks. This is described in {{service-worker}}. This, like the other unencrypted options, do not provide any protection against exfiltration from the filesystem.
 
-If using a service worker is not a viable option, the next best option is to store tokens in memory only. To prevent XSS attackers from exfiltrating the tokens, a "token manager" class can store the token in a closure variable (rather than an object property), and manage all calls to the resource server itself, never letting the access token be accessible outside this manager class. However, the major downside to this approach is that the tokens will not be persisted between page reloads. If that is a property you would like, then the next best options are one of the persistent browser storage APIs.
+In-Memory Token Storage {#token-storage-in-memory}
+-----------------------
 
-The persistent storage APIs currently available are LocalStorage, SessionStorage, and IndexedDB.
+If using a service worker is not a viable option, the next most secure option is to store tokens in memory only. To prevent XSS attackers from exfiltrating the tokens, a "token manager" class can store the token in a closure variable (rather than an object property), and manage all calls to the resource server itself, never letting the access token be accessible outside this manager class.
+
+However, the major downside to this approach is that the tokens will not be persisted between page reloads. If that is a property you would like, then the next best options are one of the persistent browser storage APIs.
+
+Persistent Token Storage {#token-storage-persistent}
+------------------------
+
+The persistent storage APIs currently available as of this writing are LocalStorage, SessionStorage, and IndexedDB.
 
 LocalStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. LocalStorage does not protect against XSS attacks, as the attacker would be running code within the same origin.
 
@@ -585,10 +603,14 @@ SessionStorage is similar to LocalStorage, except that SessionStorage is cleared
 
 IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the DOM and Service Workers.
 
+Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
+--------------------------------------------------
+
 In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. Even if an application does not suffer from an XSS attack, other software on the computer may be able to read the filesystem and exfiltrate tokens from the storage.
 
-The WebCrypto API provides a mechanism for JavaScript code to encrypt and decrypt data before storing it. An application could use the WebCrypto API to encrypt the tokens before storing them with one of the above methods, and decrypting them in memory when needed. However, in order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
+The {{WebCrypto}} API provides a mechanism for JavaScript code to generate a private key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the WebCrypto specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
+In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
 
 
 Security Considerations
