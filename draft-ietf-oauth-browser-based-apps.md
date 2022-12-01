@@ -114,6 +114,22 @@ informative:
       org: Proton AG
     date: November 2022
     target: https://w3c.github.io/webcrypto/
+  DPoP:
+    title: Demonstrating Proof-of-Possession at the Application Layer
+    author:
+    - ins: D. Fett
+      org: yes.com
+    - ins: B. Cambpell
+      org: Ping Identity
+    - ins: J. Bradley
+      org: Yubico
+    - ins: T. Lodderstedt
+      org: yes.com
+    - ins: M. Jones
+      org: Microsoft
+    - ins: D. Waite
+      org: Ping Identity
+    target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop
 
 --- abstract
 
@@ -611,6 +627,19 @@ In all cases, as of this writing, browsers ultimately store data in plain text o
 The {{WebCrypto}} API provides a mechanism for JavaScript code to generate a private key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the WebCrypto specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
 In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
+
+Sender-Constrained Tokens {#sender-constrained-tokens}
+-------------------------
+
+Sender-constrained tokens require that the OAuth client prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key.
+
+One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is {{DPoP}}.
+
+Using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
+
+If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCrypto}} API. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+
+If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from XSS attacks, such as by generating and storing it in a closure variable or in a Service Worker. This is similar to the considerations for storing tokens in a Service Worker, as described in {{service-worker}}.
 
 
 Security Considerations
