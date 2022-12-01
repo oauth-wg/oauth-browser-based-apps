@@ -943,6 +943,7 @@ Document History
 
 * Revised overview and server support checklist to bring them up to date with the rest of the draft
 * Added a new section about options for storing tokens
+* Added a section on sender-constrained tokens and a reference to DPoP
 * Rephrased the architecture patterns to focus on token acquisition
 
 -11
