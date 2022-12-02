@@ -290,7 +290,7 @@ in using OAuth even in a common-domain architecture:
 Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
 
 
-Backend For Frontend (BFF) Proxy
+Backend For Frontend (BFF) Proxy {#bff-proxy}
 --------------------------------
 
     +-------------+  +--------------+ +---------------+
@@ -353,7 +353,7 @@ browser and BFF Proxy. Additionally, cookies MUST be protected from leakage by o
 In this architecture, tokens are never sent to the front-end and are never accessible by any JavaScript code, so it fully protects against XSS attackers stealing tokens. However, an XSS attacker may still be able to make authenticated requests to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server.
 
 
-Token Mediating Backend
+Token Mediating Backend {#tm-backend}
 -----------------------
 
 An alternative to a full BFF where all resource requests go through the backend is to use a token mediating backend which obtains the tokens and then forwards the tokens to the browser.
@@ -409,7 +409,7 @@ If the backend caches tokens from the authorization server, it presents scopes e
 In the case of a successful XSS attack, the attacker may be able to access the tokens if the tokens are persisted in the frontend, but is less likely to be able to access the tokens if they are stored only in memory. However, a successful XSS attack will also allow the attacker to call the Token Mediating Backend itself to retrieve the cached token or start a new OAuth flow.
 
 
-JavaScript Applications obtaining tokens directly
+JavaScript Applications obtaining tokens directly {#javascript-apps-direct-tokens}
 -------------------------------------------------
 
 This section describes the architecture of a JavaScript application obtaining tokens from the authorization server itself, with no intermediate proxy server and no backend component.
@@ -594,10 +594,20 @@ There are a number of storage options available to browser-based applications, a
 * Stored in LocalStorage, SessionStorage, or IndexedDB
 * Stored in an encrypted format using the WebCrypto API to encrypt and decrypt from storage
 
-The Cookie API is an older mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern since in that pattern the tokens are never accessible to the browser-based code.)
+
+Cookies {#cookies}
+-------
+
+The Cookie API is a mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern described in {{bff-proxy}} since in that pattern the tokens are never accessible to the browser-based code.)
+
+When JavaScript code stores a token, the intent is for it to be able to retrieve the token for later use in an API call. Using the Cookie API to store the token has the unintended side effect of the browser also sending the token to the web server the next time the app is loaded, or on any API calls the app makes to its own backend.
+
+Illustrating this example with the diagram in {{javascript-apps-direct-tokens}}, the app would acquire the tokens in step C, store them in a cookie, and the next time the app loads from the Static Web Host, the browser would transmit the tokens in the Cookie header to the Static Web Host unnecessarily. Instead, the tokens should be stored using an API that is only accessible to JavaScript, such that the tokens are only sent outside the browser when intended.
+
+
 
 Token Storage in a Service Worker {#token-storage-service-worker}
--------------------=-------------
+---------------------------------
 
 Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks. This is described in {{service-worker}}. This, like the other unencrypted options, do not provide any protection against exfiltration from the filesystem.
 
