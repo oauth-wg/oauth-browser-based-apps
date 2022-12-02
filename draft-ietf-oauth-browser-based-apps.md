@@ -182,6 +182,8 @@ the following terms:
 : An application that is dynamically downloaded and executed in a web browser,
   usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
+While this document often refers to "JavaScript apps", this is not intended to be exclusive to JavaScript. The recommendations and considerations herein also apply to other languages that execute code in the browser, such as Web Assembly.
+
 
 Overview
 ========
