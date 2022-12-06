@@ -957,6 +957,7 @@ Document History
 * Added a new section about options for storing tokens
 * Added a section on sender-constrained tokens and a reference to DPoP
 * Rephrased the architecture patterns to focus on token acquisition
+* Added a section discussing why not to use the Cookie API to store tokens
 
 -11
 
