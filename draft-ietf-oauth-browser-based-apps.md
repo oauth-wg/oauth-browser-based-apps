@@ -604,7 +604,7 @@ The Cookie API is a mechanism that is technically possible to use as storage fro
 
 When JavaScript code stores a token, the intent is for it to be able to retrieve the token for later use in an API call. Using the Cookie API to store the token has the unintended side effect of the browser also sending the token to the web server the next time the app is loaded, or on any API calls the app makes to its own backend.
 
-Illustrating this example with the diagram in {{javascript-apps-direct-tokens}}, the app would acquire the tokens in step C, store them in a cookie, and the next time the app loads from the Static Web Host, the browser would transmit the tokens in the Cookie header to the Static Web Host unnecessarily. Instead, the tokens should be stored using an API that is only accessible to JavaScript, such that the tokens are only sent outside the browser when intended.
+Illustrating this example with the diagram in {{javascript-apps-direct-tokens}}, the app would acquire the tokens in step C, store them in a cookie, and the next time the app loads from the Static Web Host, the browser would transmit the tokens in the Cookie header to the Static Web Host unnecessarily. Instead, the tokens should be stored using an API that is only accessible to JavaScript, such as the methods described below, so that the tokens are only sent outside the browser when intended.
 
 
 
@@ -951,7 +951,7 @@ Document History
 
 [[ To be removed from the final specification ]]
 
--latest
+-12
 
 * Revised overview and server support checklist to bring them up to date with the rest of the draft
 * Added a new section about options for storing tokens
