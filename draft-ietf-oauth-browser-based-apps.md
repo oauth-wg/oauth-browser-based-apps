@@ -254,7 +254,7 @@ applications.
   * storing tokens and proxying all requests (BFF Proxy)
   * obtaining tokens and passing them to the frontend (Token Mediating Backend)
 * a JavaScript application obtaining access tokens
-  * via code executed in the DOM
+  * via code executed in a browsing context
   * through a service worker
 
 These architectures have different use cases and considerations.
@@ -457,9 +457,9 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 
 Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can acquire tokens, with different security considerations of each.
 
-### Acquiring tokens from the DOM
+### Acquiring tokens from the Browsing Context
 
-If the JavaScript in the DOM will be making requests directly to the resource server, the simplest mechanism is to acquire and store the tokens somewhere accessible to the DOM. This will typically involve DOM-accessible code initiating the authorization code flow and exchanging the authorization code for an access token, and storing the access token obtained. There are a number of different options for storing tokens with different tradeoffs, described in {{token-storage}}.
+If the JavaScript executing in the browsing context will be making requests directly to the resource server, the simplest mechanism is to acquire and store the tokens somewhere accessible to the JavaScript code. This will typically involve JavaScript code initiating the Authorization Code flow and exchanging the authorization code for an access token, and then storing the access token obtained. There are a number of different options for storing tokens, each with different tradeoffs, described in {{token-storage}}.
 
 This method poses a particular risk in the case of a successful XSS attack. In case of a successful XSS attack, the injected code will have full access to the stored tokens and can exfiltrate them to the attacker.
 
@@ -951,6 +951,10 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-latest
+
+* Corrected some uses of "DOM"
+
 -12
 
 * Revised overview and server support checklist to bring them up to date with the rest of the draft
@@ -1058,7 +1062,8 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
-Philippe De Ryck, Sean Kelleher, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+Philippe De Ryck, Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt,
+Vittorio Bertocci and Yannick Majoros.
 
 
 --- fluff
