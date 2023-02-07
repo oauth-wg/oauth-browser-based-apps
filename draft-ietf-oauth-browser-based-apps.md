@@ -153,7 +153,7 @@ applications, including incorporating additional OAuth extensions where needed.
 
 OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
 OAuth for native apps and browser-based apps, and includes additional
-considerations when running in a browser. This is primarily focused on OAuth,
+considerations when apps are running in a browser. This is primarily focused on OAuth,
 except where OpenID Connect provides additional considerations.
 
 Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
@@ -192,7 +192,7 @@ At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-bas
 
 However, there are several drawbacks to the Implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit flow in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less-secure front channel. Furthermore, adding PKCE to the flow ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. In this flow, the access token is never exposed in the less-secure front channel. Furthermore, adding PKCE to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code flow with PKCE. There are various architectural patterns for deploying browser-based apps, both with and without a corresponding server-side component, each with their own trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain apps.
 
@@ -230,7 +230,7 @@ banking application developed by a contractor that is branded as the bank's
 application is still considered a first-party application.) The first-party app
 consideration is about the user's relationship to the application and the service.
 
-To conform to this best practice, first-party applications using OAuth or OpenID
+To conform to this best practice, first-party browser-based applications using OAuth or OpenID
 Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
 as described later in this document.
 
@@ -240,7 +240,7 @@ and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
 multi-factor authentication options, take advantage of single sign-on sessions,
 or use third-party identity providers. In contrast, the resource owner password credentials grant does not
-provide any built-in mechanism for these, and would instead be extended with custom code.
+provide any built-in mechanism for these, and would instead need to be extended with custom code.
 
 
 Application Architecture Patterns
