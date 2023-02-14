@@ -130,6 +130,16 @@ informative:
     - ins: D. Waite
       org: Ping Identity
     target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop
+  OpenID:
+    title: OpenID Connect
+    target: https://openid.net/specs/openid-connect-core-1_0.html
+    date: November 8, 2014
+    author:
+      - ins: N. Sakimura
+      - ins: J. Bradley
+      - ins: M. Jones
+      - ins: B. de Medeiros
+      - ins: C. Mortimore
 
 --- abstract
 
@@ -198,18 +208,18 @@ For this reason, and from other lessons learned, the current best practice for b
 
 In summary, browser-based applications using the Authorization Code flow:
 
-* MUST use PKCE ({{RFC7636}}) when obtaining an access token
-* MUST Protect themselves against CSRF attacks by either:
+* MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
+* MUST Protect themselves against CSRF attacks ({{csrf_protection}}) by either:
   * ensuring the authorization server supports PKCE, or
   * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
-* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests
+* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
 
 In summary, OAuth 2.0 authorization servers supporting browser-based applications using the Authorization Code flow:
 
-* MUST Require exact matching of registered redirect URIs
-* MUST Support the PKCE extension
-* MUST NOT issue access tokens in the authorization response
-* If issuing refresh tokens to browser-based applications, then:
+* MUST Require exact matching of registered redirect URIs ({{auth_code_redirect}})
+* MUST Support the PKCE extension ({{auth_code_request}})
+* MUST NOT issue access tokens in the authorization response ({{implicit_flow}})
+* If issuing refresh tokens to browser-based applications ({{refresh_tokens}}), then:
   * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
   * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
   * when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time
@@ -255,7 +265,7 @@ applications.
   * obtaining tokens and passing them to the frontend (Token Mediating Backend)
 * a JavaScript application obtaining access tokens
   * via code executed in a browsing context
-  * through a service worker
+  * through a Service Worker
 
 These architectures have different use cases and considerations.
 
@@ -529,19 +539,28 @@ and exchanged for an access token by a malicious client, by providing the
 authorization server with a way to verify the client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
+
+Authorization Code Redirect {#auth_code_redirect}
+---------------------------
+
+Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.
+
+Authorization servers MUST require an exact match of a registered redirect URI.
+As described in {{oauth-security-topics}} Section 4.1.1. this helps to prevent attacks targeting the authorization code.
+
+
+Cross-Site Request Forgery Protections   {#csrf_protection}
+--------------------------------------
+
 Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
 accomplished by any of the below:
 
 * using PKCE, and confirming that the authorization server supports PKCE
-* using a unique value for the OAuth 2.0 "state" parameter
-* if the application is using OpenID Connect, by using the OpenID Connect "nonce" parameter
+* using a unique value for the OAuth 2.0 "state" parameter to carry a CSRF token
+* if the application is using OpenID Connect, by using and verifying the OpenID Connect "nonce" parameter as described in {{OpenID}}
 
+See Section 2.1 of {{oauth-security-topics}} for additional details.
 
-Handling the Authorization Code Redirect {#auth_code_redirect}
-----------------------------------------
-
-Authorization servers MUST require an exact match of a registered redirect URI.
-As described in {{oauth-security-topics}} Section 4.1.1. this helps to prevent attacks targeting the authorization code.
 
 
 Refresh Tokens {#refresh_tokens}
@@ -600,7 +619,7 @@ There are a number of storage options available to browser-based applications, a
 Cookies {#cookies}
 -------
 
-The Cookie API is a mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern described in {{bff-proxy}} since in that pattern the tokens are never accessible to the browser-based code.)
+The JavaScript Cookie API is a mechanism that is technically possible to use as storage from JavaScript, but is NOT RECOMMENDED as a place to store tokens that will be later accessed from JavaScript. (Note that this statement does not affect the BFF pattern described in {{bff-proxy}} since in that pattern the tokens are never accessible to the browser-based code.)
 
 When JavaScript code stores a token, the intent is for it to be able to retrieve the token for later use in an API call. Using the Cookie API to store the token has the unintended side effect of the browser also sending the token to the web server the next time the app is loaded, or on any API calls the app makes to its own backend.
 
@@ -629,7 +648,7 @@ LocalStorage persists between page reloads as well as is shared across all tabs.
 
 SessionStorage is similar to LocalStorage, except that SessionStorage is cleared when a browser tab is closed, and is not shared between multiple tabs open to pages on the same origin. This slightly reduces the chance of a successful XSS attack, since a user who clicks a link carrying an XSS payload would open a new tab, and wouldn't have access to the existing tokens stored. However there are still other variations of XSS attacks that can compromise this storage.
 
-IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the DOM and Service Workers.
+IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the DOM and Service Workers. For this reason, IndexedDB SHOULD NOT be used by a Service Worker if attempting to use the Service Worker to isolate the front-end from XSS attacks.
 
 Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 --------------------------------------------------
@@ -728,17 +747,6 @@ proof of identity of the client for the purpose of deciding whether to automatic
 process an authorization request when a previous request for the client_id
 has already been approved.
 
-
-Cross-Site Request Forgery Protections   {#csrf_protection}
---------------------------------------
-
-Clients MUST prevent Cross-Site Request Forgery (CSRF) attacks against their redirect URI.
-Clients can accomplish this by either ensuring the authorization server supports
-PKCE and relying on the CSRF protection that PKCE provides, or if the client is also an
-OpenID Connect client, using the OpenID Connect "nonce" parameter, or by using the
-"state" parameter to carry one-time-use CSRF tokens as described in {{auth_code_request}}.
-
-See Section 2.1 of {{oauth-security-topics}} for additional details.
 
 
 Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
