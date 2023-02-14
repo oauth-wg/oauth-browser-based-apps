@@ -894,14 +894,18 @@ simplier and provides fewer attack vectors to obtain both via the Authorization 
 Historically, the Implicit flow provided an advantage to browser-based apps since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
 URL without triggering a page reload. This was necessary in order to remove the
-access token from the URL after it was obtained by the app.
+access token from the URL after it was obtained by the app. Additionally, until
+Cross Origin Resource Sharing (CORS) was widespread in browsers, the Implicit flow
+offered an alternative flow that didn't require CORS support in the browser or on the server.
 
 Modern browsers now have the Session History API (described in "Session history and
 navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
-component of the URL without triggering a page reload. This means modern browser-based apps can
+component of the URL without triggering a page reload. Additionally, CORS has widespread
+support and is often used by single-page apps for many purposes. This means modern browser-based apps can
 use the unmodified OAuth 2.0 Authorization Code flow, since they have the ability to
 remove the authorization code from the query string without triggering a page reload
-thanks to the Session History API.
+thanks to the Session History API, and CORS support at the token endpoint means the
+app can obtain tokens even if the authorization server is on a different domain.
 
 
 Additional Security Considerations
