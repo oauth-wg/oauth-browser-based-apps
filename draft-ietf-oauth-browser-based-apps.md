@@ -262,7 +262,7 @@ applications.
 * single-domain, not using OAuth
 * a JavaScript application with a stateful backend component
   * storing tokens and proxying all requests (BFF Proxy)
-  * obtaining tokens and passing them to the frontend (Token Mediating Backend)
+  * obtaining tokens and passing them to the frontend (Token-Mediating Backend)
 * a JavaScript application obtaining access tokens
   * via code executed in a browsing context
   * through a Service Worker
@@ -365,10 +365,10 @@ browser and BFF Proxy. Additionally, cookies MUST be protected from leakage by o
 In this architecture, tokens are never sent to the front-end and are never accessible by any JavaScript code, so it fully protects against XSS attackers stealing tokens. However, an XSS attacker may still be able to make authenticated requests to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server.
 
 
-Token Mediating Backend {#tm-backend}
+Token-Mediating Backend {#tm-backend}
 -----------------------
 
-An alternative to a full BFF where all resource requests go through the backend is to use a token mediating backend which obtains the tokens and then forwards the tokens to the browser.
+An alternative to a full BFF where all resource requests go through the backend is to use a token-mediating backend which obtains the tokens and then forwards the tokens to the browser.
 
     +-------------+  +--------------+ +---------------+
     |             |  |              | |               |
@@ -383,7 +383,7 @@ An alternative to a full BFF where all resource requests go through the backend 
            |                                       |
            |    +-------------------------+        |
            |    |                         |        |
-           |    | Token Mediating Backend |        |
+           |    | Token-Mediating Backend |        |
         (B)|    |                         |        |
            |    +-------------------------+        |
            |                                       |
@@ -398,15 +398,15 @@ An alternative to a full BFF where all resource requests go through the backend 
     +-------------------------------------------------+
 
 
-The frontend code makes a request to the Token Mediating Backend (A), and the backend initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier. The backend delivers the tokens to the browser (E), which stores them for later use. The browser makes requests to the resource server directly (F) including the token it has stored.
+The frontend code makes a request to the Token-Mediating Backend (A), and the backend initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the application server (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier. The backend delivers the tokens to the browser (E), which stores them for later use. The browser makes requests to the resource server directly (F) including the token it has stored.
 
 The main advantage this architecture provides over the full BFF architecture previously described is that the backend service is only involved in the acquisition of tokens, and doesn't have to proxy every request in the future. Routing every API call through a backend can be expensive in terms of performance and latency, and can create challenges in deploying the application across many regions. Instead, routing only the token acquisition through a backend means fewer requests are made to the backend. This improves the performance and reduces the latency of requests from the frontend, and reduces the amount of infrastructure needed in the backend.
 
-Similar to the previously described BFF Proxy pattern, The Token Mediating Backend SHOULD be considered a confidential client, and issued its own client secret. The Token Mediating Backend SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
+Similar to the previously described BFF Proxy pattern, The Token-Mediating Backend SHOULD be considered a confidential client, and issued its own client secret. The Token-Mediating Backend SHOULD use the OAuth 2.0 Authorization Code grant with PKCE to initiate a request for an access token. Detailed recommendations for confidential clients can be found in {{oauth-security-topics}} Section 2.1.1.
 
-In this scenario, the connection between the browser and Token Mediating Backend SHOULD be a session cookie provided by the backend.
+In this scenario, the connection between the browser and Token-Mediating Backend SHOULD be a session cookie provided by the backend.
 
-The Token Mediating Backend SHOULD cache tokens it obtains from the authorization server such that when the frontend needs to obtain new tokens, it can do so without the additional round trip to the authorization server if the tokens are still valid.
+The Token-Mediating Backend SHOULD cache tokens it obtains from the authorization server such that when the frontend needs to obtain new tokens, it can do so without the additional round trip to the authorization server if the tokens are still valid.
 
 The frontend SHOULD NOT persist tokens in local storage or similar mechanisms; instead, the frontend SHOULD store tokens only in memory, and make a new request to the backend if no tokens exist. This provides fewer attack vectors for token exfiltration should an XSS attack be successful.
 
@@ -418,7 +418,7 @@ Editor's Note: A method of implementing this architecture is described by the {{
 
 If the backend caches tokens from the authorization server, it presents scopes elevation risks if applied indiscriminately. If the token cached by the authorization server features a superset of the scopes requested by the frontend, the backend SHOULD NOT return it to the frontend; instead it SHOULD perform a new request with the smaller set of scopes to the authorization server.
 
-In the case of a successful XSS attack, the attacker may be able to access the tokens if the tokens are persisted in the frontend, but is less likely to be able to access the tokens if they are stored only in memory. However, a successful XSS attack will also allow the attacker to call the Token Mediating Backend itself to retrieve the cached token or start a new OAuth flow.
+In the case of a successful XSS attack, the attacker may be able to access the tokens if the tokens are persisted in the frontend, but is less likely to be able to access the tokens if they are stored only in memory. However, a successful XSS attack will also allow the attacker to call the Token-Mediating Backend itself to retrieve the cached token or start a new OAuth flow.
 
 
 JavaScript Applications obtaining tokens directly {#javascript-apps-direct-tokens}
@@ -966,6 +966,9 @@ Document History
 -latest
 
 * Corrected some uses of "DOM"
+* Consolidated CSRF recommendations into normative part of the document
+* Added links from the summary into the later sections
+* Minor editorial improvements
 
 -12
 
@@ -977,7 +980,7 @@ Document History
 
 -11
 
-* Added a new architecture pattern: Token Mediating Backend
+* Added a new architecture pattern: Token-Mediating Backend
 * Revised and added clarifications for the Service Worker pattern
 * Editorial improvements in descriptions of the different architectures
 * Rephrased headers
