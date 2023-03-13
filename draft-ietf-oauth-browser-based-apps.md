@@ -296,7 +296,7 @@ in using OAuth even in a common-domain architecture:
 
 * Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
 * Being able to take advantage of existing library support rather than writing bespoke code for the integration.
-* Centralizing login and multifactor support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
+* Centralizing login and multifactor authentication support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
 * Splitting of responsibilities between authenticating a user and serving resources
 
 Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
@@ -332,10 +332,10 @@ Backend For Frontend (BFF) Proxy {#bff-proxy}
     |                                                 |
     +-------------------------------------------------+
 
-In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a dynamic BFF Proxy (A) that has the ability to execute code and handle the full authentication flow itself. This enables the ability to keep
-the call to actually get an access token outside the JavaScript application.
+In this architecture, commonly referred to as "backend for frontend" or "BFF", the JavaScript code is loaded from a BFF Proxy server (A) that has the ability to execute code and handle the full OAuth flow itself. This enables the ability to keep
+the request to obtain an access token outside the JavaScript application.
 
-Note that this BFF Proxy is not the Resource Server, it is the OAuth client and would be accessing data at a separate resource server.
+Note that this BFF Proxy is not the Resource Server, it is the OAuth client and would be later accessing data at a separate resource server after obtaining tokens.
 
 In this case, the BFF Proxy initiates the OAuth flow itself, by redirecting the browser to the authorization endpoint (B). When the user is redirected back, the browser delivers the authorization code to the BFF Proxy (C), where it can then exchange it for an access token at the token endpoint (D) using its client secret and PKCE code verifier.
 The BFF Proxy then keeps the access token and refresh token stored internally, and creates a separate session with the browser-based app via a
@@ -354,6 +354,8 @@ The BFF Proxy SHOULD be considered a confidential client, and issued its own cli
 In this scenario, the connection between the browser and BFF Proxy SHOULD be a
 session cookie provided by the BFF Proxy.
 
+While the security of this model is strong, since the OAuth tokens are never sent to the browser, there are performance and scalability implications of deploying a BFF proxy server and routing all JS requests through the server. If routing every API request through the BFF proxy is prohibitive, you may wish to consider one of the alternative architectures below.
+
 ### Security considerations
 
 Security of the connection between code running in the browser and this BFF Proxy is
@@ -362,7 +364,7 @@ this document, but many recommendations can be found in the OWASP Cheat Sheet se
 such as setting an HTTP-only and `Secure` cookie to authenticate the session between the
 browser and BFF Proxy. Additionally, cookies MUST be protected from leakage by other means, such as logs.
 
-In this architecture, tokens are never sent to the front-end and are never accessible by any JavaScript code, so it fully protects against XSS attackers stealing tokens. However, an XSS attacker may still be able to make authenticated requests to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server.
+In this architecture, tokens are never sent to the front-end and are never accessible by any JavaScript code, so it fully protects against XSS attackers stealing tokens. However, an XSS attacker may still be able to make authenticated requests to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. While the attacker is unable to extract and use the access token elsewhere, they could still effectively make authenticated requests to the resource server.
 
 
 Token-Mediating Backend {#tm-backend}
@@ -412,11 +414,10 @@ The frontend SHOULD NOT persist tokens in local storage or similar mechanisms; i
 
 Editor's Note: A method of implementing this architecture is described by the {{tmi-bff}} draft, although it is currently an expired individual draft and has not been proposed for adoption to the OAuth Working Group.
 
-<!-- TODO: Reference TMI BFF if the draft is picked up again https://www.ietf.org/archive/id/draft-bertocci-oauth2-tmi-bff-01.html -->
 
 ### Security Considerations
 
-If the backend caches tokens from the authorization server, it presents scopes elevation risks if applied indiscriminately. If the token cached by the authorization server features a superset of the scopes requested by the frontend, the backend SHOULD NOT return it to the frontend; instead it SHOULD perform a new request with the smaller set of scopes to the authorization server.
+If the backend caches tokens from the authorization server, it presents scope elevation risks if applied indiscriminately. If the token cached by the authorization server features a superset of the scopes requested by the frontend, the backend SHOULD NOT return it to the frontend; instead it SHOULD perform a new request with the smaller set of scopes to the authorization server.
 
 In the case of a successful XSS attack, the attacker may be able to access the tokens if the tokens are persisted in the frontend, but is less likely to be able to access the tokens if they are stored only in memory. However, a successful XSS attack will also allow the attacker to call the Token-Mediating Backend itself to retrieve the cached token or start a new OAuth flow.
 
@@ -455,7 +456,7 @@ extension (described in {{authorization_code_flow}}) (B) above, and obtains an
 access token via a POST request (C).
 
 The application is then responsible for storing
-the access token (and optional refresh token) as securely as possible using appropriate browser APIs.
+the access token (and optional refresh token) as securely as possible using appropriate browser APIs, described in {{token-storage}}.
 
 When the JavaScript application in the browser wants to make a request to the Resource Server,
 it can interact with the Resource Server directly. It includes the access token in the request (D)
@@ -507,8 +508,11 @@ In this architecture, a service worker intercepts calls from the frontend to the
 * The service worker MUST intercept the authorization code when the *authorization server* redirects to the application.
 * The service worker implementation MUST then initiate the token request itself.
 * The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application.
-* The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting credentials: the only way of starting the authorization flow is through the service worker. This protects against re-authorization from XSS-injected code.
+* The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting tokens: the only way of starting the authorization flow should be through the service worker. This protects against re-authorization from XSS-injected code.
 * The application MUST register the Service Worker before running any code interacting with the user.
+
+See {{token-storage-service-worker}} for details on storing tokens from the Service Worker.
+
 
 #### Security Considerations
 
@@ -516,7 +520,7 @@ A successful XSS attack on an application using this Service Worker pattern woul
 
 In case of a vulnerability leading to the Service Worker not being registered, an XSS attack would result in the attacker being able to initiate a new OAuth flow to obtain new tokens itself.
 
-To prevent the Service Worker from being unregistered, the Service Worker registration must happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
+To prevent the Service Worker from being unregistered, the Service Worker registration MUST happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
 
 
 Authorization Code Flow {#authorization_code_flow}
@@ -630,7 +634,14 @@ Illustrating this example with the diagram in {{javascript-apps-direct-tokens}},
 Token Storage in a Service Worker {#token-storage-service-worker}
 ---------------------------------
 
-Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks. This is described in {{service-worker}}. This, like the other unencrypted options, do not provide any protection against exfiltration from the filesystem.
+Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks, as described in {{service-worker}}.
+
+The Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window.
+
+Service Workers are not guaranteed to run persistently, and may be shut down by the browser for various reasons. This should be taken into consideration when implementing this pattern, until a persistent storage API that is isolated to Service Workers is available in browsers.
+
+This, like the other unencrypted options, do not provide any protection against exfiltration from the filesystem.
+
 
 In-Memory Token Storage {#token-storage-in-memory}
 -----------------------
@@ -644,11 +655,11 @@ Persistent Token Storage {#token-storage-persistent}
 
 The persistent storage APIs currently available as of this writing are LocalStorage, SessionStorage, and IndexedDB.
 
-LocalStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. LocalStorage does not protect against XSS attacks, as the attacker would be running code within the same origin.
+LocalStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. LocalStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the LocalStorage.
 
 SessionStorage is similar to LocalStorage, except that SessionStorage is cleared when a browser tab is closed, and is not shared between multiple tabs open to pages on the same origin. This slightly reduces the chance of a successful XSS attack, since a user who clicks a link carrying an XSS payload would open a new tab, and wouldn't have access to the existing tokens stored. However there are still other variations of XSS attacks that can compromise this storage.
 
-IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the DOM and Service Workers. For this reason, IndexedDB SHOULD NOT be used by a Service Worker if attempting to use the Service Worker to isolate the front-end from XSS attacks.
+IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers. For this reason, IndexedDB SHOULD NOT be used by a Service Worker if attempting to use the Service Worker to isolate the front-end from XSS attacks.
 
 Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 --------------------------------------------------
@@ -670,7 +681,7 @@ Using sender-constrained tokens shifts the challenge of securely storing the tok
 
 If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCrypto}} API. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
-If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from XSS attacks, such as by generating and storing it in a closure variable or in a Service Worker. This is similar to the considerations for storing tokens in a Service Worker, as described in {{service-worker}}.
+If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from XSS attacks, such as by generating and storing it in a closure variable or in a Service Worker. This is similar to the considerations for storing tokens in a Service Worker, as described in {{token-storage-service-worker}}.
 
 
 Security Considerations
@@ -684,7 +695,7 @@ In general, XSS attacks are a huge risk, and can lead to full compromise of the 
 
 If tokens are handled or accessible by the browser, there is a risk that a XSS attack can lead to token exfiltration.
 
-Even if tokens are never sent to the frontend and are never accessible by any JavaScript code, an XSS attacker may still be able to make authenticated requests to the resource server by mimicking legitimate code in the DOM. For example, the attacker may make a request to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. In the Service Worker example, the attacker may make an API call to the Service Worker which will then turn around and make a request to the resource server with the legitimate token. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server to steal or modify data.
+Even if tokens are never sent to the frontend and are never accessible by any JavaScript code, an XSS attacker may still be able to make authenticated requests to the resource server by mimicking legitimate code in the browsing context. For example, the attacker may make a request to the BFF Proxy which will in turn make requests to the resource server including the user's legitimate token. In the Service Worker example, the attacker may make an API call to the resource server, and the Service Worker will intercept the request and add the access token to the request. While the attacker is unable to extract and use the access token elsewhere, they can still effectively make authenticated requests to the resource server to steal or modify data.
 
 
 Reducing the Impact of Token Exfiltration {#token-exfiltration}
@@ -723,7 +734,7 @@ user may inspect their copy and learn the shared secret.  For this
 reason, and those stated in Section 5.3.1 of {{RFC6819}}, it is NOT RECOMMENDED
 for authorization servers to require client authentication of browser-based
 applications using a shared secret, as this serves little value beyond
-client identification which is already provided by the client_id request parameter.
+client identification which is already provided by the `client_id` parameter.
 
 Authorization servers that still require a statically included shared
 secret for SPA clients MUST treat the client as a public
@@ -863,7 +874,7 @@ returned in the fragment, it is visible to any third-party scripts on the page.
 
 In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
 using the Authorization Code flow with PKCE extension prevents the attacks described above by
-avoiding returning the access token in the redirect response at all.
+avoiding returning the access token in the redirect response.
 
 When PKCE is used, if an authorization code is stolen in transport, the attacker is
 unable to do anything with the authorization code.
@@ -968,6 +979,7 @@ Document History
 * Corrected some uses of "DOM"
 * Consolidated CSRF recommendations into normative part of the document
 * Added links from the summary into the later sections
+* Described limitations of Service Worker storage
 * Minor editorial improvements
 
 -12
