@@ -974,7 +974,7 @@ Document History
 
 [[ To be removed from the final specification ]]
 
--latest
+-13
 
 * Corrected some uses of "DOM"
 * Consolidated CSRF recommendations into normative part of the document
