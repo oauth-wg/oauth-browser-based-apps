@@ -617,7 +617,7 @@ There are a number of storage options available to browser-based applications, a
 * Stored and managed by a Service Worker
 * Stored in memory only, in particular stored in a closure variable rather than an object property
 * Stored in LocalStorage, SessionStorage, or IndexedDB
-* Stored in an encrypted format using the WebCrypto API to encrypt and decrypt from storage
+* Stored in an encrypted format using the {{WebCrypto}} API to encrypt and decrypt from storage
 
 
 Cookies {#cookies}
@@ -668,7 +668,7 @@ Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 
 In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. Even if an application does not suffer from an XSS attack, other software on the computer may be able to read the filesystem and exfiltrate tokens from the storage.
 
-The {{WebCrypto}} API provides a mechanism for JavaScript code to generate a private key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the WebCrypto specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
+The {{WebCrypto}} API provides a mechanism for JavaScript code to generate a private key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{WebCrypto}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
 In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
 
@@ -686,7 +686,7 @@ If an application is using sender-constrained tokens, the secure storage of the 
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from XSS attacks, such as by generating and storing it in a closure variable or in a Service Worker. This is similar to the considerations for storing tokens in a Service Worker, as described in {{token-storage-service-worker}}.
 
-While a non-exportable key is protected from exfiltration by an XSS attacker, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the WebCrypto API that a non-exportable key is actually protected by a TPM or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine for example via malware.
+While a non-exportable key is protected from exfiltration by an XSS attacker, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the {{WebCrypto}} API that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
 
 
 Security Considerations
