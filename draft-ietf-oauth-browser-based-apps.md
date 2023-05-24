@@ -34,6 +34,7 @@ normative:
   RFC6819:
   RFC7636:
   RFC8252:
+  RFC9207:
   draft-ietf-httpbis-rfc6265bis:
     title: "Cookies: HTTP State Management Mechanism"
     date: October 2021
@@ -79,17 +80,6 @@ normative:
       org: yes.com
     date: April 2021
     target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
-  oauth-iss-auth-resp:
-    title: OAuth 2.0 Authorization Server Issuer Identifier in Authorization Response
-    author:
-    - name: Karsten Meyer zu Selhausen
-      ins: K. Meyer zu Selhausen
-      org: Hackmanit
-    - name: Daniel Fett
-      ins: D. Fett
-      org: yes.com
-    date: January 2021
-    target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-iss-auth-resp
 informative:
   HTML:
     title: HTML
@@ -774,8 +764,8 @@ countermeasures to defend against mix-up attacks.
 
 It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
 of the authorization response. This can be achieved either by using the "iss" response
-parameter, as defined in {{oauth-iss-auth-resp}}, or by using the "iss" Claim of the ID token
-when OpenID Connect is used.
+parameter, as defined in {{RFC9207}}, or by using the `iss` claim of the ID token
+when using OpenID Connect.
 
 Alternative countermeasures, such as using distinct redirect URIs for each issuer, SHOULD
 only be used if identifying the issuer as described is not possible.
@@ -855,7 +845,7 @@ This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 
 An attacker could modify the page or inject scripts into the browser through various
 means, including when the browser's HTTPS connection is being intercepted by, for
-example, a corporate network. While man-in-the-middle attacks are typically out of scope
+example, a corporate network. While attacks on the TLS layer are typically out of scope
 of basic security recommendations to prevent, in the case of browser-based apps they are
 much easier to perform. An injected script can enable an attacker to have access to everything
 on the page.
@@ -897,7 +887,7 @@ using the standard Authorization Code flow.
   server no assurance that the access token will actually end up at the
   application, since there are many ways this redirect may fail or be intercepted.
 * Supporting the Implicit flow requires additional code, more upkeep and
-  understanding of the related security considerations, while limiting the
+  understanding of the related security considerations. Limiting the
   authorization server to just the Authorization Code flow reduces the attack surface
   of the implementation.
 * If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
@@ -908,7 +898,7 @@ signed. Returning an ID token using the Implicit flow (`response_type=id_token`)
 validate the JWT signature, as malicious parties could otherwise craft and supply
 fraudulent ID tokens. Performing OpenID Connect using the Authorization Code flow provides
 the benefit of the client not needing to verify the JWT signature, as the ID token will
-have been fetched over an HTTPS connection directly from the authorization server. Additionally,
+have been fetched over an HTTPS connection directly from the authorization server's token endpoint. Additionally,
 in many cases an application will request both an ID token and an access token, so it is
 simplier and provides fewer attack vectors to obtain both via the Authorization Code flow.
 
@@ -978,6 +968,12 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-latest
+
+* Minor editorial fixes and clarifications
+* Updated some references
+* Added a paragraph noting the possible exfiltration of a non-exportable key from the filesystem
 
 -13
 
