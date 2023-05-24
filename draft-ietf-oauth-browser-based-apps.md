@@ -163,12 +163,12 @@ applications, including incorporating additional OAuth extensions where needed.
 
 OAuth 2.0 for Browser-Based Apps addresses the similarities between implementing
 OAuth for native apps and browser-based apps, and includes additional
-considerations when apps are running in a browser. This is primarily focused on OAuth,
+considerations when apps are running in a browser. This document is primarily focused on OAuth,
 except where OpenID Connect provides additional considerations.
 
 Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
 {{oauth-security-topics}} and browser-based apps are expected to follow those recommendations
-as well. This draft expands on and further restricts various recommendations in {{oauth-security-topics}}.
+as well. This document expands on and further restricts various recommendations in {{oauth-security-topics}}.
 
 
 Notational Conventions
@@ -192,7 +192,7 @@ the following terms:
 : An application that is dynamically downloaded and executed in a web browser,
   usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
-While this document often refers to "JavaScript apps", this is not intended to be exclusive to JavaScript. The recommendations and considerations herein also apply to other languages that execute code in the browser, such as Web Assembly.
+While this document often refers to "JavaScript apps", this is not intended to be exclusive to the JavaScript language. The recommendations and considerations herein also apply to other languages that execute code in the browser, such as Web Assembly.
 
 
 Overview
@@ -216,8 +216,8 @@ In summary, browser-based applications using the Authorization Code flow:
 
 In summary, OAuth 2.0 authorization servers supporting browser-based applications using the Authorization Code flow:
 
-* MUST Require exact matching of registered redirect URIs ({{auth_code_redirect}})
-* MUST Support the PKCE extension ({{auth_code_request}})
+* MUST require exact matching of registered redirect URIs ({{auth_code_redirect}})
+* MUST support the PKCE extension ({{auth_code_request}})
 * MUST NOT issue access tokens in the authorization response ({{implicit_flow}})
 * If issuing refresh tokens to browser-based applications ({{refresh_tokens}}), then:
   * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
@@ -244,12 +244,12 @@ To conform to this best practice, first-party browser-based applications using O
 Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
 as described later in this document.
 
-The resource owner password credentials grant MUST NOT be used, as described in
+The Resource Owner Password Credentials Grant MUST NOT be used, as described in
 {{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code flow
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
-multi-factor authentication options, take advantage of single sign-on sessions,
-or use third-party identity providers. In contrast, the resource owner password credentials grant does not
+secure non-phishable multi-factor authentication options, take advantage of single sign-on sessions,
+or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
 provide any built-in mechanism for these, and would instead need to be extended with custom code.
 
 
@@ -288,10 +288,10 @@ secure storage mechanism is in place.
 
 As such, it could be considered to use an HTTP-only cookie between the JavaScript application
 and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
-but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}
+but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}.
 
 OAuth was originally created for third-party or federated access to APIs, so it may not be
-the best solution in a common-domain deployment. That said, there are still some advantages
+the best solution in a single common-domain deployment. That said, there are still some advantages
 in using OAuth even in a common-domain architecture:
 
 * Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
@@ -449,7 +449,7 @@ This section describes the architecture of a JavaScript application obtaining to
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
-client, since there is no way to issue it a client secret in this model.
+client, since there is no way to provision it a client secret in this model.
 
 The code in the browser initiates the Authorization Code flow with the PKCE
 extension (described in {{authorization_code_flow}}) (B) above, and obtains an
@@ -466,7 +466,7 @@ In this scenario, the Authorization Server and Resource Server MUST support
 the necessary CORS headers to enable the JavaScript code to make these POST requests
 from the domain on which the script is executing. (See {{cors}} for additional details.)
 
-Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can acquire tokens, with different security considerations of each.
+Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can acquire tokens, each with different security considerations.
 
 ### Acquiring tokens from the Browsing Context
 
@@ -478,7 +478,7 @@ This method poses a particular risk in the case of a successful XSS attack. In c
 
 In this model, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and making requests to the resource server.
 
-Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker or the storage available to the service worker. This makes service workers the most secure place to acquire and store tokens, as an XSS attack would be unable to exfiltrate the tokens.
+Service workers are run in a separate context from the DOM, have no access to the DOM, and the DOM has no access to the service worker or the memory of the service worker. This makes service workers the most secure place to acquire and store tokens, as an XSS attack would be unable to exfiltrate the tokens.
 
 In this architecture, a service worker intercepts calls from the frontend to the resource server. As such, it completely isolates calls to the authorization server from XSS attack surface, as all tokens are safely kept in the service worker context without any access from other JavaScript contexts. The service worker is then solely responsible for adding the token in the authorization header to calls to the resource server.
 
@@ -507,8 +507,8 @@ In this architecture, a service worker intercepts calls from the frontend to the
 * The service worker MUST initiate the OAuth 2.0 Authorization Code grant with PKCE itself.
 * The service worker MUST intercept the authorization code when the *authorization server* redirects to the application.
 * The service worker implementation MUST then initiate the token request itself.
-* The service worker MUST not transmit tokens, authorization codes or PKCE secrets (e.g. code verifier) to the frontend application.
-* The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting tokens: the only way of starting the authorization flow should be through the service worker. This protects against re-authorization from XSS-injected code.
+* The service worker MUST NOT transmit tokens, authorization codes or PKCE code verifier to the frontend application.
+* The service worker MUST block authorization requests and token requests initiating from the frontend application in order to avoid any front-end side-channel for getting tokens. The only way of starting the authorization flow should be through the service worker. This protects against re-authorization from XSS-injected code.
 * The application MUST register the Service Worker before running any code interacting with the user.
 
 See {{token-storage-service-worker}} for details on storing tokens from the Service Worker.
@@ -549,8 +549,8 @@ Authorization Code Redirect {#auth_code_redirect}
 
 Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.
 
-Authorization servers MUST require an exact match of a registered redirect URI.
-As described in {{oauth-security-topics}} Section 4.1.1. this helps to prevent attacks targeting the authorization code.
+Authorization servers MUST require an exact match of a registered redirect URI
+as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent attacks targeting the authorization code.
 
 
 Cross-Site Request Forgery Protections   {#csrf_protection}
@@ -560,8 +560,8 @@ Browser-based applications MUST prevent CSRF attacks against their redirect URI.
 accomplished by any of the below:
 
 * using PKCE, and confirming that the authorization server supports PKCE
-* using a unique value for the OAuth 2.0 "state" parameter to carry a CSRF token
-* if the application is using OpenID Connect, by using and verifying the OpenID Connect "nonce" parameter as described in {{OpenID}}
+* using a unique value for the OAuth 2.0 `state` parameter to carry a CSRF token
+* if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
 
 See Section 2.1 of {{oauth-security-topics}} for additional details.
 
@@ -588,7 +588,7 @@ around refresh tokens if refresh tokens are issued to browser-based applications
 
 In particular, authorization servers:
 
-* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.13.2
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.14.2
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -636,7 +636,7 @@ Token Storage in a Service Worker {#token-storage-service-worker}
 
 Obtaining and storing the tokens with a service worker is the most secure option for unencrypted storage, as that isolates the tokens from XSS attacks, as described in {{service-worker}}.
 
-The Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window.
+The Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window.
 
 Service Workers are not guaranteed to run persistently, and may be shut down by the browser for various reasons. This should be taken into consideration when implementing this pattern, until a persistent storage API that is isolated to Service Workers is available in browsers.
 
@@ -648,7 +648,8 @@ In-Memory Token Storage {#token-storage-in-memory}
 
 If using a service worker is not a viable option, the next most secure option is to store tokens in memory only. To prevent XSS attackers from exfiltrating the tokens, a "token manager" class can store the token in a closure variable (rather than an object property), and manage all calls to the resource server itself, never letting the access token be accessible outside this manager class.
 
-However, the major downside to this approach is that the tokens will not be persisted between page reloads. If that is a property you would like, then the next best options are one of the persistent browser storage APIs.
+However, the major downside to this approach is that the tokens will not be persisted between page reloads. If that is a property you would like, then the next best options are one of the persistent browser storage APIs described below.
+
 
 Persistent Token Storage {#token-storage-persistent}
 ------------------------
@@ -661,6 +662,7 @@ SessionStorage is similar to LocalStorage, except that SessionStorage is cleared
 
 IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers. For this reason, IndexedDB SHOULD NOT be used by a Service Worker if attempting to use the Service Worker to isolate the front-end from XSS attacks.
 
+
 Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 --------------------------------------------------
 
@@ -669,6 +671,7 @@ In all cases, as of this writing, browsers ultimately store data in plain text o
 The {{WebCrypto}} API provides a mechanism for JavaScript code to generate a private key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the WebCrypto specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
 In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
+
 
 Sender-Constrained Tokens {#sender-constrained-tokens}
 -------------------------
@@ -682,6 +685,8 @@ Using sender-constrained tokens shifts the challenge of securely storing the tok
 If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCrypto}} API. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from XSS attacks, such as by generating and storing it in a closure variable or in a Service Worker. This is similar to the considerations for storing tokens in a Service Worker, as described in {{token-storage-service-worker}}.
+
+While a non-exportable key is protected from exfiltration by an XSS attacker, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the WebCrypto API that a non-exportable key is actually protected by a TPM or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine for example via malware.
 
 
 Security Considerations
