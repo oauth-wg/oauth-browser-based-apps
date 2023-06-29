@@ -510,7 +510,7 @@ A successful XSS attack on an application using this Service Worker pattern woul
 
 In case of a vulnerability leading to the Service Worker not being registered, an XSS attack would result in the attacker being able to initiate a new OAuth flow to obtain new tokens itself.
 
-To prevent the Service Worker from being unregistered, the Service Worker registration MUST happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
+To prevent the Service Worker from being unregistered by an XSS attacker, the Service Worker registration MUST happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
 
 
 Authorization Code Flow {#authorization_code_flow}
@@ -969,7 +969,7 @@ Document History
 
 [[ To be removed from the final specification ]]
 
--latest
+-14
 
 * Minor editorial fixes and clarifications
 * Updated some references
