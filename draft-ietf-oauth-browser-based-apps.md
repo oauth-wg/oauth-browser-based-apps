@@ -498,8 +498,8 @@ Authorization servers MAY set different policies around refresh token issuance, 
 
 
 
-Alternative Architecture Patterns
-=================================
+Discouraged and Deprecated Architecture Patterns
+================================================
 
 TODO: Intro text
 
@@ -533,7 +533,7 @@ in using OAuth even in a common-domain architecture:
 * Centralizing login and multifactor authentication support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
 * Splitting of responsibilities between authenticating a user and serving resources
 
-Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
+Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described above.
 
 
 
@@ -711,32 +711,20 @@ app can obtain tokens even if the authorization server is on a different domain.
 
 
 
-First-Party Applications
-------------------------
-
-While OAuth was initially created to allow third-party
-applications to access an API on behalf of a user, it has proven to be
-useful in a first-party scenario as well. First-party apps are applications where
-the same organization provides both the API and the application.
-
-Examples of first-party applications are a web email client provided by the operator of the email account,
-or a mobile banking application created by bank itself. (Note that there is no
-requirement that the application actually be developed by the same company; a mobile
-banking application developed by a contractor that is branded as the bank's
-application is still considered a first-party application.) The first-party app
-consideration is about the user's relationship to the application and the service.
-
-To conform to this best practice, first-party browser-based applications using OAuth or OpenID
-Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
-as described later in this document.
+Resource Owner Password Grant
+-----------------------------
 
 The Resource Owner Password Credentials Grant MUST NOT be used, as described in
 {{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code flow
 and redirecting the user to the authorization server,
 this provides the authorization server the opportunity to prompt the user for
-secure non-phishable multi-factor authentication options, take advantage of single sign-on sessions,
+secure non-phishable authentication options, take advantage of single sign-on sessions,
 or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
-provide any built-in mechanism for these, and would instead need to be extended with custom code.
+provide any built-in mechanism for these, and would instead need to be extended with custom protocols.
+
+To conform to this best practice, browser-based applications using OAuth or OpenID
+Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
+as described in this document.
 
 
 
