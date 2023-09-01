@@ -185,8 +185,13 @@ the following terms:
 While this document often refers to "JavaScript apps", this is not intended to be exclusive to the JavaScript language. The recommendations and considerations herein also apply to other languages that execute code in the browser, such as Web Assembly.
 
 
-Overview
-========
+
+
+
+OAuth 2.0 in Browser-Based Applications
+=======================================
+
+TODO: Reword this intro to mention refresh tokens, but also the security limitations of browser-only apps
 
 At the time that OAuth 2.0 {{RFC6749}} and {{RFC6750}} were created, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code flow which would require a cross-origin POST request. This was one of the motivations for the definition of the Implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
@@ -196,100 +201,25 @@ In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS), wh
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code flow with PKCE. There are various architectural patterns for deploying browser-based apps, both with and without a corresponding server-side component, each with their own trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain apps.
 
-In summary, browser-based applications using the Authorization Code flow:
-
-* MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
-* MUST Protect themselves against CSRF attacks ({{csrf_protection}}) by either:
-  * ensuring the authorization server supports PKCE, or
-  * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
-* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
-
-In summary, OAuth 2.0 authorization servers supporting browser-based applications using the Authorization Code flow:
-
-* MUST require exact matching of registered redirect URIs ({{auth_code_redirect}})
-* MUST support the PKCE extension ({{auth_code_request}})
-* MUST NOT issue access tokens in the authorization response ({{implicit_flow}})
-* If issuing refresh tokens to browser-based applications ({{refresh_tokens}}), then:
-  * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
-  * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
-  * when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time
-
-
-First-Party Applications
-========================
-
-While OAuth was initially created to allow third-party
-applications to access an API on behalf of a user, it has proven to be
-useful in a first-party scenario as well. First-party apps are applications where
-the same organization provides both the API and the application.
-
-Examples of first-party applications are a web email client provided by the operator of the email account,
-or a mobile banking application created by bank itself. (Note that there is no
-requirement that the application actually be developed by the same company; a mobile
-banking application developed by a contractor that is branded as the bank's
-application is still considered a first-party application.) The first-party app
-consideration is about the user's relationship to the application and the service.
-
-To conform to this best practice, first-party browser-based applications using OAuth or OpenID
-Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
-as described later in this document.
-
-The Resource Owner Password Credentials Grant MUST NOT be used, as described in
-{{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code flow
-and redirecting the user to the authorization server,
-this provides the authorization server the opportunity to prompt the user for
-secure non-phishable multi-factor authentication options, take advantage of single sign-on sessions,
-or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
-provide any built-in mechanism for these, and would instead need to be extended with custom code.
 
 
 Application Architecture Patterns
 =================================
 
+TODO: Update text to clarify that a BFF does NOT have to be stateful
+
 Here are the main architectural patterns available when building browser-based
 applications.
 
-* single-domain, not using OAuth
 * a JavaScript application with a stateful backend component
   * storing tokens and proxying all requests (BFF Proxy)
   * obtaining tokens and passing them to the frontend (Token-Mediating Backend)
-* a JavaScript application obtaining access tokens
-  * via code executed in a browsing context
-  * through a Service Worker
+* a JavaScript application acting as the OAuth 2.0 client
 
 These architectures have different use cases and considerations.
 
 
-Single-Domain Browser-Based Apps (not using OAuth)
---------------------------------------------------
 
-For simple system architectures, such as when the JavaScript application is served
-from a domain that can share cookies with the domain of the API (resource server) and the authorization server,
-OAuth adds additional attack vectors that could be avoided with a different solution.
-
-In particular, using any redirect-based mechanism of obtaining an access token
-enables the redirect-based attacks described in {{oauth-security-topics}} Section 4, but if
-the application, authorization server and resource server share a domain, then it is
-unnecessary to use a redirect mechanism to communicate between them.
-
-An additional concern with handling access tokens in a browser is that
-in case of successful cross-site scripting (XSS) attack, tokens could be read and further used or transmitted by the injected code if no
-secure storage mechanism is in place.
-
-As such, it could be considered to use an HTTP-only cookie between the JavaScript application
-and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
-but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}.
-
-OAuth was originally created for third-party or federated access to APIs, so it may not be
-the best solution in a single common-domain deployment. That said, there are still some advantages
-in using OAuth even in a common-domain architecture:
-
-* Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
-* Being able to take advantage of existing library support rather than writing bespoke code for the integration.
-* Centralizing login and multifactor authentication support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
-* Splitting of responsibilities between authenticating a user and serving resources
-
-Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described below.
 
 
 Backend For Frontend (BFF) Proxy {#bff-proxy}
@@ -359,6 +289,8 @@ In this architecture, tokens are never sent to the front-end and are never acces
 
 Token-Mediating Backend {#tm-backend}
 -----------------------
+
+TODO: Refer to token_storage for storing tokens in the browser
 
 An alternative to a full BFF where all resource requests go through the backend is to use a token-mediating backend which obtains the tokens and then forwards the tokens to the browser.
 
@@ -458,13 +390,158 @@ from the domain on which the script is executing. (See {{cors}} for additional d
 
 Besides the general risks of XSS, if tokens are stored or handled by the browser, XSS poses an additional risk of token exfiltration. In this architecture, the JavaScript application is storing the access token so that it can make requests directly to the resource server. There are two primary methods by which the application can acquire tokens, each with different security considerations.
 
-### Acquiring tokens from the Browsing Context
+
+### Security Considerations {#authorization_code_flow}
+
+Browser-based applications that are public clients and use the Authorization Code grant type described in
+Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
+described in this section.
+
+In summary, browser-based applications using the Authorization Code flow:
+
+* MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
+* MUST Protect themselves against CSRF attacks ({{csrf_protection}}) by either:
+  * ensuring the authorization server supports PKCE, or
+  * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
+* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
+
+In summary, OAuth 2.0 authorization servers supporting browser-based applications using the Authorization Code flow:
+
+* MUST require exact matching of registered redirect URIs ({{auth_code_redirect}})
+* MUST support the PKCE extension ({{auth_code_request}})
+* MUST NOT issue access tokens in the authorization response ({{implicit_flow}})
+* If issuing refresh tokens to browser-based applications ({{refresh_tokens}}), then:
+  * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
+  * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
+  * when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time
+
+
+### Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
+
+Browser-based applications that are public clients MUST implement the Proof Key for Code Exchange
+(PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
+PKCE for such clients.
+
+The PKCE extension prevents an attack where the authorization code is intercepted
+and exchanged for an access token by a malicious client, by providing the
+authorization server with a way to verify the client instance that exchanges
+the authorization code is the same one that initiated the flow.
+
+
+### Authorization Code Redirect {#auth_code_redirect}
+
+Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.
+
+Authorization servers MUST require an exact match of a registered redirect URI
+as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent attacks targeting the authorization code.
+
+
+### Cross-Site Request Forgery Protections   {#csrf_protection}
+
+Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
+accomplished by any of the below:
+
+* using PKCE, and confirming that the authorization server supports PKCE
+* using a unique value for the OAuth 2.0 `state` parameter to carry a CSRF token
+* if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
+
+See Section 2.1 of {{oauth-security-topics}} for additional details.
+
+
+
+### Handling tokens in the Browsing Context
 
 If the JavaScript executing in the browsing context will be making requests directly to the resource server, the simplest mechanism is to acquire and store the tokens somewhere accessible to the JavaScript code. This will typically involve JavaScript code initiating the Authorization Code flow and exchanging the authorization code for an access token, and then storing the access token obtained. There are a number of different options for storing tokens, each with different tradeoffs, described in {{token-storage}}.
 
 This method poses a particular risk in the case of a successful XSS attack. In case of a successful XSS attack, the injected code will have full access to the stored tokens and can exfiltrate them to the attacker.
 
-### Acquiring tokens from a Service Worker {#service-worker}
+
+
+### Refresh Tokens {#refresh_tokens}
+
+Refresh tokens provide a way for applications to obtain a new access token when the
+initial access token expires. With public clients, the risk of a leaked refresh token
+is greater than leaked access tokens, since an attacker may be able to
+continue using the stolen refresh token to obtain new access tokens potentially without being
+detectable by the authorization server.
+
+Javascript-accessible storage mechanisms like _Local Storage_ provide an attacker with several opportunities by which a
+refresh token can be leaked, just as with access tokens. As such, these mechanisms
+are considered a higher risk for handling refresh tokens.
+
+Authorization servers may choose whether or not to issue refresh tokens to browser-based
+applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens
+on top of the recommendations of {{RFC6749}}. Applications and authorization servers
+conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
+around refresh tokens if refresh tokens are issued to browser-based applications.
+
+In particular, authorization servers:
+
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.14.2
+* MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
+* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
+
+For example:
+
+* A user authorizes an application, issuing an access token that lasts 1 hour, and a refresh token that lasts 24 hours
+* After 1 hour, the initial access token expires, so the application uses the refresh token to get a new access token
+* The authorization server returns a new access token that lasts 1 hour, and a new refresh token that lasts 23 hours
+* This continues until 24 hours pass from the initial authorization
+* At this point, when the application attempts to use the refresh token after 24 hours, the request will fail and the application will have to involve the user in a new authorization request
+
+By limiting the overall refresh token lifetime to the lifetime of the initial refresh token, this ensures a stolen refresh token cannot be used indefinitely.
+
+Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
+
+
+
+
+
+
+Discouraged and Deprecated Architecture Patterns
+================================================
+
+TODO: Intro text
+
+
+Single-Domain Browser-Based Apps (not using OAuth)
+--------------------------------------------------
+
+For simple system architectures, such as when the JavaScript application is served
+from a domain that can share cookies with the domain of the API (resource server) and the authorization server,
+OAuth adds additional attack vectors that could be avoided with a different solution.
+
+In particular, using any redirect-based mechanism of obtaining an access token
+enables the redirect-based attacks described in {{oauth-security-topics}} Section 4, but if
+the application, authorization server and resource server share a domain, then it is
+unnecessary to use a redirect mechanism to communicate between them.
+
+An additional concern with handling access tokens in a browser is that
+in case of successful cross-site scripting (XSS) attack, tokens could be read and further used or transmitted by the injected code if no
+secure storage mechanism is in place.
+
+As such, it could be considered to use an HTTP-only cookie between the JavaScript application
+and API so that the JavaScript code can't access the cookie value itself. The `Secure` cookie attribute should be used to ensure the cookie is not included in unencrypted HTTP requests. Additionally, the `SameSite` cookie attribute can be used to counter some CSRF attacks,
+but should not be considered the extent of the CSRF protection, as described in {{draft-ietf-httpbis-rfc6265bis}}.
+
+OAuth was originally created for third-party or federated access to APIs, so it may not be
+the best solution in a single common-domain deployment. That said, there are still some advantages
+in using OAuth even in a common-domain architecture:
+
+* Allows more flexibility in the future, such as if you were to later add a new domain to the system. With OAuth already in place, adding a new domain wouldn't require any additional rearchitecting.
+* Being able to take advantage of existing library support rather than writing bespoke code for the integration.
+* Centralizing login and multifactor authentication support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
+* Splitting of responsibilities between authenticating a user and serving resources
+
+Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described above.
+
+
+
+
+Handling tokens in a Service Worker {#service-worker}
+-----------------------------------
+
+TODO: Update the text to avoid confusion with other SW approaches, add security details
 
 In this model, a [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) is responsible for obtaining tokens from the authorization server and making requests to the resource server.
 
@@ -513,86 +590,142 @@ In case of a vulnerability leading to the Service Worker not being registered, a
 To prevent the Service Worker from being unregistered by an XSS attacker, the Service Worker registration MUST happen as first step of the application start, and before any user interaction. Starting the Service worker before the rest of the application, and the fact that [there is no way to remove a Service Worker from an active application](https://www.w3.org/TR/service-workers/#navigator-service-worker-unregister), reduces the risk of an XSS attack being able to prevent the Service Worker from being registered.
 
 
-Authorization Code Flow {#authorization_code_flow}
-=======================
 
-Browser-based applications that are public clients and use the Authorization Code grant type described in
-Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
-described in this section.
+OAuth Implicit Flow   {#implicit_flow}
+-------------------
 
+The OAuth 2.0 Implicit flow (defined in Section 4.2 of
+OAuth 2.0 {{RFC6749}}) works by the authorization server issuing an access token in the
+authorization response (front channel) without the code exchange step. In this case, the access
+token is returned in the fragment part of the redirect URI, providing an attacker
+with several opportunities to intercept and steal the access token.
 
-Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
----------------------------------------------------------------------
-
-Browser-based applications that are public clients MUST implement the Proof Key for Code Exchange
-(PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
-PKCE for such clients.
-
-The PKCE extension prevents an attack where the authorization code is intercepted
-and exchanged for an access token by a malicious client, by providing the
-authorization server with a way to verify the client instance that exchanges
-the authorization code is the same one that initiated the flow.
+Authorization servers MUST NOT issue access tokens in the authorization response, and MUST issue
+access tokens only from the token endpoint.
 
 
-Authorization Code Redirect {#auth_code_redirect}
----------------------------
+### Attacks on the Implicit Flow
 
-Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.
+Many attacks on the Implicit flow described by {{RFC6819}} and Section 4.1.2 of {{oauth-security-topics}}
+do not have sufficient mitigation strategies. The following sections describe the specific
+attacks that cannot be mitigated while continuing to use the Implicit flow.
 
-Authorization servers MUST require an exact match of a registered redirect URI
-as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent attacks targeting the authorization code.
+#### Threat: Manipulation of the Redirect URI
+
+If an attacker is able to cause the authorization response to be sent to a URI under
+their control, they will directly get access to the authorization response including the access token.
+Several methods of performing this attack are described in detail in {{oauth-security-topics}}.
+
+#### Threat: Access Token Leak in Browser History
+
+An attacker could obtain the access token from the browser's history.
+The countermeasures recommended by {{RFC6819}} are limited to using short expiration
+times for tokens, and indicating that browsers should not cache the response.
+Neither of these fully prevent this attack, they only reduce the potential damage.
+
+Additionally, many browsers now also sync browser history to cloud services and to
+multiple devices, providing an even wider attack surface to extract access tokens
+out of the URL.
+
+This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
+
+#### Threat: Manipulation of Scripts
+
+An attacker could modify the page or inject scripts into the browser through various
+means, including when the browser's HTTPS connection is being intercepted by, for
+example, a corporate network. While attacks on the TLS layer are typically out of scope
+of basic security recommendations to prevent, in the case of browser-based apps they are
+much easier to perform. An injected script can enable an attacker to have access to everything
+on the page.
+
+The risk of a malicious script running on the page may be amplified when the application
+uses a known standard way of obtaining access tokens, namely that the attacker can
+always look at the `window.location` variable to find an access token. This threat profile
+is different from an attacker specifically targeting an individual application
+by knowing where or how an access token obtained via the Authorization Code flow may
+end up being stored.
+
+#### Threat: Access Token Leak to Third-Party Scripts
+
+It is relatively common to use third-party scripts in browser-based apps, such as
+analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
+In these situations, the author of the application may not be able to be fully aware
+of the entirety of the code running in the application. When an access token is
+returned in the fragment, it is visible to any third-party scripts on the page.
+
+### Countermeasures
+
+In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
+using the Authorization Code flow with PKCE extension prevents the attacks described above by
+avoiding returning the access token in the redirect response.
+
+When PKCE is used, if an authorization code is stolen in transport, the attacker is
+unable to do anything with the authorization code.
+
+### Disadvantages of the Implicit Flow
+
+There are several additional reasons the Implicit flow is disadvantageous compared to
+using the standard Authorization Code flow.
+
+* OAuth 2.0 provides no mechanism for a client to verify that a particular access token was
+  intended for that client, which could lead to misuse and possible impersonation attacks if
+  a malicious party hands off an access token it retrieved through some other means
+  to the client.
+* Returning an access token in the front-channel redirect gives the authorization
+  server no assurance that the access token will actually end up at the
+  application, since there are many ways this redirect may fail or be intercepted.
+* Supporting the Implicit flow requires additional code, more upkeep and
+  understanding of the related security considerations. Limiting the
+  authorization server to just the Authorization Code flow reduces the attack surface
+  of the implementation.
+* If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
+  also requires the use of the Authorization Code flow with PKCE anyway.
+
+In OpenID Connect, the ID Token is sent in a known format (as a JWT), and digitally
+signed. Returning an ID token using the Implicit flow (`response_type=id_token`) requires the client
+validate the JWT signature, as malicious parties could otherwise craft and supply
+fraudulent ID tokens. Performing OpenID Connect using the Authorization Code flow provides
+the benefit of the client not needing to verify the JWT signature, as the ID token will
+have been fetched over an HTTPS connection directly from the authorization server's token endpoint. Additionally,
+in many cases an application will request both an ID token and an access token, so it is
+simplier and provides fewer attack vectors to obtain both via the Authorization Code flow.
 
 
-Cross-Site Request Forgery Protections   {#csrf_protection}
---------------------------------------
+### Historic Note
 
-Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
-accomplished by any of the below:
+Historically, the Implicit flow provided an advantage to browser-based apps since
+JavaScript could always arbitrarily read and manipulate the fragment portion of the
+URL without triggering a page reload. This was necessary in order to remove the
+access token from the URL after it was obtained by the app. Additionally, until
+Cross Origin Resource Sharing (CORS) was widespread in browsers, the Implicit flow
+offered an alternative flow that didn't require CORS support in the browser or on the server.
 
-* using PKCE, and confirming that the authorization server supports PKCE
-* using a unique value for the OAuth 2.0 `state` parameter to carry a CSRF token
-* if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
+Modern browsers now have the Session History API (described in "Session history and
+navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
+component of the URL without triggering a page reload. Additionally, CORS has widespread
+support and is often used by single-page apps for many purposes. This means modern browser-based apps can
+use the unmodified OAuth 2.0 Authorization Code flow, since they have the ability to
+remove the authorization code from the query string without triggering a page reload
+thanks to the Session History API, and CORS support at the token endpoint means the
+app can obtain tokens even if the authorization server is on a different domain.
 
-See Section 2.1 of {{oauth-security-topics}} for additional details.
 
 
+Resource Owner Password Grant
+-----------------------------
 
-Refresh Tokens {#refresh_tokens}
-==============
+The Resource Owner Password Credentials Grant MUST NOT be used, as described in
+{{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code flow
+and redirecting the user to the authorization server,
+this provides the authorization server the opportunity to prompt the user for
+secure non-phishable authentication options, take advantage of single sign-on sessions,
+or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
+provide any built-in mechanism for these, and would instead need to be extended with custom protocols.
 
-Refresh tokens provide a way for applications to obtain a new access token when the
-initial access token expires. With public clients, the risk of a leaked refresh token
-is greater than leaked access tokens, since an attacker may be able to
-continue using the stolen refresh token to obtain new access tokens potentially without being
-detectable by the authorization server.
+To conform to this best practice, browser-based applications using OAuth or OpenID
+Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
+as described in this document.
 
-Javascript-accessible storage mechanisms like _Local Storage_ provide an attacker with several opportunities by which a
-refresh token can be leaked, just as with access tokens. As such, these mechanisms
-are considered a higher risk for handling refresh tokens.
-
-Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. {{oauth-security-topics}} describes some additional requirements around refresh tokens
-on top of the recommendations of {{RFC6749}}. Applications and authorization servers
-conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
-around refresh tokens if refresh tokens are issued to browser-based applications.
-
-In particular, authorization servers:
-
-* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.14.2
-* MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
-* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
-
-For example:
-
-* A user authorizes an application, issuing an access token that lasts 1 hour, and a refresh token that lasts 24 hours
-* After 1 hour, the initial access token expires, so the application uses the refresh token to get a new access token
-* The authorization server returns a new access token that lasts 1 hour, and a new refresh token that lasts 23 hours
-* This continues until 24 hours pass from the initial authorization
-* At this point, when the application attempts to use the refresh token after 24 hours, the request will fail and the application will have to involve the user in a new authorization request
-
-By limiting the overall refresh token lifetime to the lifetime of the initial refresh token, this ensures a stolen refresh token cannot be used indefinitely.
-
-Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
 
 
 Token Storage in the Browser {#token-storage}
@@ -803,123 +936,7 @@ strong Content Security Policy can limit the potential attack vectors for malici
 JavaScript to be executed on the page.
 
 
-OAuth Implicit Flow   {#implicit_flow}
--------------------
 
-The OAuth 2.0 Implicit flow (defined in Section 4.2 of
-OAuth 2.0 {{RFC6749}}) works by the authorization server issuing an access token in the
-authorization response (front channel) without the code exchange step. In this case, the access
-token is returned in the fragment part of the redirect URI, providing an attacker
-with several opportunities to intercept and steal the access token.
-
-Authorization servers MUST NOT issue access tokens in the authorization response, and MUST issue
-access tokens only from the token endpoint.
-
-
-### Attacks on the Implicit Flow
-
-Many attacks on the Implicit flow described by {{RFC6819}} and Section 4.1.2 of {{oauth-security-topics}}
-do not have sufficient mitigation strategies. The following sections describe the specific
-attacks that cannot be mitigated while continuing to use the Implicit flow.
-
-#### Threat: Manipulation of the Redirect URI
-
-If an attacker is able to cause the authorization response to be sent to a URI under
-their control, they will directly get access to the authorization response including the access token.
-Several methods of performing this attack are described in detail in {{oauth-security-topics}}.
-
-#### Threat: Access Token Leak in Browser History
-
-An attacker could obtain the access token from the browser's history.
-The countermeasures recommended by {{RFC6819}} are limited to using short expiration
-times for tokens, and indicating that browsers should not cache the response.
-Neither of these fully prevent this attack, they only reduce the potential damage.
-
-Additionally, many browsers now also sync browser history to cloud services and to
-multiple devices, providing an even wider attack surface to extract access tokens
-out of the URL.
-
-This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
-
-#### Threat: Manipulation of Scripts
-
-An attacker could modify the page or inject scripts into the browser through various
-means, including when the browser's HTTPS connection is being intercepted by, for
-example, a corporate network. While attacks on the TLS layer are typically out of scope
-of basic security recommendations to prevent, in the case of browser-based apps they are
-much easier to perform. An injected script can enable an attacker to have access to everything
-on the page.
-
-The risk of a malicious script running on the page may be amplified when the application
-uses a known standard way of obtaining access tokens, namely that the attacker can
-always look at the `window.location` variable to find an access token. This threat profile
-is different from an attacker specifically targeting an individual application
-by knowing where or how an access token obtained via the Authorization Code flow may
-end up being stored.
-
-#### Threat: Access Token Leak to Third-Party Scripts
-
-It is relatively common to use third-party scripts in browser-based apps, such as
-analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
-In these situations, the author of the application may not be able to be fully aware
-of the entirety of the code running in the application. When an access token is
-returned in the fragment, it is visible to any third-party scripts on the page.
-
-### Countermeasures
-
-In addition to the countermeasures described by {{RFC6819}} and {{oauth-security-topics}},
-using the Authorization Code flow with PKCE extension prevents the attacks described above by
-avoiding returning the access token in the redirect response.
-
-When PKCE is used, if an authorization code is stolen in transport, the attacker is
-unable to do anything with the authorization code.
-
-### Disadvantages of the Implicit Flow
-
-There are several additional reasons the Implicit flow is disadvantageous compared to
-using the standard Authorization Code flow.
-
-* OAuth 2.0 provides no mechanism for a client to verify that a particular access token was
-  intended for that client, which could lead to misuse and possible impersonation attacks if
-  a malicious party hands off an access token it retrieved through some other means
-  to the client.
-* Returning an access token in the front-channel redirect gives the authorization
-  server no assurance that the access token will actually end up at the
-  application, since there are many ways this redirect may fail or be intercepted.
-* Supporting the Implicit flow requires additional code, more upkeep and
-  understanding of the related security considerations. Limiting the
-  authorization server to just the Authorization Code flow reduces the attack surface
-  of the implementation.
-* If the JavaScript application gets wrapped into a native app, then {{RFC8252}}
-  also requires the use of the Authorization Code flow with PKCE anyway.
-
-In OpenID Connect, the ID Token is sent in a known format (as a JWT), and digitally
-signed. Returning an ID token using the Implicit flow (`response_type=id_token`) requires the client
-validate the JWT signature, as malicious parties could otherwise craft and supply
-fraudulent ID tokens. Performing OpenID Connect using the Authorization Code flow provides
-the benefit of the client not needing to verify the JWT signature, as the ID token will
-have been fetched over an HTTPS connection directly from the authorization server's token endpoint. Additionally,
-in many cases an application will request both an ID token and an access token, so it is
-simplier and provides fewer attack vectors to obtain both via the Authorization Code flow.
-
-
-### Historic Note
-
-Historically, the Implicit flow provided an advantage to browser-based apps since
-JavaScript could always arbitrarily read and manipulate the fragment portion of the
-URL without triggering a page reload. This was necessary in order to remove the
-access token from the URL after it was obtained by the app. Additionally, until
-Cross Origin Resource Sharing (CORS) was widespread in browsers, the Implicit flow
-offered an alternative flow that didn't require CORS support in the browser or on the server.
-
-Modern browsers now have the Session History API (described in "Session history and
-navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
-component of the URL without triggering a page reload. Additionally, CORS has widespread
-support and is often used by single-page apps for many purposes. This means modern browser-based apps can
-use the unmodified OAuth 2.0 Authorization Code flow, since they have the ability to
-remove the authorization code from the query string without triggering a page reload
-thanks to the Session History API, and CORS support at the token endpoint means the
-app can obtain tokens even if the authorization server is on a different domain.
 
 
 Additional Security Considerations
