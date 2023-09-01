@@ -26,6 +26,12 @@ author:
     name: David Waite
     org: Ping Identity
     email: david@alkaline-solutions.com
+  -
+    ins: P. De Ryck
+    name: Philippe De Ryck
+    org: Pragmatic Web Security
+    email: philippe@pragmaticwebsecurity.com
+
 
 normative:
   RFC2119:
@@ -986,6 +992,13 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-latest
+
+* Consolidated guidelines for public JS clients in a single section
+* Added more focus on best practices at the start of the document
+* Restructured document to have top-level recommended and discouraged architecture patterns
+* Added Philippe De Ryck as an author
+
 -14
 
 * Minor editorial fixes and clarifications
@@ -1107,8 +1120,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
 George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
-Philippe De Ryck, Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt,
-Vittorio Bertocci and Yannick Majoros.
+Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 
 --- fluff
