@@ -241,9 +241,9 @@ This scenario covers a simple token exfiltration attack, where the attacker obta
 - Send the tokens to a server controlled by the attacker
 - Store/abuse the stolen tokens
 
-The recommended defensive strategy to protect access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism.
+The recommended defensive strategy to protect access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism. Sender-constrained tokens ({{sender-constrained-tokens}}) offer an additional layer of protection against stolen access tokens.
 
-Finally, note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. Unfortunately, it significantly underestimates the capabilities of a sophisticated and motivated attacker.
+Note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. Unfortunately, it significantly underestimates the capabilities of a sophisticated and motivated attacker.
 
 
 ### Persistent Token Theft {#payload-persistent-theft}
@@ -252,14 +252,14 @@ This attack scenario is a more advanced variation on the Single-Execution Token 
 
 - Execute malicious JS code
 - Setup a continuous token theft mechanism (e.g., on a 10-second time interval)
-	- Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
-	- Send the tokens to a server controlled by the attacker
-	- Store the tokens
+	  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
+	  - Send the tokens to a server controlled by the attacker
+	  - Store the tokens
 - Wait until the opportune moment to abuse the latest version of the stolen tokens
 
 The crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the payload already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.
 
-For access tokens, the attacker now obtains the latest access token for as long as the user's browser is online. For refresh tokens, the implication is that refresh token rotation is not sufficient to prevent abuse of a refresh token. An attacker can easily wait until the user closes the application or their browser goes offline before using the latest refresh token, thereby ensuring that the latest refresh token is not reused.
+For access tokens, the attacker now obtains the latest access token for as long as the user's browser is online. Refresh token rotation is not sufficient to prevent abuse of a refresh token. An attacker can easily wait until the user closes the application or their browser goes offline before using the latest refresh token, thereby ensuring that the latest refresh token is not reused.
 
 
 
@@ -279,20 +279,20 @@ The most important takeaway from this scenario is that it runs a new OAuth flow 
 
 This attack scenario is possible because the security of public browser-based OAuth 2.0 clients relies entirely on the redirect URI and application's origin. When the attacker can execute malicious JavaScript code in the application's execution context, they effectively control the application's origin, and by extension, the redirect URI. This attack scenario uses a silent iframe-based flow, which is the same mechanism most browser-based apps use to bootstrap their authentication state. Since the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
 
-There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Additionally, authorization server behavior that would force every Authorization Code flow to require user interaction would significantly impact widely-established patterns, such as silently bootstrapping an application with tokens, or Single Sign-On across multiple related applications.
+There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as silently bootstrapping an application on first page load, or single sign-on across multiple related applications, and is not a practical measure.
 
 
 
 ### Proxying Requests via the User's Browser {#payload-proxy}
 
-This attack scenario takes a different approach. Instead of abusing the application to obtain tokens, the attacker will send requests directly from within the OAuth client application running in the user's browser. The requests sent by the attacker are indistinguishable from requests sent by the legitimate application. This scenario consists of the following steps:
+This attack scenario involves the attacker sending requests to the resource server directly from within the OAuth client application running in the user's browser. In this scenario, there is no need for the attacker to abuse the application to obtain tokens, since the browser will include its own cookies or tokens along in the request. The requests to the resource server sent by the attacker are indistinguishable from requests sent by the legitimate application, since the attacker is running code in the same context as the legitimate application. This scenario consists of the following steps:
 
 - Execute malicious JS code
 - Send a request to a resource server and process the response
 
 To authorize the requests to the resource server, the attacker simply mimics the behavior of the client application. For example, when a client application programmatically attaches an access token to outgoing requests, the attacker does the same. Should the client application rely on an external component to augment the request with the proper access token, then this external component will also augment the attacker's request.
 
-This attack pattern is well-known and also occurs with traditional applications using HttpOnly session cookies. It is commonly accepted that this scenario cannot be stopped or prevented by application-level security measures. For example, the DPoP specification ({{DPoP}}) explicitly considers this attack scenario to be out of scope.
+This attack pattern is well-known and also occurs with traditional applications using `HttpOnly` session cookies. It is commonly accepted that this scenario cannot be stopped or prevented by application-level security measures. For example, the DPoP specification ({{DPoP}}) explicitly considers this attack scenario to be out of scope.
 
 
 
@@ -306,7 +306,7 @@ Successful execution of a malicious payload can result in the theft of access to
 
 When the attacker obtains a valid refresh token from a browser-based OAuth client, they can abuse the refresh token by running a Refresh Token flow with the authorization server. The response of the Refresh Token flow contains an access token, which gives the attacker the ability to access protected resources (See {{consequence-at}}). In essence, abusing a stolen refresh token enables long-term impersonation of the user to resource servers.
 
-The attack is only stopped when the authorization server refuses a refresh token for expiration reasons, or when the refresh token is revoked. In a typical browser-based OAuth client, it is not uncommon for a refresh token to remain valid for multiple hours, or even days.
+The attack is only stopped when the authorization server refuses a refresh token because it has expired or rotated, or when the refresh token is revoked. In a typical browser-based OAuth client, it is not uncommon for a refresh token to remain valid for multiple hours, or even days.
 
 
 
@@ -318,7 +318,7 @@ The attack ends when the access token expires or when a token is revoked with th
 
 Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.
 
-The application can use DPoP to ensure its access tokens are bound to non-exportable key linked to the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the {{DPoP}} specification. Additionally, when the attacker obtains a fresh set of tokens, as described in {{payload-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled secret. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
+The application can use DPoP to ensure its access tokens are bound to non-exportable key linked to the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the {{DPoP}} specification. Additionally, when the attacker obtains a fresh set of tokens, as described in {{payload-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled private key. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
 
 
 
@@ -1352,7 +1352,7 @@ Sender-Constrained Tokens {#sender-constrained-tokens}
 
 As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend (Section {{pattern-tmb}}) or a browser-only OAuth client (Section {{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is {{DPoP}}.
 
-When using sender-constrained tokens, the Oauth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
+When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
 
 If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCrypto}} API. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
