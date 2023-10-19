@@ -54,7 +54,7 @@ normative:
       org: Google LLC
     - name: J. Wilander
       org: Apple, Inc
-    CookiePrefixes:
+  CookiePrefixes:
     title: Using HTTP cookies
     author:
     - name: MDN Contributors
@@ -468,7 +468,7 @@ This defense is adequate if the BFF is never considered to be same-site with any
 For example, subdomains, such as  `https://a.example.com` and `https://b.example.com`, are considered same-site, since they share the same site `example.com`. They are considered cross-origin, since origins consist of the tuple *<scheme, host, port>*. As a result, a subdomain takeover attack against `b.example.com` can enable CSRF attacks against the BFF of `a.example.com`. Technically, this attack should be identified as a "Same-Site But Cross-Origin Request Forgery" attack.
 
 
-##### Cross-Origin Resource Sharing (CORS)
+##### Cross-Origin Resource Sharing (CORS) {#cors}
 
 The BFF can rely on CORS as a CSRF defense mechanism. CORS is a security mechanism implemented by browsers that restricts cross-origin JavaScript-based requests, unless the server explicitly approves such a request by setting the proper CORS headers.
 
@@ -490,7 +490,7 @@ Finally, note that the JavaScript application is often deployed on the same-orig
 All OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications are more powerful than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.
 
 
-## Threat Analysis
+### Threat Analysis
 
 This section revisits the payloads and consequences from section {{threats}}, and discusses potential additional defenses.
 
@@ -579,7 +579,7 @@ In this architecture, the JavaScript code is first loaded from a static web host
 
 When no active session is found, the JavaScript application calls out to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in {{pattern-tmb-flow}}), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client secret and PKCE code verifier.
 
-The token-mediating backend associates the obtained tokens with the user's session (See {{pattern-tmb-session}}) and includes the relevant information in a cookie that is included in the response to the browser (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the JavaScript application to resume its authenticated state and obtain the access token from the token-mediating backend.
+The token-mediating backend associates the obtained tokens with the user's session (See {{pattern-tmb-sessions}}) and includes the relevant information in a cookie that is included in the response to the browser (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the JavaScript application to resume its authenticated state and obtain the access token from the token-mediating backend.
 
 The JavaScript application in the browser can use the access token obtained in step I to directly make requests to the resource server (J).
 
@@ -650,7 +650,7 @@ The token-mediating backend is a confidential client running as a server-side co
 
 
 
-## Threat Analysis
+### Threat Analysis
 
 This section revisits the payloads and consequences from section {{threats}}, and discusses potential additional defenses.
 
@@ -690,7 +690,7 @@ While this architecture inherently exposes access tokens, there are some additio
 
 ##### Secure Token Storage
 
-Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed ,the application can always use its cookie-based session to obtain an access token from the token-mediating backend. Section {{token_storage}} provides more details on the security properties of various storage mechanisms in the browser.
+Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed ,the application can always use its cookie-based session to obtain an access token from the token-mediating backend. Section {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
 
 Note that even when the access token is stored out of reach of malicious JavaScript code, the attacker still has the ability to request the access token from the token-mediating backend.
 
@@ -944,7 +944,7 @@ While this architecture is inherently vulnerable to malicious JavaScript code, t
 
 ##### Secure Token Storage
 
-When handling tokens directly, the application can choose different storage mechanisms to handle access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage*, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker*. Section {{token_storage}} discusses different storage mechanisms with their trade-off in more detail.
+When handling tokens directly, the application can choose different storage mechanisms to handle access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage*, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker*. Section {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
 
 A practical implementation pattern can use a Web Worker to isolate the refresh token, and provide the application with the access token making requests to resource servers.
 
@@ -1339,7 +1339,7 @@ When using sender-constrained tokens, the Oauth client has to prove possession o
 
 If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCrypto}} API. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
-If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token_storage}}.
+If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
 While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the {{WebCrypto}} API that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
 
