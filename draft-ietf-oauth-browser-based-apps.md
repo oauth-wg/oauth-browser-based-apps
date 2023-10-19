@@ -420,7 +420,7 @@ Best practices to secure the session cookie are discussed in section {{pattern-b
 
 #### Combining OAuth and OpenID Connect {#pattern-bff-oidc}
 
-The OAuth flow used by this application architecture can be combined with OpenID Connect by including the proper scopes in the authorization request (C). In that case, the BFF will receive an identity token in step F. The BFF can associate the information from the identity token with the user's session and provide it to the JavaScript application in step B or I.
+The OAuth flow used by this application architecture can be combined with OpenID Connect by including the proper scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the JavaScript application in step B or I.
 
 When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.
 
@@ -1344,7 +1344,7 @@ A general security best practice in the OAuth world is to minimize the authority
 * Reduce the scopes or permissions associated with the access token
 * Use {{RFC8707}} to restrict access tokens to a single resource
 
-When OpenID Connect is used, it is important to avoid sensitive information disclosure through the claims in the identity token. The authorization server SHOULD NOT include any ID token claims that aren't used by the client.
+When OpenID Connect is used, it is important to avoid sensitive information disclosure through the claims in the ID Token. The authorization server SHOULD NOT include any ID token claims that aren't used by the client.
 
 
 Sender-Constrained Tokens {#sender-constrained-tokens}
