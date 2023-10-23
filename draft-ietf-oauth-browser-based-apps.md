@@ -402,16 +402,16 @@ When the JavaScript application in the browser wants to make a request to the re
 
 It is recommended to use both access tokens and refresh tokens, as it enables access tokens to be short-lived and minimally scoped (e.g., using {{RFC8707}}). When using refresh tokens, the BFF obtains the refresh token in step F and associates it with the user's session.
 
-If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can run a Refresh Token flow to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this Refresh Token flow involves a confidential client, thus requires client authentication.
+If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can run a Refresh Token flow to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the Refresh Token request.
 
 When the refresh token expires, there is no way to recover without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
 
 #### Cookie-based Session Management {#pattern-bff-sessions}
 
-The BFF relies on traditional browser cookies to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, are often thought of as problematic.
+The BFF relies on traditional browser cookies to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.
 
-Server-side sessions only expose a session identifier and keep all data on the server. Doing so ensures a great level of control over active sessions, along with the possibility to revoke any session at will. The downside of this approach is the impact on scalability, requiring solutions such as sticky sessions, or session replication. Given these downsides, using server-side sessions with a BFF is only recommended in small-scale scenarios.
+Server-side sessions only expose a session identifier and keep all data on the server. Doing so ensures a great level of control over active sessions, along with the possibility to revoke any session at will. The downside of this approach is the impact on scalability, requiring solutions such as "sticky sessions", or "session replication". Given these downsides, using server-side sessions with a BFF is only recommended in small-scale scenarios.
 
 Client-side sessions push all data to the browser in a signed, and optionally encrypted, object. This pattern absolves the server of keeping track of any session data, but severely limits control over active sessions and makes it difficult to handle session revocation. However, when client-side sessions are used in the context of a BFF, these properties change significantly. Since the cookie-based session is only used to obtain a user's tokens, all control and revocation properties follow from the use of access tokens and refresh tokens. It suffices to revoke the user's access token and/or refresh token to prevent ongoing access to protected resources, without the need to explicitly invalidate the cookie-based session.
 
@@ -420,7 +420,7 @@ Best practices to secure the session cookie are discussed in section {{pattern-b
 
 #### Combining OAuth and OpenID Connect {#pattern-bff-oidc}
 
-The OAuth flow used by this application architecture can be combined with OpenID Connect by including the proper scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the JavaScript application in step B or I.
+The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the JavaScript application in step B or I.
 
 When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.
 
@@ -478,7 +478,7 @@ For example, subdomains, such as  `https://a.example.com` and `https://b.example
 
 The BFF can rely on CORS as a CSRF defense mechanism. CORS is a security mechanism implemented by browsers that restricts cross-origin JavaScript-based requests, unless the server explicitly approves such a request by setting the proper CORS headers.
 
-CORS is designed in such a way that every JavaScript-based request that does not mimic a legacy browser interaction, such as a navigation or image load, requires approval by the server through a preflight. Unless the preflight response explicitly approves the request, the browser will refuse to send it.
+Browsers typically restrict cross-origin HTTP requests initiated from scripts. CORS can remove this restriction if the target server approves the request, which is checked through an initial "preflight" request. Unless the preflight response explicitly approves the request, the browser will refuse to send the full request.
 
 Because of this property, the BFF can rely on CORS as a CSRF defense. When the attacker tries to launch a cross-origin request to the BFF from the user's browser, the BFF will not approve the request in the preflight response, causing the browser to block the actual request. Note that the attacker can always launch the request from their own machine, but then the request will not carry the user's cookies, so the attack will fail.
 
@@ -488,12 +488,12 @@ The consequence of this behavior is that certain endpoints of the resource serve
 
 To avoid such bypasses against the CORS policy, the BFF SHOULD require that every request includes a custom request header. Cross-origin requests with a custom request header always require a preflight, which makes CORS an effective CSRF defense. Implementing this mechanism is as simple as requiring every request to have a static request header, such as `X-CORS-Security: 1`.
 
-Finally, note that the JavaScript application is often deployed on the same-origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
+It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
 
 
 #### Advanced Security
 
-All OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications are more powerful than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.
+In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications are more powerful than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.
 
 
 ### Threat Analysis
@@ -603,7 +603,7 @@ Editor's Note: A method of implementing this architecture is described by the {{
 
 It is recommended to use both access tokens and refresh tokens, as it enables access tokens to be short-lived and minimally scoped (e.g., using {{RFC8707}}). When using refresh tokens, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.
 
-If the JavaScript application notices that the user's access token has expired, it can contact the token-mediating backend to request a fresh access token. The token-mediating backend relies on the cookies associated with this request to obtain the user's refresh token and run a Refresh Token flow. These steps are not shown in the diagram. Note that this Refresh Token flow involves a confidential client, thus requires client authentication.
+If the JavaScript application notices that the user's access token has expired, it can contact the token-mediating backend to request a fresh access token. The token-mediating backend relies on the cookies associated with this request to use the user's refresh token to run a Refresh Token flow. These steps are not shown in the diagram. Note that this Refresh Token flow involves a confidential client, thus requires client authentication.
 
 When the refresh token expires, there is no way to recover without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
@@ -614,7 +614,7 @@ Depending on the resource servers being accessed and the configuration of scopes
 
 The JavaScript application can inform the token-mediating backend of the desired scopes when it checks for the active session (Step A/I). It is up to the token-mediating backend to decide if previously obtained access tokens fall within the desired scope criteria.
 
-It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead it SHOULD use the refresh token to request an access token with the smaller set of scopes from  the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.
+It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.
 
 The token-mediating backend can use a similar mechanism to downscoping when relying on {{RFC8707}} to obtain access token for a specific resource server.
 
@@ -631,7 +631,7 @@ Similar to a BFF, the token-mediating backend can choose to combine OAuth and Op
 
 #### Practical Deployment Scenarios
 
-Serving the static JavaScript code is a separate responsibility from handling interactions with the authorization server. In the diagram presented above, the token-mediating backend and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the token-mediating backend serving the static JS code), as two separate services (i.e., a CDN and a token-mediating backend), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).
+Serving the static JavaScript code is a separate responsibility from handling interactions with the authorization server. In the diagram presented above, the token-mediating backend and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the token-mediating backend serving the static JS code), as two separate services (i.e., a CDN and a token-mediating backend), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform). These deployment differences do not affect the relationships described in this pattern.
 
 
 
@@ -704,7 +704,7 @@ While this architecture inherently exposes access tokens, there are some additio
 
 ##### Secure Token Storage
 
-Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed ,the application can always use its cookie-based session to obtain an access token from the token-mediating backend. Section {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
+Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. Section {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
 
 Note that even when the access token is stored out of reach of malicious JavaScript code, the attacker still has the ability to request the access token from the token-mediating backend.
 
@@ -785,7 +785,7 @@ In summary, browser-based applications using the Authorization Code flow:
 * MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
 * MUST Protect themselves against CSRF attacks ({{pattern-oauth-browser-csrf}}) by either:
   * ensuring the authorization server supports PKCE, or
-  * by using the OAuth 2.0 "state" parameter or the OpenID Connect "nonce" parameter to carry one-time use CSRF tokens
+  * by using the OAuth 2.0 `state` parameter or the OpenID Connect `nonce` parameter to carry one-time use CSRF tokens
 * MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
 
 
@@ -837,7 +837,7 @@ multiple users should not be treated as confidential secrets, as one
 user may inspect their copy and learn the shared secret.  For this
 reason, and those stated in Section 5.3.1 of {{RFC6819}}, it is NOT RECOMMENDED
 for authorization servers to require client authentication of browser-based
-applications using a shared secret, as this serves little value beyond
+applications using a shared secret, as this serves no value beyond
 client identification which is already provided by the `client_id` parameter.
 
 Authorization servers that still require a statically included shared
@@ -964,14 +964,14 @@ When handling tokens directly, the application can choose different storage mech
 
 A practical implementation pattern can use a Web Worker to isolate the refresh token, and provide the application with the access token making requests to resource servers.
 
-Note that even the perfect token storage mechanism does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{payload-new-flow}}).
+Note that even a perfect token storage mechanism does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{payload-new-flow}}).
 
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth 2.0 clients can implement {{DPoP}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser and cannot be extracted. As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the applications tokens (See {{payload-single-theft}} and {{payload-persistent-theft}}).
+Browser-based OAuth 2.0 clients can implement {{DPoP}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser and cannot be extracted. As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{payload-single-theft}} and {{payload-persistent-theft}}).
 
-Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{payload-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, effectively allowing them to calculate the necessary DPoP proofs.
+Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{payload-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to calculate the necessary DPoP proofs to use the tokens.
 
 
 ##### Restricting Access to the Authorization Server
@@ -980,9 +980,9 @@ The scenario where the attacker obtains a fresh set of tokens (See {{payload-new
 
 For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.
 
-The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from section {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
+The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from section {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
-The authorization server could opt to make user consent mandatory in every Authorization Code flow, thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
+The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
 
 
 #### Summary
@@ -997,7 +997,7 @@ This architecture is not recommended for business applications, sensitive applic
 Discouraged and Deprecated Architecture Patterns
 ================================================
 
-Client applications and backend applications have evolved quite a bit over the last two decades, along with threats, attacker models, and our understanding of modern application security. As a result, previous recommendations are often no longer recommended and proposed solutions often fall short of meeting the expected security requirements.
+Client applications and backend applications have evolved significantly over the last two decades, along with threats, attacker models, and our understanding of modern application security. As a result, previous recommendations are often no longer recommended and proposed solutions often fall short of meeting the expected security requirements.
 
 This section discusses a few alternative architecture patterns, which are not recommended for use in modern browser-based OAuth applications. This section discusses each of the patterns, along with a threat analysis that investigates the attack payloads and consequences when relevant.
 
@@ -1008,7 +1008,7 @@ Single-Domain Browser-Based Apps (not using OAuth)
 
 Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.
 
-In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simply the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session management to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in section {{pattern-bff-cookie-security}}.
+In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simplify the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session management to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in section {{pattern-bff-cookie-security}}.
 
 While the advice to not use OAuth seems out-of-place in this document, it is important to note that OAuth was originally created for third-party or federated access to APIs, so it may not be the best solution in a single common-domain deployment. That said, there are still some advantages in using OAuth even in a common-domain architecture:
 
@@ -1167,7 +1167,7 @@ or use third-party identity providers. In contrast, the Resource Owner Password 
 provide any built-in mechanism for these, and would instead need to be extended with custom protocols.
 
 To conform to this best practice, browser-based applications using OAuth or OpenID
-Connect MUST use a redirect-based flow (such as the OAuth Authorization Code flow)
+Connect MUST use a redirect-based flow (e.g. the OAuth Authorization Code flow)
 as described in this document.
 
 
@@ -1372,7 +1372,7 @@ at least two authorization servers. To conform to this BCP such clients MUST app
 countermeasures to defend against mix-up attacks.
 
 It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
-of the authorization response. This can be achieved either by using the "iss" response
+of the authorization response. This can be achieved either by using the `iss` response
 parameter, as defined in {{RFC9207}}, or by using the `iss` claim of the ID token
 when using OpenID Connect.
 
@@ -1424,7 +1424,7 @@ Document History
 
 [[ To be removed from the final specification ]]
 
--latest
+-15
 
 * Consolidated guidelines for public JS clients in a single section
 * Added more focus on best practices at the start of the document
