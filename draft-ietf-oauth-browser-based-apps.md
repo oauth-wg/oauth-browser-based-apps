@@ -1399,7 +1399,7 @@ In browser-based apps, it is common to execute the OAuth flow in a secondary win
 In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
 
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
-To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage have to be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
+To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
 
 Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
 
