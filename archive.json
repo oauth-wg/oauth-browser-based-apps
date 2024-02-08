@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-06T00:33:59.701021+00:00",
+  "timestamp": "2024-02-08T00:34:07.164097+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -367,6 +367,22 @@
           "updatedAt": "2023-11-21T16:04:06Z"
         }
       ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOCUe3lM5-gK-_",
+      "title": "6.1.3.2 Question: benefits of encrypting cookie contents in BFF security",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/31",
+      "state": "OPEN",
+      "author": "nike61",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I was unable to find an explanation for the following point:\r\n_Additionally, the BFF SHOULD encrypt its cookie contents, to ensure that tokens stored in cookies are never written to disk in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see Section 8)._\r\n\r\nWhat is the advantage of encrypting cookies? If a malicious actor steals the cookie as plain text, couldn't they just send the entire cookie in a request?",
+      "createdAt": "2024-02-07T07:30:57Z",
+      "updatedAt": "2024-02-07T07:37:50Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -1736,7 +1752,7 @@
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/30",
       "state": "OPEN",
       "author": "panva",
-      "authorAssociation": "NONE",
+      "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "This is still a WIP but feel free to comment as I go along.",
