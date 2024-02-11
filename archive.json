@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-08T00:34:07.164097+00:00",
+  "timestamp": "2024-02-11T00:37:17.385297+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1755,21 +1755,162 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "This is still a WIP but feel free to comment as I go along.",
+      "body": "A followup review with suggestions as requested at IETF 118",
       "createdAt": "2024-01-16T21:18:24Z",
-      "updatedAt": "2024-01-16T21:18:24Z",
+      "updatedAt": "2024-02-09T14:02:06Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
       "headRepository": "panva/oauth-browser-based-apps",
       "headRefName": "filip-review",
-      "headRefOid": "4d030d54c12208a4b145d1f36eb055b8daf42a9d",
+      "headRefOid": "d015b2d809cde58a32e2e8dae0ffbad32dd14b33",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5vlVzp",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:18:47Z",
+          "updatedAt": "2024-02-09T10:18:47Z",
+          "comments": [
+            {
+              "originalPosition": 66,
+              "body": "Note: flows may be referred to as silent, iframes in such flows OTOH are hidden",
+              "createdAt": "2024-02-09T10:18:47Z",
+              "updatedAt": "2024-02-09T10:18:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlWfN",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:20:24Z",
+          "updatedAt": "2024-02-09T10:20:24Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "Note: we cannot say this pattern exlusively uses client_secret based flows, it may also use private key jwt or mtls.",
+              "createdAt": "2024-02-09T10:20:24Z",
+              "updatedAt": "2024-02-09T10:20:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlX35",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:23:47Z",
+          "updatedAt": "2024-02-09T10:23:47Z",
+          "comments": [
+            {
+              "originalPosition": 135,
+              "body": "there is no interoperable mechanism for signalling refresh token expiration, it may be known or disclosed but we cannot say that all clients know how long their refresh tokens will survive",
+              "createdAt": "2024-02-09T10:23:47Z",
+              "updatedAt": "2024-02-09T10:23:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlZKN",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:26:53Z",
+          "updatedAt": "2024-02-09T10:26:53Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "I would actually suggest to include a guideline here which is to\r\n\r\n- have Origin allow-list pre-registerable or even required for browser based applications\r\n- implement preflights that are wildcard and/or limited\r\n- figure out the client_id from the actual request (client_id in body, aud/azp in tokens) and check the origin matches one that is pre-registered, otherwise error the response and/or remove the actual responses' CORS headers to have the browser hide the response properties.",
+              "createdAt": "2024-02-09T10:26:53Z",
+              "updatedAt": "2024-02-09T10:26:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlaMz",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:29:20Z",
+          "updatedAt": "2024-02-09T10:29:20Z",
+          "comments": [
+            {
+              "originalPosition": 189,
+              "body": "If we don't mention the intended way to persist non-extractable CryptoKey instances a developer will realize they can't serialize the non-extractable key and resolve into making it extractable and subsequently just serializing it to JWK and store it using other storage mechanisms.\r\n\r\nUsing IndexedDB and non-extractable CryptoKey has at least the benefit of not allowing the CryptoKey to be exfiltrated by an online attack.\r\n\r\nYes it's still vulnerable to reading the serialized data off disk but that's a different vector.",
+              "createdAt": "2024-02-09T10:29:20Z",
+              "updatedAt": "2024-02-09T10:29:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlaeK",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:29:59Z",
+          "updatedAt": "2024-02-09T10:29:59Z",
+          "comments": [
+            {
+              "originalPosition": 207,
+              "body": "Note: we're not using unmodified, we require the PKCE extension to be used.",
+              "createdAt": "2024-02-09T10:29:59Z",
+              "updatedAt": "2024-02-09T10:29:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vm7lb",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T14:02:06Z",
+          "updatedAt": "2024-02-09T14:02:06Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "Note: the javascript application has no way of determining the access token is *expired* given the only reliable information it would get is a www-authenticate header with an error=invalid_token property, the optional error_description may include this detail but should not be relied on because of its free form unstructured contents.",
+              "createdAt": "2024-02-09T14:02:06Z",
+              "updatedAt": "2024-02-09T14:02:06Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
