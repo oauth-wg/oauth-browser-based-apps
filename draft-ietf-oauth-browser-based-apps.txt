@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 25 April 2024                                     Ping Identity
+Expires: 16 August 2024                                    Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                         23 October 2023
+                                                        13 February 2024
 
 
                     OAuth 2.0 for Browser-Based Apps
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2024.
+   This Internet-Draft will expire on 16 August 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -151,7 +151,7 @@ Table of Contents
    Many of these recommendations are derived from the OAuth 2.0 Security
    Best Current Practice [oauth-security-topics] and browser-based apps
    are expected to follow those recommendations as well.  This document
-   expands on and further restricts various recommendations in
+   expands on and further restricts various recommendations given in
    [oauth-security-topics].
 
 2.  Notational Conventions
@@ -174,10 +174,11 @@ Table of Contents
       JavaScript.  Also sometimes referred to as a "single-page
       application", or "SPA".
 
-   While this document often refers to "JavaScript apps", this is not
-   intended to be exclusive to the JavaScript language.  The
+   While this document often refers to "JavaScript applications", this
+   is not intended to be exclusive to the JavaScript language.  The
    recommendations and considerations herein also apply to other
-   languages that execute code in the browser, such as Web Assembly.
+   languages that execute code in the browser, such as Web Assembly
+   (https://webassembly.org/).
 
 4.  History of OAuth 2.0 in Browser-Based Applications
 
@@ -228,7 +229,7 @@ Table of Contents
    in nature, but can also be highly sophisticated and tailored to the
    application.  Real-world examples include stealing data from the
    page, sending requests to a backend in the name of the user, and
-   stealing tokens from storage areas.
+   stealing tokens from available storage mechanisms.
 
    When analyzing the security of browser-based applications in light of
    the presence of malicious JS, it is crucial to realize that the
@@ -240,7 +241,7 @@ Table of Contents
    level defenses, since they are typically controlled from within the
    application.  For example, the attacker can remove or override event
    listeners, modify the behavior of built-in functions (prototype
-   poisoning), and stop pages in frames from loading.
+   pollution), and stop pages in frames from loading.
 
    This section explores the threats malicious JS code poses to browser-
    based applications that assume the role of an OAuth client.  The
@@ -326,9 +327,9 @@ Table of Contents
    In this advanced attack scenario, the attacker completely disregards
    any tokens that the application has already obtained.  Instead, the
    attacker takes advantage of the ability to run malicious code in the
-   application's origin.  With that ability, the attacker can inject a
-   hidden iframe and launch a silent Authorization Code flow.  This
-   silent flow will reuse the user's existing session with the
+   application's execution context.  With that ability, the attacker can
+   inject a hidden iframe and launch a silent Authorization Code flow.
+   This silent flow will reuse the user's existing session with the
    authorization server and result in the issuing of a new, independent
    set of tokens.  This scenario consists of the following steps:
 
@@ -339,8 +340,8 @@ Table of Contents
 
    *  Insert a hidden iframe into the page and initialize it with an
       authorization request.  The authorization request in the iframe
-      will occur within the user's session and, when the session is
-      still active, result in the issuing of an authorization code.
+      will occur within the user's session and, if the session is still
+      active, result in the issuing of an authorization code.
 
    *  Extract the authorization code from the iframe using the
       previously installed handler
@@ -359,14 +360,15 @@ Table of Contents
 
    This attack scenario is possible because the security of public
    browser-based OAuth 2.0 clients relies entirely on the redirect URI
-   and application's origin.  When the attacker can execute malicious
-   JavaScript code in the application's execution context, they
-   effectively control the application's origin, and by extension, the
-   redirect URI.  This attack scenario uses a silent iframe-based flow,
-   which is the same mechanism most browser-based apps use to bootstrap
-   their authentication state.  Since the attacker controls the
-   application in the browser, the attacker's Authorization Code flow is
-   indistinguishable from a legitimate Authorization Code flow.
+   and application's execution context.  When the attacker can execute
+   malicious JavaScript code in the application's execution context,
+   they effectively control the application's execution context, and by
+   extension, the redirect URI.  This attack scenario uses a hidden
+   iframe-based flow, which is the same mechanism most browser-based
+   apps use to bootstrap their authentication state.  Since the attacker
+   controls the application in the browser, the attacker's Authorization
+   Code flow is indistinguishable from a legitimate Authorization Code
+   flow.
 
    There are no practical security mechanisms for frontend applications
    that counter this attack scenario.  Short access token lifetimes and
@@ -377,7 +379,7 @@ Table of Contents
    tokens.  Requiring user interaction with every Authorization Code
    flow would effectively stop the automatic silent issuance of new
    tokens, but this would significantly impact widely-established
-   patterns, such as silently bootstrapping an application on first page
+   patterns, such as bootstrapping an application on its first page
    load, or single sign-on across multiple related applications, and is
    not a practical measure.
 
@@ -457,7 +459,7 @@ Table of Contents
    values, or body.
 
    The application can use DPoP to ensure its access tokens are bound to
-   non-exportable key linked to the browser.  In that case, it becomes
+   non-exportable key held by the browser.  In that case, it becomes
    significantly harder for the attacker to abuse stolen access tokens.
    More specifically, with DPoP, the attacker can only abuse stolen
    application tokens by carrying out an online attack, where the proofs
@@ -465,7 +467,7 @@ Table of Contents
    detail in section 11.4 of the [DPoP] specification.  Additionally,
    when the attacker obtains a fresh set of tokens, as described in
    Section 5.1.3, they can set up DPoP for these tokens using an
-   attacker-controlled private key.  In that case, the attacker is again
+   attacker-controlled key pair.  In that case, the attacker is again
    free to abuse this newly obtained access token without restrictions.
 
 5.2.3.  Client Hijacking
@@ -515,8 +517,8 @@ Table of Contents
    responsibilities and API interactions.  The BFF has three core
    responsibilities:
 
-   1.  The BFF interacts as a confidential OAuth client with the
-       authorization server
+   1.  The BFF interacts with the authorization server as a confidential
+       OAuth client
 
    2.  The BFF manages OAuth access and refresh tokens, making them
        inaccessible by the JavaScript application
@@ -577,7 +579,7 @@ Table of Contents
    by redirecting the browser to the authorization endpoint (D).  When
    the user is redirected back, the browser delivers the authorization
    code to the BFF (E), where the BFF can then exchange it for tokens at
-   the token endpoint (F) using its client secret and PKCE code
+   the token endpoint (F) using its client credentials and PKCE code
    verifier.
 
    The BFF associates the obtained tokens with the user's session (See
@@ -717,12 +719,13 @@ Table of Contents
    *  The BFF SHOULD start the name of its cookies with the ___Host-_
       prefix ([CookiePrefixes])
 
-   Additionally, the BFF SHOULD encrypt its cookie contents, to ensure
-   that tokens stored in cookies are never written to disk in plaintext
-   format.  This security measure helps to ensure protect the access
-   token against malware that actively scans the user's hard drive to
-   extract sensitive browser artifacts, such as cookies and locally
-   stored data (see Section 8).
+   Additionally, the BFF SHOULD encrypt its cookie contents using an
+   Authenticated Encryption with Authenticated Data ([RFC5116]), to
+   ensure that tokens stored in cookies are never written to disk in
+   plaintext format.  This security measure helps to ensure protect the
+   access token against malware that actively scans the user's hard
+   drive to extract sensitive browser artifacts, such as cookies and
+   locally stored data (see Section 8).
 
    For further guidance on cookie security best practices, we refer to
    the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org
@@ -961,8 +964,8 @@ Table of Contents
    the authorization endpoint (D).  When the user is redirected back,
    the browser delivers the authorization code to the token-mediating
    backend (E), where the token-mediating backend can then exchange it
-   for tokens at the token endpoint (F) using its client secret and PKCE
-   code verifier.
+   for tokens at the token endpoint (F) using its client credentials and
+   PKCE code verifier.
 
    The token-mediating backend associates the obtained tokens with the
    user's session (See Section 6.2.2.3) and includes the relevant
@@ -993,8 +996,8 @@ Table of Contents
    backend obtains the refresh token in step F and associates it with
    the user's session.
 
-   If the JavaScript application notices that the user's access token
-   has expired, it can contact the token-mediating backend to request a
+   If the resource server rejects the access token, the JavaScript
+   application can contact the token-mediating backend to request a
    fresh access token.  The token-mediating backend relies on the
    cookies associated with this request to use the user's refresh token
    to run a Refresh Token flow.  These steps are not shown in the
@@ -1004,10 +1007,10 @@ Table of Contents
    When the refresh token expires, there is no way to recover without
    running an entirely new Authorization Code flow.  Therefore, it is
    recommended to configure the lifetime of the cookie-based session to
-   be equal to the maximum lifetime of the refresh token.  Additionally,
-   when the token-mediating backend learns that a refresh token for an
-   active session is no longer valid, it is recommended to invalidate
-   the session.
+   be equal to the maximum lifetime of the refresh token if such
+   information is known upfront.  Additionally, when the token-mediating
+   backend learns that a refresh token for an active session is no
+   longer valid, it is recommended to invalidate the session.
 
 6.2.2.2.  Access Token Scopes
 
@@ -1245,7 +1248,8 @@ Table of Contents
    In this architecture, the JavaScript code is first loaded from a
    static web host into the browser (A), and the application then runs
    in the browser.  This application is considered a public client,
-   since there is no way to provision it a client secret in this model.
+   since there is no way to provision it with client credentials in this
+   model.
 
    The application obtains an authorization code (B) by initiating the
    Authorization Code flow with the PKCE extension (described in
@@ -1397,8 +1401,8 @@ Table of Contents
    *  using PKCE, and confirming that the authorization server supports
       PKCE
 
-   *  using a unique value for the OAuth 2.0 state parameter to carry a
-      CSRF token
+   *  using and verifying unique value for the OAuth 2.0 state parameter
+      to carry a CSRF token
 
    *  if the application is using OpenID Connect, by using and verifying
       the OpenID Connect nonce parameter as described in [OpenID]
@@ -1489,18 +1493,30 @@ Table of Contents
    for the token endpoint, where the browser-based application exchanges
    the authorization code for tokens.  Additionally, if the
    authorization server provides additional endpoints to the
-   application, such as metadata URLs, dynamic client registration,
-   revocation, introspection, discovery or user info endpoints, these
-   endpoints may also be accessed by the browser-based application.
-   Consequentially, the authorization server is responsible for
-   enforcing a proper CORS configuration on these endpoints.
+   application, such as discovery metadata URLs, JSON Web Key Sets,
+   dynamic client registration, revocation, introspection or user info
+   endpoints, these endpoints may also be accessed by the browser-based
+   application.  Consequentially, the authorization server is
+   responsible for enforcing a proper CORS configuration on these
+   endpoints.
 
    This specification does not include guidelines for deciding whether a
-   CORS policy for the token endpoint should be a wildcard origin or
-   more restrictive.  Note, however, that the browser will attempt to
-   GET or POST to the API endpoint before knowing any CORS policy; it
-   simply hides the succeeding or failing result from JavaScript if the
-   policy does not allow sharing.
+   CORS policy for these endpoints should be a wildcard origin or more
+   restrictive.  Note, however, that the browser will typically do a
+   "preflight" request to check to see if the CORS protocol is
+   understood and what the policy is.  In absence of support for
+   preflight requests at the server the browser will attempt to access
+   the API endpoint regardless and will simply hide the succeeding or
+   failing result from JavaScript if the policy does not allow sharing.
+
+   Note that the server CORS preflight response and the actual response
+   CORS headers may differ, this allows the server to indicate wildcard
+   support for accessing the endpoints during preflight when it has no
+   access to the actual request's body or headers and then when the
+   actual request is made decide to restrict the response after it was
+   able to check the request was made from an expected origin based on
+   the data in the request, e.g. based on pre-registered origins of the
+   Browser-based OAuth 2.0 client.
 
 6.3.3.  Threat Analysis
 
@@ -1568,10 +1584,11 @@ Table of Contents
    Browser-based OAuth 2.0 clients can implement [DPoP] to transition
    from bearer access tokens and bearer refresh tokens to sender-
    constrained tokens.  In such an implementation, the private key used
-   to sign DPoP proofs is handled by the browser and cannot be
-   extracted.  As a result, the use of DPoP effectively prevents
-   scenarios where the attacker exfiltrates the application's tokens
-   (See Section 5.1.1 and Section 5.1.2).
+   to sign DPoP proofs is handled by the browser (a non-extractable
+   CryptoKeyPair (https://developer.mozilla.org/en-US/docs/Web/API/
+   CryptoKeyPair) is stored using IndexedDB).  As a result, the use of
+   DPoP effectively prevents scenarios where the attacker exfiltrates
+   the application's tokens (See Section 5.1.1 and Section 5.1.2).
 
    Note that the use of DPoP does not prevent the attacker from running
    a new flow to obtain a fresh set of tokens (See Section 5.1.3).  Even
@@ -1692,10 +1709,11 @@ Table of Contents
 
    The OAuth 2.0 Implicit flow (defined in Section 4.2 of OAuth 2.0
    [RFC6749]) works by the authorization server issuing an access token
-   in the authorization response (front channel) without the code
-   exchange step.  In this case, the access token is returned in the
-   fragment part of the redirect URI, providing an attacker with several
-   opportunities to intercept and steal the access token.
+   in the authorization response (front channel) without an
+   authorization code exchange step.  In this case, the access token is
+   returned in the fragment part of the redirect URI, providing an
+   attacker with several opportunities to intercept and steal the access
+   token.
 
    Authorization servers MUST NOT issue access tokens in the
    authorization response, and MUST issue access tokens only from the
@@ -1718,12 +1736,12 @@ Table of Contents
    mechanism to modify the path and query string component of the URL
    without triggering a page reload.  Additionally, CORS has widespread
    support and is often used by single-page apps for many purposes.
-   This means modern browser-based apps can use the unmodified OAuth 2.0
-   Authorization Code flow, since they have the ability to remove the
-   authorization code from the query string without triggering a page
-   reload thanks to the Session History API, and CORS support at the
-   token endpoint means the app can obtain tokens even if the
-   authorization server is on a different domain.
+   This means modern browser-based apps can use the OAuth 2.0
+   Authorization Code flow with PKCE, since they have the ability to
+   remove the authorization code from the query string without
+   triggering a page reload thanks to the Session History API, and CORS
+   support at the token endpoint means the app can obtain tokens even if
+   the authorization server is on a different domain.
 
 7.2.2.  Threat Analysis
 
@@ -2028,7 +2046,8 @@ Table of Contents
    mechanism.  The browser automatically supports both through the
    corresponding request and response headers, resulting in the storage
    of cookies in the browser and the automatic inclusion of cookies on
-   relevant outgoing requests.
+   outgoing requests given it matches the cookie's domain, path, or
+   other properties.
 
    Next to header-based control over cookies, browsers also offer a
    JavaScript Cookie API to get and set cookies.  This Cookie API is
@@ -2169,15 +2188,15 @@ Table of Contents
    While the browser-based application is incapable of mitigating such
    attacks, the application can mitigate the consequences of such an
    attack by ensuring data confidentiality using encryption.  The
-   [WebCrypto] API provides a mechanism for JavaScript code to generate
-   a private key, as well as an option for that key to be non-
+   [Web_Cryptography_API] provides a mechanism for JavaScript code to
+   generate a secret key, as well as an option for that key to be non-
    exportable.  A JavaScript application could then use this API to
    encrypt and decrypt tokens before storing them.  However, the
-   [WebCrypto] specification only ensures that the key is not exportable
-   to the browser code, but does not place any requirements on the
-   underlying storage of the key itself with the operating system.  As
-   such, a non-exportable key cannot be relied on as a way to protect
-   against exfiltration from the underlying filesystem.
+   [Web_Cryptography_API] specification only ensures that the key is not
+   exportable to the browser code, but does not place any requirements
+   on the underlying storage of the key itself with the operating
+   system.  As such, a non-exportable key cannot be relied on as a way
+   to protect against exfiltration from the underlying filesystem.
 
    In order to protect against token exfiltration from the filesystem,
    the encryption keys would need to be stored somewhere other than the
@@ -2230,10 +2249,10 @@ Table of Contents
    If an application is using sender-constrained tokens, the secure
    storage of the private key is more important than the secure storage
    of the token.  Ideally the application should use a non-exportable
-   private key, such as generating one with the [WebCrypto] API.  With
-   an unencrypted token in LocalStorage protected by a non-exportable
-   private key, an XSS attack would not be able to extract the key, so
-   the token would not be usable by the attacker.
+   private key, such as generating one with the [Web_Cryptography_API].
+   With an unencrypted token in LocalStorage protected by a non-
+   exportable private key, an XSS attack would not be able to extract
+   the key, so the token would not be usable by the attacker.
 
    If the application is unable to use an API that generates a non-
    exportable key, the application should take measures to isolate the
@@ -2244,12 +2263,12 @@ Table of Contents
    While a non-exportable key is protected from exfiltration from within
    JavaScript, exfiltration of the underlying private key from the
    filesystem is still a concern.  As of the time of this writing, there
-   is no guarantee made by the [WebCrypto] API that a non-exportable key
-   is actually protected by a Trusted Platform Module (TPM) or stored in
-   an encrypted form on disk.  Exfiltration of the non-exportable key
-   from the underlying filesystem may still be possible if the attacker
-   can get access to the filesystem of the user's machine, for example
-   via malware.
+   is no guarantee made by the [Web_Cryptography_API] that a non-
+   exportable key is actually protected by a Trusted Platform Module
+   (TPM) or stored in an encrypted form on disk.  Exfiltration of the
+   non-exportable key from the underlying filesystem may still be
+   possible if the attacker can get access to the filesystem of the
+   user's machine, for example via malware.
 
 9.3.  Authorization Server Mix-Up Mitigation
 
@@ -2302,6 +2321,10 @@ Table of Contents
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC5116]  McGrew, D., "An Interface and Algorithms for Authenticated
+              Encryption", RFC 5116, DOI 10.17487/RFC5116, January 2008,
+              <https://www.rfc-editor.org/info/rfc5116>.
 
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
@@ -2357,7 +2380,7 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-bertocci-
               oauth2-tmi-bff-01>.
 
-   [WebCrypto]
+   [Web_Cryptography_API]
               Huigens, D., "Web Cryptography API", November 2022,
               <https://w3c.github.io/webcrypto/>.
 
@@ -2373,13 +2396,14 @@ Appendix A.  Server Support Checklist
 
    3.  NOT support the Implicit grant for browser-based clients.
 
-   4.  Require "https" scheme redirect URIs.
+   4.  Require "https" scheme redirect URIs for browser-based clients.
 
-   5.  Require exact matching of registered redirect URIs.
+   5.  Require exact matching of registered redirect URIs for browser-
+       based clients.
 
-   6.  Support cross-domain requests at the token endpoint in order to
-       allow browsers to make the authorization code exchange request.
-       See Section 6.1.3.3.2
+   6.  Support cross-domain requests at endpoints browser-based clients
+       access in order to allow browsers to make the authorization code
+       exchange request.  See Section 6.1.3.3.2
 
    7.  Not assume that browser-based clients can keep a secret, and
        SHOULD NOT issue secrets to applications of this type.
@@ -2610,11 +2634,11 @@ Appendix C.  Acknowledgements
    final specification:
 
    Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka,
-   Daniel Fett, Eva Sarafianou, George Fletcher, Hannes Tschofenig,
-   Janak Amarasena, John Bradley, Joseph Heenan, Justin Richer, Karl
-   McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones, Sean
-   Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio
-   Bertocci and Yannick Majoros.
+   Daniel Fett, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
+   Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
+   Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike
+   Jones, Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten
+   Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 Authors' Addresses
 
