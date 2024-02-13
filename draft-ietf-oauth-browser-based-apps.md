@@ -924,7 +924,7 @@ For the authorization server, a proper CORS configuration is relevant for the to
 
 This specification does not include guidelines for deciding whether a CORS policy
 for these endpoints should be a wildcard origin or more restrictive. Note,
-however, that the browser will typically do a "preflight" request to checks to see
+however, that the browser will typically do a "preflight" request to check to see
 if the CORS protocol is understood and what the policy is. In absence of support for
 preflight requests at the server the browser will attempt to access the API endpoint
 regardless and will simply hide the succeeding or failing result from
