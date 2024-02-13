@@ -759,7 +759,7 @@ If an attacker is able to execute malicious JavaScript code, this application ar
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
-client, since there is no way to provision it with authentication credentials in this model.
+client, since there is no way to provision it with client credentials in this model.
 
 The application obtains an authorization code (B) by initiating the Authorization Code flow with the PKCE
 extension (described in {{pattern-oauth-browser-flow}}). The application exchanges the authorization code for tokens via a JavaScript-based POST request to the token endpoint (C).
