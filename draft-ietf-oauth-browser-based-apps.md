@@ -416,7 +416,7 @@ Server-side sessions only expose a session identifier and keep all data on the s
 
 Client-side sessions push all data to the browser in a signed, and optionally encrypted, object. This pattern absolves the server of keeping track of any session data, but severely limits control over active sessions and makes it difficult to handle session revocation. However, when client-side sessions are used in the context of a BFF, these properties change significantly. Since the cookie-based session is only used to obtain a user's tokens, all control and revocation properties follow from the use of access tokens and refresh tokens. It suffices to revoke the user's access token and/or refresh token to prevent ongoing access to protected resources, without the need to explicitly invalidate the cookie-based session.
 
-Best practices to secure the session cookie are discussed in section {{pattern-bff-cookie-security}}.
+Best practices to secure the session cookie are discussed in {{pattern-bff-cookie-security}}.
 
 
 #### Combining OAuth and OpenID Connect {#pattern-bff-oidc}
@@ -499,7 +499,7 @@ In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a ser
 
 ### Threat Analysis
 
-This section revisits the payloads and consequences from section {{threats}}, and discusses potential additional defenses.
+This section revisits the payloads and consequences from {{threats}}, and discusses potential additional defenses.
 
 
 #### Attack Payloads and Consequences
@@ -652,7 +652,7 @@ The token-mediating backend uses cookies to create a user session, which is dire
 
 The interactions between the JavaScript application and the token-mediating backend rely on cookies for authentication and authorization. Just like a BFF, the token-mediating backend is required to account for Cross-Site Request Forgery (CSRF) attacks.
 
-Section {{pattern-bff-csrf}} outlines the nuances of various mitigation strategies against CSRF attacks. Specifically for a token-mediating backend, these CSRF defenses only apply to the endpoint or endpoints where the JavaScript application can obtain its access tokens.
+{{pattern-bff-csrf}} outlines the nuances of various mitigation strategies against CSRF attacks. Specifically for a token-mediating backend, these CSRF defenses only apply to the endpoint or endpoints where the JavaScript application can obtain its access tokens.
 
 
 #### Advanced OAuth Security
@@ -663,7 +663,7 @@ The token-mediating backend is a confidential client running as a server-side co
 
 ### Threat Analysis
 
-This section revisits the payloads and consequences from section {{threats}}, and discusses potential additional defenses.
+This section revisits the payloads and consequences from {{threats}}, and discusses potential additional defenses.
 
 
 #### Attack Payloads and Consequences
@@ -684,7 +684,7 @@ Exposing the access token to the JavaScript application is the core idea behind 
 
 #### Mitigated Attack Scenarios
 
-The other payloads, listed below, are effectively mitigated by the BFF application architecture:
+The other payloads, listed below, are effectively mitigated by the token-mediating backend:
 
 * Single-Execution Token Theft (See {{payload-single-theft}}) for refresh tokens
 * Persistent Token Theft (See {{payload-persistent-theft}}) for refresh tokens
@@ -705,7 +705,7 @@ While this architecture inherently exposes access tokens, there are some additio
 
 ##### Secure Token Storage
 
-Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. Section {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
+Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
 
 Note that even when the access token is stored out of reach of malicious JavaScript code, the attacker still has the ability to request the access token from the token-mediating backend.
 
@@ -941,7 +941,7 @@ origins of the Browser-based OAuth 2.0 client.
 
 ### Threat Analysis
 
-This section revisits the payloads and consequences from section {{threats}}, and discusses potential additional defenses.
+This section revisits the payloads and consequences from {{threats}}, and discusses potential additional defenses.
 
 
 #### Attack Payloads and Consequences
@@ -969,7 +969,7 @@ While this architecture is inherently vulnerable to malicious JavaScript code, t
 
 ##### Secure Token Storage
 
-When handling tokens directly, the application can choose different storage mechanisms to handle access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage*, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker*. Section {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
+When handling tokens directly, the application can choose different storage mechanisms to handle access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage*, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker*. {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
 
 A practical implementation pattern can use a Web Worker to isolate the refresh token, and provide the application with the access token making requests to resource servers.
 
@@ -989,7 +989,7 @@ The scenario where the attacker obtains a fresh set of tokens (See {{payload-new
 
 For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.
 
-The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from section {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
+The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
 The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
 
@@ -1017,7 +1017,7 @@ Single-Domain Browser-Based Apps (not using OAuth)
 
 Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.
 
-In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simplify the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session management to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in section {{pattern-bff-cookie-security}}.
+In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simplify the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session management to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in {{pattern-bff-cookie-security}}.
 
 While the advice to not use OAuth seems out-of-place in this document, it is important to note that OAuth was originally created for third-party or federated access to APIs, so it may not be the best solution in a single common-domain deployment. That said, there are still some advantages in using OAuth even in a common-domain architecture:
 
@@ -1228,12 +1228,12 @@ As a result, this pattern can lead to the following consequences:
 
 #### Attacking the Service Worker
 
-The seemingly promising security benefits of using a Service Worker warrant a more detailed discussion of its security limitations. To fully protect the application against the relevant payloads (See section {{payloads}}), the Service Worker needs to meet two security requirements:
+The seemingly promising security benefits of using a Service Worker warrant a more detailed discussion of its security limitations. To fully protect the application against the relevant payloads (See {{payloads}}), the Service Worker needs to meet two security requirements:
 
 1. Prevent an attacker from exfiltrating tokens
 2. Prevent an attacker from acquiring a new set of tokens
 
-Once registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in section {{payloads}}.
+Once registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in {{payloads}}.
 
 To meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code flow, an attack discussed in {{payload-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.
 
@@ -1265,7 +1265,7 @@ When discussing the security properties of browser-based token storage solutions
 
 Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even the perfect token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.
 
-That said, the different security properties of browser-based storage solutions will impact the attacker's ability to obtain existing tokens from storage. In browser This section discusses a few different storage mechanisms and their properties.
+That said, the different security properties of browser-based storage solutions will impact the attacker's ability to obtain existing tokens from storage. This section discusses a few different storage mechanisms and their properties.
 
 
 Cookies
@@ -1277,7 +1277,7 @@ Next to header-based control over cookies, browsers also offer a JavaScript Cook
 
 Because of these unintentional side effect of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.
 
-Note that this practice is different from the use of cookies in a BFF (discussed in section {{pattern-bff-cookie-security}}), where the cookie is inaccessible to JavaScript and is supposed to be sent to the backend.
+Note that this practice is different from the use of cookies in a BFF (discussed in {{pattern-bff-cookie-security}}), where the cookie is inaccessible to JavaScript and is supposed to be sent to the backend.
 
 
 
@@ -1359,7 +1359,7 @@ When OpenID Connect is used, it is important to avoid sensitive information disc
 Sender-Constrained Tokens {#sender-constrained-tokens}
 -------------------------
 
-As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend (Section {{pattern-tmb}}) or a browser-only OAuth client (Section {{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is {{DPoP}}.
+As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is {{DPoP}}.
 
 When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
 
