@@ -102,7 +102,7 @@ informative:
       org: Ping
     date: April 2021
     target: https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01
-  Web Cryptography API:
+  WebCryptographyAPI:
     title: Web Cryptography API
     author:
     - name: Daniel Huigens
@@ -454,7 +454,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
 
-Additionally, the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data ({{RFC5116}}), to ensure that tokens stored in cookies are never written to disk in plaintext format. This security measure helps to ensure protect the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
+Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data ({{RFC5116}}). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
 
 For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series (<https://cheatsheetseries.owasp.org>).
 
@@ -1334,7 +1334,7 @@ Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 
 In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.
 
-While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The {{Web Cryptography API}} provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{Web Cryptography API}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
+While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The {{WebCryptographyAPI}} provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{WebCryptographyAPI}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
 In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
 
@@ -1363,11 +1363,11 @@ As discussed throughout this document, the use of sender-constrained tokens does
 
 When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
 
-If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{Web Cryptography API}}. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
-While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the {{Web Cryptography API}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
+While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the {{WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
 
 
 
@@ -1432,6 +1432,11 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-16
+
+* Applied editorial changes from Filip Skokan and Louis Jannett
+* Clarified when cookie encryption applies
 
 -15
 
@@ -1560,7 +1565,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 
 Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
+Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
 Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 
