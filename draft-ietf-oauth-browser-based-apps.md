@@ -390,7 +390,7 @@ If an attacker is able to execute malicious code within the JavaScript applicati
 In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the BFF if there is an active session (B). If an active session is found, the application resumes its authenticated state and skips forward to step J.
 
 When no active session is found, the JavaScript application calls out to the BFF (C) to initiate the Authorization Code flow with the PKCE
-extension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F).
+extension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.
 
 The BFF associates the obtained tokens with the user's session (See {{pattern-bff-sessions}}) and includes the relevant information in a cookie that is included in the response to the browser (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the BFF for an existing session (I), allowing the JavaScript application to resume its authenticated state.
 
