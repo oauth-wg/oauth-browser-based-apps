@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-11T00:37:17.385297+00:00",
+  "timestamp": "2024-02-13T00:34:45.347496+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1757,7 +1757,7 @@
       "labels": [],
       "body": "A followup review with suggestions as requested at IETF 118",
       "createdAt": "2024-01-16T21:18:24Z",
-      "updatedAt": "2024-02-09T14:02:06Z",
+      "updatedAt": "2024-02-12T23:40:04Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
@@ -1909,6 +1909,159 @@
               "updatedAt": "2024-02-09T14:02:06Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2TjK",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:49:50Z",
+          "updatedAt": "2024-02-12T22:49:50Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "I believe the idea was to pass the `expires_in` [back to the browser](https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01#name-access-token-response) for this, but I agree this reads better anyway.",
+              "createdAt": "2024-02-12T22:49:50Z",
+              "updatedAt": "2024-02-12T22:49:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VPG",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:56:23Z",
+          "updatedAt": "2024-02-12T22:56:23Z",
+          "comments": [
+            {
+              "originalPosition": 144,
+              "body": "```suggestion\r\nclient, since there is no way to provision it with client credentials in this model.\r\n```",
+              "createdAt": "2024-02-12T22:56:23Z",
+              "updatedAt": "2024-02-12T22:56:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2Vgy",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:57:29Z",
+          "updatedAt": "2024-02-12T22:57:29Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "```suggestion\r\nWhen no active session is found, the JavaScript application calls out to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in {{pattern-tmb-flow}}), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.\r\n```",
+              "createdAt": "2024-02-12T22:57:29Z",
+              "updatedAt": "2024-02-12T22:57:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VnJ",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:57:51Z",
+          "updatedAt": "2024-02-12T22:57:51Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "```suggestion\r\nextension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.\r\n```",
+              "createdAt": "2024-02-12T22:57:51Z",
+              "updatedAt": "2024-02-12T22:57:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VuE",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:58:16Z",
+          "updatedAt": "2024-02-12T22:58:16Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "How about \"credentials\" instead of secret? The point is to make an obvious distinction that this client is using credentials in this version.",
+              "createdAt": "2024-02-12T22:58:16Z",
+              "updatedAt": "2024-02-12T22:58:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2WqP",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T23:01:58Z",
+          "updatedAt": "2024-02-12T23:01:59Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "```suggestion\r\nhowever, that the browser will typically do a \"preflight\" request to check to see\r\n```",
+              "createdAt": "2024-02-12T23:01:58Z",
+              "updatedAt": "2024-02-12T23:01:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2g3s",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T23:39:13Z",
+          "updatedAt": "2024-02-12T23:39:13Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "That sounds like it will require a lot of additional text to justify those recommendations.",
+              "createdAt": "2024-02-12T23:39:13Z",
+              "updatedAt": "2024-02-12T23:39:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2hgG",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "see suggestions inline",
+          "createdAt": "2024-02-12T23:40:04Z",
+          "updatedAt": "2024-02-12T23:40:04Z",
+          "comments": []
         }
       ]
     }
