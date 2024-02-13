@@ -719,13 +719,15 @@ Table of Contents
    *  The BFF SHOULD start the name of its cookies with the ___Host-_
       prefix ([CookiePrefixes])
 
-   Additionally, the BFF SHOULD encrypt its cookie contents using an
-   Authenticated Encryption with Authenticated Data ([RFC5116]), to
-   ensure that tokens stored in cookies are never written to disk in
-   plaintext format.  This security measure helps to ensure protect the
-   access token against malware that actively scans the user's hard
-   drive to extract sensitive browser artifacts, such as cookies and
-   locally stored data (see Section 8).
+   Additionally, when using client-side sessions that contain access
+   tokens, (as opposed to server-side sessions where the tokens only
+   live on the server), the BFF SHOULD encrypt its cookie contents using
+   an Authenticated Encryption with Authenticated Data ([RFC5116]).
+   This ensures that tokens stored in cookies are never written to the
+   user's hard drive in plaintext format.  This security measure helps
+   to ensure protection of the access token against malware that
+   actively scans the user's hard drive to extract sensitive browser
+   artifacts, such as cookies and locally stored data (see Section 8).
 
    For further guidance on cookie security best practices, we refer to
    the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org
@@ -2188,11 +2190,11 @@ Table of Contents
    While the browser-based application is incapable of mitigating such
    attacks, the application can mitigate the consequences of such an
    attack by ensuring data confidentiality using encryption.  The
-   [Web_Cryptography_API] provides a mechanism for JavaScript code to
+   [WebCryptographyAPI] provides a mechanism for JavaScript code to
    generate a secret key, as well as an option for that key to be non-
    exportable.  A JavaScript application could then use this API to
    encrypt and decrypt tokens before storing them.  However, the
-   [Web_Cryptography_API] specification only ensures that the key is not
+   [WebCryptographyAPI] specification only ensures that the key is not
    exportable to the browser code, but does not place any requirements
    on the underlying storage of the key itself with the operating
    system.  As such, a non-exportable key cannot be relied on as a way
@@ -2248,7 +2250,7 @@ Table of Contents
    If an application is using sender-constrained tokens, the secure
    storage of the private key is more important than the secure storage
    of the token.  Ideally the application should use a non-exportable
-   private key, such as generating one with the [Web_Cryptography_API].
+   private key, such as generating one with the [WebCryptographyAPI].
    With an unencrypted token in LocalStorage protected by a non-
    exportable private key, an XSS attack would not be able to extract
    the key, so the token would not be usable by the attacker.
@@ -2262,7 +2264,7 @@ Table of Contents
    While a non-exportable key is protected from exfiltration from within
    JavaScript, exfiltration of the underlying private key from the
    filesystem is still a concern.  As of the time of this writing, there
-   is no guarantee made by the [Web_Cryptography_API] that a non-
+   is no guarantee made by the [WebCryptographyAPI] that a non-
    exportable key is actually protected by a Trusted Platform Module
    (TPM) or stored in an encrypted form on disk.  Exfiltration of the
    non-exportable key from the underlying filesystem may still be
@@ -2379,7 +2381,7 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-bertocci-
               oauth2-tmi-bff-01>.
 
-   [Web_Cryptography_API]
+   [WebCryptographyAPI]
               Huigens, D., "Web Cryptography API", November 2022,
               <https://w3c.github.io/webcrypto/>.
 
@@ -2414,6 +2416,12 @@ Appendix A.  Server Support Checklist
 Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -16
+
+   *  Applied editorial changes from Filip Skokan and Louis Jannett
+
+   *  Clarified when cookie encryption applies
 
    -15
 
@@ -2635,9 +2643,9 @@ Appendix C.  Acknowledgements
    Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka,
    Daniel Fett, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
    Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
-   Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike
-   Jones, Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten
-   Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+   Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill,
+   Louis Jannett, Mike Jones, Sean Kelleher, Thomas Broyer Tomek
+   Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 Authors' Addresses
 

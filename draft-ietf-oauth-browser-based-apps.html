@@ -1726,7 +1726,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.1.3.2-3.6.1">The BFF SHOULD start the name of its cookies with the <em>__Host-</em> prefix (<span>[<a href="#CookiePrefixes" class="cite xref">CookiePrefixes</a>]</span>)<a href="#section-6.1.3.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.1.3.2-4">Additionally, the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data (<span>[<a href="#RFC5116" class="cite xref">RFC5116</a>]</span>), to ensure that tokens stored in cookies are never written to disk in plaintext format. This security measure helps to ensure protect the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see <a href="#token-storage" class="auto internal xref">Section 8</a>).<a href="#section-6.1.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.2-4">Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data (<span>[<a href="#RFC5116" class="cite xref">RFC5116</a>]</span>). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see <a href="#token-storage" class="auto internal xref">Section 8</a>).<a href="#section-6.1.3.2-4" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.2-5">For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series (<a href="https://cheatsheetseries.owasp.org">https://cheatsheetseries.owasp.org</a>).<a href="#section-6.1.3.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2856,7 +2856,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-filesystem-considerations-f" class="section-name selfRef">Filesystem Considerations for Browser Storage APIs</a>
         </h3>
 <p id="section-8.6-1">In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
-<p id="section-8.6-2">While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The <span>[<a href="#Web_Cryptography_API" class="cite xref">Web_Cryptography_API</a>]</span> provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the <span>[<a href="#Web_Cryptography_API" class="cite xref">Web_Cryptography_API</a>]</span> specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
+<p id="section-8.6-2">While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
 <p id="section-8.6-3">In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2894,9 +2894,9 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         </h3>
 <p id="section-9.2-1">As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend (<a href="#pattern-tmb" class="auto internal xref">Section 6.2</a>) or a browser-only OAuth client (<a href="#pattern-oauth-browser" class="auto internal xref">Section 6.3</a>) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is <span>[<a href="#DPoP" class="cite xref">DPoP</a>]</span>.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 <p id="section-9.2-2">When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
-<p id="section-9.2-3">If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the <span>[<a href="#Web_Cryptography_API" class="cite xref">Web_Cryptography_API</a>]</span>. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2-3">If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span>. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
 <p id="section-9.2-4">If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in <a href="#token-storage" class="auto internal xref">Section 8</a>.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
-<p id="section-9.2-5">While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the <span>[<a href="#Web_Cryptography_API" class="cite xref">Web_Cryptography_API</a>]</span> that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.<a href="#section-9.2-5" class="pilcrow">¶</a></p>
+<p id="section-9.2-5">While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.<a href="#section-9.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="auth_server_mixup">
@@ -3018,7 +3018,7 @@ and the countermeasures mentioned above.<a href="#section-9.3-4" class="pilcrow"
         <dd>
 <span class="refAuthor">Bertocci, V.</span> and <span class="refAuthor">B. Cambpell</span>, <span class="refTitle">"Token Mediating and session Information Backend For Frontend"</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01">https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="Web_Cryptography_API">[Web_Cryptography_API]</dt>
+<dt id="WebCryptographyAPI">[WebCryptographyAPI]</dt>
       <dd>
 <span class="refAuthor">Huigens, D.</span>, <span class="refTitle">"Web Cryptography API"</span>, <time datetime="2022-11" class="refDate">November 2022</time>, <span>&lt;<a href="https://w3c.github.io/webcrypto/">https://w3c.github.io/webcrypto/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
@@ -3070,256 +3070,265 @@ as the additional requirements described in <a href="#pattern-oauth-browser-rt" 
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
       </h2>
 <p id="appendix-B-1">[[ To be removed from the final specification ]]<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">-15<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">-16<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-3.1">
-          <p id="appendix-B-3.1.1">Consolidated guidelines for public JS clients in a single section<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-3.1.1">Applied editorial changes from Filip Skokan and Louis Jannett<a href="#appendix-B-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-3.2">
-          <p id="appendix-B-3.2.1">Added more focus on best practices at the start of the document<a href="#appendix-B-3.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-3.3">
-          <p id="appendix-B-3.3.1">Restructured document to have top-level recommended and discouraged architecture patterns<a href="#appendix-B-3.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-3.4">
-          <p id="appendix-B-3.4.1">Added Philippe De Ryck as an author<a href="#appendix-B-3.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-3.2.1">Clarified when cookie encryption applies<a href="#appendix-B-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-4">-14<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">-15<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-5.1">
-          <p id="appendix-B-5.1.1">Minor editorial fixes and clarifications<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-5.1.1">Consolidated guidelines for public JS clients in a single section<a href="#appendix-B-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-5.2">
-          <p id="appendix-B-5.2.1">Updated some references<a href="#appendix-B-5.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-5.2.1">Added more focus on best practices at the start of the document<a href="#appendix-B-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-5.3">
-          <p id="appendix-B-5.3.1">Added a paragraph noting the possible exfiltration of a non-exportable key from the filesystem<a href="#appendix-B-5.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-5.3.1">Restructured document to have top-level recommended and discouraged architecture patterns<a href="#appendix-B-5.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-5.4">
+          <p id="appendix-B-5.4.1">Added Philippe De Ryck as an author<a href="#appendix-B-5.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-6">-13<a href="#appendix-B-6" class="pilcrow">¶</a></p>
+<p id="appendix-B-6">-14<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-7.1">
-          <p id="appendix-B-7.1.1">Corrected some uses of "DOM"<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-7.1.1">Minor editorial fixes and clarifications<a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-7.2">
-          <p id="appendix-B-7.2.1">Consolidated CSRF recommendations into normative part of the document<a href="#appendix-B-7.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-7.2.1">Updated some references<a href="#appendix-B-7.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-7.3">
-          <p id="appendix-B-7.3.1">Added links from the summary into the later sections<a href="#appendix-B-7.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-7.4">
-          <p id="appendix-B-7.4.1">Described limitations of Service Worker storage<a href="#appendix-B-7.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-7.5">
-          <p id="appendix-B-7.5.1">Minor editorial improvements<a href="#appendix-B-7.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-7.3.1">Added a paragraph noting the possible exfiltration of a non-exportable key from the filesystem<a href="#appendix-B-7.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-8">-12<a href="#appendix-B-8" class="pilcrow">¶</a></p>
+<p id="appendix-B-8">-13<a href="#appendix-B-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-9.1">
-          <p id="appendix-B-9.1.1">Revised overview and server support checklist to bring them up to date with the rest of the draft<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.1.1">Corrected some uses of "DOM"<a href="#appendix-B-9.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-9.2">
-          <p id="appendix-B-9.2.1">Added a new section about options for storing tokens<a href="#appendix-B-9.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.2.1">Consolidated CSRF recommendations into normative part of the document<a href="#appendix-B-9.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-9.3">
-          <p id="appendix-B-9.3.1">Added a section on sender-constrained tokens and a reference to DPoP<a href="#appendix-B-9.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.3.1">Added links from the summary into the later sections<a href="#appendix-B-9.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-9.4">
-          <p id="appendix-B-9.4.1">Rephrased the architecture patterns to focus on token acquisition<a href="#appendix-B-9.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.4.1">Described limitations of Service Worker storage<a href="#appendix-B-9.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-9.5">
-          <p id="appendix-B-9.5.1">Added a section discussing why not to use the Cookie API to store tokens<a href="#appendix-B-9.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-9.5.1">Minor editorial improvements<a href="#appendix-B-9.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-10">-11<a href="#appendix-B-10" class="pilcrow">¶</a></p>
+<p id="appendix-B-10">-12<a href="#appendix-B-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-11.1">
-          <p id="appendix-B-11.1.1">Added a new architecture pattern: Token-Mediating Backend<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-11.1.1">Revised overview and server support checklist to bring them up to date with the rest of the draft<a href="#appendix-B-11.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-11.2">
-          <p id="appendix-B-11.2.1">Revised and added clarifications for the Service Worker pattern<a href="#appendix-B-11.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-11.2.1">Added a new section about options for storing tokens<a href="#appendix-B-11.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-11.3">
-          <p id="appendix-B-11.3.1">Editorial improvements in descriptions of the different architectures<a href="#appendix-B-11.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-11.3.1">Added a section on sender-constrained tokens and a reference to DPoP<a href="#appendix-B-11.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-11.4">
-          <p id="appendix-B-11.4.1">Rephrased headers<a href="#appendix-B-11.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-11.4.1">Rephrased the architecture patterns to focus on token acquisition<a href="#appendix-B-11.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-11.5">
+          <p id="appendix-B-11.5.1">Added a section discussing why not to use the Cookie API to store tokens<a href="#appendix-B-11.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-12">-10<a href="#appendix-B-12" class="pilcrow">¶</a></p>
+<p id="appendix-B-12">-11<a href="#appendix-B-12" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-13.1">
-          <p id="appendix-B-13.1.1">Revised the names of the architectural patterns<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-13.1.1">Added a new architecture pattern: Token-Mediating Backend<a href="#appendix-B-13.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-13.2">
-          <p id="appendix-B-13.2.1">Added a new pattern using a service worker as the OAuth client to manage tokens<a href="#appendix-B-13.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-13.2.1">Revised and added clarifications for the Service Worker pattern<a href="#appendix-B-13.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-13.3">
-          <p id="appendix-B-13.3.1">Added some considerations when storing tokens in Local or Session Storage<a href="#appendix-B-13.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-13.3.1">Editorial improvements in descriptions of the different architectures<a href="#appendix-B-13.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-13.4">
+          <p id="appendix-B-13.4.1">Rephrased headers<a href="#appendix-B-13.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-14">-09<a href="#appendix-B-14" class="pilcrow">¶</a></p>
+<p id="appendix-B-14">-10<a href="#appendix-B-14" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-15.1">
-          <p id="appendix-B-15.1.1">Provide additional context for the same-domain architecture pattern<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-15.1.1">Revised the names of the architectural patterns<a href="#appendix-B-15.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-15.2">
-          <p id="appendix-B-15.2.1">Added reference to draft-ietf-httpbis-rfc6265bis to clarify that SameSite is not the only CSRF protection measure needed<a href="#appendix-B-15.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-15.2.1">Added a new pattern using a service worker as the OAuth client to manage tokens<a href="#appendix-B-15.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-15.3">
-          <p id="appendix-B-15.3.1">Editorial improvements<a href="#appendix-B-15.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-15.3.1">Added some considerations when storing tokens in Local or Session Storage<a href="#appendix-B-15.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-16">-08<a href="#appendix-B-16" class="pilcrow">¶</a></p>
+<p id="appendix-B-16">-09<a href="#appendix-B-16" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-17.1">
-          <p id="appendix-B-17.1.1">Added a note to use the "Secure" cookie attribute in addition to SameSite etc<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-17.1.1">Provide additional context for the same-domain architecture pattern<a href="#appendix-B-17.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-17.2">
-          <p id="appendix-B-17.2.1">Updates to bring this draft in sync with the latest Security BCP<a href="#appendix-B-17.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-17.2.1">Added reference to draft-ietf-httpbis-rfc6265bis to clarify that SameSite is not the only CSRF protection measure needed<a href="#appendix-B-17.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-17.3">
-          <p id="appendix-B-17.3.1">Updated text for mix-up countermeasures to reference the new "iss" extension<a href="#appendix-B-17.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-17.4">
-          <p id="appendix-B-17.4.1">Changed "SHOULD" for refresh token rotation to MUST either use rotation or sender-constraining to match the Security BCP<a href="#appendix-B-17.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-17.5">
-          <p id="appendix-B-17.5.1">Fixed references to other specs and extensions<a href="#appendix-B-17.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-17.6">
-          <p id="appendix-B-17.6.1">Editorial improvements in descriptions of the different architectures<a href="#appendix-B-17.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-17.3.1">Editorial improvements<a href="#appendix-B-17.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-18">-07<a href="#appendix-B-18" class="pilcrow">¶</a></p>
+<p id="appendix-B-18">-08<a href="#appendix-B-18" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-19.1">
-          <p id="appendix-B-19.1.1">Clarify PKCE requirements apply only to issuing access tokens<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-19.1.1">Added a note to use the "Secure" cookie attribute in addition to SameSite etc<a href="#appendix-B-19.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-19.2">
-          <p id="appendix-B-19.2.1">Change "MUST" to "SHOULD" for refresh token rotation<a href="#appendix-B-19.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-19.2.1">Updates to bring this draft in sync with the latest Security BCP<a href="#appendix-B-19.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-19.3">
-          <p id="appendix-B-19.3.1">Editorial clarifications<a href="#appendix-B-19.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-19.3.1">Updated text for mix-up countermeasures to reference the new "iss" extension<a href="#appendix-B-19.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-19.4">
+          <p id="appendix-B-19.4.1">Changed "SHOULD" for refresh token rotation to MUST either use rotation or sender-constraining to match the Security BCP<a href="#appendix-B-19.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-19.5">
+          <p id="appendix-B-19.5.1">Fixed references to other specs and extensions<a href="#appendix-B-19.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-19.6">
+          <p id="appendix-B-19.6.1">Editorial improvements in descriptions of the different architectures<a href="#appendix-B-19.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-20">-06<a href="#appendix-B-20" class="pilcrow">¶</a></p>
+<p id="appendix-B-20">-07<a href="#appendix-B-20" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-21.1">
-          <p id="appendix-B-21.1.1">Added refresh token requirements to AS summary<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-21.1.1">Clarify PKCE requirements apply only to issuing access tokens<a href="#appendix-B-21.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-21.2">
-          <p id="appendix-B-21.2.1">Editorial clarifications<a href="#appendix-B-21.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-21.2.1">Change "MUST" to "SHOULD" for refresh token rotation<a href="#appendix-B-21.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-21.3">
+          <p id="appendix-B-21.3.1">Editorial clarifications<a href="#appendix-B-21.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-22">-05<a href="#appendix-B-22" class="pilcrow">¶</a></p>
+<p id="appendix-B-22">-06<a href="#appendix-B-22" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-23.1">
-          <p id="appendix-B-23.1.1">Incorporated editorial and substantive feedback from Mike Jones<a href="#appendix-B-23.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-23.1.1">Added refresh token requirements to AS summary<a href="#appendix-B-23.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-23.2">
-          <p id="appendix-B-23.2.1">Added references to "nonce" as another way to prevent CSRF attacks<a href="#appendix-B-23.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-23.3">
-          <p id="appendix-B-23.3.1">Updated headers in the Implicit Flow section to better represent the relationship between the paragraphs<a href="#appendix-B-23.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-23.2.1">Editorial clarifications<a href="#appendix-B-23.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-24">-04<a href="#appendix-B-24" class="pilcrow">¶</a></p>
+<p id="appendix-B-24">-05<a href="#appendix-B-24" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-25.1">
-          <p id="appendix-B-25.1.1">Disallow the use of the Password Grant<a href="#appendix-B-25.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-25.1.1">Incorporated editorial and substantive feedback from Mike Jones<a href="#appendix-B-25.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-25.2">
-          <p id="appendix-B-25.2.1">Add PKCE support to summary list for authorization server requirements<a href="#appendix-B-25.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-25.2.1">Added references to "nonce" as another way to prevent CSRF attacks<a href="#appendix-B-25.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-25.3">
-          <p id="appendix-B-25.3.1">Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token, and to bring it in line with the Security BCP<a href="#appendix-B-25.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-25.4">
-          <p id="appendix-B-25.4.1">Updated recommendations on using state to reflect the Security BCP<a href="#appendix-B-25.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-25.5">
-          <p id="appendix-B-25.5.1">Updated server support checklist to reflect latest changes<a href="#appendix-B-25.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-25.6">
-          <p id="appendix-B-25.6.1">Updated the same-domain JS architecture section to emphasize the architecture rather than domain<a href="#appendix-B-25.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-25.7">
-          <p id="appendix-B-25.7.1">Editorial clarifications in the section that talks about OpenID Connect ID tokens<a href="#appendix-B-25.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-25.3.1">Updated headers in the Implicit Flow section to better represent the relationship between the paragraphs<a href="#appendix-B-25.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-26">-03<a href="#appendix-B-26" class="pilcrow">¶</a></p>
+<p id="appendix-B-26">-04<a href="#appendix-B-26" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-27.1">
-          <p id="appendix-B-27.1.1">Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified Authorization Code flow<a href="#appendix-B-27.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.1.1">Disallow the use of the Password Grant<a href="#appendix-B-27.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.2">
-          <p id="appendix-B-27.2.1">Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections<a href="#appendix-B-27.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.2.1">Add PKCE support to summary list for authorization server requirements<a href="#appendix-B-27.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.3">
-          <p id="appendix-B-27.3.1">Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments<a href="#appendix-B-27.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.3.1">Rewrote refresh token section to allow refresh tokens if they are time-limited, rotated on each use, and requiring that the rotated refresh token lifetimes do not extend past the lifetime of the initial refresh token, and to bring it in line with the Security BCP<a href="#appendix-B-27.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.4">
-          <p id="appendix-B-27.4.1">Updated abstract to not be limited to public clients, since the later sections talk about confidential clients<a href="#appendix-B-27.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.4.1">Updated recommendations on using state to reflect the Security BCP<a href="#appendix-B-27.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.5">
-          <p id="appendix-B-27.5.1">Removed references to avoiding OpenID Connect for same-domain architectures<a href="#appendix-B-27.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.5.1">Updated server support checklist to reflect latest changes<a href="#appendix-B-27.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.6">
-          <p id="appendix-B-27.6.1">Updated headers to better describe architectures (Apps Served from a Static Web Server -&gt; JavaScript Applications without a Backend)<a href="#appendix-B-27.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.6.1">Updated the same-domain JS architecture section to emphasize the architecture rather than domain<a href="#appendix-B-27.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-27.7">
-          <p id="appendix-B-27.7.1">Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario<a href="#appendix-B-27.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-27.8">
-          <p id="appendix-B-27.8.1">Referenced Security BCP in implicit flow attacks where possible<a href="#appendix-B-27.8.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-27.9">
-          <p id="appendix-B-27.9.1">Minor typo corrections<a href="#appendix-B-27.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-27.7.1">Editorial clarifications in the section that talks about OpenID Connect ID tokens<a href="#appendix-B-27.7.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-28">-02<a href="#appendix-B-28" class="pilcrow">¶</a></p>
+<p id="appendix-B-28">-03<a href="#appendix-B-28" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-29.1">
-          <p id="appendix-B-29.1.1">Rewrote overview section incorporating feedback from Leo Tohill<a href="#appendix-B-29.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-29.1.1">Updated the historic note about the fragment URL clarifying that the Session History API means browsers can use the unmodified Authorization Code flow<a href="#appendix-B-29.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-29.2">
-          <p id="appendix-B-29.2.1">Updated summary recommendation bullet points to split out application and server requirements<a href="#appendix-B-29.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-29.2.1">Rephrased "Authorization Code Flow" intro paragraph to better lead into the next two sections<a href="#appendix-B-29.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-29.3">
-          <p id="appendix-B-29.3.1">Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching<a href="#appendix-B-29.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-29.3.1">Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments<a href="#appendix-B-29.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-29.4">
-          <p id="appendix-B-29.4.1">Updated Section 6.2 to drop reference of SPA with a backend component being a public client<a href="#appendix-B-29.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-29.4.1">Updated abstract to not be limited to public clients, since the later sections talk about confidential clients<a href="#appendix-B-29.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-29.5">
-          <p id="appendix-B-29.5.1">Expanded the architecture section to explicitly mention three architectural patterns available to JS apps<a href="#appendix-B-29.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-29.5.1">Removed references to avoiding OpenID Connect for same-domain architectures<a href="#appendix-B-29.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-29.6">
+          <p id="appendix-B-29.6.1">Updated headers to better describe architectures (Apps Served from a Static Web Server -&gt; JavaScript Applications without a Backend)<a href="#appendix-B-29.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-29.7">
+          <p id="appendix-B-29.7.1">Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario<a href="#appendix-B-29.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-29.8">
+          <p id="appendix-B-29.8.1">Referenced Security BCP in implicit flow attacks where possible<a href="#appendix-B-29.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-29.9">
+          <p id="appendix-B-29.9.1">Minor typo corrections<a href="#appendix-B-29.9.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-30">-01<a href="#appendix-B-30" class="pilcrow">¶</a></p>
+<p id="appendix-B-30">-02<a href="#appendix-B-30" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-31.1">
-          <p id="appendix-B-31.1.1">Incorporated feedback from Torsten Lodderstedt<a href="#appendix-B-31.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-31.1.1">Rewrote overview section incorporating feedback from Leo Tohill<a href="#appendix-B-31.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-31.2">
-          <p id="appendix-B-31.2.1">Updated abstract<a href="#appendix-B-31.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-31.2.1">Updated summary recommendation bullet points to split out application and server requirements<a href="#appendix-B-31.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-31.3">
-          <p id="appendix-B-31.3.1">Clarified the definition of browser-based apps to not exclude applications cached in the browser, e.g. via Service Workers<a href="#appendix-B-31.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-31.3.1">Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching<a href="#appendix-B-31.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-31.4">
-          <p id="appendix-B-31.4.1">Clarified use of the state parameter for CSRF protection<a href="#appendix-B-31.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-31.4.1">Updated Section 6.2 to drop reference of SPA with a backend component being a public client<a href="#appendix-B-31.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-31.5">
-          <p id="appendix-B-31.5.1">Added background information about the original reason the implicit flow was created due to lack of CORS support<a href="#appendix-B-31.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-31.5.1">Expanded the architecture section to explicitly mention three architectural patterns available to JS apps<a href="#appendix-B-31.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-B-31.6">
-          <p id="appendix-B-31.6.1">Clarified the same-domain use case where the SPA and API share a cookie domain<a href="#appendix-B-31.6.1" class="pilcrow">¶</a></p>
+      </ul>
+<p id="appendix-B-32">-01<a href="#appendix-B-32" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-33.1">
+          <p id="appendix-B-33.1.1">Incorporated feedback from Torsten Lodderstedt<a href="#appendix-B-33.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-B-31.7">
-          <p id="appendix-B-31.7.1">Moved historic note about the fragment URL into the Overview<a href="#appendix-B-31.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-B-33.2">
+          <p id="appendix-B-33.2.1">Updated abstract<a href="#appendix-B-33.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-33.3">
+          <p id="appendix-B-33.3.1">Clarified the definition of browser-based apps to not exclude applications cached in the browser, e.g. via Service Workers<a href="#appendix-B-33.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-33.4">
+          <p id="appendix-B-33.4.1">Clarified use of the state parameter for CSRF protection<a href="#appendix-B-33.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-33.5">
+          <p id="appendix-B-33.5.1">Added background information about the original reason the implicit flow was created due to lack of CORS support<a href="#appendix-B-33.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-33.6">
+          <p id="appendix-B-33.6.1">Clarified the same-domain use case where the SPA and API share a cookie domain<a href="#appendix-B-33.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-33.7">
+          <p id="appendix-B-33.7.1">Moved historic note about the fragment URL into the Overview<a href="#appendix-B-33.7.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -3337,7 +3346,7 @@ session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 <p id="appendix-C-2">Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Mike Jones,
+Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
 Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 </section>
 </div>
