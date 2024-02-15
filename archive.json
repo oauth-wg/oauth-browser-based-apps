@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-13T00:34:45.347496+00:00",
+  "timestamp": "2024-02-15T00:34:10.052180+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -273,7 +273,7 @@
       "labels": [],
       "body": "6.1.4.3. \r\n\r\n_Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF, which puts a significant burden on the server-side component._\r\n\r\nI usually use the BFF architecture without requiring a downstream API or a resource server and thus no proxy is required.  My server logic is deployed as part of the BFF server application.  \r\n",
       "createdAt": "2023-10-23T20:53:23Z",
-      "updatedAt": "2023-11-21T16:15:08Z",
+      "updatedAt": "2024-02-13T18:52:23Z",
       "closedAt": null,
       "comments": [
         {
@@ -310,6 +310,13 @@
           "body": "@aaronpk This discussion is related to our discussion when we restructured the document. The \"no oauth\" model is indeed valid and would just rely on a session between the frontend and the \"API\" to keep track of user's authentication state.\n\nBack then, we weren't sure if this was discouraged, but agreed that it is not a core pattern of this spec, since it focuses on API-access with access tokens.\n\nTwo options: Either we rename this entire section (not my favorite), or we move the \"no oauth\" pattern upwards to section 4.\n\nLet me know what you think",
           "createdAt": "2023-11-21T16:15:07Z",
           "updatedAt": "2023-11-21T16:15:07Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This sounds like what's described [in 6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.1.2.4)\r\n\r\n> an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network.\r\n\r\nThe intent of the \"significant burden\" line is to capture the difficulty in deploying this pattern at scale. Perhaps there is a better way to phrase it. The same difficulty applies whether the resource server is internal to the backend or if it calls external resources. The point is you have to deal with either more network traffic or doing things like geographically distributing your databases. ",
+          "createdAt": "2024-02-13T18:52:22Z",
+          "updatedAt": "2024-02-13T18:52:22Z"
         }
       ]
     },
@@ -325,7 +332,7 @@
       "labels": [],
       "body": "Because the UI and the backend APIs can be hosted from the same backend application, Anti-forgery tokens can also be used to protect against CSRF.",
       "createdAt": "2023-10-23T21:46:41Z",
-      "updatedAt": "2023-11-21T18:40:17Z",
+      "updatedAt": "2024-02-13T18:54:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -341,6 +348,13 @@
           "body": "I thought it would be good to add this as it is per default supported in some tech stacks and so easy to use. People reading the doc might read it as only the mentioned ways protect against CSRF. Adding this would make the recommendations more complete.\r\n\r\n\u201cAre there benefits to using anti-forgery cookies over samesite cookies/CORS that we're missing?\u201d\r\n\r\nIn my opinion, there are no benefits compared with the other two options, just another option. Samesite cookies/ anti-forgery cookies are also a viable option. If the used tech stack has this already supported per default, then there is less to do as a developer. This would make it an option.\r\n",
           "createdAt": "2023-11-21T18:40:16Z",
           "updatedAt": "2023-11-21T18:40:16Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@damienbod  I am open to listing out this option as well for the scenario you mention. Do you have text you could suggest that captures this?",
+          "createdAt": "2024-02-13T18:54:10Z",
+          "updatedAt": "2024-02-13T18:54:10Z"
         }
       ]
     },
@@ -373,14 +387,38 @@
       "id": "I_kwDOCUe3lM5-gK-_",
       "title": "6.1.3.2 Question: benefits of encrypting cookie contents in BFF security",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/31",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nike61",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I was unable to find an explanation for the following point:\r\n_Additionally, the BFF SHOULD encrypt its cookie contents, to ensure that tokens stored in cookies are never written to disk in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see Section 8)._\r\n\r\nWhat is the advantage of encrypting cookies? If a malicious actor steals the cookie as plain text, couldn't they just send the entire cookie in a request?",
       "createdAt": "2024-02-07T07:30:57Z",
-      "updatedAt": "2024-02-07T07:37:50Z",
+      "updatedAt": "2024-02-13T22:51:55Z",
+      "closedAt": "2024-02-13T22:51:55Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "emphasis mine:\r\n\r\n> Additionally, the BFF SHOULD encrypt its cookie contents, to ensure that **tokens stored in cookies** are never written to disk in plaintext format. This security measure helps to ensure protection of the **access token** against malware...\r\n\r\nI believe this is meant to be an additional layer of security when the cookie actually contains the access token. While someone who steals the cookie can use the cookie regardless of whether the contents are encrypted, they can only use it at the BFF, whereas the access token itself might be able to be used elsewhere. I will add some text to clarify this.",
+          "createdAt": "2024-02-13T21:46:53Z",
+          "updatedAt": "2024-02-13T21:46:53Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOCUe3lM5_KnbF",
+      "title": "DPoP",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/32",
+      "state": "OPEN",
+      "author": "criztovyl",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> The application can use DPoP to ensure its access tokens are bound to non-exportable key linked to the browser.\r\n\r\nthis reads strange, not sure, but is there an \"a\" or \"s\" missing?\r\n\r\n> [...] bound to ***a*** non-exportable key linked to the browser.\r\n\r\n> [...] bound to non-exportable key***s*** linked to the browser.\r\n\r\nhttps://github.com/oauth-wg/oauth-browser-based-apps/blob/11ee6bc7997b3226c140fca219b9bcb629188089/draft-ietf-oauth-browser-based-apps.md?plain=1#L322",
+      "createdAt": "2024-02-14T03:45:23Z",
+      "updatedAt": "2024-02-14T03:45:23Z",
       "closedAt": null,
       "comments": []
     }
@@ -1698,24 +1736,26 @@
       "id": "PR_kwDOCUe3lM5iA1_9",
       "title": "Fix minor editorial issues",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/28",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "iphoneintosh",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "* Remove doubled \"... section Section ...\"\r\n* Replace \"BFF\" with \"token-mediating backend\" in token-mediating backend section\r\n* Remote redundant \"In browser\" wording",
       "createdAt": "2023-12-14T15:09:44Z",
-      "updatedAt": "2023-12-14T16:09:24Z",
+      "updatedAt": "2024-02-13T22:14:51Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
       "headRepository": "iphoneintosh/oauth-browser-based-apps",
       "headRefName": "fix-editorial-issues",
       "headRefOid": "48be6c1bcb6fc63fc6e75b51bf04bd6a0d3434eb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-02-13T22:14:51Z",
+      "mergedAt": "2024-02-13T22:14:51Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "ba6c495f0f0ac5017543aa0936ec87a5d5537e1d"
+      },
       "comments": [],
       "reviews": []
     },
@@ -1726,7 +1766,7 @@
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/29",
       "state": "OPEN",
       "author": "iphoneintosh",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed on the OSW, this PR adds a small section with security considerations on the use of `postMessage` (a.k.a. \"web messaging\") to this draft. It makes reference to [Section 4.18 of the OAuth BCP](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-24#name-attacks-on-in-browser-commu), which already discusses the security implications of in-browser communication flows in detail.\r\n\r\nSince (silent) iframe flows and popup flows are especially used in browser-based apps, we think that it makes sense to include security considerations of their in-browser communication into this draft. Please let us know what you think about this. We appreciate any feedback.",
@@ -1750,24 +1790,26 @@
       "id": "PR_kwDOCUe3lM5kP4yT",
       "title": "IETF 118 followup review",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/30",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "panva",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "A followup review with suggestions as requested at IETF 118",
       "createdAt": "2024-01-16T21:18:24Z",
-      "updatedAt": "2024-02-12T23:40:04Z",
+      "updatedAt": "2024-02-13T18:28:54Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
       "headRepository": "panva/oauth-browser-based-apps",
       "headRefName": "filip-review",
-      "headRefOid": "d015b2d809cde58a32e2e8dae0ffbad32dd14b33",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "e718520f2c1151625b07781927624d241dcf5a05",
+      "closedAt": "2024-02-13T18:28:33Z",
+      "mergedAt": "2024-02-13T18:28:33Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "6f12ac032a426d52f5a471f21872c5442d5f8cf0"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2061,6 +2103,19 @@
           "body": "see suggestions inline",
           "createdAt": "2024-02-12T23:40:04Z",
           "updatedAt": "2024-02-12T23:40:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v-igg",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-13T18:26:57Z",
+          "updatedAt": "2024-02-13T18:26:57Z",
           "comments": []
         }
       ]
