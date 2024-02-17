@@ -1549,7 +1549,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
 <p id="section-5.2.2-1">If the attacker obtains a valid access token, they gain the ability to impersonate the user in a request to a resource server. Concretely, possession of an access token allows the attacker to send arbitrary requests to any resource server that considers the access token to be valid. In essence, abusing a stolen access token enables short-term impersonation of the user to resource servers.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">The attack ends when the access token expires or when a token is revoked with the authorization server. In a typical browser-based OAuth client, access token lifetimes can be quite short, ranging from minutes to hours.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-3">Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-4">The application can use DPoP to ensure its access tokens are bound to non-exportable key held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the <span>[<a href="#DPoP" class="cite xref">DPoP</a>]</span> specification. Additionally, when the attacker obtains a fresh set of tokens, as described in <a href="#payload-new-flow" class="auto internal xref">Section 5.1.3</a>, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-4">The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the <span>[<a href="#DPoP" class="cite xref">DPoP</a>]</span> specification. Additionally, when the attacker obtains a fresh set of tokens, as described in <a href="#payload-new-flow" class="auto internal xref">Section 5.1.3</a>, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="consequence-hijack">
@@ -3096,6 +3096,9 @@ as the additional requirements described in <a href="#pattern-oauth-browser-rt" 
 </li>
         <li class="normal" id="appendix-B-3.2">
           <p id="appendix-B-3.2.1">Clarified when cookie encryption applies<a href="#appendix-B-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-3.3">
+          <p id="appendix-B-3.3.1">Added a section with security considerations on the use of postMessage<a href="#appendix-B-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-B-4">-15<a href="#appendix-B-4" class="pilcrow">¶</a></p>

@@ -460,7 +460,7 @@ Table of Contents
    values, or body.
 
    The application can use DPoP to ensure its access tokens are bound to
-   non-exportable key held by the browser.  In that case, it becomes
+   non-exportable keys held by the browser.  In that case, it becomes
    significantly harder for the attacker to abuse stolen access tokens.
    More specifically, with DPoP, the attacker can only abuse stolen
    application tokens by carrying out an online attack, where the proofs
@@ -2450,6 +2450,9 @@ Appendix B.  Document History
    *  Applied editorial changes from Filip Skokan and Louis Jannett
 
    *  Clarified when cookie encryption applies
+
+   *  Added a section with security considerations on the use of
+      postMessage
 
    -15
 
