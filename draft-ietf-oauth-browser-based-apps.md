@@ -144,6 +144,13 @@ informative:
       org: Google, Inc
     date: October 2018
     target: https://www.w3.org/TR/CSP3/
+  WebMessaging:
+    title: HTML Living Standard - Cross-document messaging
+    author:
+      name: whatwg
+      ins: whatwg
+    date: December 2023
+    target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
 
 --- abstract
 
@@ -1390,6 +1397,20 @@ only be used if identifying the issuer as described is not possible.
 
 Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
 and the countermeasures mentioned above.
+
+
+
+
+Security of In-Browser Communication Flows {#in_browser_communication_security}
+--------------------------------------
+
+In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
+In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
+
+If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
+To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
+
+Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
 
 
 
