@@ -996,7 +996,7 @@ The scenario where the attacker obtains a fresh set of tokens (See {{payload-new
 
 For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.
 
-The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
+The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
 The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
 
@@ -1405,7 +1405,7 @@ Security of In-Browser Communication Flows {#in_browser_communication_security}
 --------------------------------------
 
 In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
-In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
+In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run hidden iframe-based flows.
 
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
