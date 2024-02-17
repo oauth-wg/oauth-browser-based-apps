@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 16 August 2024                                    Ping Identity
+Expires: 20 August 2024                                    Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                        13 February 2024
+                                                        17 February 2024
 
 
                     OAuth 2.0 for Browser-Based Apps
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 August 2024.
+   This Internet-Draft will expire on 20 August 2024.
 
 Copyright Notice
 
@@ -115,6 +115,7 @@ Table of Contents
      9.1.  Reducing the Authority of Tokens
      9.2.  Sender-Constrained Tokens
      9.3.  Authorization Server Mix-Up Mitigation
+     9.4.  Security of In-Browser Communication Flows
    10. IANA Considerations
    11. References
      11.1.  Normative References
@@ -2291,6 +2292,28 @@ Table of Contents
    Section 4.4 of [oauth-security-topics] provides additional details
    about mix-up attacks and the countermeasures mentioned above.
 
+9.4.  Security of In-Browser Communication Flows
+
+   In browser-based apps, it is common to execute the OAuth flow in a
+   secondary window, such as a popup or iframe, instead of redirecting
+   the primary window.  In these flows, the browser-based app holds
+   control of the primary window, for instance, to avoid page refreshes
+   or run silent frame-based flows.
+
+   If the browser-based app and the authorization server are invoked in
+   different frames, they have to use in-browser communication
+   techniques like the postMessage API (a.k.a.  [WebMessaging]) instead
+   of top-level redirections.  To guarantee confidentiality and
+   authenticity of messages, both the initiator origin and receiver
+   origin of a postMessage MUST be verified using the mechanisms
+   inherently provided by the postMessage API (Section 9.3.2 in
+   [WebMessaging]).
+
+   Section 4.18. of [oauth-security-topics] provides additional details
+   about the security of in-browser communication flows and the
+   countermeasures that browser-based apps and authorization servers
+   MUST apply to defend against these attacks.
+
 10.  IANA Considerations
 
    This document does not require any IANA actions.
@@ -2384,6 +2407,11 @@ Table of Contents
    [WebCryptographyAPI]
               Huigens, D., "Web Cryptography API", November 2022,
               <https://w3c.github.io/webcrypto/>.
+
+   [WebMessaging]
+              whatwg, "HTML Living Standard - Cross-document messaging",
+              December 2023, <https://html.spec.whatwg.org/multipage/
+              web-messaging.html#web-messaging>.
 
 Appendix A.  Server Support Checklist
 
