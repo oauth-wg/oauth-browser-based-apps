@@ -326,7 +326,7 @@ The attack ends when the access token expires or when a token is revoked with th
 
 Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.
 
-The application can use DPoP to ensure its access tokens are bound to non-exportable key held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the {{DPoP}} specification. Additionally, when the attacker obtains a fresh set of tokens, as described in {{payload-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
+The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the {{DPoP}} specification. Additionally, when the attacker obtains a fresh set of tokens, as described in {{payload-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
 
 
 
@@ -1458,6 +1458,7 @@ Document History
 
 * Applied editorial changes from Filip Skokan and Louis Jannett
 * Clarified when cookie encryption applies
+* Added a section with security considerations on the use of postMessage
 
 -15
 
