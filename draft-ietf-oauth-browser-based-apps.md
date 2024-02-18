@@ -499,6 +499,13 @@ To avoid such bypasses against the CORS policy, the BFF SHOULD require that ever
 It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
 
 
+##### Use Anti-forgery/double submit cookies
+
+Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. When implemented correctly, it provides an extra layer of protection against Cross-Site Request Forgery. The cookie is validated for all state changing requests. 
+
+The anti-forgery cookie should be encrypted and apply the SameSite=Strict attribute to the cookie. The cookie should be connected to the session and different for each session. The session should use HTTPS. 
+
+
 #### Advanced Security
 
 In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications are more powerful than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.
