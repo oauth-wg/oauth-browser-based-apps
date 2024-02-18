@@ -151,6 +151,12 @@ informative:
       ins: whatwg
     date: December 2023
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
+  Site:
+    title: Site
+    author:
+    - name: MDN Contributors
+      org: Mozilla Developer Network
+    target: https://developer.mozilla.org/en-US/docs/Glossary/Site
 
 --- abstract
 
@@ -412,7 +418,7 @@ It is recommended to use both access tokens and refresh tokens, as it enables ac
 
 If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can run a Refresh Token flow to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the Refresh Token request.
 
-When the refresh token expires, there is no way to recover without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
+When the refresh token expires, there is no way to recover without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
 
 #### Cookie-based Session Management {#pattern-bff-sessions}
@@ -477,9 +483,9 @@ The BFF MUST implement a proper CSRF defense. The exact mechanism or combination
 
 Configuring the cookies with the *SameSite=Strict* attribute (See {{pattern-bff-cookie-security}}) ensures that the BFF's cookies are only included on same-site requests, and not on potentially malicious cross-site requests.
 
-This defense is adequate if the BFF is never considered to be same-site with any other applications. However, it falls short when the BFF is hosted alongside other applications within the same parent domain.
+This defense is adequate if the BFF is never considered to be same-site with any other applications. However, it falls short when the BFF is hosted alongside other applications within the same site, defined as the eTLD+1 (See this definition of {{Site}} for more details).
 
-For example, subdomains, such as  `https://a.example.com` and `https://b.example.com`, are considered same-site, since they share the same site `example.com`. They are considered cross-origin, since origins consist of the tuple *<scheme, host, port>*. As a result, a subdomain takeover attack against `b.example.com` can enable CSRF attacks against the BFF of `a.example.com`. Technically, this attack should be identified as a "Same-Site But Cross-Origin Request Forgery" attack.
+For example, subdomains, such as  `https://a.example.com` and `https://b.example.com`, are considered same-site, since they share the same site `example.com`. They are considered cross-origin, since origins consist of the tuple *<scheme, hostname, port>*. As a result, a subdomain takeover attack against `b.example.com` can enable CSRF attacks against the BFF of `a.example.com`. Technically, this attack should be identified as a "Same-Site But Cross-Origin Request Forgery" attack.
 
 
 ##### Cross-Origin Resource Sharing (CORS) {#cors}
@@ -490,7 +496,7 @@ Browsers typically restrict cross-origin HTTP requests initiated from scripts. C
 
 Because of this property, the BFF can rely on CORS as a CSRF defense. When the attacker tries to launch a cross-origin request to the BFF from the user's browser, the BFF will not approve the request in the preflight response, causing the browser to block the actual request. Note that the attacker can always launch the request from their own machine, but then the request will not carry the user's cookies, so the attack will fail.
 
-When relying on CORS as a CSRF defense, it is important to realize that certain requests are possible without a preflight. For such requests, named "Simple Requests" in CORS terminology, the browser will simply send the request and prevent access to the response if the server did not send the proper CORS headers. This behavior is enforced for requests that can be triggered via other means than JavaScript, such as a GET request or a form-based POST request.
+When relying on CORS as a CSRF defense, it is important to realize that certain requests are possible without a preflight. For such requests, named "CORS-safelisted Requests", the browser will simply send the request and prevent access to the response if the server did not send the proper CORS headers. This behavior is enforced for requests that can be triggered via other means than JavaScript, such as a GET request or a form-based POST request.
 
 The consequence of this behavior is that certain endpoints of the resource server could become vulnerable to CSRF, even with CORS enabled as a defense. For example, if the resource server is an API that exposes an endpoint to a body-less POST request, there will be no preflight request and no CSRF defense.
 
@@ -1325,13 +1331,13 @@ While closures work well in simple, isolated environments, they are tricky to se
 Persistent Token Storage {#token-storage-persistent}
 ------------------------
 
-The persistent storage APIs currently available as of this writing are LocalStorage, SessionStorage, and IndexedDB.
+The persistent storage APIs currently available as of this writing are localStorage, sessionStorage, and IndexedDB.
 
-LocalStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. LocalStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the LocalStorage.
+localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.
 
-SessionStorage is similar to LocalStorage, except that SessionStorage is cleared when a browser tab is closed, and is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in SessionStorage.
+sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.
 
-IndexedDB is a persistent storage mechanism like LocalStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.
+IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.
 
 Note that the main difference between these patterns is the exposure of the data, but that none of these options can fully mitigate token exfiltration when the attacker can execute malicious code in the application's execution environment.
 
@@ -1370,7 +1376,7 @@ As discussed throughout this document, the use of sender-constrained tokens does
 
 When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key.
 
-If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in LocalStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+If an application is using sender-constrained tokens, the secure storage of the private key is more important than the secure storage of the token. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
@@ -1398,6 +1404,14 @@ only be used if identifying the issuer as described is not possible.
 Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
 and the countermeasures mentioned above.
 
+
+
+Isolating Applications using Origins
+--------------------------------------
+
+Many of the web's security mechanisms rely on origins, which are defined as the triple `<scheme, hostname, port>`. For example, browsers automatically isolate browsing contexts with different origins, limit resources to certain origins, and apply CORS restrictions to outgoing cross-origin requests.
+
+Therefore, it is considered a best practice to avoid deploying more than one application in a single origin. An architecture that only deploys a single application in an origin can leverage these browser restrictions to increase the security of the application. Additionally, having a single origin per application makes it easier to configure and deploy security measures such as CORS, CSP, etc.
 
 
 
