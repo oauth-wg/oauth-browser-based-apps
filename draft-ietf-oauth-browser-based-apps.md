@@ -501,9 +501,9 @@ It is also possible to deploy the JavaScript application on the same origin as t
 
 ##### Use anti-forgery/double submit cookies
 
-Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. When implemented correctly, it provides an extra layer of protection against Cross-Site Request Forgery. The cookie is validated for all state changing requests. 
+Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identity legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.
 
-The anti-forgery cookie should be encrypted and apply the SameSite=Strict attribute to the cookie. The cookie should be connected to the session and different for each session. The session should use HTTPS. 
+Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.
 
 
 #### Advanced Security
