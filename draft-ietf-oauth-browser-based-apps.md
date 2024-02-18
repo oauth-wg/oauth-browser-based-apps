@@ -499,7 +499,7 @@ To avoid such bypasses against the CORS policy, the BFF SHOULD require that ever
 It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
 
 
-##### Use Anti-forgery/double submit cookies
+##### Use anti-forgery/double submit cookies
 
 Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. When implemented correctly, it provides an extra layer of protection against Cross-Site Request Forgery. The cookie is validated for all state changing requests. 
 
