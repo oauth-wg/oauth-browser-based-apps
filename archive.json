@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-15T00:34:10.052180+00:00",
+  "timestamp": "2024-02-18T00:36:47.846765+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -332,7 +332,7 @@
       "labels": [],
       "body": "Because the UI and the backend APIs can be hosted from the same backend application, Anti-forgery tokens can also be used to protect against CSRF.",
       "createdAt": "2023-10-23T21:46:41Z",
-      "updatedAt": "2024-02-13T18:54:11Z",
+      "updatedAt": "2024-02-17T07:23:05Z",
       "closedAt": null,
       "comments": [
         {
@@ -355,6 +355,13 @@
           "body": "@damienbod  I am open to listing out this option as well for the scenario you mention. Do you have text you could suggest that captures this?",
           "createdAt": "2024-02-13T18:54:10Z",
           "updatedAt": "2024-02-13T18:54:10Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "NONE",
+          "body": "Hi @aaronpk I'll write something\r\n\r\nKind regards Damien",
+          "createdAt": "2024-02-17T07:23:04Z",
+          "updatedAt": "2024-02-17T07:23:04Z"
         }
       ]
     },
@@ -411,16 +418,31 @@
       "id": "I_kwDOCUe3lM5_KnbF",
       "title": "DPoP",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/32",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "criztovyl",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> The application can use DPoP to ensure its access tokens are bound to non-exportable key linked to the browser.\r\n\r\nthis reads strange, not sure, but is there an \"a\" or \"s\" missing?\r\n\r\n> [...] bound to ***a*** non-exportable key linked to the browser.\r\n\r\n> [...] bound to non-exportable key***s*** linked to the browser.\r\n\r\nhttps://github.com/oauth-wg/oauth-browser-based-apps/blob/11ee6bc7997b3226c140fca219b9bcb629188089/draft-ietf-oauth-browser-based-apps.md?plain=1#L322",
       "createdAt": "2024-02-14T03:45:23Z",
-      "updatedAt": "2024-02-14T03:45:23Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-02-17T00:21:44Z",
+      "closedAt": "2024-02-17T00:21:44Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Good catch, thanks",
+          "createdAt": "2024-02-17T00:16:22Z",
+          "updatedAt": "2024-02-17T00:16:22Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Fixed in c593337de1055185b9d41783bf3e16ac922f9231",
+          "createdAt": "2024-02-17T00:21:44Z",
+          "updatedAt": "2024-02-17T00:21:44Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -1764,25 +1786,35 @@
       "id": "PR_kwDOCUe3lM5iluJO",
       "title": "Added section on the security of in-browser communication flows",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/29",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "iphoneintosh",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed on the OSW, this PR adds a small section with security considerations on the use of `postMessage` (a.k.a. \"web messaging\") to this draft. It makes reference to [Section 4.18 of the OAuth BCP](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-24#name-attacks-on-in-browser-commu), which already discusses the security implications of in-browser communication flows in detail.\r\n\r\nSince (silent) iframe flows and popup flows are especially used in browser-based apps, we think that it makes sense to include security considerations of their in-browser communication into this draft. Please let us know what you think about this. We appreciate any feedback.",
       "createdAt": "2023-12-21T16:43:52Z",
-      "updatedAt": "2023-12-21T16:43:53Z",
+      "updatedAt": "2024-02-17T00:14:52Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
       "headRepository": "iphoneintosh/oauth-browser-based-apps",
       "headRefName": "inbc-security-considerations",
       "headRefOid": "e1da28f8eb77ac158e145f4118b6723c236d5bbf",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2024-02-17T00:14:52Z",
+      "mergedAt": "2024-02-17T00:14:52Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "de70195fda83a6a563ebfd4bd1342a346312b188"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Sounds good to me, thanks!",
+          "createdAt": "2024-02-17T00:14:42Z",
+          "updatedAt": "2024-02-17T00:14:42Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -2119,6 +2151,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOCUe3lM5nKFKi",
+      "title": "more silent frame edits",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/33",
+      "state": "OPEN",
+      "author": "panva",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-17T09:15:43Z",
+      "updatedAt": "2024-02-17T09:15:43Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "panva/oauth-browser-based-apps",
+      "headRefName": "more-edit",
+      "headRefOid": "776a156f18527511982ff33f8955a67989a549ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
