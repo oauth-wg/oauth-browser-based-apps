@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-18T00:36:47.846765+00:00",
+  "timestamp": "2024-02-20T00:33:33.260448+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -273,7 +273,7 @@
       "labels": [],
       "body": "6.1.4.3. \r\n\r\n_Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF, which puts a significant burden on the server-side component._\r\n\r\nI usually use the BFF architecture without requiring a downstream API or a resource server and thus no proxy is required.  My server logic is deployed as part of the BFF server application.  \r\n",
       "createdAt": "2023-10-23T20:53:23Z",
-      "updatedAt": "2024-02-13T18:52:23Z",
+      "updatedAt": "2024-02-18T10:19:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -317,6 +317,13 @@
           "body": "This sounds like what's described [in 6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.1.2.4)\r\n\r\n> an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network.\r\n\r\nThe intent of the \"significant burden\" line is to capture the difficulty in deploying this pattern at scale. Perhaps there is a better way to phrase it. The same difficulty applies whether the resource server is internal to the backend or if it calls external resources. The point is you have to deal with either more network traffic or doing things like geographically distributing your databases. ",
           "createdAt": "2024-02-13T18:52:22Z",
           "updatedAt": "2024-02-13T18:52:22Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I have [proposed](https://github.com/oauth-wg/oauth-browser-based-apps/pull/36)  a slight rewording to resolve this issue according to comments made by @aaronpk and @damienbod ",
+          "createdAt": "2024-02-18T10:19:17Z",
+          "updatedAt": "2024-02-18T10:19:17Z"
         }
       ]
     },
@@ -332,7 +339,7 @@
       "labels": [],
       "body": "Because the UI and the backend APIs can be hosted from the same backend application, Anti-forgery tokens can also be used to protect against CSRF.",
       "createdAt": "2023-10-23T21:46:41Z",
-      "updatedAt": "2024-02-17T07:23:05Z",
+      "updatedAt": "2024-02-18T07:24:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -362,6 +369,13 @@
           "body": "Hi @aaronpk I'll write something\r\n\r\nKind regards Damien",
           "createdAt": "2024-02-17T07:23:04Z",
           "updatedAt": "2024-02-17T07:23:04Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "NONE",
+          "body": "@aaronpk @philippederyck \r\n\r\nI created a PR with an initial draft. I don't think we should explain how it works because this is not the scope of this doc. \r\n\r\nkind regards Damien",
+          "createdAt": "2024-02-18T07:24:25Z",
+          "updatedAt": "2024-02-18T07:24:25Z"
         }
       ]
     },
@@ -443,6 +457,22 @@
           "updatedAt": "2024-02-17T00:21:44Z"
         }
       ]
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOCUe3lM5_m5mK",
+      "title": "Follow up on review for merged PR",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/35",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "PR #30 merges a bunch of changes suggested by @panva. After merging, I have added [a couple of notes](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30#pullrequestreview-1887186225) that require following up. This issue is to keep track of that work.",
+      "createdAt": "2024-02-18T10:09:29Z",
+      "updatedAt": "2024-02-18T10:09:29Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -1829,7 +1859,7 @@
       "labels": [],
       "body": "A followup review with suggestions as requested at IETF 118",
       "createdAt": "2024-01-16T21:18:24Z",
-      "updatedAt": "2024-02-13T18:28:54Z",
+      "updatedAt": "2024-02-18T12:00:22Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
@@ -2149,6 +2179,144 @@
           "createdAt": "2024-02-13T18:26:57Z",
           "updatedAt": "2024-02-13T18:26:57Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfC0x",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Hey @panva, thanks for the detailed review!\r\n\r\n@aaronpk I am aware that this is merged already, but I added a bunch of comments that I believe need addressing. Let me know if you need any more input from me.",
+          "createdAt": "2024-02-18T09:53:37Z",
+          "updatedAt": "2024-02-18T10:08:29Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "I don't believe that the consistent rewording to `execution context` is accurate in this context. It is true that the code runs in the execution context, but the underlying security model of the browser is based on origins (Same-Origin Policy). When two execution contexts have the same origin and have a direct reference to each other, they are not isolated (e.g., a parent window and a frame). \r\n\r\nI strongly recommend to stick with `origin`. Alternatively, we should add a note to explain this context.",
+              "createdAt": "2024-02-18T09:53:38Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "Doesn't the silent apply to the \"flow\" here? As in `silent ... flow`? The attack does not rely on the frame being hidden, but on the attackers ability to run a flow that does not require user interaction, so the __silent__ modifier is more important/accurate than the __hidden__ modifier.",
+              "createdAt": "2024-02-18T09:55:56Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 169,
+              "body": "This is not correct. The browser only uses preflights for CORS-safelisted requests (i.e., anything that cannot be sent without modifying a request through JS). A simple GET or POST without custom headers or without a custom content type will not require a preflight.",
+              "createdAt": "2024-02-18T10:02:57Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 180,
+              "body": "I am assuming you are hinting at a dynamic CORS configuration where the AS uses the client ID to lookup a configuration and determine if this origin is legitimate? If that is indeed true, I don't think enforcement through CORS would be a correct implementation technique. I consider it application-level logic, akin to checking a redirect URI during an OAuth flow. As such, I would handle this as an application-level error instead of an *invalid CORS request*.\r\n\r\nI am not objecting against this, but I believe it needs a bit more explaining when it is left in. This will not be obvious to someone without proper context.",
+              "createdAt": "2024-02-18T10:06:22Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfE0B",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:11:48Z",
+          "updatedAt": "2024-02-18T10:11:48Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Explaining either one of the two that you think is more appropriate is definitely needed. I don't think origin is any better to execution context without an explanation of what we mean by it.",
+              "createdAt": "2024-02-18T10:11:48Z",
+              "updatedAt": "2024-02-18T10:11:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfFmz",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:26:05Z",
+          "updatedAt": "2024-02-18T10:26:05Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "A simple request won't get a preflight, right, feel free to reword the conditions which are currently summarized as \"typically\".\r\n\r\nIt needs to be mentioned (at least here) that when one uses DPoP there are no more simple requests. Having had written not one browser based client I am no longer envisioning typical operation to be without preflights.",
+              "createdAt": "2024-02-18T10:26:05Z",
+              "updatedAt": "2024-02-18T10:28:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfF1p",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:29:57Z",
+          "updatedAt": "2024-02-18T10:29:57Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "It is not enforced through CORS, the request would still fail with a proper oauth error, but it is through CORS that we ensure even these error responses don't get read from unintended origins.",
+              "createdAt": "2024-02-18T10:29:57Z",
+              "updatedAt": "2024-02-18T10:29:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfLbj",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T11:57:27Z",
+          "updatedAt": "2024-02-18T11:57:27Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "So the scenario would be as follows:\r\n\r\nThe AS has client 1 with origin A and client B with origin B. Upon handling a preflight, it sees a request coming from origin B, so it allows the request to go through. Upon handling the request, the AS sees that client 1 does not have origin B approved, so it issues an error message. However, additionally, it should not set the CORS header that allows origin B to read this response.\r\n\r\nIs that a correct description? If so, I think we need to add this context in the document to make this point clear. We probably also need to make this a SHOULD requirement for the AS (as I don't think we can make it a MUST)",
+              "createdAt": "2024-02-18T11:57:27Z",
+              "updatedAt": "2024-02-18T11:57:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfLib",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T12:00:22Z",
+          "updatedAt": "2024-02-18T12:00:22Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "It's currently a Note and I think that's enough to give guidance. I wouldn't make this normative in any way.",
+              "createdAt": "2024-02-18T12:00:22Z",
+              "updatedAt": "2024-02-18T12:00:22Z"
+            }
+          ]
         }
       ]
     },
@@ -2171,6 +2339,153 @@
       "headRepository": "panva/oauth-browser-based-apps",
       "headRefName": "more-edit",
       "headRefOid": "776a156f18527511982ff33f8955a67989a549ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOCUe3lM5nNIxR",
+      "title": "6.1.3.3.3. Use Anti-forgery/double submit cookies",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/34",
+      "state": "OPEN",
+      "author": "damienbod",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "fixes https://github.com/oauth-wg/oauth-browser-based-apps/issues/26\r\n",
+      "createdAt": "2024-02-18T07:23:03Z",
+      "updatedAt": "2024-02-18T10:54:52Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "damienbod/oauth-browser-based-apps",
+      "headRefName": "feature/6-1-3-3-use-Anti-forgery",
+      "headRefOid": "7831ad2b4eb688a846ddc8a22aed592f895ed120",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "damienbod",
+          "authorAssociation": "NONE",
+          "body": "Thanks @philippederyck I like it, I updated the PR",
+          "createdAt": "2024-02-18T10:52:37Z",
+          "updatedAt": "2024-02-18T10:52:37Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5wfCiY",
+          "commit": {
+            "abbreviatedOid": "df048fb"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks for the suggestion @damienbod. I believe it is important to explain why this addition is there, so I've taken a stab at rewording (see below). \r\n\r\nI have also removed some of the implementation details that are not necessarily relevant (e.g., the use of HTTPS). I also removed the note on encryption, since the value in the cookie is typically random, so there would be no need to encrypt the cookie. \r\n\r\nLet me know what you think.\r\n\r\n\r\n\r\n```\r\nSome technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identity legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.\r\n\r\nNote that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.\r\n```",
+          "createdAt": "2024-02-18T09:47:13Z",
+          "updatedAt": "2024-02-18T09:47:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOCUe3lM5nNjJe",
+      "title": "Reworded *significant burden*",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/36",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR resolves issue #25 by rephrasing the *significant burden* of having a BFF",
+      "createdAt": "2024-02-18T10:18:10Z",
+      "updatedAt": "2024-02-18T14:28:42Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/25-address-language",
+      "headRefOid": "ca5aa7b17fdb6f7ffe4f9900a50cab0864c33e5a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5wfS6x",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "damienbod",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T14:28:42Z",
+          "updatedAt": "2024-02-18T14:28:42Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "How about adding this as well?\r\n\r\n```\r\nA proxy is not required, if the resource server and the BFF server are the same. \r\n```\r\n",
+              "createdAt": "2024-02-18T14:28:42Z",
+              "updatedAt": "2024-02-18T14:28:42Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOCUe3lM5nNsQY",
+      "title": "Addressed comments from Elar Lang",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/37",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR incorporates a bunch of comments made by Elar Lang via mail.",
+      "createdAt": "2024-02-18T11:47:22Z",
+      "updatedAt": "2024-02-18T11:53:47Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/review-elar-lang",
+      "headRefOid": "1e8482abdf3ff54e5c202d492c3a8facb67d19a4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOCUe3lM5nNsdt",
+      "title": "Moved new section on in-browser flows",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/38",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The new section on the security of in-browser communication flows only applies to the browser-based OAuth client. It does not apply to the BFF or TM Backend. Therefore, I moved this section to the security considerations of the relevant pattern.",
+      "createdAt": "2024-02-18T11:50:41Z",
+      "updatedAt": "2024-02-18T11:50:41Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/move-inbrowser-flows",
+      "headRefOid": "582bffee22cf09e0889d634f6bff0eb7d683d04c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
