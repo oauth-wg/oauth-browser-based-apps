@@ -1304,8 +1304,8 @@ Table of Contents
    *  MUST use PKCE ([RFC7636]) when obtaining an access token
       (Section 6.3.2.1.1)
 
-   *  MUST Protect themselves against CSRF attacks (Section 6.3.2.4.3)
-      by either:
+   *  MUST Protect themselves against CSRF attacks (Section 6.3.2.6) by
+      either:
 
       -  ensuring the authorization server supports PKCE, or
 
@@ -1328,7 +1328,7 @@ Table of Contents
       (Section 7.2)
 
    *  If issuing refresh tokens to browser-based applications
-      (Section 6.3.2.5), then:
+      (Section 6.3.2.7), then:
 
       -  MUST rotate refresh tokens on each use or use sender-
          constrained refresh tokens, and
@@ -1416,7 +1416,7 @@ Table of Contents
    redirect URI as described in [oauth-security-topics] Section 4.1.1.
    This helps to prevent attacks targeting the authorization code.
 
-6.3.2.4.2.  Security of In-Browser Communication Flows
+6.3.2.5.  Security of In-Browser Communication Flows
 
    In browser-based apps, it is common to execute the OAuth flow in a
    secondary window, such as a popup or iframe, instead of redirecting
@@ -1438,7 +1438,7 @@ Table of Contents
    countermeasures that browser-based apps and authorization servers
    MUST apply to defend against these attacks.
 
-6.3.2.4.3.  Cross-Site Request Forgery Protections
+6.3.2.6.  Cross-Site Request Forgery Protections
 
    Browser-based applications MUST prevent CSRF attacks against their
    redirect URI.  This can be accomplished by any of the below:
@@ -1454,7 +1454,7 @@ Table of Contents
 
    See Section 2.1 of [oauth-security-topics] for additional details.
 
-6.3.2.5.  Refresh Tokens
+6.3.2.7.  Refresh Tokens
 
    Refresh tokens provide a way for applications to obtain a new access
    token when the initial access token expires.  For browser-based
@@ -1520,7 +1520,7 @@ Table of Contents
    policies around refresh token issuance, lifetime and expiration for
    browser-based applications compared to other public clients.
 
-6.3.2.6.  Cross-Origin Requests
+6.3.2.8.  Cross-Origin Requests
 
    In this scenario, the application sends JavaScript-based requests to
    the authorization server and the resource server.  Given the nature
@@ -2478,7 +2478,7 @@ Appendix A.  Server Support Checklist
 
    8.  Follow the [oauth-security-topics] recommendations on refresh
        tokens, as well as the additional requirements described in
-       Section 6.3.2.5.
+       Section 6.3.2.7.
 
 Appendix B.  Document History
 
@@ -2492,6 +2492,11 @@ Appendix B.  Document History
 
    *  Added a section with security considerations on the use of
       postMessage
+
+   *  Added a section on anti-forgery/double-submit cookies as another
+      form of CSRF protection
+
+   *  Updated CORS terminology
 
    -15
 
@@ -2711,11 +2716,12 @@ Appendix C.  Acknowledgements
    final specification:
 
    Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka,
-   Daniel Fett, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
-   Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
-   Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill,
-   Louis Jannett, Mike Jones, Sean Kelleher, Thomas Broyer Tomek
-   Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+   Damien Bowden, Daniel Fett, Elar Lang, Eva Sarafianou, Filip Skokan,
+   George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley,
+   Joseph Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu
+   Selhausen, Leo Tohill, Louis Jannett, Mike Jones, Sean Kelleher,
+   Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci
+   and Yannick Majoros.
 
 Authors' Addresses
 

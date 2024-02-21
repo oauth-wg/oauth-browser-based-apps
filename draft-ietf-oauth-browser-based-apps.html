@@ -2165,7 +2165,7 @@ described in this section.<a href="#section-6.3.2.1-1" class="pilcrow">¶</a></p
                 <p id="section-6.3.2.1-3.1.1">MUST use PKCE (<span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span>) when obtaining an access token (<a href="#auth_code_request" class="auto internal xref">Section 6.3.2.1.1</a>)<a href="#section-6.3.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3.2.1-3.2">
-                <p id="section-6.3.2.1-3.2.1">MUST Protect themselves against CSRF attacks (<a href="#pattern-oauth-browser-csrf" class="auto internal xref">Section 6.3.2.4.3</a>) by either:<a href="#section-6.3.2.1-3.2.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3.2.1-3.2.1">MUST Protect themselves against CSRF attacks (<a href="#pattern-oauth-browser-csrf" class="auto internal xref">Section 6.3.2.6</a>) by either:<a href="#section-6.3.2.1-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.2.1-3.2.2.1">
                     <p id="section-6.3.2.1-3.2.2.1.1">ensuring the authorization server supports PKCE, or<a href="#section-6.3.2.1-3.2.2.1.1" class="pilcrow">¶</a></p>
@@ -2191,7 +2191,7 @@ described in this section.<a href="#section-6.3.2.1-1" class="pilcrow">¶</a></p
                 <p id="section-6.3.2.1-5.3.1">MUST NOT issue access tokens in the authorization response (<a href="#implicit_flow" class="auto internal xref">Section 7.2</a>)<a href="#section-6.3.2.1-5.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3.2.1-5.4">
-                <p id="section-6.3.2.1-5.4.1">If issuing refresh tokens to browser-based applications (<a href="#pattern-oauth-browser-rt" class="auto internal xref">Section 6.3.2.5</a>), then:<a href="#section-6.3.2.1-5.4.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3.2.1-5.4.1">If issuing refresh tokens to browser-based applications (<a href="#pattern-oauth-browser-rt" class="auto internal xref">Section 6.3.2.7</a>), then:<a href="#section-6.3.2.1-5.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.2.1-5.4.2.1">
                     <p id="section-6.3.2.1-5.4.2.1.1">MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and<a href="#section-6.3.2.1-5.4.2.1.1" class="pilcrow">¶</a></p>
@@ -2283,110 +2283,110 @@ has already been approved.<a href="#section-6.3.2.4-2" class="pilcrow">¶</a></p
 as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.1.1. This helps to prevent attacks targeting the authorization code.<a href="#section-6.3.2.4.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
 <div id="in_browser_communication_security">
-<section id="section-6.3.2.4.2">
-              <h6 id="name-security-of-in-browser-comm">
-<a href="#section-6.3.2.4.2" class="section-number selfRef">6.3.2.4.2. </a><a href="#name-security-of-in-browser-comm" class="section-name selfRef">Security of In-Browser Communication Flows</a>
-              </h6>
-<p id="section-6.3.2.4.2-1">In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
-In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.<a href="#section-6.3.2.4.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.4.2-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
-To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-6.3.2.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.4.2-3">Section 4.18. of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.2.4.2-3" class="pilcrow">¶</a></p>
+<section id="section-6.3.2.5">
+            <h5 id="name-security-of-in-browser-comm">
+<a href="#section-6.3.2.5" class="section-number selfRef">6.3.2.5. </a><a href="#name-security-of-in-browser-comm" class="section-name selfRef">Security of In-Browser Communication Flows</a>
+            </h5>
+<p id="section-6.3.2.5-1">In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
+In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.<a href="#section-6.3.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.5-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
+To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-6.3.2.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.5-3">Section 4.18. of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.2.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-csrf">
-<section id="section-6.3.2.4.3">
-              <h6 id="name-cross-site-request-forgery-pr">
-<a href="#section-6.3.2.4.3" class="section-number selfRef">6.3.2.4.3. </a><a href="#name-cross-site-request-forgery-pr" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
-              </h6>
-<p id="section-6.3.2.4.3-1">Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
-accomplished by any of the below:<a href="#section-6.3.2.4.3-1" class="pilcrow">¶</a></p>
+<section id="section-6.3.2.6">
+            <h5 id="name-cross-site-request-forgery-pr">
+<a href="#section-6.3.2.6" class="section-number selfRef">6.3.2.6. </a><a href="#name-cross-site-request-forgery-pr" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
+            </h5>
+<p id="section-6.3.2.6-1">Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
+accomplished by any of the below:<a href="#section-6.3.2.6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.2.4.3-2.1">
-                  <p id="section-6.3.2.4.3-2.1.1">using PKCE, and confirming that the authorization server supports PKCE<a href="#section-6.3.2.4.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.2.6-2.1">
+                <p id="section-6.3.2.6-2.1.1">using PKCE, and confirming that the authorization server supports PKCE<a href="#section-6.3.2.6-2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.3.2.4.3-2.2">
-                  <p id="section-6.3.2.4.3-2.2.1">using and verifying unique value for the OAuth 2.0 <code>state</code> parameter to carry a CSRF token<a href="#section-6.3.2.4.3-2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.6-2.2">
+                <p id="section-6.3.2.6-2.2.1">using and verifying unique value for the OAuth 2.0 <code>state</code> parameter to carry a CSRF token<a href="#section-6.3.2.6-2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.3.2.4.3-2.3">
-                  <p id="section-6.3.2.4.3-2.3.1">if the application is using OpenID Connect, by using and verifying the OpenID Connect <code>nonce</code> parameter as described in <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span><a href="#section-6.3.2.4.3-2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.6-2.3">
+                <p id="section-6.3.2.6-2.3.1">if the application is using OpenID Connect, by using and verifying the OpenID Connect <code>nonce</code> parameter as described in <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span><a href="#section-6.3.2.6-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              </ul>
-<p id="section-6.3.2.4.3-3">See Section 2.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> for additional details.<a href="#section-6.3.2.4.3-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+            </ul>
+<p id="section-6.3.2.6-3">See Section 2.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> for additional details.<a href="#section-6.3.2.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-rt">
-<section id="section-6.3.2.5">
+<section id="section-6.3.2.7">
             <h5 id="name-refresh-tokens-3">
-<a href="#section-6.3.2.5" class="section-number selfRef">6.3.2.5. </a><a href="#name-refresh-tokens-3" class="section-name selfRef">Refresh Tokens</a>
+<a href="#section-6.3.2.7" class="section-number selfRef">6.3.2.7. </a><a href="#name-refresh-tokens-3" class="section-name selfRef">Refresh Tokens</a>
             </h5>
-<p id="section-6.3.2.5-1">Refresh tokens provide a way for applications to obtain a new access token when the
+<p id="section-6.3.2.7-1">Refresh tokens provide a way for applications to obtain a new access token when the
 initial access token expires. For browser-based clients, the refresh token is typically a bearer token, unless the application explicitly uses <span>[<a href="#DPoP" class="cite xref">DPoP</a>]</span>. As a result, the risk of a leaked refresh token
 is greater than leaked access tokens, since an attacker may be able to
 continue using the stolen refresh token to obtain new access tokens potentially without being
-detectable by the authorization server.<a href="#section-6.3.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.5-2">Authorization servers may choose whether or not to issue refresh tokens to browser-based
+detectable by the authorization server.<a href="#section-6.3.2.7-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.7-2">Authorization servers may choose whether or not to issue refresh tokens to browser-based
 applications. However, in light of the impact of third-party cookie blocking mechanisms, the use of refresh tokens has become significantly more attractive. The <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> describes some additional requirements around refresh tokens
 on top of the recommendations of <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>. Applications and authorization servers
 conforming to this BCP MUST also follow the recommendations in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>
-around refresh tokens if refresh tokens are issued to browser-based applications.<a href="#section-6.3.2.5-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.5-3">In particular, authorization servers:<a href="#section-6.3.2.5-3" class="pilcrow">¶</a></p>
+around refresh tokens if refresh tokens are issued to browser-based applications.<a href="#section-6.3.2.7-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.7-3">In particular, authorization servers:<a href="#section-6.3.2.7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.2.5-4.1">
-                <p id="section-6.3.2.5-4.1.1">MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.14.2<a href="#section-6.3.2.5-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.2.7-4.1">
+                <p id="section-6.3.2.7-4.1.1">MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.14.2<a href="#section-6.3.2.7-4.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-4.2">
-                <p id="section-6.3.2.5-4.2.1">MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time<a href="#section-6.3.2.5-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-4.2">
+                <p id="section-6.3.2.7-4.2.1">MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time<a href="#section-6.3.2.7-4.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-4.3">
-                <p id="section-6.3.2.5-4.3.1">upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time<a href="#section-6.3.2.5-4.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-4.3">
+                <p id="section-6.3.2.7-4.3.1">upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time<a href="#section-6.3.2.7-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.3.2.5-5">For example:<a href="#section-6.3.2.5-5" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.7-5">For example:<a href="#section-6.3.2.7-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.2.5-6.1">
-                <p id="section-6.3.2.5-6.1.1">A user authorizes an application, issuing an access token that lasts 10 minutes, and a refresh token that lasts 8 hours<a href="#section-6.3.2.5-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.2.7-6.1">
+                <p id="section-6.3.2.7-6.1.1">A user authorizes an application, issuing an access token that lasts 10 minutes, and a refresh token that lasts 8 hours<a href="#section-6.3.2.7-6.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-6.2">
-                <p id="section-6.3.2.5-6.2.1">After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token<a href="#section-6.3.2.5-6.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-6.2">
+                <p id="section-6.3.2.7-6.2.1">After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token<a href="#section-6.3.2.7-6.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-6.3">
-                <p id="section-6.3.2.5-6.3.1">The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes<a href="#section-6.3.2.5-6.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-6.3">
+                <p id="section-6.3.2.7-6.3.1">The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes<a href="#section-6.3.2.7-6.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-6.4">
-                <p id="section-6.3.2.5-6.4.1">This continues until 8 hours pass from the initial authorization<a href="#section-6.3.2.5-6.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-6.4">
+                <p id="section-6.3.2.7-6.4.1">This continues until 8 hours pass from the initial authorization<a href="#section-6.3.2.7-6.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-6.3.2.5-6.5">
-                <p id="section-6.3.2.5-6.5.1">At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code flow that relies on the user's authentication or previously established session<a href="#section-6.3.2.5-6.5.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-6.3.2.7-6.5">
+                <p id="section-6.3.2.7-6.5.1">At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code flow that relies on the user's authentication or previously established session<a href="#section-6.3.2.7-6.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.3.2.5-7">Limiting the overall refresh token lifetime to the lifetime of the initial refresh token ensures a stolen refresh token cannot be used indefinitely.<a href="#section-6.3.2.5-7" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.5-8">Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.<a href="#section-6.3.2.5-8" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.7-7">Limiting the overall refresh token lifetime to the lifetime of the initial refresh token ensures a stolen refresh token cannot be used indefinitely.<a href="#section-6.3.2.7-7" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.7-8">Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.<a href="#section-6.3.2.7-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-cors">
-<section id="section-6.3.2.6">
+<section id="section-6.3.2.8">
             <h5 id="name-cross-origin-requests">
-<a href="#section-6.3.2.6" class="section-number selfRef">6.3.2.6. </a><a href="#name-cross-origin-requests" class="section-name selfRef">Cross-Origin Requests</a>
+<a href="#section-6.3.2.8" class="section-number selfRef">6.3.2.8. </a><a href="#name-cross-origin-requests" class="section-name selfRef">Cross-Origin Requests</a>
             </h5>
-<p id="section-6.3.2.6-1">In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send proper CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to ensure that the browser allows the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.2.6-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.6-2">For the authorization server, a proper CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for enforcing a proper CORS configuration on these endpoints.<a href="#section-6.3.2.6-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.6-3">This specification does not include guidelines for deciding whether a CORS policy
+<p id="section-6.3.2.8-1">In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send proper CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to ensure that the browser allows the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.2.8-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.8-2">For the authorization server, a proper CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for enforcing a proper CORS configuration on these endpoints.<a href="#section-6.3.2.8-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.8-3">This specification does not include guidelines for deciding whether a CORS policy
 for these endpoints should be a wildcard origin or more restrictive. Note,
 however, that the browser will typically do a "preflight" request to check to see
 if the CORS protocol is understood and what the policy is. In absence of support for
 preflight requests at the server the browser will attempt to access the API endpoint
 regardless and will simply hide the succeeding or failing result from
-JavaScript if the policy does not allow sharing.<a href="#section-6.3.2.6-3" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.6-4">Note that the server CORS preflight response and the actual response CORS headers may differ,
+JavaScript if the policy does not allow sharing.<a href="#section-6.3.2.8-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.8-4">Note that the server CORS preflight response and the actual response CORS headers may differ,
 this allows the server to indicate wildcard support for accessing the endpoints
 during preflight when it has no access to the actual request's body or headers and then when
 the actual request is made decide to restrict the response after it was able to check the request
 was made from an expected origin based on the data in the request, e.g. based on pre-registered
-origins of the Browser-based OAuth 2.0 client.<a href="#section-6.3.2.6-4" class="pilcrow">¶</a></p>
+origins of the Browser-based OAuth 2.0 client.<a href="#section-6.3.2.8-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3100,7 +3100,7 @@ secrets to applications of this type.<a href="#appendix-A-2.7.1" class="pilcrow"
 </li>
         <li id="appendix-A-2.8">
           <p id="appendix-A-2.8.1">Follow the <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> recommendations on refresh tokens, as well
-as the additional requirements described in <a href="#pattern-oauth-browser-rt" class="auto internal xref">Section 6.3.2.5</a>.<a href="#appendix-A-2.8.1" class="pilcrow">¶</a></p>
+as the additional requirements described in <a href="#pattern-oauth-browser-rt" class="auto internal xref">Section 6.3.2.7</a>.<a href="#appendix-A-2.8.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 </section>
@@ -3121,6 +3121,12 @@ as the additional requirements described in <a href="#pattern-oauth-browser-rt" 
 </li>
         <li class="normal" id="appendix-B-3.3">
           <p id="appendix-B-3.3.1">Added a section with security considerations on the use of postMessage<a href="#appendix-B-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-3.4">
+          <p id="appendix-B-3.4.1">Added a section on anti-forgery/double-submit cookies as another form of CSRF protection<a href="#appendix-B-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-3.5">
+          <p id="appendix-B-3.5.1">Updated CORS terminology<a href="#appendix-B-3.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-B-4">-15<a href="#appendix-B-4" class="pilcrow">¶</a></p>
@@ -3388,10 +3394,11 @@ browser-based applications. The authors would also like to thank Hannes Tschofen
 and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<p id="appendix-C-2">Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
+<p id="appendix-C-2">Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden, Daniel Fett,
+Elar Lang, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
-Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
+Sean Kelleher, Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
