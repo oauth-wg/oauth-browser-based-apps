@@ -115,6 +115,7 @@ Table of Contents
      9.1.  Reducing the Authority of Tokens
      9.2.  Sender-Constrained Tokens
      9.3.  Authorization Server Mix-Up Mitigation
+     9.4.  Isolating Applications using Origins
    10. IANA Considerations
    11. References
      11.1.  Normative References
@@ -617,10 +618,11 @@ Table of Contents
 
    When the refresh token expires, there is no way to recover without
    running an entirely new Authorization Code flow.  Therefore, it is
-   recommended to configure the lifetime of the cookie-based session to
-   be equal to the maximum lifetime of the refresh token.  Additionally,
-   when the BFF learns that a refresh token for an active session is no
-   longer valid, it is recommended to invalidate the session.
+   recommended to configure the lifetime of the cookie-based session
+   managed by the BFF to be equal to the maximum lifetime of the refresh
+   token.  Additionally, when the BFF learns that a refresh token for an
+   active session is no longer valid, it is recommended to invalidate
+   the session.
 
 6.1.2.2.  Cookie-based Session Management
 
@@ -753,14 +755,15 @@ Table of Contents
 
    This defense is adequate if the BFF is never considered to be same-
    site with any other applications.  However, it falls short when the
-   BFF is hosted alongside other applications within the same parent
-   domain.
+   BFF is hosted alongside other applications within the same site,
+   defined as the eTLD+1 (See this definition of [Site] for more
+   details).
 
    For example, subdomains, such as https://a.example.com and
    https://b.example.com, are considered same-site, since they share the
    same site example.com.  They are considered cross-origin, since
-   origins consist of the tuple _<scheme, host, port>_. As a result, a
-   subdomain takeover attack against b.example.com can enable CSRF
+   origins consist of the tuple _<scheme, hostname, port>_. As a result,
+   a subdomain takeover attack against b.example.com can enable CSRF
    attacks against the BFF of a.example.com.  Technically, this attack
    should be identified as a "Same-Site But Cross-Origin Request
    Forgery" attack.
@@ -788,11 +791,11 @@ Table of Contents
 
    When relying on CORS as a CSRF defense, it is important to realize
    that certain requests are possible without a preflight.  For such
-   requests, named "Simple Requests" in CORS terminology, the browser
-   will simply send the request and prevent access to the response if
-   the server did not send the proper CORS headers.  This behavior is
-   enforced for requests that can be triggered via other means than
-   JavaScript, such as a GET request or a form-based POST request.
+   requests, named "CORS-safelisted Requests", the browser will simply
+   send the request and prevent access to the response if the server did
+   not send the proper CORS headers.  This behavior is enforced for
+   requests that can be triggered via other means than JavaScript, such
+   as a GET request or a form-based POST request.
 
    The consequence of this behavior is that certain endpoints of the
    resource server could become vulnerable to CSRF, even with CORS
@@ -2192,21 +2195,22 @@ Table of Contents
 8.5.  Persistent Token Storage
 
    The persistent storage APIs currently available as of this writing
-   are LocalStorage, SessionStorage, and IndexedDB.
+   are localStorage, sessionStorage, and IndexedDB.
 
-   LocalStorage persists between page reloads as well as is shared
+   localStorage persists between page reloads as well as is shared
    across all tabs.  This storage is accessible to the entire origin,
-   and persists longer term.  LocalStorage does not protect against XSS
+   and persists longer term. localStorage does not protect against XSS
    attacks, as the attacker would be running code within the same
    origin, and as such, would be able to read the contents of the
-   LocalStorage.
+   localStorage.
 
-   SessionStorage is similar to LocalStorage, except that SessionStorage
-   is cleared when a browser tab is closed, and is not shared between
-   multiple tabs open to pages on the same origin, which slightly
-   reduces the exposure of the tokens in SessionStorage.
+   sessionStorage is similar to localStorage, except that the lifetime
+   of sessionStorage is linked to the lifetime of a browser tab.
+   Additionally, sessionStorage is not shared between multiple tabs open
+   to pages on the same origin, which slightly reduces the exposure of
+   the tokens in sessionStorage.
 
-   IndexedDB is a persistent storage mechanism like LocalStorage, but is
+   IndexedDB is a persistent storage mechanism like localStorage, but is
    shared between multiple tabs as well as between the browsing context
    and Service Workers.
 
@@ -2291,7 +2295,7 @@ Table of Contents
    storage of the private key is more important than the secure storage
    of the token.  Ideally the application should use a non-exportable
    private key, such as generating one with the [WebCryptographyAPI].
-   With an unencrypted token in LocalStorage protected by a non-
+   With an unencrypted token in localStorage protected by a non-
    exportable private key, an XSS attack would not be able to extract
    the key, so the token would not be usable by the attacker.
 
@@ -2330,6 +2334,21 @@ Table of Contents
 
    Section 4.4 of [oauth-security-topics] provides additional details
    about mix-up attacks and the countermeasures mentioned above.
+
+9.4.  Isolating Applications using Origins
+
+   Many of the web's security mechanisms rely on origins, which are
+   defined as the triple <scheme, hostname, port>.  For example,
+   browsers automatically isolate browsing contexts with different
+   origins, limit resources to certain origins, and apply CORS
+   restrictions to outgoing cross-origin requests.
+
+   Therefore, it is considered a best practice to avoid deploying more
+   than one application in a single origin.  An architecture that only
+   deploys a single application in an origin can leverage these browser
+   restrictions to increase the security of the application.
+   Additionally, having a single origin per application makes it easier
+   to configure and deploy security measures such as CORS, CSP, etc.
 
 10.  IANA Considerations
 
@@ -2415,6 +2434,9 @@ Table of Contents
    [RFC8707]  Campbell, B., Bradley, J., and H. Tschofenig, "Resource
               Indicators for OAuth 2.0", RFC 8707, DOI 10.17487/RFC8707,
               February 2020, <https://www.rfc-editor.org/info/rfc8707>.
+
+   [Site]     Contributors, M., "Site", n.d.,
+              <https://developer.mozilla.org/en-US/docs/Glossary/Site>.
 
    [tmi-bff]  Bertocci, V. and B. Cambpell, "Token Mediating and session
               Information Backend For Frontend", April 2021,
