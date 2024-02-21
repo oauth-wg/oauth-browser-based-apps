@@ -505,6 +505,13 @@ To avoid such bypasses against the CORS policy, the BFF SHOULD require that ever
 It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
 
 
+##### Use anti-forgery/double submit cookies
+
+Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.
+
+Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.
+
+
 #### Advanced Security
 
 In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications are more powerful than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.
@@ -884,6 +891,18 @@ Authorization servers MUST require an exact match of a registered redirect URI
 as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent attacks targeting the authorization code.
 
 
+
+##### Security of In-Browser Communication Flows {#in_browser_communication_security}
+
+In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
+In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
+
+If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
+To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
+
+Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
+
+
 ##### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
 
 Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
@@ -1002,7 +1021,7 @@ The scenario where the attacker obtains a fresh set of tokens (See {{payload-new
 
 For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.
 
-The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a silent frame-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
+The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth 2.0 clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
 The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
 
@@ -1412,20 +1431,6 @@ Isolating Applications using Origins
 Many of the web's security mechanisms rely on origins, which are defined as the triple `<scheme, hostname, port>`. For example, browsers automatically isolate browsing contexts with different origins, limit resources to certain origins, and apply CORS restrictions to outgoing cross-origin requests.
 
 Therefore, it is considered a best practice to avoid deploying more than one application in a single origin. An architecture that only deploys a single application in an origin can leverage these browser restrictions to increase the security of the application. Additionally, having a single origin per application makes it easier to configure and deploy security measures such as CORS, CSP, etc.
-
-
-
-Security of In-Browser Communication Flows {#in_browser_communication_security}
---------------------------------------
-
-In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
-In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
-
-If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
-To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
-
-Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
-
 
 
 
