@@ -886,7 +886,7 @@ as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent a
 
 
 
-##### Security of In-Browser Communication Flows {#in_browser_communication_security}
+#### Security of In-Browser Communication Flows {#in_browser_communication_security}
 
 In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
 In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.
@@ -897,7 +897,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
 Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
 
 
-##### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
+#### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
 
 Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
 accomplished by any of the below:
