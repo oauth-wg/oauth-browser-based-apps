@@ -1463,6 +1463,8 @@ Document History
 * Applied editorial changes from Filip Skokan and Louis Jannett
 * Clarified when cookie encryption applies
 * Added a section with security considerations on the use of postMessage
+* Added a section on anti-forgery/double-submit cookies as another form of CSRF protection
+* Updated CORS terminology
 
 -15
 
@@ -1589,10 +1591,11 @@ and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
-Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Daniel Fett, Eva Sarafianou,
+Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden, Daniel Fett,
+Elar Lang, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
-Sean Kelleher, Thomas Broyer Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+Sean Kelleher, Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
 
 
 --- fluff
