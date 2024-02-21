@@ -1310,9 +1310,6 @@ taken into account when developing browser-based applications that use OAuth 2.0
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
                 <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-authorization-server-mix-up" class="internal xref">Authorization Server Mix-Up Mitigation</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-security-of-in-browser-comm" class="internal xref">Security of In-Browser Communication Flows</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
@@ -2165,7 +2162,7 @@ described in this section.<a href="#section-6.3.2.1-1" class="pilcrow">¶</a></p
                 <p id="section-6.3.2.1-3.1.1">MUST use PKCE (<span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span>) when obtaining an access token (<a href="#auth_code_request" class="auto internal xref">Section 6.3.2.1.1</a>)<a href="#section-6.3.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3.2.1-3.2">
-                <p id="section-6.3.2.1-3.2.1">MUST Protect themselves against CSRF attacks (<a href="#pattern-oauth-browser-csrf" class="auto internal xref">Section 6.3.2.4.2</a>) by either:<a href="#section-6.3.2.1-3.2.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3.2.1-3.2.1">MUST Protect themselves against CSRF attacks (<a href="#pattern-oauth-browser-csrf" class="auto internal xref">Section 6.3.2.4.3</a>) by either:<a href="#section-6.3.2.1-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.2.1-3.2.2.1">
                     <p id="section-6.3.2.1-3.2.2.1.1">ensuring the authorization server supports PKCE, or<a href="#section-6.3.2.1-3.2.2.1.1" class="pilcrow">¶</a></p>
@@ -2283,25 +2280,37 @@ has already been approved.<a href="#section-6.3.2.4-2" class="pilcrow">¶</a></p
 as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.1.1. This helps to prevent attacks targeting the authorization code.<a href="#section-6.3.2.4.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="pattern-oauth-browser-csrf">
+<div id="in_browser_communication_security">
 <section id="section-6.3.2.4.2">
-              <h6 id="name-cross-site-request-forgery-pr">
-<a href="#section-6.3.2.4.2" class="section-number selfRef">6.3.2.4.2. </a><a href="#name-cross-site-request-forgery-pr" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
+              <h6 id="name-security-of-in-browser-comm">
+<a href="#section-6.3.2.4.2" class="section-number selfRef">6.3.2.4.2. </a><a href="#name-security-of-in-browser-comm" class="section-name selfRef">Security of In-Browser Communication Flows</a>
               </h6>
-<p id="section-6.3.2.4.2-1">Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
-accomplished by any of the below:<a href="#section-6.3.2.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.4.2-1">In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
+In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run silent frame-based flows.<a href="#section-6.3.2.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.4.2-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
+To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-6.3.2.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.4.2-3">Section 4.18. of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.2.4.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="pattern-oauth-browser-csrf">
+<section id="section-6.3.2.4.3">
+              <h6 id="name-cross-site-request-forgery-pr">
+<a href="#section-6.3.2.4.3" class="section-number selfRef">6.3.2.4.3. </a><a href="#name-cross-site-request-forgery-pr" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
+              </h6>
+<p id="section-6.3.2.4.3-1">Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
+accomplished by any of the below:<a href="#section-6.3.2.4.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.2.4.2-2.1">
-                  <p id="section-6.3.2.4.2-2.1.1">using PKCE, and confirming that the authorization server supports PKCE<a href="#section-6.3.2.4.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.3.2.4.3-2.1">
+                  <p id="section-6.3.2.4.3-2.1.1">using PKCE, and confirming that the authorization server supports PKCE<a href="#section-6.3.2.4.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.3.2.4.2-2.2">
-                  <p id="section-6.3.2.4.2-2.2.1">using and verifying unique value for the OAuth 2.0 <code>state</code> parameter to carry a CSRF token<a href="#section-6.3.2.4.2-2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.3.2.4.3-2.2">
+                  <p id="section-6.3.2.4.3-2.2.1">using and verifying unique value for the OAuth 2.0 <code>state</code> parameter to carry a CSRF token<a href="#section-6.3.2.4.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-                <li class="normal" id="section-6.3.2.4.2-2.3">
-                  <p id="section-6.3.2.4.2-2.3.1">if the application is using OpenID Connect, by using and verifying the OpenID Connect <code>nonce</code> parameter as described in <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span><a href="#section-6.3.2.4.2-2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-6.3.2.4.3-2.3">
+                  <p id="section-6.3.2.4.3-2.3.1">if the application is using OpenID Connect, by using and verifying the OpenID Connect <code>nonce</code> parameter as described in <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span><a href="#section-6.3.2.4.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
-<p id="section-6.3.2.4.2-3">See Section 2.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> for additional details.<a href="#section-6.3.2.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.4.3-3">See Section 2.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> for additional details.<a href="#section-6.3.2.4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2927,18 +2936,6 @@ when using OpenID Connect.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
 only be used if identifying the issuer as described is not possible.<a href="#section-9.3-3" class="pilcrow">¶</a></p>
 <p id="section-9.3-4">Section 4.4 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about mix-up attacks
 and the countermeasures mentioned above.<a href="#section-9.3-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="in_browser_communication_security">
-<section id="section-9.4">
-        <h3 id="name-security-of-in-browser-comm">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-security-of-in-browser-comm" class="section-name selfRef">Security of In-Browser Communication Flows</a>
-        </h3>
-<p id="section-9.4-1">In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
-In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or run hidden iframe-based flows.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<p id="section-9.4-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
-To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-9.4-2" class="pilcrow">¶</a></p>
-<p id="section-9.4-3">Section 4.18. of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.<a href="#section-9.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
