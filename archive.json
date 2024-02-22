@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-20T00:33:33.260448+00:00",
+  "timestamp": "2024-02-22T00:34:04.001642+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -268,7 +268,7 @@
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/25",
       "state": "OPEN",
       "author": "damienbod",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "6.1.4.3. \r\n\r\n_Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF, which puts a significant burden on the server-side component._\r\n\r\nI usually use the BFF architecture without requiring a downstream API or a resource server and thus no proxy is required.  My server logic is deployed as part of the BFF server application.  \r\n",
@@ -285,7 +285,7 @@
         },
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Hi @aaronpk yes it does sound like this, but I'm a bit confused because this is in the \"Discouraged and Deprecated Architecture Patterns\"  I still use OIDC (Confidential client Code flow with PKCE)\r\n\r\nThis is in effect the BFF without a downstream API. If I need a downstream API, then I add a proxy and request the scope when required. I see the proxy, downstream API as an add-on to the BFF. ",
           "createdAt": "2023-10-23T21:16:16Z",
           "updatedAt": "2023-10-23T21:19:49Z"
@@ -299,7 +299,7 @@
         },
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Yes. The UI and the backend are authenticated as one using OIDC against any third party IDP etc. The session is stored in the form of a cookie as described in the doc. The APIs uses cookie authentication like the BFF. The backend APIs implement the business logic directly and there is no need for further API calls to different domains. Authz still needs a solution. If I need to use separate APIs on different domains, then I implement OAuth and add new scopes as required. At this point I would add the proxy, or just implement a Http Client. I don't always require a delegated user access token for the downstream APIs. I usually get an AT back from the OIDC server and can persist the claims to the cookie session as required. \r\n\r\nSo this is the BFF pattern described in section 6.1.1. The resource server part is not separated \"always\" from the BFF part, only when required.\r\n\r\nThis removes the  \"significant burden on the server-side component\"\r\n\r\nSection **6.1.2.4.  Deployment Scenarios** already mentions this pattern as well:\r\n\r\n_Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF)_",
           "createdAt": "2023-10-23T21:32:57Z",
           "updatedAt": "2023-10-23T22:03:59Z"
@@ -332,15 +332,15 @@
       "id": "I_kwDOCUe3lM50td4Y",
       "title": "Suggestion: add new section 6.1.3.3.3. Use Anti-forgery cookies",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/26",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "damienbod",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Because the UI and the backend APIs can be hosted from the same backend application, Anti-forgery tokens can also be used to protect against CSRF.",
       "createdAt": "2023-10-23T21:46:41Z",
-      "updatedAt": "2024-02-18T07:24:26Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-21T21:36:20Z",
+      "closedAt": "2024-02-21T21:36:20Z",
       "comments": [
         {
           "author": "philippederyck",
@@ -351,7 +351,7 @@
         },
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "I thought it would be good to add this as it is per default supported in some tech stacks and so easy to use. People reading the doc might read it as only the mentioned ways protect against CSRF. Adding this would make the recommendations more complete.\r\n\r\n\u201cAre there benefits to using anti-forgery cookies over samesite cookies/CORS that we're missing?\u201d\r\n\r\nIn my opinion, there are no benefits compared with the other two options, just another option. Samesite cookies/ anti-forgery cookies are also a viable option. If the used tech stack has this already supported per default, then there is less to do as a developer. This would make it an option.\r\n",
           "createdAt": "2023-11-21T18:40:16Z",
           "updatedAt": "2023-11-21T18:40:16Z"
@@ -365,14 +365,14 @@
         },
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Hi @aaronpk I'll write something\r\n\r\nKind regards Damien",
           "createdAt": "2024-02-17T07:23:04Z",
           "updatedAt": "2024-02-17T07:23:04Z"
         },
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "@aaronpk @philippederyck \r\n\r\nI created a PR with an initial draft. I don't think we should explain how it works because this is not the scope of this doc. \r\n\r\nkind regards Damien",
           "createdAt": "2024-02-18T07:24:25Z",
           "updatedAt": "2024-02-18T07:24:25Z"
@@ -386,7 +386,7 @@
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/27",
       "state": "CLOSED",
       "author": "damienbod",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "I'm not sure where this belongs, but I think it would be good to add it. \r\n\r\nBecause the BFF APIs and the UI can be hosted in the same application, it is easy  to implement a nonce based CSP for the UI scripts and styles. Modern JS framework now support this. This is very easy to implement when using BFF security architecture where the same application is used to host the APIs and the UI .",
@@ -2325,54 +2325,72 @@
       "id": "PR_kwDOCUe3lM5nKFKi",
       "title": "more silent frame edits",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/33",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "panva",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-17T09:15:43Z",
-      "updatedAt": "2024-02-17T09:15:43Z",
+      "updatedAt": "2024-02-21T21:34:05Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
       "headRepository": "panva/oauth-browser-based-apps",
       "headRefName": "more-edit",
       "headRefOid": "776a156f18527511982ff33f8955a67989a549ee",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-02-21T21:34:05Z",
+      "mergedAt": "2024-02-21T21:34:05Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "5715598fdf2964a2af01277755540f0882aa1e00"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w6y5H",
+          "commit": {
+            "abbreviatedOid": "776a156"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:34:00Z",
+          "updatedAt": "2024-02-21T21:34:00Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 34,
       "id": "PR_kwDOCUe3lM5nNIxR",
       "title": "6.1.3.3.3. Use Anti-forgery/double submit cookies",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/34",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "damienbod",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "fixes https://github.com/oauth-wg/oauth-browser-based-apps/issues/26\r\n",
       "createdAt": "2024-02-18T07:23:03Z",
-      "updatedAt": "2024-02-18T10:54:52Z",
+      "updatedAt": "2024-02-21T21:36:19Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
       "headRepository": "damienbod/oauth-browser-based-apps",
       "headRefName": "feature/6-1-3-3-use-Anti-forgery",
       "headRefOid": "7831ad2b4eb688a846ddc8a22aed592f895ed120",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-02-21T21:36:18Z",
+      "mergedAt": "2024-02-21T21:36:18Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "38c71730d16b1b5da783e644aaa4a33b02331040"
+      },
       "comments": [
         {
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Thanks @philippederyck I like it, I updated the PR",
           "createdAt": "2024-02-18T10:52:37Z",
           "updatedAt": "2024-02-18T10:52:37Z"
@@ -2391,6 +2409,19 @@
           "createdAt": "2024-02-18T09:47:13Z",
           "updatedAt": "2024-02-18T09:47:13Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5w6zc-",
+          "commit": {
+            "abbreviatedOid": "7831ad2"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:35:28Z",
+          "updatedAt": "2024-02-21T21:35:28Z",
+          "comments": []
         }
       ]
     },
@@ -2406,7 +2437,7 @@
       "labels": [],
       "body": "This PR resolves issue #25 by rephrasing the *significant burden* of having a BFF",
       "createdAt": "2024-02-18T10:18:10Z",
-      "updatedAt": "2024-02-18T14:28:42Z",
+      "updatedAt": "2024-02-21T22:28:36Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
@@ -2425,7 +2456,7 @@
             "abbreviatedOid": "ca5aa7b"
           },
           "author": "damienbod",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-02-18T14:28:42Z",
@@ -2438,6 +2469,26 @@
               "updatedAt": "2024-02-18T14:28:42Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5w7FK8",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-21T22:28:35Z",
+          "updatedAt": "2024-02-21T22:28:36Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I feel like this needs to link to [6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps-16#section-6.1.2.4), which already mentions that no proxying is necessary in that situation. How about this instead:\r\n\r\n> See Section 6.1.2.4 for additional notes if the BFF is acting as the resource server.",
+              "createdAt": "2024-02-21T22:28:35Z",
+              "updatedAt": "2024-02-21T22:28:36Z"
+            }
+          ]
         }
       ]
     },
@@ -2446,52 +2497,84 @@
       "id": "PR_kwDOCUe3lM5nNsQY",
       "title": "Addressed comments from Elar Lang",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/37",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR incorporates a bunch of comments made by Elar Lang via mail.",
       "createdAt": "2024-02-18T11:47:22Z",
-      "updatedAt": "2024-02-18T11:53:47Z",
+      "updatedAt": "2024-02-21T21:52:03Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
-      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "baseRefOid": "b5baa7e8d4c1c85997e7b2bd5023c510222cdb82",
       "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
       "headRefName": "pdr/review-elar-lang",
-      "headRefOid": "1e8482abdf3ff54e5c202d492c3a8facb67d19a4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "9119a78421ddbc2ca650e478267080211ea53225",
+      "closedAt": "2024-02-21T21:52:03Z",
+      "mergedAt": "2024-02-21T21:52:03Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "c807e83ca1c0a0084264c4ba593096e77441093c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w65Jx",
+          "commit": {
+            "abbreviatedOid": "9119a78"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:51:57Z",
+          "updatedAt": "2024-02-21T21:51:57Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 38,
       "id": "PR_kwDOCUe3lM5nNsdt",
       "title": "Moved new section on in-browser flows",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/38",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The new section on the security of in-browser communication flows only applies to the browser-based OAuth client. It does not apply to the BFF or TM Backend. Therefore, I moved this section to the security considerations of the relevant pattern.",
       "createdAt": "2024-02-18T11:50:41Z",
-      "updatedAt": "2024-02-18T11:50:41Z",
+      "updatedAt": "2024-02-21T21:47:08Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
-      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "baseRefOid": "38c71730d16b1b5da783e644aaa4a33b02331040",
       "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
       "headRefName": "pdr/move-inbrowser-flows",
-      "headRefOid": "582bffee22cf09e0889d634f6bff0eb7d683d04c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "8fbf58f134fb39c2f533cdf1a40e1ff0e7760d95",
+      "closedAt": "2024-02-21T21:47:08Z",
+      "mergedAt": "2024-02-21T21:47:08Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "b5baa7e8d4c1c85997e7b2bd5023c510222cdb82"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w63R3",
+          "commit": {
+            "abbreviatedOid": "8fbf58f"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:46:30Z",
+          "updatedAt": "2024-02-21T21:46:30Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
