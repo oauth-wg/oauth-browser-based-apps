@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 24 August 2024                                    Ping Identity
+Expires: 25 August 2024                                    Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                        21 February 2024
+                                                        22 February 2024
 
 
                     OAuth 2.0 for Browser-Based Apps
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 August 2024.
+   This Internet-Draft will expire on 25 August 2024.
 
 Copyright Notice
 
@@ -910,8 +910,10 @@ Table of Contents
    complicated than a browser-only application.  It requires deploying
    and operating a server-side BFF component.  Additionally, this
    pattern requires all interactions between the JavaScript application
-   and the resource servers to be proxied by the BFF, which puts a
-   significant burden on the server-side component.
+   and the resource servers to be proxied by the BFF.  Depending on the
+   deployment pattern, this proxy behavior can add a significant burden
+   on the server-side components.  See Section 6.1.2.4 for additional
+   notes if the BFF is acting as the resource server.
 
    However, because of the nature of the BFF architecture pattern, it
    offers strong security guarantees.  Using a BFF also ensures that the
