@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-22T00:34:04.001642+00:00",
+  "timestamp": "2024-02-25T00:37:01.279580+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -266,15 +266,15 @@
       "id": "I_kwDOCUe3lM50tMuk",
       "title": "6.1.4.3 Suggestion: change text and remove significant burden ",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/25",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "damienbod",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "6.1.4.3. \r\n\r\n_Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF, which puts a significant burden on the server-side component._\r\n\r\nI usually use the BFF architecture without requiring a downstream API or a resource server and thus no proxy is required.  My server logic is deployed as part of the BFF server application.  \r\n",
       "createdAt": "2023-10-23T20:53:23Z",
-      "updatedAt": "2024-02-18T10:19:18Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-22T17:26:47Z",
+      "closedAt": "2024-02-22T17:26:46Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -324,6 +324,13 @@
           "body": "I have [proposed](https://github.com/oauth-wg/oauth-browser-based-apps/pull/36)  a slight rewording to resolve this issue according to comments made by @aaronpk and @damienbod ",
           "createdAt": "2024-02-18T10:19:17Z",
           "updatedAt": "2024-02-18T10:19:17Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you, closing as PR #36 resolves this.",
+          "createdAt": "2024-02-22T17:26:46Z",
+          "updatedAt": "2024-02-22T17:26:46Z"
         }
       ]
     },
@@ -2332,7 +2339,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-02-17T09:15:43Z",
-      "updatedAt": "2024-02-21T21:34:05Z",
+      "updatedAt": "2024-02-22T06:31:39Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
@@ -2430,24 +2437,26 @@
       "id": "PR_kwDOCUe3lM5nNjJe",
       "title": "Reworded *significant burden*",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/36",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR resolves issue #25 by rephrasing the *significant burden* of having a BFF",
       "createdAt": "2024-02-18T10:18:10Z",
-      "updatedAt": "2024-02-21T22:28:36Z",
+      "updatedAt": "2024-02-22T17:25:34Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
       "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
       "headRefName": "pdr/25-address-language",
-      "headRefOid": "ca5aa7b17fdb6f7ffe4f9900a50cab0864c33e5a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "545b9aec335a524b6ddd1317a230240a68fe043f",
+      "closedAt": "2024-02-22T17:25:34Z",
+      "mergedAt": "2024-02-22T17:25:34Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "afe2b1ea6436c9d9fe54e1fdca179ea40196b8eb"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2487,6 +2496,26 @@
               "body": "I feel like this needs to link to [6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps-16#section-6.1.2.4), which already mentions that no proxying is necessary in that situation. How about this instead:\r\n\r\n> See Section 6.1.2.4 for additional notes if the BFF is acting as the resource server.",
               "createdAt": "2024-02-21T22:28:35Z",
               "updatedAt": "2024-02-21T22:28:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xCTcZ",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T17:23:27Z",
+          "updatedAt": "2024-02-22T17:23:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nTo summarize, the architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See {{practical-deployment-scenarios}} for additional notes if the BFF is acting as the resource server.\r\n```",
+              "createdAt": "2024-02-22T17:23:27Z",
+              "updatedAt": "2024-02-22T17:23:28Z"
             }
           ]
         }
