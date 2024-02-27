@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-25T00:37:01.279580+00:00",
+  "timestamp": "2024-02-27T00:33:54.805505+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1866,7 +1866,7 @@
       "labels": [],
       "body": "A followup review with suggestions as requested at IETF 118",
       "createdAt": "2024-01-16T21:18:24Z",
-      "updatedAt": "2024-02-18T12:00:22Z",
+      "updatedAt": "2024-02-25T08:24:26Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
@@ -2324,6 +2324,66 @@
               "updatedAt": "2024-02-18T12:00:22Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOfXL",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:03:56Z",
+          "updatedAt": "2024-02-25T08:03:56Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Reworded to clarify what it means.",
+              "createdAt": "2024-02-25T08:03:56Z",
+              "updatedAt": "2024-02-25T08:03:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOf2I",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:16:18Z",
+          "updatedAt": "2024-02-25T08:16:18Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "I understand your point of view, but vanilla OAuth requests with form encoding would be simple requests. Reworded the text to add the necessary context.",
+              "createdAt": "2024-02-25T08:16:18Z",
+              "updatedAt": "2024-02-25T08:16:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOgKE",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:24:25Z",
+          "updatedAt": "2024-02-25T08:24:26Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "Sounds good. I have rephrased this to include a bit more details on an example.",
+              "createdAt": "2024-02-25T08:24:25Z",
+              "updatedAt": "2024-02-25T08:24:26Z"
+            }
+          ]
         }
       ]
     },
@@ -2601,6 +2661,46 @@
           "body": "",
           "createdAt": "2024-02-21T21:46:30Z",
           "updatedAt": "2024-02-21T21:46:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOCUe3lM5n1gdm",
+      "title": "Reworded text based on PR comments",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/39",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Reworded the text based on the discussion in [PR #30](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30)\r\n\r\nThis PR resolves issue #35 ",
+      "createdAt": "2024-02-25T08:26:03Z",
+      "updatedAt": "2024-02-25T10:45:47Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "afe2b1ea6436c9d9fe54e1fdca179ea40196b8eb",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/35-review-pr-30",
+      "headRefOid": "9c7d6f471ebd1cbcea49bdf1a8e0a37e9f8d0411",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5xOlxK",
+          "commit": {
+            "abbreviatedOid": "9c7d6f4"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-25T10:45:47Z",
+          "updatedAt": "2024-02-25T10:45:47Z",
           "comments": []
         }
       ]
