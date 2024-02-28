@@ -2493,6 +2493,20 @@ Appendix B.  Document History
 
    [[ To be removed from the final specification ]]
 
+   -17
+
+   *  Added a section on anti-forgery/double-submit cookies as another
+      form of CSRF protection
+
+   *  Updated CORS terminology
+
+   *  Moved new section on in-browser flows as not applicable to BFF or
+      TM patterns
+
+   *  Fixed usage of some browser technology terminology
+
+   *  Editorial improvements
+
    -16
 
    *  Applied editorial changes from Filip Skokan and Louis Jannett
@@ -2501,11 +2515,6 @@ Appendix B.  Document History
 
    *  Added a section with security considerations on the use of
       postMessage
-
-   *  Added a section on anti-forgery/double-submit cookies as another
-      form of CSRF protection
-
-   *  Updated CORS terminology
 
    -15
 
