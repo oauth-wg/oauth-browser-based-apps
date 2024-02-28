@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Parecki, et al.</td>
-<td class="center">Expires 25 August 2024</td>
+<td class="center">Expires 31 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-oauth-browser-based-apps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-22" class="published">22 February 2024</time>
+<time datetime="2024-02-28" class="published">28 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-25">25 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-31">31 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1104,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1414,7 +1414,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
       <h2 id="name-the-threat-of-malicious-jav">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-threat-of-malicious-jav" class="section-name selfRef">The Threat of Malicious JavaScript</a>
       </h2>
-<p id="section-5-1">Malicious JavaScript poses a significant risk to browser-based applications. Attack vectors, such as cross-site scripting (XSS) or the compromise of remote code files, give an attacker the capability to run arbitrary code in the application's execution context. The payload that the attacker chooses to execute can be extremely simple in nature, but can also be highly sophisticated and tailored to the application. Real-world examples include stealing data from the page, sending requests to a backend in the name of the user, and stealing tokens from available storage mechanisms.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Malicious JavaScript poses a significant risk to browser-based applications. Attack vectors, such as cross-site scripting (XSS) or the compromise of remote code files, give an attacker the capability to run arbitrary code in the application's execution context. This malicious code is not isolated from the main application's code in any way. Consequentially, the malicious code can not only take control of the running execution context, but can also perform actions within the application's origin. Concretely, this means that the malicious code can steal data from the current page, interact with other same-origin browsing contexts, send requests to a backend from within the application's origin, steal data from origin-based storage mechanisms (e.g., localStorage, IndexedDB), etc.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the <strong>malicious JavaScript code has the same privileges as the legitimate application code</strong>. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">This section explores the threats malicious JS code poses to browser-based applications that assume the role of an OAuth client. The first part discusses a few scenarios that attackers can use once they found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part of this section analyzes the impact of these attack scenarios on the OAuth client.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.<a href="#section-5-4" class="pilcrow">¶</a></p>
@@ -1477,7 +1477,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
           <h4 id="name-acquisition-and-extraction-">
 <a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-acquisition-and-extraction-" class="section-name selfRef">Acquisition and Extraction of New Tokens</a>
           </h4>
-<p id="section-5.1.3-1">In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code in the application's execution context. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-1">In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1.3-2.1">
               <p id="section-5.1.3-2.1.1">Execute malicious JS code<a href="#section-5.1.3-2.1.1" class="pilcrow">¶</a></p>
@@ -1501,8 +1501,8 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
               <p id="section-5.1.3-2.7.1">Abuse the stolen tokens<a href="#section-5.1.3-2.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.3-3">The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-4">This attack scenario is possible because the security of public browser-based OAuth 2.0 clients relies entirely on the redirect URI and application's execution context. When the attacker can execute malicious JavaScript code in the application's execution context, they effectively control the application's execution context, and by extension, the redirect URI. This attack scenario uses a hidden iframe-based flow, which is the same mechanism most browser-based apps use to bootstrap their authentication state. Since the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.<a href="#section-5.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-3">The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-4">This attack scenario is possible because the security of public browser-based OAuth 2.0 clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.<a href="#section-5.1.3-4" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-5">There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP (<span>[<a href="#DPoP" class="cite xref">DPoP</a>]</span>) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.<a href="#section-5.1.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1600,7 +1600,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
             <p id="section-6.1-2.3.1">The BFF proxies all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-6.1-3">If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to withstand most of the payload scenarios discussed before. Since tokens are only available to the BFF, there are no tokens available to extract from JavaScript (Payload <a href="#payload-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#payload-persistent-theft" class="auto internal xref">Section 5.1.2</a>). The BFF is a confidential client, which prevents the attacker from running a new flow within the browser (Payload <a href="#payload-new-flow" class="auto internal xref">Section 5.1.3</a>). Since the malicious JavaScript code still runs within the application's execution context, the attacker is able to send requests to the BFF from within the user's browser (Payload <a href="#payload-proxy" class="auto internal xref">Section 5.1.4</a>).<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to withstand most of the payload scenarios discussed before. Since tokens are only available to the BFF, there are no tokens available to extract from JavaScript (Payload <a href="#payload-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#payload-persistent-theft" class="auto internal xref">Section 5.1.2</a>). The BFF is a confidential client, which prevents the attacker from running a new flow within the browser (Payload <a href="#payload-new-flow" class="auto internal xref">Section 5.1.3</a>). Since the malicious JavaScript code still runs within the application's origin, the attacker is able to send requests to the BFF from within the user's browser (Payload <a href="#payload-proxy" class="auto internal xref">Section 5.1.4</a>).<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <div id="application-architecture">
 <section id="section-6.1.1">
           <h4 id="name-application-architecture">
@@ -2374,19 +2374,8 @@ around refresh tokens if refresh tokens are issued to browser-based applications
             </h5>
 <p id="section-6.3.2.8-1">In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send proper CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to ensure that the browser allows the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.2.8-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.2.8-2">For the authorization server, a proper CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for enforcing a proper CORS configuration on these endpoints.<a href="#section-6.3.2.8-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.8-3">This specification does not include guidelines for deciding whether a CORS policy
-for these endpoints should be a wildcard origin or more restrictive. Note,
-however, that the browser will typically do a "preflight" request to check to see
-if the CORS protocol is understood and what the policy is. In absence of support for
-preflight requests at the server the browser will attempt to access the API endpoint
-regardless and will simply hide the succeeding or failing result from
-JavaScript if the policy does not allow sharing.<a href="#section-6.3.2.8-3" class="pilcrow">¶</a></p>
-<p id="section-6.3.2.8-4">Note that the server CORS preflight response and the actual response CORS headers may differ,
-this allows the server to indicate wildcard support for accessing the endpoints
-during preflight when it has no access to the actual request's body or headers and then when
-the actual request is made decide to restrict the response after it was able to check the request
-was made from an expected origin based on the data in the request, e.g. based on pre-registered
-origins of the Browser-based OAuth 2.0 client.<a href="#section-6.3.2.8-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.8-3">This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends their approval in the preflight response.<a href="#section-6.3.2.8-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.8-4">Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different than the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.<a href="#section-6.3.2.8-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
