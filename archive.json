@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-27T00:33:54.805505+00:00",
+  "timestamp": "2024-02-29T00:34:01.040952+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -470,16 +470,24 @@
       "id": "I_kwDOCUe3lM5_m5mK",
       "title": "Follow up on review for merged PR",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "PR #30 merges a bunch of changes suggested by @panva. After merging, I have added [a couple of notes](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30#pullrequestreview-1887186225) that require following up. This issue is to keep track of that work.",
       "createdAt": "2024-02-18T10:09:29Z",
-      "updatedAt": "2024-02-18T10:09:29Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-02-28T23:05:43Z",
+      "closedAt": "2024-02-28T23:05:43Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you!",
+          "createdAt": "2024-02-28T23:05:43Z",
+          "updatedAt": "2024-02-28T23:05:43Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2670,25 +2678,35 @@
       "id": "PR_kwDOCUe3lM5n1gdm",
       "title": "Reworded text based on PR comments",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/39",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Reworded the text based on the discussion in [PR #30](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30)\r\n\r\nThis PR resolves issue #35 ",
       "createdAt": "2024-02-25T08:26:03Z",
-      "updatedAt": "2024-02-25T10:45:47Z",
+      "updatedAt": "2024-02-28T23:05:29Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "afe2b1ea6436c9d9fe54e1fdca179ea40196b8eb",
       "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
       "headRefName": "pdr/35-review-pr-30",
       "headRefOid": "9c7d6f471ebd1cbcea49bdf1a8e0a37e9f8d0411",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2024-02-28T23:05:29Z",
+      "mergedAt": "2024-02-28T23:05:29Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "7cd74c4c81d422f96864fc2bc3b316366ebfdc6b"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you both!",
+          "createdAt": "2024-02-28T23:05:24Z",
+          "updatedAt": "2024-02-28T23:05:24Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOCUe3lM5xOlxK",
