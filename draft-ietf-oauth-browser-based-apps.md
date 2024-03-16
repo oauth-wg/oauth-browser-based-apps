@@ -445,6 +445,7 @@ Serving the static JavaScript code is a separate responsibility from handling OA
 
 Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.
 
+BFF pattern responsabilities can also be split across multiple components. If the resource server is exposed through a dedicated proxy or an API Gateway, this component can be responsible for handling the access token and forwarding requests to the resource server. This approach can improve resource server response latency and be an alternative if the Token Mediating Backend architecture ({{tmi-bff}}) is considered for performance reasons.
 
 
 ### Security Considerations
