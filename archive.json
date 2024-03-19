@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-17T00:04:51.374227+00:00",
+  "timestamp": "2024-03-19T00:04:33.201696+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -2722,6 +2722,47 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOCUe3lM5p23Zt",
+      "title": "Add BFF advice for performance purposes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/40",
+      "state": "OPEN",
+      "author": "emmanuelgautier",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "As the Token Mediating Backend may be considered for performance reason sometimes, this PR shared an alternative solution.\r\nMost of the time, the resource servers are deployed with a proxy handling incoming request. Re-using those components may be a solution to not degrade security, not degrades performance, and be an alternative to use Token Mediating Backend pattern.\r\n\r\nA not answered question in this PR is how to shared relevant informations to handle cookies decryption when applied. Does this RFC should handle this question?",
+      "createdAt": "2024-03-17T10:46:26Z",
+      "updatedAt": "2024-03-18T09:27:51Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "emmanuelgautier/oauth-browser-based-apps",
+      "headRefName": "resource-proxy-reusage",
+      "headRefOid": "8da66994e92b7683d1d3a16f5c03d1789474f48f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "You're absolutely right that there is a lot of freedom in deciding how to implement the BFF or TM-BFF pattern. If there are pre-existing architecture components that can handle some of the heavy lifting, you are definitely encouraged to do so. \r\n\r\nWith that in mind, it is important to note that neither the BFF nor the TM-BFF require actual changes on the part of the resource server. It received an access token before, and it still receives an access token now. The specifics of how you implement the handling of that access token are out of scope for OAuth in general, and for this document as well. \r\n\r\nIn a nutshell, I don't think this PR addresses a core issue or adds an in-scope clarification, so I would not include it. ",
+          "createdAt": "2024-03-18T05:47:00Z",
+          "updatedAt": "2024-03-18T05:47:00Z"
+        },
+        {
+          "author": "emmanuelgautier",
+          "authorAssociation": "NONE",
+          "body": "Thanks for your review @philippederyck. I agree with you, this is not a core issue but more a deployment advice as it already exist some in the draft.\r\n\r\nThis PR intends to add a reminder about this implementation freedom and avoid wrong choice with TM-BFF based on performance reasons.\r\n\r\nAs there exists some architecture where the performance is critical but still exists some misconception on how to implement BFF, the latency reason could drive the decision to choose TM-BFF instead of BFF.\r\n\r\nMaybe the latency reason to choose TM-BFF can be removed to avoid confusion? ",
+          "createdAt": "2024-03-18T09:27:50Z",
+          "updatedAt": "2024-03-18T09:27:50Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
