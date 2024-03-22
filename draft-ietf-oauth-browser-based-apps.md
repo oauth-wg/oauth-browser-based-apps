@@ -467,7 +467,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
 
-Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data algorithm ({{RFC5116}}). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
+Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data cipher ({{RFC5116}}). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
 
 For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series (<https://cheatsheetseries.owasp.org>).
 
