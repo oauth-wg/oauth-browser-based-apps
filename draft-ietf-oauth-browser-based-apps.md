@@ -234,7 +234,7 @@ Malicious JavaScript poses a significant risk to browser-based applications. Att
 
 When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
 
-This section explores the threats malicious JS code poses to browser-based applications that assume the role of an OAuth client. The first part discusses a few scenarios that attackers can use once they found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part of this section analyzes the impact of these attack scenarios on the OAuth client.
+This section explores the threats malicious JS code poses to browser-based applications that assume the role of an OAuth client. The first part discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part of this section analyzes the impact of these attack scenarios on the OAuth client.
 
 The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.
 
@@ -467,7 +467,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
 
-Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data ({{RFC5116}}). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
+Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents using an Authenticated Encryption with Authenticated Data cipher ({{RFC5116}}). This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see {{token-storage}}).
 
 For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series (<https://cheatsheetseries.owasp.org>).
 
