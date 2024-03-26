@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-24T00:05:37.870212+00:00",
+  "timestamp": "2024-03-26T00:04:15.369567+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -488,6 +488,54 @@
           "updatedAt": "2024-02-28T23:05:43Z"
         }
       ]
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOCUe3lM6DYVBb",
+      "title": "Consistently use *applications* or *apps*",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/42",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In his review, Justin Richer pointed out that the spec inconsistently uses both the term *applications* and *apps* in the title and the document. It makes sense to settle for one and be consistent about it. \r\n\r\nMy vote goes to *applications*, which is most common in the context of web applications. *Apps* is more related to native/mobile apps. \r\n\r\nA quick Google search on *Angular apps* vs *Angular applications* or *js apps* vs *js applications* also indicates that applications is more common. \r\n\r\nWhen not updating, include *applications* vs *apps* in the terminology section.",
+      "createdAt": "2024-03-24T05:47:29Z",
+      "updatedAt": "2024-03-24T06:14:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 43,
+      "id": "I_kwDOCUe3lM6DYZrC",
+      "title": "Properly render sublists",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/43",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 5.1.2 contains a sublist, but it is not rendered properly\r\n\r\n```\r\n### Persistent Token Theft {#payload-persistent-theft}\r\n\r\nThis attack scenario is a more advanced variation on the Single-Execution Token Theft scenario ({{payload-single-theft}}). Instead of immediately stealing tokens upon the execution of the malicious payload, the attacker sets up the necessary handlers to steal the application's tokens on a continuous basis. This scenario consists of the following steps:\r\n\r\n- Execute malicious JS code\r\n- Setup a continuous token theft mechanism (e.g., on a 10-second time interval)\r\n\t  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})\r\n\t  - Send the tokens to a server controlled by the attacker\r\n\t  - Store the tokens\r\n- Wait until the opportune moment to abuse the latest version of the stolen tokens\r\n\r\nThe crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the payload already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.\r\n\r\nFor access tokens, the attacker now obtains the latest acce\r\n```",
+      "createdAt": "2024-03-24T06:54:28Z",
+      "updatedAt": "2024-03-24T06:54:28Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 44,
+      "id": "I_kwDOCUe3lM6DYnD2",
+      "title": "Address outstanding comments from Justin Richer",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/44",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Hey @aaronpk, I have a bunch of comments from Justin's reviews that I don't know how to handle. I have listed them below with my notes. Can you add your notes inline, or create new issues for these items that require some work?\r\n\r\n### Outstanding comments\r\n\r\n> \u00a75 is the bold formatting really necessary to make this point?\r\n\r\nBased on the discussions I/we've had in the past, I'd say yes. \r\n\r\n\r\n> \u00a76.1 what does \"Payload\" refer to here? The sections above are not referred to as \"Payloads\" in the titles\r\n\r\nThe scenarios are grouped under \"Malicious JavaScript Payloads\", so there is a concrete reference. I don't know if we need to include the term \"payload\" in the subtitles as well.\r\n\r\n\r\n> diagram nit: suggest using aasvg or similar tooling instead of plain ASCII\r\n\r\nI am not sure how this part works / is supposed to work.\r\n\r\n\r\n\r\n> \u00a76.1 diagram nit: this might read better as a vertical time sequence diagram, with concise labels on the arrows\r\n\r\nI have mostly seen diagrams in this format, so I'm not sure if we should change this.  \r\n\r\n\r\n> \u00a76.1.2.1 are these items \"recommended\" or \"RECOMMENDED\"? ie, is this intentionally informative?\r\n\r\nI believe this should be informative, but wanted to double check. This also applies to 6.2.2.1.\r\n\r\n\r\n> \u00a76.1.3.2 \r\n> Why is AEAD the only encryption method called out here? What's particularly special about this algorithm? \r\n> \r\n> There are no requirements for key management. It's obvious to a seasoned developer or security engineer that the BFF holds the decryption keys and doesn't give them out but that's never talked about. Are there any other considerations? Like, is it OK for the BFF to use the same encryption keys with each client? Does the key need to be identified? \r\n\r\nNot sure about this and whether we really want to go that far in this spec. Maybe we should just simplify this statement to mention that encryption is recommended?\r\n\r\n\r\n> \u00a76.1.3.3.2  \u00b66 it is considered bad practice to create `X-` header field names, and probably even worse practice to recommend making up an unregistered and ignored header field name just to force CORS. I don't think this is good and actionable advice and will likely run afoul of the HTTP directorate review during publication. If this actually does need to be kept, perhaps seek out advice from HTTP WG?\r\n\r\nI am not sure what to do with this. \r\n\r\n\r\n> \u00a76.2.1 question, is the \"Editor's note\" intended to survive to the full RFC? it seems useful reference if sufficiently caveated\r\n\r\nNot sure if the draft spec adds much value, so I'm fine either way\r\n\r\n\r\n\r\n> \u00a76.2.4.3.1 this \"note\" is pretty serious and deserves more than a note in terms of attention\r\n\r\nI have reworded this slightly, but this is quite inherent to the nature of the pattern. Not sure how to put more emphasis on it and whether it is needed.\r\n\r\n\r\n> the advice on refresh token expiration seems confusing at first read, particularly if my lifetime is based on use in the first place. What is this advice in the last bullet trying to prevent?\r\n\r\nDo you think this sentence needs rewording: \"when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time\"?\r\n\r\n\r\n> \u00a76.3.2.2\r\n> again this restriction to public clients predates several specs that remove it and the advice shouldn't be parroted here. better to say that they usually are going to be public because of the problem of registering a client ID and storing a secret of any kind at configuration time associated with that client ID.\r\n\r\nUpon reviewing this, I was wondering if we should just drop this section? The important issues are covered in other places, so I don't really see the need. This is likely  a leftover from when public clients were the only option. What do you think?\r\n\r\n\r\n> \u00a76.3.2.7 \r\n> aren't these the same requirements as above in \u00a76.3.2.1? Does it need to be listed as requirements in both places? Are they identical?\r\n\r\nThis remark is valid, and I had a similar thought when reworking the spec a while ago. I understand why the summary is there, but it is some duplication. Do you think we should address this?\r\n\r\n\r\n> \u00a76.3.2.8\r\n> \u00b62 what is a \"proper CORS configuration\" as per this spec? I don't think we have quite enough details to require that as such.\r\n\r\nNot sure what to do with this\r\n\r\n> \u00a79 security considerations sections should be about \"why\" and really shouldn't have normative requirements, please remove them from the subsequent sections\r\n\r\nI don't know how to handle this. Should we move these requirements somewhere else, or just rename the entire chapter to avoid confusion?\r\n\r\n\r\n> \u00a7A it feels wrong to have normative requirements in an appendix (point 7), and points 2 and 3 both have a weird uppercase NOT which isn't a keyword\r\n\r\nShould we move this?\r\n",
+      "createdAt": "2024-03-24T09:39:43Z",
+      "updatedAt": "2024-03-24T09:39:43Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -2762,6 +2810,459 @@
           "updatedAt": "2024-03-18T09:27:50Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 45,
+      "id": "PR_kwDOCUe3lM5qlIv5",
+      "title": "Processed review from Justin Richer",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/45",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-03-24T09:40:52Z",
+      "updatedAt": "2024-03-25T21:47:19Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/review-justin-richer",
+      "headRefOid": "a8db1b8513538018d359ab4a1e82692d96bcfddb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM50wIPd",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T20:59:20Z",
+          "updatedAt": "2024-03-25T20:59:20Z",
+          "comments": [
+            {
+              "originalPosition": 102,
+              "body": "Was there a reason to remove the mention of Web Assembly?",
+              "createdAt": "2024-03-25T20:59:20Z",
+              "updatedAt": "2024-03-25T20:59:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wNza",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:13:53Z",
+          "updatedAt": "2024-03-25T21:13:53Z",
+          "comments": [
+            {
+              "originalPosition": 292,
+              "body": "```suggestion\r\nWhen the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.\r\n```",
+              "createdAt": "2024-03-25T21:13:53Z",
+              "updatedAt": "2024-03-25T21:13:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wN3K",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:14:03Z",
+          "updatedAt": "2024-03-25T21:14:03Z",
+          "comments": [
+            {
+              "originalPosition": 292,
+              "body": "this one should stay as \"flow\"",
+              "createdAt": "2024-03-25T21:14:03Z",
+              "updatedAt": "2024-03-25T21:14:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wOF3",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:14:45Z",
+          "updatedAt": "2024-03-25T21:14:46Z",
+          "comments": [
+            {
+              "originalPosition": 162,
+              "body": "```suggestion\r\nIn this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:\r\n```\r\n\r\nThis one reads better as \"flow\"",
+              "createdAt": "2024-03-25T21:14:46Z",
+              "updatedAt": "2024-03-25T21:14:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wOrJ",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:16:26Z",
+          "updatedAt": "2024-03-25T21:16:26Z",
+          "comments": [
+            {
+              "originalPosition": 175,
+              "body": "```suggestion\r\nThe most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.\r\n```\r\n\r\nThis one should stay as \"flow\" since the paragraph started by referring to \"a new OAuth flow\".",
+              "createdAt": "2024-03-25T21:16:26Z",
+              "updatedAt": "2024-03-25T21:16:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wRcY",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:24:36Z",
+          "updatedAt": "2024-03-25T21:24:36Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "```suggestion\r\nWhen the attacker obtains a valid refresh token from a browser-based OAuth client, they can abuse the refresh token by running a Refresh Token grant with the authorization server. The response of the Refresh Token grant contains an access token, which gives the attacker the ability to access protected resources (See {{consequence-at}}). In essence, abusing a stolen refresh token enables long-term impersonation of the legitimate client application to resource servers.\r\n```\r\n\r\nIt is a either a \"grant\" or \"flow\" when referring to the actual request.",
+              "createdAt": "2024-03-25T21:24:36Z",
+              "updatedAt": "2024-03-25T21:24:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wRvF",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:25:31Z",
+          "updatedAt": "2024-03-25T21:25:31Z",
+          "comments": [
+            {
+              "originalPosition": 289,
+              "body": "```suggestion\r\nIf the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.\r\n```",
+              "createdAt": "2024-03-25T21:25:31Z",
+              "updatedAt": "2024-03-25T21:25:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wSBq",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:26:26Z",
+          "updatedAt": "2024-03-25T21:26:26Z",
+          "comments": [
+            {
+              "originalPosition": 310,
+              "body": "```suggestion\r\n#### The Authorization Code Grant {#pattern-bff-flow}\r\n```",
+              "createdAt": "2024-03-25T21:26:26Z",
+              "updatedAt": "2024-03-25T21:26:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wShx",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:27:59Z",
+          "updatedAt": "2024-03-25T21:27:59Z",
+          "comments": [
+            {
+              "originalPosition": 382,
+              "body": "This should be \"triggers a navigation\" instead of \"calls out\" just like [this line](https://github.com/oauth-wg/oauth-browser-based-apps/pull/45/files#diff-b8a39beaf896e9ec278c32c7ce5f353a35d1a54b46cc14edd775e65183f51c70R436), right?",
+              "createdAt": "2024-03-25T21:27:59Z",
+              "updatedAt": "2024-03-25T21:28:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wS-j",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:29:24Z",
+          "updatedAt": "2024-03-25T21:29:24Z",
+          "comments": [
+            {
+              "originalPosition": 411,
+              "body": "```suggestion\r\nWhen the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.\r\n```",
+              "createdAt": "2024-03-25T21:29:24Z",
+              "updatedAt": "2024-03-25T21:29:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTWa",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:30:32Z",
+          "updatedAt": "2024-03-25T21:30:32Z",
+          "comments": [
+            {
+              "originalPosition": 607,
+              "body": "```suggestion\r\nThe authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in \"consent fatigue\", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.\r\n```",
+              "createdAt": "2024-03-25T21:30:32Z",
+              "updatedAt": "2024-03-25T21:30:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTi5",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:09Z",
+          "updatedAt": "2024-03-25T21:31:09Z",
+          "comments": [
+            {
+              "originalPosition": 631,
+              "body": "```suggestion\r\nOAuth Implicit Grant {#implicit_flow}\r\n```\r\n\r\nMatches the section heading of RFC6749 this way",
+              "createdAt": "2024-03-25T21:31:09Z",
+              "updatedAt": "2024-03-25T21:31:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTs3",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:38Z",
+          "updatedAt": "2024-03-25T21:31:38Z",
+          "comments": [
+            {
+              "originalPosition": 672,
+              "body": "```suggestion\r\n### Further Attacks on the Implicit Grant\r\n```",
+              "createdAt": "2024-03-25T21:31:38Z",
+              "updatedAt": "2024-03-25T21:31:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTy8",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:55Z",
+          "updatedAt": "2024-03-25T21:31:56Z",
+          "comments": [
+            {
+              "originalPosition": 719,
+              "body": "```suggestion\r\n### Disadvantages of the Implicit Grant\r\n```",
+              "createdAt": "2024-03-25T21:31:55Z",
+              "updatedAt": "2024-03-25T21:31:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX09",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:24Z",
+          "updatedAt": "2024-03-25T21:45:25Z",
+          "comments": [
+            {
+              "originalPosition": 788,
+              "body": "```suggestion\r\nOnce registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in {{payloads}}.\r\n```",
+              "createdAt": "2024-03-25T21:45:24Z",
+              "updatedAt": "2024-03-25T21:45:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX6P",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:42Z",
+          "updatedAt": "2024-03-25T21:45:42Z",
+          "comments": [
+            {
+              "originalPosition": 791,
+              "body": "```suggestion\r\nTo meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant, an attack discussed in {{payload-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.\r\n```",
+              "createdAt": "2024-03-25T21:45:42Z",
+              "updatedAt": "2024-03-25T21:45:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX-O",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:54Z",
+          "updatedAt": "2024-03-25T21:45:55Z",
+          "comments": [
+            {
+              "originalPosition": 796,
+              "body": "```suggestion\r\nOne of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run an Authorization Code grant, extract the code from the frame's URL, and exchange it for tokens.\r\n```",
+              "createdAt": "2024-03-25T21:45:54Z",
+              "updatedAt": "2024-03-25T21:45:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYGi",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:46:18Z",
+          "updatedAt": "2024-03-25T21:46:18Z",
+          "comments": [
+            {
+              "originalPosition": 803,
+              "body": "```suggestion\r\nFinally, note that the use of a Service Worker by itself does not increase the attack surface of the application. In practice, Service Workers are often used to retrofit a legacy application with support for including OAuth access tokens on outgoing requests. The Service Worker in these scenarios does not change the security properties of the application, but merely simplifies development and maintenance of the application.\r\n```",
+              "createdAt": "2024-03-25T21:46:18Z",
+              "updatedAt": "2024-03-25T21:46:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYTf",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:46:59Z",
+          "updatedAt": "2024-03-25T21:46:59Z",
+          "comments": [
+            {
+              "originalPosition": 848,
+              "body": "```suggestion\r\nOne common use of Web Workers is to isolate the refresh token. In such a scenario, the application runs an Authorization Code flow to obtain the authorization code. This code is forwarded to a Web Worker, which exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.\r\n```",
+              "createdAt": "2024-03-25T21:46:59Z",
+              "updatedAt": "2024-03-25T21:47:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYZf",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:47:18Z",
+          "updatedAt": "2024-03-25T21:47:19Z",
+          "comments": [
+            {
+              "originalPosition": 851,
+              "body": "```suggestion\r\nIn this scenario, the application's existing refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code flow.\r\n```",
+              "createdAt": "2024-03-25T21:47:18Z",
+              "updatedAt": "2024-03-25T21:47:19Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOCUe3lM5qtWCN",
+      "title": "Feedback",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/46",
+      "state": "OPEN",
+      "author": "0xandybarlow",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Overall the spec reads very well, I didn't have trouble following.\r\n\r\nI did spot a missing word perhaps? And also I was curious if there was a better way to describe the intent behind \"Authenticated Encryption with Authenticated Data\" statements - cipher? suite? algorithm? I couldn't decide on a better way - feel free to reject!\r\n\r\nGreat work!",
+      "createdAt": "2024-03-25T20:53:57Z",
+      "updatedAt": "2024-03-25T20:53:58Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "0xandybarlow/oauth-browser-based-apps",
+      "headRefName": "andy-review",
+      "headRefOid": "d0fab5e707a6db95df3c3bb39ee94cef5cbdff5c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
