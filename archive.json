@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-26T00:04:15.369567+00:00",
+  "timestamp": "2024-03-28T00:04:59.054122+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -501,9 +501,17 @@
       "labels": [],
       "body": "In his review, Justin Richer pointed out that the spec inconsistently uses both the term *applications* and *apps* in the title and the document. It makes sense to settle for one and be consistent about it. \r\n\r\nMy vote goes to *applications*, which is most common in the context of web applications. *Apps* is more related to native/mobile apps. \r\n\r\nA quick Google search on *Angular apps* vs *Angular applications* or *js apps* vs *js applications* also indicates that applications is more common. \r\n\r\nWhen not updating, include *applications* vs *apps* in the terminology section.",
       "createdAt": "2024-03-24T05:47:29Z",
-      "updatedAt": "2024-03-24T06:14:28Z",
+      "updatedAt": "2024-03-26T00:20:26Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "+1 for \"applications\"",
+          "createdAt": "2024-03-26T00:20:25Z",
+          "updatedAt": "2024-03-26T00:20:25Z"
+        }
+      ]
     },
     {
       "number": 43,
