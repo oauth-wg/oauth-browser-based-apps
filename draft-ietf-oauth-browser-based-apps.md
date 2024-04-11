@@ -163,6 +163,14 @@ informative:
       name: Joshua Bell
       org: Google
     target: https://www.w3.org/TR/IndexedDB/
+  serviceworker:
+    title: Service Workers
+    author:
+    - name: Jake Archibald
+      org: Google
+    - name: Marijn Kruisselbrink
+      org: Google
+    target: https://www.w3.org/TR/service-workers/
 
 
 --- abstract
