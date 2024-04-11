@@ -292,12 +292,12 @@ Note that this attack scenario is trivial and often used to illustrate the dange
 
 This attack scenario is a more advanced variation on the Single-Execution Token Theft scenario ({{scenario-single-theft}}). Instead of immediately stealing tokens upon the execution of the malicious code, the attacker sets up the necessary handlers to steal the application's tokens on a continuous basis. This scenario consists of the following steps:
 
-- Execute malicious JS code
-- Setup a continuous token theft mechanism (e.g., on a 10-second time interval)
-  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
-  - Send the tokens to a server controlled by the attacker
-  - Store the tokens
-- Wait until the opportune moment to abuse the latest version of the stolen tokens
+* Execute malicious JS code
+* Setup a continuous token theft mechanism (e.g., on a 10-second time interval)
+  * Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
+  * Send the tokens to a server controlled by the attacker
+  * Store the tokens
+* Wait until the opportune moment to abuse the latest version of the stolen tokens
 
 The crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the attack scenario already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.
 
@@ -551,6 +551,13 @@ It is also possible to deploy the JavaScript application on the same origin as t
 Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.
 
 Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.
+
+
+##### Privacy considerations in the BFF architecture
+
+The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.
+
+When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third-party, this privacy impact needs to be taken into account.
 
 
 #### Advanced Security
