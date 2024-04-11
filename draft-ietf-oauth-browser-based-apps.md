@@ -34,8 +34,6 @@ author:
 
 
 normative:
-  BCP14:
-  BCP212:
   RFC2119:
   RFC5116:
   RFC6749:
