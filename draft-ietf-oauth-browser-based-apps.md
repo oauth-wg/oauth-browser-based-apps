@@ -1,5 +1,5 @@
 ---
-title: OAuth 2.0 for Browser-Based Apps
+title: OAuth 2.0 for Browser-Based Applications
 docname: draft-ietf-oauth-browser-based-apps-latest
 
 ipr: trust200902
@@ -209,11 +209,11 @@ the OpenID Foundation-sponsored set of libraries that assist developers in adopt
 these practices. {{RFC8252}} makes specific recommendations for how to securely implement OAuth clients in native
 applications, including incorporating additional OAuth extensions where needed.
 
-This specification, OAuth 2.0 for Browser-Based Apps, addresses the similarities between implementing
-OAuth clients as native apps and browser-based apps, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.
+This specification, OAuth 2.0 for Browser-Based Applications, addresses the similarities between implementing
+OAuth clients as native applications and browser-based applications, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.
 
 Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
-{{oauth-security-topics}} and browser-based apps are expected to follow those recommendations
+{{oauth-security-topics}} and browser-based applications are expected to follow those recommendations
 as well. This document expands on and further restricts various recommendations given in {{oauth-security-topics}}.
 
 
@@ -251,9 +251,9 @@ At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}
 
 However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) ({{Fetch}}), which enables exceptions to the same-origin policy, allows browser-based apps to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding PKCE to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) ({{Fetch}}), which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding PKCE to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
-For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based apps, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain apps.
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain applications.
 
 
 
@@ -890,7 +890,7 @@ authorization server with a way to verify the client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
 
-#### Registration of Browser-Based Apps {#client_registration}
+#### Registration of Browser-Based Applications {#client_registration}
 
 Browser-only OAuth clients are considered public clients as defined by Section 2.1
 of OAuth 2.0 {{RFC6749}}, and MUST be registered with the authorization server as
@@ -950,13 +950,13 @@ as described in {{oauth-security-topics}} Section 4.1.1. This helps to prevent a
 
 #### Security of In-Browser Communication Flows {#in_browser_communication_security}
 
-In browser-based apps, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
+In browser-based applications, it is common to execute the OAuth flow in a secondary window, such as a popup or iframe, instead of redirecting the primary window.
 In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or to run frame-based flows silently.
 
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
 
-Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based apps and authorization servers MUST apply to defend against these attacks.
+Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
 
 
 #### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
@@ -1088,7 +1088,7 @@ This section discusses a few alternative architecture patterns, which are not re
 
 
 
-Single-Domain Browser-Based Apps (not using OAuth)
+Single-Domain Browser-Based Applications (not using OAuth)
 --------------------------------------------------
 
 Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.
@@ -1102,7 +1102,7 @@ While the advice to not use OAuth seems out-of-place in this document, it is imp
 * Centralizing login and multi-factor authentication support, account management, and recovery at the OAuth server, rather than making it part of the application logic.
 * Splitting of responsibilities between authenticating a user and serving resources
 
-Using OAuth for browser-based apps in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described above.
+Using OAuth for browser-based applications in a first-party same-domain scenario provides these advantages, and can be accomplished by any of the architectural patterns described above.
 
 
 ### Threat Analysis
@@ -1126,7 +1126,7 @@ access tokens only from the token endpoint. Browser-based clients MUST use the A
 
 ### Historic Note
 
-Historically, the Implicit grant type provided an advantage to browser-based apps since
+Historically, the Implicit grant type provided an advantage to browser-based applications since
 JavaScript could always arbitrarily read and manipulate the fragment portion of the
 URL without triggering a page reload. This was necessary in order to remove the
 access token from the URL after it was obtained by the app. Additionally, until
@@ -1136,7 +1136,7 @@ offered an alternative flow that didn't require CORS support in the browser or o
 Modern browsers now have the Session History API (described in "Session history and
 navigation" of {{HTML}}), which provides a mechanism to modify the path and query string
 component of the URL without triggering a page reload. Additionally, CORS has widespread
-support and is often used by single-page apps for many purposes. This means modern browser-based apps can
+support and is often used by single-page applications for many purposes. This means modern browser-based applications can
 use the OAuth 2.0 Authorization Code grant type with PKCE, since they have the ability to
 remove the authorization code from the query string without triggering a page reload
 thanks to the Session History API, and CORS support at the token endpoint means the
@@ -1190,7 +1190,7 @@ This is discussed in more detail in Section 4.3.2 of {{oauth-security-topics}}.
 An attacker could modify the page or inject scripts into the browser through various
 means, including when the browser's HTTPS connection is being intercepted by, for
 example, a corporate network. While attacks on the TLS layer are typically out of scope
-of basic security recommendations to prevent, in the case of browser-based apps they are
+of basic security recommendations to prevent, in the case of browser-based applications they are
 much easier to perform. An injected script can enable an attacker to have access to everything
 on the page.
 
@@ -1203,7 +1203,7 @@ end up being stored.
 
 #### Access Token Leak to Third-Party Scripts
 
-It is relatively common to use third-party scripts in browser-based apps, such as
+It is relatively common to use third-party scripts in browser-based applications, such as
 analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
 In these situations, the author of the application may not be able to be fully aware
 of the entirety of the code running in the application. When an access token is
@@ -1435,7 +1435,7 @@ When OpenID Connect is used, it is important to avoid sensitive information disc
 Sender-Constrained Tokens {#sender-constrained-tokens}
 -------------------------
 
-As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based apps is {{DPoP}}.
+As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is {{DPoP}}.
 
 When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
@@ -1487,7 +1487,7 @@ This document does not require any IANA actions.
 Server Support Checklist
 ====================================
 
-OAuth authorization servers that support browser-based apps MUST:
+OAuth authorization servers that support browser-based applications MUST:
 
 1.  Support PKCE {{RFC7636}}. Required to protect authorization code
     grants sent to public clients. See {{auth_code_request}}
@@ -1620,7 +1620,7 @@ Document History
 * Softened "is likely a better decision to avoid using OAuth entirely" to "it may be..." for common-domain deployments
 * Updated abstract to not be limited to public clients, since the later sections talk about confidential clients
 * Removed references to avoiding OpenID Connect for same-domain architectures
-* Updated headers to better describe architectures (Apps Served from a Static Web Server -> JavaScript Applications without a Backend)
+* Updated headers to better describe architectures (Applications Served from a Static Web Server -> JavaScript Applications without a Backend)
 * Expanded "same-domain architecture" section to better explain the problems that OAuth has in this scenario
 * Referenced Security BCP in Implicit grant type attacks where possible
 * Minor typo corrections
@@ -1631,13 +1631,13 @@ Document History
 * Updated summary recommendation bullet points to split out application and server requirements
 * Removed the allowance on hostname-only redirect URI matching, now requiring exact redirect URI matching
 * Updated Section 6.2 to drop reference of SPA with a backend component being a public client
-* Expanded the architecture section to explicitly mention three architectural patterns available to JS apps
+* Expanded the architecture section to explicitly mention three architectural patterns available to JS applications
 
 -01
 
 * Incorporated feedback from Torsten Lodderstedt
 * Updated abstract
-* Clarified the definition of browser-based apps to not exclude applications cached in the browser, e.g. via Service Workers
+* Clarified the definition of browser-based applications to not exclude applications cached in the browser, e.g. via Service Workers
 * Clarified use of the state parameter for CSRF protection
 * Added background information about the original reason the Implicit grant type was created due to lack of CORS support
 * Clarified the same-domain use case where the SPA and API share a cookie domain
@@ -1648,7 +1648,7 @@ Acknowledgements
 ================
 
 The authors would like to acknowledge the work of William Denniss and John Bradley,
-whose recommendation for native apps informed many of the best practices for
+whose recommendation for native applications informed many of the best practices for
 browser-based applications. The authors would also like to thank Hannes Tschofenig
 and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
