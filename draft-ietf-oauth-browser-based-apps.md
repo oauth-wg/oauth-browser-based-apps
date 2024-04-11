@@ -166,7 +166,7 @@ informative:
       name: whatwg
       ins: whatwg
     date: March 2024
-    target :https://html.spec.whatwg.org/multipage/workers.html
+    target: https://html.spec.whatwg.org/multipage/workers.html
   Site:
     title: Site
     author:
