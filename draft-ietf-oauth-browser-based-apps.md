@@ -151,27 +151,18 @@ informative:
       ins: whatwg
     date:  March 2024
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
-  WebStorage:
-    title: HTML Living Standard - Cross-document messaging
-    author:
-      name: whatwg
-      ins: whatwg
-    date: March 2024
-    target: https://html.spec.whatwg.org/multipage/webstorage.html#webstorage
-  WebWorker:
-    title: HTML Living Standard - Cross-document messaging
-    author:
-      name: whatwg
-      ins: whatwg
-    date: March 2024
-    target: https://html.spec.whatwg.org/multipage/workers.html
   Site:
     title: Site
     author:
     - name: MDN Contributors
       org: Mozilla Developer Network
     target: https://developer.mozilla.org/en-US/docs/Glossary/Site
-
+  indexeddb:
+    title: Indexed Database API 3.0
+    author:
+      name: Joshua Bell
+      org: Google
+    target: https://www.w3.org/TR/IndexedDB/
 
 
 --- abstract
@@ -528,7 +519,7 @@ When relying on CORS as a CSRF defense, it is important to realize that certain 
 
 The consequence of this behavior is that certain endpoints of the resource server could become vulnerable to CSRF, even with CORS enabled as a defense. For example, if the resource server is an API that exposes an endpoint to a body-less POST request, there will be no preflight request and no CSRF defense.
 
-To avoid such bypasses against the CORS policy, the BFF SHOULD require that every request includes a custom request header. Cross-origin requests with a custom request header always require a preflight, which makes CORS an effective CSRF defense. Implementing this mechanism is as simple as requiring every request to have a static request header, such as `X-CORS-Security: 1`.
+To avoid such bypasses against the CORS policy, the BFF SHOULD require that the JavaScript application includes a custom request header. Cross-origin requests with a custom request header always require a preflight, which makes CORS an effective CSRF defense. When this mechanism is used, the BFF MUST ensure that every incoming request carries this static header. The exact naming of this header is at the discretion of the JavaScript application and BFF. A sample configuration would be a request header with a static value, such as `My-Static-Header: 1`.
 
 It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.
 
@@ -644,7 +635,7 @@ The token-mediating backend associates the obtained tokens with the user's sessi
 
 The JavaScript application in the browser can use the access token obtained in step I to directly make requests to the resource server (J).
 
-Editor's Note: A method of implementing this architecture is described by the {{tmi-bff}} draft, although it is currently an expired individual draft and has not been proposed for adoption to the OAuth Working Group.
+Note that an early draft ({{tmi-bff}}) already documented this concept, although the draft is is currently expired and has not been proposed for adoption to the OAuth Working Group.
 
 
 
@@ -767,7 +758,7 @@ While this architecture inherently exposes access tokens, there are some additio
 
 Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
 
-Be aware that even when the access token is stored out of reach of malicious JavaScript code, the attacker still has the ability to request the access token from the token-mediating backend.
+Be aware that even when the access token is stored out of reach of malicious JavaScript code, the malicious code can still mimic the legitimate application and send a request to the token-mediation backend to obtain the latest access token. 
 
 
 ##### Using Sender-Constrained Tokens
