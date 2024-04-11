@@ -171,20 +171,7 @@ informative:
     - name: MDN Contributors
       org: Mozilla Developer Network
     target: https://developer.mozilla.org/en-US/docs/Glossary/Site
-  indexeddb:
-    title: Indexed Database API 3.0
-    author:
-      name: Joshua Bell
-      org: Google
-    target: https://www.w3.org/TR/IndexedDB/
-  serviceworker:
-    title: Service Workers
-    author:
-    - name: Jake Archibald
-      org: Google
-    - name:   Marijn Kruisselbrink
-      org: Google
-    target: https://www.w3.org/TR/service-workers/
+
 
 
 --- abstract
