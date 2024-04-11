@@ -310,7 +310,7 @@ For access tokens, the attacker now obtains the latest access token for as long 
 
 ### Acquisition and Extraction of New Tokens {#payload-new-flow}
 
-In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code grant type. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:
+In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:
 
 - Execute malicious JS code
 - Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging ({{WebMessaging}}))
@@ -320,7 +320,7 @@ In this advanced attack scenario, the attacker completely disregards any tokens 
 - Exchange the authorization code for a new set of tokens
 - Abuse the stolen tokens
 
-The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code grant type is indistinguishable from a legitimate Authorization Code grant type.
+The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
 
 This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.
 
@@ -349,7 +349,7 @@ Successful execution of a malicious payload can result in the theft of access to
 
 ### Exploiting Stolen Refresh Tokens {#consequence-rt}
 
-When the attacker obtains a valid refresh token from a browser-based OAuth client, they can abuse the refresh token by running a Refresh Token grant type with the authorization server. The response of the Refresh Token grant type contains an access token, which gives the attacker the ability to access protected resources (See {{consequence-at}}). In essence, abusing a stolen refresh token enables long-term impersonation of the legitimate client application to resource servers.
+When the attacker obtains a valid refresh token from a browser-based OAuth client, they can abuse the refresh token by running a Refresh Token grant with the authorization server. The response of the Refresh Token grant contains an access token, which gives the attacker the ability to access protected resources (See {{consequence-at}}). In essence, abusing a stolen refresh token enables long-term impersonation of the legitimate client application to resource servers.
 
 The attack is only stopped when the authorization server refuses a refresh token because it has expired or rotated, or when the refresh token is revoked. In a typical browser-based OAuth client, it is not uncommon for a refresh token to remain valid for multiple hours, or even days.
 
@@ -460,9 +460,9 @@ Finally, the BFF can also offer a "logout" endpoint to the JavaScript applicatio
 
 It is recommended to use both access tokens and refresh tokens, as it enables access tokens to be short-lived and minimally scoped (e.g., using {{RFC8707}}). When using refresh tokens, the BFF obtains the refresh token (step F) and associates it with the user's session.
 
-If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can run a Refresh Token grant type to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.
+If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.
 
-When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code grant type. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
+When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
 
 #### Cookie-based Session Management {#pattern-bff-sessions}
@@ -493,7 +493,7 @@ Note that it is possible to further customize this architecture to tailor to spe
 
 ### Security Considerations
 
-#### The Authorization Code grant type {#pattern-bff-flow}
+#### The Authorization Code Grant {#pattern-bff-flow}
 
 The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described by Section 2.1.1 of {{oauth-security-topics}} to initiate a request for an access token.
 
@@ -682,7 +682,7 @@ It is recommended to use both access tokens and refresh tokens, as it enables ac
 
 If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a fresh access token. The token-mediating backend relies on the cookies associated with this request to use the user's refresh token to run a Refresh Token grant type. These steps are not shown in the diagram. Note that this Refresh Token grant type involves a confidential client, thus requires client authentication.
 
-When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code grant type. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
+When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
 
 #### Access Token Scopes
@@ -1067,7 +1067,7 @@ For completeness, this BCP lists a few options below. Note that none of these de
 
 The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{payload-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
-The authorization server could opt to make user consent mandatory in every Authorization Code grant type (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
+The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
 
 
 #### Summary
@@ -1111,7 +1111,7 @@ Due to the lack of using OAuth, this architecture pattern is only vulnerable to 
 
 
 
-OAuth Implicit grant type   {#implicit_flow}
+OAuth Implicit Grant {#implicit_flow}
 -------------------
 
 The OAuth 2.0 Implicit grant type (defined in Section 4.2 of
@@ -1160,7 +1160,7 @@ As a result, this pattern can lead to the following consequences:
 
 
 
-### Further Attacks on the Implicit grant type
+### Further Attacks on the Implicit Grant
 
 Apart from the attack payloads and consequences that were already discussed, there are a few additional attacks that further support the deprecation of the Implicit grant type. Many attacks on the Implicit grant type described by {{RFC6819}} and Section 4.1.2 of {{oauth-security-topics}}
 do not have sufficient mitigation strategies. The following sections describe the specific
@@ -1210,7 +1210,7 @@ of the entirety of the code running in the application. When an access token is
 returned in the fragment, it is visible to any third-party scripts on the page.
 
 
-### Disadvantages of the Implicit grant type
+### Disadvantages of the Implicit Grant
 
 There are several additional reasons the Implicit grant type is disadvantageous compared to
 using the recommended Authorization Code grant type.
@@ -1309,19 +1309,19 @@ The seemingly promising security benefits of using a Service Worker warrant a mo
 1. Prevent an attacker from exfiltrating tokens
 2. Prevent an attacker from acquiring a new set of tokens
 
-Once registered, the Service Worker runs an Authorization Code grant type and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in {{payloads}}.
+Once registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in {{payloads}}.
 
-To meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant type, an attack discussed in {{payload-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.
+To meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant, an attack discussed in {{payload-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.
 
 However, the malicious code running inside the application can unregister this Service Worker. Unregistering a Service Worker can have a significant functional impact on the application, so it is not an operation the browser handles lightly. Therefore, an unregistered Service Worker is marked as such, but all currently running instances remain active until their corresponding browsing context is terminated (e.g., by closing the tab or window). So even when an attacker unregisters a Service Worker, it remains active and able to prevent the attacker from reaching the authorization server.
 
-One of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run an Authorization Code grant type, extract the code from the frame's URL, and exchange it for tokens.
+One of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run an Authorization Code grant, extract the code from the frame's URL, and exchange it for tokens.
 
 In essence, the Service Worker fails to meet the second security requirement, leaving it vulnerable to the payload where the attacker acquires a new set of tokens ({{payload-new-flow}}).
 
 Due to these shortcomings, combined with the significant complexity of registering and maintaining a Service Worker, this pattern is not recommended.
 
-Finally, note that the use of a Service Worker by itself does not increase the attack surface of the application. In practice, Service Workers are often used to retrofit a legacy application with support for including OAuth access tokens on outgoing requests.The Service Worker in these scenarios does not change the security properties of the application, but merely simplifies development and maintenance of the application.
+Finally, note that the use of a Service Worker by itself does not increase the attack surface of the application. In practice, Service Workers are often used to retrofit a legacy application with support for including OAuth access tokens on outgoing requests. The Service Worker in these scenarios does not change the security properties of the application, but merely simplifies development and maintenance of the application.
 
 
 
@@ -1375,9 +1375,9 @@ The application can use a Web Worker ({{WebWorker}}), which results in an almost
 
 The security properties of using a Web Worker are identical to using Service Workers. When tokens are exposed to the application, they become vulnerable. When tokens need to be used, the operation that relies on them has to be carried out by the Web Worker.
 
-One common use of Web Workers is to isolate the refresh token. In such a scenario, the application runs an Authorization Code grant type to obtain the authorization code. This code is forwarded to a Web Worker, which exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.
+One common use of Web Workers is to isolate the refresh token. In such a scenario, the application runs an Authorization Code flow to obtain the authorization code. This code is forwarded to a Web Worker, which exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.
 
-In this scenario, the application's existing refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code grant type.
+In this scenario, the application's existing refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code flow.
 
 
 In-Memory Token Storage {#token-storage-in-memory}
