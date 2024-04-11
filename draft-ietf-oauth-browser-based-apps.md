@@ -151,6 +151,13 @@ informative:
       ins: whatwg
     date:  March 2024
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
+  WebStorage:
+    title: HTML Living Standard - Web Storage
+    author:
+      name: whatwg
+      ins: whatwg
+    date: March 2024
+    target: https://html.spec.whatwg.org/multipage/webstorage.html#webstorage
   WebWorker:
     title: HTML Living Standard - Web workers
     author:
