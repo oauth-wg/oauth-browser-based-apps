@@ -151,6 +151,13 @@ informative:
       ins: whatwg
     date:  March 2024
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
+  WebWorker:
+    title: HTML Living Standard - Web workers
+    author:
+      name: whatwg
+      ins: whatwg
+    date: March 2024
+    target: https://html.spec.whatwg.org/multipage/workers.html
   Site:
     title: Site
     author:
@@ -766,7 +773,7 @@ While this architecture inherently exposes access tokens, there are some additio
 
 Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. {{token-storage}} provides more details on the security properties of various storage mechanisms in the browser.
 
-Be aware that even when the access token is stored out of reach of malicious JavaScript code, the malicious code can still mimic the legitimate application and send a request to the token-mediation backend to obtain the latest access token. 
+Be aware that even when the access token is stored out of reach of malicious JavaScript code, the malicious code can still mimic the legitimate application and send a request to the token-mediation backend to obtain the latest access token.
 
 
 ##### Using Sender-Constrained Tokens
