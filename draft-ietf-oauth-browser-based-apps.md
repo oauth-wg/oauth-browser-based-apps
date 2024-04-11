@@ -201,7 +201,7 @@ This specification describes different architectural patterns for implementing O
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
-This document is formally known as RFC8252 or {{BCP212}}, but often referred to as "AppAuth" after
+This document is formally known as RFC8252 or BCP212, but often referred to as "AppAuth" after
 the OpenID Foundation-sponsored set of libraries that assist developers in adopting
 these practices. {{RFC8252}} makes specific recommendations for how to securely implement OAuth clients in native
 applications, including incorporating additional OAuth extensions where needed.
@@ -219,7 +219,7 @@ Notational Conventions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in {{BCP14}}.
+"OPTIONAL" in this document are to be interpreted as described in BCP14.
 
 
 Terminology
