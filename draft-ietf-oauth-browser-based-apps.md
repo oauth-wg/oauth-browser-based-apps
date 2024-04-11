@@ -823,37 +823,13 @@ it can interact with the resource server directly. The application includes the 
 and receives the resource server's response (E).
 
 
-
-### Security Considerations
-
-#### The Authorization Code Grant {#pattern-oauth-browser-flow}
+### Implementation Details
 
 Browser-based applications that are public clients and use the Authorization Code grant type described in
 Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
 described in this section.
 
-Concretely, browser-based applications using the Authorization Code grant type:
-
-* MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
-* MUST Protect themselves against CSRF attacks (See section {{pattern-oauth-browser-csrf}} below for more details) by either:
-  * ensuring the authorization server supports PKCE, or
-  * by using the OAuth `state` parameter, or
-  * the OpenID Connect `nonce` parameter to carry one-time use CSRF tokens
-* MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
-
-
-Concretely, OAuth authorization servers supporting browser-based applications using the Authorization Code grant type:
-
-* MUST require exact matching of registered redirect URIs ({{auth_code_redirect}})
-* MUST support the PKCE extension ({{auth_code_request}})
-* MUST NOT issue access tokens in the authorization response ({{implicit_flow}})
-* If issuing refresh tokens to browser-based applications (See section {{pattern-oauth-browser-rt}} below for more details), then:
-  * MUST rotate refresh tokens on each use or use sender-constrained refresh tokens, and
-  * MUST set a maximum lifetime on refresh tokens or expire if they are not used in some amount of time
-  * when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time
-
-
-##### Initiating the Authorization Request from a Browser-Based Application {#auth_code_request}
+#### The Authorization Code Grant {#pattern-oauth-browser-flow}
 
 Browser-based applications that are public clients MUST implement the Proof Key for Code Exchange
 (PKCE {{RFC7636}}) extension when obtaining an access token, and authorization servers MUST support and enforce
@@ -865,18 +841,53 @@ authorization server with a way to verify the client instance that exchanges
 the authorization code is the same one that initiated the flow.
 
 
-#### Registration of Browser-Based Applications {#client_registration}
+#### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
 
-Browser-only OAuth clients are considered public clients as defined by Section 2.1
-of OAuth 2.0 {{RFC6749}}, and MUST be registered with the authorization server as
-such. Authorization servers MUST record the client type in the client registration
-details in order to identify and process requests accordingly.
+Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
+accomplished by any of the below:
 
-Authorization servers MUST require that browser-based applications register
-their redirect URIs (See {{auth_code_redirect}}).
+* using PKCE, and confirming that the authorization server supports PKCE
+* using and verifying unique value for the OAuth `state` parameter to carry a CSRF token
+* if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
 
-Note that both the BFF and token-mediating backend are confidential clients.
+See Section 2.1 of {{oauth-security-topics}} for additional details on selecting a proper CSRF defense for the Authorization Code grant type.
 
+
+#### Refresh Tokens {#pattern-oauth-browser-rt}
+
+For browser-based clients, the refresh token is typically a bearer token, unless the application explicitly uses {{DPoP}}. As a result, the risk of a leaked refresh token
+is greater than leaked access tokens, since an attacker may be able to
+continue using the stolen refresh token to obtain new access tokens potentially without being
+detectable by the authorization server.
+
+Authorization servers may choose whether or not to issue refresh tokens to browser-based
+applications. However, in light of the impact of third-party cookie blocking mechanisms, the use of refresh tokens has become significantly more attractive. The {{oauth-security-topics}} describes some additional requirements around refresh tokens
+on top of the recommendations of {{RFC6749}}. Applications and authorization servers
+conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
+around refresh tokens if refresh tokens are issued to browser-based applications.
+
+In particular, authorization servers:
+
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.14.2
+* MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
+* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
+
+Limiting the overall refresh token lifetime to the lifetime of the initial refresh token ensures a stolen refresh token cannot be used indefinitely.
+
+For example:
+
+* A user authorizes an application, issuing an access token that lasts 10 minutes, and a refresh token that lasts 8 hours
+* After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token
+* The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes
+* This continues until 8 hours pass from the initial authorization
+* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code grant type that relies on the user's authentication or previously established session
+
+Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
+
+
+
+
+### Security Considerations
 
 #### Client Authentication {#client_authentication}
 
@@ -934,55 +945,11 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
 Section 4.18. of {{oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
 
 
-#### Cross-Site Request Forgery Protections {#pattern-oauth-browser-csrf}
-
-Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
-accomplished by any of the below:
-
-* using PKCE, and confirming that the authorization server supports PKCE
-* using and verifying unique value for the OAuth `state` parameter to carry a CSRF token
-* if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
-
-See Section 2.1 of {{oauth-security-topics}} for additional details on selecting a proper CSRF defense for the Authorization Code grant type.
-
-
-#### Refresh Tokens {#pattern-oauth-browser-rt}
-
-For browser-based clients, the refresh token is typically a bearer token, unless the application explicitly uses {{DPoP}}. As a result, the risk of a leaked refresh token
-is greater than leaked access tokens, since an attacker may be able to
-continue using the stolen refresh token to obtain new access tokens potentially without being
-detectable by the authorization server.
-
-Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. However, in light of the impact of third-party cookie blocking mechanisms, the use of refresh tokens has become significantly more attractive. The {{oauth-security-topics}} describes some additional requirements around refresh tokens
-on top of the recommendations of {{RFC6749}}. Applications and authorization servers
-conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
-around refresh tokens if refresh tokens are issued to browser-based applications.
-
-In particular, authorization servers:
-
-* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{oauth-security-topics}} Section 4.14.2
-* MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
-* upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
-
-For example:
-
-* A user authorizes an application, issuing an access token that lasts 10 minutes, and a refresh token that lasts 8 hours
-* After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token
-* The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes
-* This continues until 8 hours pass from the initial authorization
-* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code grant type that relies on the user's authentication or previously established session
-
-Limiting the overall refresh token lifetime to the lifetime of the initial refresh token ensures a stolen refresh token cannot be used indefinitely.
-
-Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
-
-
 #### Cross-Origin Requests {#pattern-oauth-browser-cors}
 
-In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send proper CORS headers (defined in {{Fetch}}) to ensure that the browser allows the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.
+In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send necessary CORS headers (defined in {{Fetch}}) to enable the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.
 
-For the authorization server, a proper CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for enforcing a proper CORS configuration on these endpoints.
+For the authorization server, the CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for supporting CORS on these endpoints.
 
 This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends their approval in the preflight response.
 
@@ -1426,18 +1393,7 @@ Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
 --------------------------------------
 
 Authorization server mix-up attacks mark a severe threat to every client that supports
-at least two authorization servers. To conform to this BCP such clients MUST apply
-countermeasures to defend against mix-up attacks.
-
-It is RECOMMENDED to defend against mix-up attacks by identifying and validating the issuer
-of the authorization response. This can be achieved either by using the `iss` response
-parameter, as defined in {{RFC9207}}, or by using the `iss` claim of the ID token
-when using OpenID Connect.
-
-Alternative countermeasures, such as using distinct redirect URIs for each issuer, SHOULD
-only be used if identifying the issuer as described is not possible.
-
-Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
+at least two authorization servers. Section 4.4 of {{oauth-security-topics}} provides additional details about mix-up attacks
 and the countermeasures mentioned above.
 
 
@@ -1458,31 +1414,6 @@ This document does not require any IANA actions.
 
 
 --- back
-
-Server Support Checklist
-====================================
-
-OAuth authorization servers that support browser-based applications MUST:
-
-1.  Support PKCE {{RFC7636}}. Required to protect authorization code
-    grants sent to public clients. See {{auth_code_request}}
-
-2.  NOT support the Resource Owner Password grant for browser-based clients.
-
-3.  NOT support the Implicit grant for browser-based clients.
-
-4.  Require "https" scheme redirect URIs for browser-based clients.
-
-5.  Require exact matching of registered redirect URIs for browser-based clients.
-
-6.  Support cross-domain requests at endpoints browser-based clients access in order to allow browsers
-    to make the authorization code exchange request. See {{cors}}
-
-7.  Not assume that browser-based clients can keep a secret, and SHOULD NOT issue
-    secrets to applications of this type.
-
-8.  Follow the {{oauth-security-topics}} recommendations on refresh tokens, as well
-    as the additional requirements described in {{pattern-oauth-browser-rt}}.
 
 
 Document History
