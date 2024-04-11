@@ -456,7 +456,7 @@ Finally, the BFF can also offer a "logout" endpoint to the JavaScript applicatio
 
 #### Refresh Tokens
 
-When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the BFF obtains the refresh token (step F) and associates it with the user's session. 
+When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the BFF obtains the refresh token (step F) and associates it with the user's session.
 
 If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.
 
@@ -860,7 +860,7 @@ Concretely, browser-based applications using the Authorization Code grant type:
 * MUST use PKCE ({{RFC7636}}) when obtaining an access token ({{auth_code_request}})
 * MUST Protect themselves against CSRF attacks (See section {{pattern-oauth-browser-csrf}} below for more details) by either:
   * ensuring the authorization server supports PKCE, or
-  * by using the OAuth `state` parameter, or 
+  * by using the OAuth `state` parameter, or
   * the OpenID Connect `nonce` parameter to carry one-time use CSRF tokens
 * MUST Register one or more redirect URIs, and use only exact registered redirect URIs in authorization requests ({{auth_code_redirect}})
 
