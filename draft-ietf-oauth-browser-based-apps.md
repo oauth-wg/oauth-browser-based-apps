@@ -178,7 +178,7 @@ informative:
       org: Google
     target: https://www.w3.org/TR/IndexedDB/
   serviceworker:
-    title:
+    title: Service Workers
     author:
     - name: Jake Archibald
       org: Google
