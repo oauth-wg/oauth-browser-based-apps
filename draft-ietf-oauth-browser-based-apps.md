@@ -297,9 +297,9 @@ This attack scenario is a more advanced variation on the Single-Execution Token 
 
 - Execute malicious JS code
 - Setup a continuous token theft mechanism (e.g., on a 10-second time interval)
-	  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
-	  - Send the tokens to a server controlled by the attacker
-	  - Store the tokens
+  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})
+  - Send the tokens to a server controlled by the attacker
+  - Store the tokens
 - Wait until the opportune moment to abuse the latest version of the stolen tokens
 
 The crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the payload already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.
