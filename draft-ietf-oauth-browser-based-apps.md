@@ -185,7 +185,6 @@ informative:
     - name:   Marijn Kruisselbrink
       org: Google
     target: https://www.w3.org/TR/service-workers/
-  
 
 
 --- abstract
