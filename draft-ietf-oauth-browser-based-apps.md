@@ -286,7 +286,7 @@ This scenario covers a simple token exfiltration attack, where the attacker obta
 
 The recommended defensive strategy to protect access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism. Sender-constrained tokens ({{sender-constrained-tokens}}) offer an additional layer of protection against stolen access tokens.
 
-Note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. When discussing the security of browser-based applications, it is crucial to avoid limiting the attacker's capabilities to the payload discussed in this scenario. 
+Note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. When discussing the security of browser-based applications, it is crucial to avoid limiting the attacker's capabilities to the payload discussed in this scenario.
 
 
 ### Persistent Token Theft {#payload-persistent-theft}
@@ -312,7 +312,7 @@ In this advanced attack scenario, the attacker completely disregards any tokens 
 
 - Execute malicious JS code
 - Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging ({{WebMessaging}}))
-- Insert a hidden iframe into the page and initialize it with an authorization request. The authorization request in the iframe will occur within the user's session and, if the session is still active, result in the issuing of an authorization code. Note that this step relies on the Authorization Server supporting silent frame-based flows, as discussed in the last paragraph of this scenario. 
+- Insert a hidden iframe into the page and initialize it with an authorization request. The authorization request in the iframe will occur within the user's session and, if the session is still active, result in the issuing of an authorization code. Note that this step relies on the Authorization Server supporting silent frame-based flows, as discussed in the last paragraph of this scenario.
 - Extract the authorization code from the iframe using the previously installed handler
 - Send the authorization code to a server controlled by the attacker
 - Exchange the authorization code for a new set of tokens
@@ -443,9 +443,9 @@ When the JavaScript application in the browser wants to make a request to the re
 
 #### Session and OAuth Endpoints {#bff_endpoints}
 
-The BFF provides a set of endpoints that are crucial to implement the interactions between the browser-based application and the BFF. This section discusses these endpoints in a bit more detail to clarify their purpose and use cases. 
+The BFF provides a set of endpoints that are crucial to implement the interactions between the browser-based application and the BFF. This section discusses these endpoints in a bit more detail to clarify their purpose and use cases.
 
-The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the BFF to check for an active session. The response should indicate to the browser-based application whether the session is active. Additionally, the BFF can include other information, such as identity information about the authenticated user. 
+The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the BFF to check for an active session. The response should indicate to the browser-based application whether the session is active. Additionally, the BFF can include other information, such as identity information about the authenticated user.
 
 The endpoint that initializes the Authorization Code grant type (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initialize this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initialize the Authorization Code grant type in step B, when it detects the absence of an active session. In that case, the BFF would return the initialization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.
 
@@ -527,7 +527,7 @@ Configuring the cookies with the *SameSite=Strict* attribute (See {{pattern-bff-
 
 This defense is adequate if the BFF is never considered to be same-site with any other applications. However, it falls short when the BFF is hosted alongside other applications within the same site, defined as the eTLD+1 (See this definition of {{Site}} for more details).
 
-For example, subdomains, such as  `https://a.example.com` and `https://b.example.com`, are considered same-site, since they share the same site `example.com`. They are considered cross-origin, since origins consist of the tuple *<scheme, hostname, port>*. As a result, a subdomain takeover attack against `b.example.com` can enable CSRF attacks against the BFF of `a.example.com`. Note that these subdomain-based attacks follow the same pattern as CSRF attacks, but with cross-origin nature instead of a cross-site nature. 
+For example, subdomains, such as  `https://a.example.com` and `https://b.example.com`, are considered same-site, since they share the same site `example.com`. They are considered cross-origin, since origins consist of the tuple *<scheme, hostname, port>*. As a result, a subdomain takeover attack against `b.example.com` can enable CSRF attacks against the BFF of `a.example.com`. Note that these subdomain-based attacks follow the same pattern as CSRF attacks, but with cross-origin nature instead of a cross-site nature.
 
 
 ##### Cross-Origin Resource Sharing {#cors}
@@ -576,7 +576,7 @@ Note that this attack scenario results in the following consequences:
 
 Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy ({{CSP3}}).
 
-In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of scope for this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application. 
+In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of scope for this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.
 
 Finally, the BFF is uniquely placed to observe all traffic between the JavaScript application and the resource servers. If a high-security application would prefer to implement anomaly detection or rate limiting, such a BFF would be the ideal place to do so. Such restrictions can further help to mitigate the consequences of client hijacking.
 
@@ -668,10 +668,10 @@ Editor's Note: A method of implementing this architecture is described by the {{
 
 Most of the endpoint implementations of the token-mediating backend are similar to those described for a BFF.
 
-- The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the backend to check for an active session. The response should indicate to the browser-based application whether the session is active. If an active session is found, the backend includes the access token in the response. Additionally, the backend can include other information, such as identity information about the authenticated user. 
-- The endpoint that initializes the Authorization Code grant type (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details. 
-- The endpoint that receives the authorization code (step E) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details. 
-- The endpoint that supports logout is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details. 
+- The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the backend to check for an active session. The response should indicate to the browser-based application whether the session is active. If an active session is found, the backend includes the access token in the response. Additionally, the backend can include other information, such as identity information about the authenticated user.
+- The endpoint that initializes the Authorization Code grant type (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
+- The endpoint that receives the authorization code (step E) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
+- The endpoint that supports logout is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 
 
 #### Refresh Tokens
@@ -786,7 +786,7 @@ Be aware that even when the access token is stored out of reach of malicious Jav
 
 ##### Using Sender-Constrained Tokens
 
-Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as {{DPoP}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document. 
+Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as {{DPoP}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document.
 
 
 #### Summary
@@ -1362,7 +1362,7 @@ A Service Worker ({{serviceworker}}) offers a fully isolated environment to keep
 
 When aiming to isolate tokens from the application's execution context, the Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window. Consequentially, the Service Worker currently does not have access to an isolated persistent storage area.
 
-As discussed before, the use of a Service Worker does not prevent an attacker from obtaining a new set of tokens. Similarly, if the application is responsible for obtaining tokens from the authorization server and passing them to a Service Worker for further management, the attacker can perform the same operation as the legitimate application to obtain these tokens. 
+As discussed before, the use of a Service Worker does not prevent an attacker from obtaining a new set of tokens. Similarly, if the application is responsible for obtaining tokens from the authorization server and passing them to a Service Worker for further management, the attacker can perform the same operation as the legitimate application to obtain these tokens.
 
 
 
