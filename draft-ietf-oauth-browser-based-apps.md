@@ -716,7 +716,7 @@ If an attacker is able to execute malicious JavaScript code, this application ar
 ~~~ aasvg
 {::include art/bbapp-pattern-standalone.ascii-art}
 ~~~
-{: #fig-bbapp-pattern-standalone title="OAuth 2.0 Browser-based OAuth 2.0 Client Pattern" }
+{: #fig-bbapp-pattern-standalone title="Browser-based OAuth 2.0 Client Pattern" }
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
