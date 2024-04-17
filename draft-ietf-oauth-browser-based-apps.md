@@ -372,32 +372,10 @@ If an attacker is able to execute malicious code within the JavaScript applicati
 
 ### Application Architecture
 
-                                +-------------+  +--------------+ +--------------+
-                                |             |  |              | |              |
-                                |Authorization|  |    Token     | |   Resource   |
-                                |  Endpoint   |  |   Endpoint   | |    Server    |
-                                |             |  |              | |              |
-                                +-------------+  +--------------+ +--------------+
-
-                                    ^                        ^              ^
-                                    |                     (F)|           (K)|
-                                    |                        v              v
-
-                                    |         +-----------------------------------+
-                                    |         |                                   |
-                                    |         |    Backend for Frontend  (BFF)    |
-                                 (D)|         |                                   |
-                                    |         +-----------------------------------+
-                                    |
-                                    |           ^     ^     ^     +       ^  +
-                                    |      (B,I)|  (C)|  (E)|  (G)|    (J)|  |(L)
-                                    v           v     v     +     v       +  v
-
-    +-----------------+         +-------------------------------------------------+
-    |                 |  (A,H)  |                                                 |
-    | Static Web Host | +-----> |                    Browser                      |
-    |                 |         |                                                 |
-    +-----------------+         +-------------------------------------------------+
+~~~ aasvg
+{::include art/bbapp-pattern-bff.ascii-art}
+~~~
+{: #fig-bbapp-pattern-bff title="OAuth 2.0 BFF Pattern" }
 
 
 In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the BFF if there is an active session (B). If an active session is found, the application resumes its authenticated state and skips forward to step J.
@@ -578,32 +556,10 @@ If an attacker is able to execute malicious code within the JavaScript applicati
 
 ### Application Architecture
 
-                                +-------------+  +--------------+ +--------------+
-                                |             |  |              | |              |
-                                |Authorization|  |    Token     | |   Resource   |
-                                |  Endpoint   |  |   Endpoint   | |    Server    |
-                                |             |  |              | |              |
-                                +-------------+  +--------------+ +--------------+
-
-                                    ^                   ^                 ^
-                                    |                (F)|                 |
-                                    |                   v                 |
-                                                                          |
-                                    |   +-----------------------+         |
-                                    |   |                       |         |
-                                    |   |Token-Mediating Backend|         | (J)
-                                 (D)|   |                       |         |
-                                    |   +-----------------------+         |
-                                    |                                     |
-                                    |       ^     ^     ^     +           |
-                                    |  (B,I)|  (C)|  (E)|  (G)|           |
-                                    v       v     v     +     v           v
-
-    +-----------------+         +-------------------------------------------------+
-    |                 |  (A,H)  |                                                 |
-    | Static Web Host | +-----> |                    Browser                      |
-    |                 |         |                                                 |
-    +-----------------+         +-------------------------------------------------+
+~~~ aasvg
+{::include art/bbapp-pattern-tmb.ascii-art}
+~~~
+{: #fig-bbapp-pattern-tmb title="OAuth 2.0 TMB Pattern" }
 
 
 In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the token-mediating backend if there is an active session (B). If an active session is found, the application receives the corresponding access token, resumes its authenticated state, and skips forward to step J.
@@ -757,25 +713,10 @@ If an attacker is able to execute malicious JavaScript code, this application ar
 
 ### Application Architecture
 
-                          +---------------+           +--------------+
-                          |               |           |              |
-                          | Authorization |           |   Resource   |
-                          |    Server     |           |    Server    |
-                          |               |           |              |
-                          +---------------+           +--------------+
-
-                                 ^     ^                 ^     +
-                                 |     |                 |     |
-                                 |(B)  |(C)              |(D)  |(E)
-                                 |     |                 |     |
-                                 |     |                 |     |
-                                 +     v                 +     v
-
-    +-----------------+         +-------------------------------+
-    |                 |   (A)   |                               |
-    | Static Web Host | +-----> |           Browser             |
-    |                 |         |                               |
-    +-----------------+         +-------------------------------+
+~~~ aasvg
+{::include art/bbapp-pattern-standalone.ascii-art}
+~~~
+{: #fig-bbapp-pattern-standalone title="OAuth 2.0 Browser-based OAuth 2.0 Client Pattern" }
 
 In this architecture, the JavaScript code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. This application is considered a public
@@ -1210,25 +1151,10 @@ In an attempt to limit the attacker's ability to extract existing tokens or acqu
 
 The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.
 
-                                                                     Resource               Authorization
-      User       Application        Service Worker                    server                   server
-       |   browse     |                   |                              |                        |
-       | ------------>|                   |                              |                        |
-       |              |------------------->                              |           /authorize   |
-       |              |                   -------------------------------------------------------->
-       |              |                   |                 redirect w/ authorization code        |
-       |              |                   < - - - - - - - - - - - - - - - - - - - - - - - - - - - |
-       |              |                   |                              |                        |
-       |              |                   |  token request w/ auth code  |               /token   |
-       |              |                   | ------------------------------------------------------>
-       |              |                   | <- - - - - - - - - - - - - - - - - - - - - - - - - - -|
-       |              |                   |                              |                        |
-       |              | resource request  |                              |                        |
-       |              |-------------------> resource request with token  |                        |
-       |              |                   | ---------------------------->|                        |
-       |              |                   |                              |                        |
-      User       Application        Service Worker                   Resource               Authorization
-                                                                      server                   server
+~~~ aasvg
+{::include art/bbapp-pattern-serviceworker.ascii-art}
+~~~
+{: #fig-bbapp-pattern-serviceworker title="OAuth 2.0 Service Worker Pattern" }
 
 Note that this pattern never exposes the tokens to the application running in the browser. Since the Service Worker runs in an isolated execution environment, there is no shared memory and no way for the client application to influence the execution of the Service Worker.
 
