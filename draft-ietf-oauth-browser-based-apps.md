@@ -1523,11 +1523,12 @@ and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
-Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden, Daniel Fett,
-Elar Lang, Eva Sarafianou,
+Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden,
+Daniel Fett, Elar Lang, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
-Sean Kelleher, Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci and Yannick Majoros.
+Sean Kelleher, Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
+William Duncan, and Yannick Majoros.
 
 
 --- fluff
