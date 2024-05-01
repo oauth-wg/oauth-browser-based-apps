@@ -621,7 +621,7 @@ Token-Mediating Backend {#pattern-tmb}
 
 This section describes the architecture of a JavaScript application that relies on a backend component to handle OAuth responsibilities for obtaining tokens as a confidential client. The backend component then provides the JavaScript application with the access token to directly interact with resource servers.
 
-The token-mediating backend pattern is more lightweight than the BFF pattern (See {{pattern-bff}}), since it does not require the proxying of all requests to a resource server, which improves latency and significantly simplifies deployment. From a security perspective, the token-mediating backend is less secure than a BFF, but still offers significant advantages over an OAuth client application running directly in the browser.
+The token-mediating backend pattern is more lightweight than the BFF pattern (See {{pattern-bff}}), since it does not require the proxying of all requests and responses between the JavaScript application and the resource server. From a security perspective, the token-mediating backend is less secure than a BFF, but still offers significant advantages over an OAuth client application running directly in the browser.
 
 If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to prevent the attacker from abusing refresh tokens or obtaining a fresh set of tokens. However, since the access token is directly exposed to the JavaScript application, token theft scenarios fall within the capabilities of the attacker.
 
