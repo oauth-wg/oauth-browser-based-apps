@@ -321,7 +321,7 @@ The most important takeaway from this scenario is that it runs a new OAuth flow 
 
 This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.
 
-There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code grant type would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.
+There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.
 
 
 
@@ -408,7 +408,7 @@ If an attacker is able to execute malicious code within the JavaScript applicati
 
 In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the BFF if there is an active session by calling a "check session" API endpoint (B). If an active session is found, the application resumes its authenticated state and skips forward to step J.
 
-When no active session is found, the JavaScript application triggers a navigation to the BFF (C) to initiate the Authorization Code grant type with the PKCE
+When no active session is found, the JavaScript application triggers a navigation to the BFF (C) to initiate the Authorization Code flow with the PKCE
 extension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.
 
 The BFF associates the obtained tokens with the user's session (See {{pattern-bff-sessions}}) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the BFF for an existing session (I), allowing the JavaScript application to resume its authenticated state.
@@ -424,7 +424,7 @@ The BFF provides a set of endpoints that are crucial to implement the interactio
 
 The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the BFF to check for an active session. The response should indicate to the browser-based application whether the session is active. Additionally, the BFF can include other information, such as identity information about the authenticated user.
 
-The endpoint that initializes the Authorization Code grant type (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initialize this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initialize the Authorization Code grant type in step B, when it detects the absence of an active session. In that case, the BFF would return the initialization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.
+The endpoint that initializes the Authorization Code flow (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initialize this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initialize the Authorization Code flow in step B, when it detects the absence of an active session. In that case, the BFF would return the initialization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.
 
 The endpoint that receives the authorization code (step E) is called by a navigation event from within the browser. At this point, the JavaScript application is not loaded and not in a position to handle the redirect. Similar to the initialization of the flow, the endpoint to handle the redirect is offered by standard OAuth libraries. The BFF can respond to this request with a redirect that triggers the browser to load the  JavaScript application.
 
@@ -614,7 +614,7 @@ If an attacker is able to execute malicious code within the JavaScript applicati
 
 In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the token-mediating backend if there is an active session (B). If an active session is found, the application receives the corresponding access token, resumes its authenticated state, and skips forward to step J.
 
-When no active session is found, the JavaScript application triggers a navigation to the token-mediating backend (C) to initiate the Authorization Code grant type with the PKCE extension (described in {{pattern-tmb-flow}}), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.
+When no active session is found, the JavaScript application triggers a navigation to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in {{pattern-tmb-flow}}), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.
 
 The token-mediating backend associates the obtained tokens with the user's session (See {{pattern-tmb-sessions}}) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the JavaScript application to resume its authenticated state and obtain the access token from the token-mediating backend.
 
@@ -631,7 +631,7 @@ Note that an early draft ({{tmi-bff}}) already documented this concept, although
 Most of the endpoint implementations of the token-mediating backend are similar to those described for a BFF.
 
 - The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the backend to check for an active session. The response should indicate to the browser-based application whether the session is active. If an active session is found, the backend includes the access token in the response. Additionally, the backend can include other information, such as identity information about the authenticated user.
-- The endpoint that initializes the Authorization Code grant type (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
+- The endpoint that initializes the Authorization Code flow (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 - The endpoint that receives the authorization code (step E) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 - The endpoint that supports logout is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 
@@ -640,7 +640,7 @@ Most of the endpoint implementations of the token-mediating backend are similar 
 
 When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.
 
-If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a fresh access token. The token-mediating backend relies on the cookies associated with this request to use the user's refresh token to run a Refresh Token grant type. These steps are not shown in the diagram. Note that this Refresh Token grant type involves a confidential client, thus requires client authentication.
+If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, thus requires client authentication.
 
 When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
 
@@ -782,7 +782,7 @@ In this architecture, the JavaScript code is first loaded from a static web host
 the browser (A), and the application then runs in the browser. In this scenario, the browser-based application is considered a public
 client, which does not possess client credentials to authenticate to the authorization server.
 
-The application obtains an authorization code (B) by initiating the Authorization Code grant type with the PKCE
+The application obtains an authorization code (B) by initiating the Authorization Code flow with the PKCE
 extension (described in {{pattern-oauth-browser-flow}}). The application exchanges the authorization code for tokens via a JavaScript-based POST request to the token endpoint (C).
 
 The application is then responsible for storing
@@ -820,7 +820,7 @@ accomplished by any of the below:
 * using and verifying unique value for the OAuth `state` parameter to carry a CSRF token
 * if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
 
-See Section 2.1 of {{oauth-security-topics}} for additional details on selecting a proper CSRF defense for the Authorization Code grant type.
+See Section 2.1 of {{oauth-security-topics}} for additional details on selecting a proper CSRF defense for the Authorization Code flow.
 
 
 #### Refresh Tokens {#pattern-oauth-browser-rt}
@@ -850,7 +850,7 @@ For example:
 * After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token
 * The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes
 * This continues until 8 hours pass from the initial authorization
-* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code grant type that relies on the user's authentication or previously established session
+* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code flow that relies on the user's authentication or previously established session
 
 Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
 
@@ -1110,7 +1110,7 @@ The risk of a malicious script running on the page may be amplified when the app
 uses a known standard way of obtaining access tokens, namely that the attacker can
 always look at the `window.location` variable to find an access token. This threat profile
 is different from an attacker specifically targeting an individual application
-by knowing where or how an access token obtained via the Authorization Code grant type may
+by knowing where or how an access token obtained via the Authorization Code flow may
 end up being stored.
 
 #### Access Token Leak to Third-Party Scripts
@@ -1148,7 +1148,7 @@ fraudulent ID tokens. Performing OpenID Connect using the Authorization Code gra
 the benefit of the client not needing to verify the JWT signature, as the ID token will
 have been fetched over an HTTPS connection directly from the authorization server's token endpoint. Additionally,
 in many cases an application will request both an ID token and an access token, so it is
-simpler and provides fewer attack vectors to obtain both via the Authorization Code grant type.
+simpler and provides fewer attack vectors to obtain both via the Authorization Code flow.
 
 
 
@@ -1173,7 +1173,7 @@ as described in this document.
 Handling the OAuth Flow in a Service Worker {#service-worker}
 -------------------------------------------
 
-In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{serviceworker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code grant type to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
+In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{serviceworker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
 
 The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.
 
@@ -1375,6 +1375,14 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-18
+
+* Addressed last call comments from Justin Richer
+* Updated description of the benfits of Token-Mediating Backend pattern
+* Added SVG diagrams in HTML version
+* Added privacy considerations for BFF pattern
+* Consistent use of "grant type", "grant" and "flow"
 
 -17
 
