@@ -1,0 +1,24 @@
+                          Service             Resource     Authorization
+  User      Application   Worker               Server         Server
+   |            |            |                    |              |
+   |   browse   |            |                    |              |
+   |----------->|            |                    |              |
+   |            |----------->|                    |   /authorize |
+   |            |            |---------------------------------->|
+   |            |            |  redirect w/ authorization code   |
+   |            |            |< - - - - - - - - - - - - - - - - -|
+   |            |            |                    |              |
+   |            |            |    token request   |              |
+   |            |            |    w/ auth code    |       /token |
+   |            |            |---------------------------------->|
+   |            |            |< - - - - - - - - - - - - - - - - -|
+   |            |            |                    |              |
+   |            |  resource  |                    |              |
+   |            |  request   |                    |              |
+   |            |----------->|                    |              |
+   |            |            |  resource request  |              |
+   |            |            |  w/ access token   |              |   
+   |            |            |------------------->|              |
+   |            |            |                    |              |
+  User      Application   Service             Resource     Authorization
+                          Worker               Server         Server
