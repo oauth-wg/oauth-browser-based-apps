@@ -109,22 +109,6 @@ informative:
       org: Proton AG
     date: November 2022
     target: https://w3c.github.io/webcrypto/
-  DPoP:
-    title: Demonstrating Proof-of-Possession at the Application Layer
-    author:
-    - ins: D. Fett
-      org: yes.com
-    - ins: B. Campbell
-      org: Ping Identity
-    - ins: J. Bradley
-      org: Yubico
-    - ins: T. Lodderstedt
-      org: yes.com
-    - ins: M. Jones
-      org: Microsoft
-    - ins: D. Waite
-      org: Ping Identity
-    target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-dpop
   OpenID:
     title: OpenID Connect
     target: https://openid.net/specs/openid-connect-core-1_0.html
@@ -136,6 +120,7 @@ informative:
       - ins: B. de Medeiros
       - ins: C. Mortimore
   RFC8707:
+  RFC9449:
   CSP3:
     title: Content Security Policy
     author:
@@ -321,7 +306,7 @@ The most important takeaway from this scenario is that it runs a new OAuth flow 
 
 This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.
 
-There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.
+There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{RFC9449}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.
 
 
 
@@ -334,7 +319,7 @@ This attack scenario involves the attacker sending requests to the resource serv
 
 To authorize the requests to the resource server, the attacker simply mimics the behavior of the client application. For example, when a client application programmatically attaches an access token to outgoing requests, the attacker does the same. Should the client application rely on an external component to augment the request with the proper access token, then this external component will also augment the attacker's request.
 
-This attack pattern is well-known and also occurs with traditional applications using `HttpOnly` session cookies. It is commonly accepted that this scenario cannot be stopped or prevented by application-level security measures. For example, the DPoP specification ({{DPoP}}) explicitly considers this attack scenario to be out of scope.
+This attack pattern is well-known and also occurs with traditional applications using `HttpOnly` session cookies. It is commonly accepted that this scenario cannot be stopped or prevented by application-level security measures. For example, the DPoP specification ({{RFC9449}}) explicitly considers this attack scenario to be out of scope.
 
 
 
@@ -360,7 +345,7 @@ The attack ends when the access token expires or when a token is revoked with th
 
 Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.
 
-The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of the {{DPoP}} specification. However, when the attacker obtains a fresh set of tokens, as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
+The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of {{RFC9449}}. However, when the attacker obtains a fresh set of tokens, as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
 
 
 
@@ -748,7 +733,7 @@ Be aware that even when the access token is stored out of reach of malicious Jav
 
 ##### Using Sender-Constrained Tokens
 
-Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as {{DPoP}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document.
+Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP {{RFC9449}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document.
 
 
 #### Summary
@@ -825,7 +810,7 @@ See Section 2.1 of {{oauth-security-topics}} for additional details on selecting
 
 #### Refresh Tokens {#pattern-oauth-browser-rt}
 
-For browser-based clients, the refresh token is typically a bearer token, unless the application explicitly uses {{DPoP}}. As a result, the risk of a leaked refresh token
+For browser-based clients, the refresh token is typically a bearer token, unless the application explicitly uses DPoP {{RFC9449}}. As a result, the risk of a leaked refresh token
 is greater than leaked access tokens, since an attacker may be able to
 continue using the stolen refresh token to obtain new access tokens potentially without being
 detectable by the authorization server.
@@ -966,7 +951,7 @@ Note that even a perfect token storage mechanism does not prevent the attacker f
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth clients can implement {{DPoP}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable [CryptoKeyPair](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair) is stored using IndexedDB ({{indexeddb}})). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
+Browser-based OAuth clients can implement DPoP ({{RFC9449}}) to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable [CryptoKeyPair](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair) is stored using IndexedDB ({{indexeddb}})). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
 Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
@@ -1332,7 +1317,7 @@ When OpenID Connect is used, it is important to avoid sensitive information disc
 Sender-Constrained Tokens {#sender-constrained-tokens}
 -------------------------
 
-As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is {{DPoP}}.
+As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is DPoP ({{RFC9449}}).
 
 When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
