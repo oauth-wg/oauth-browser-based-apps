@@ -98,7 +98,7 @@ informative:
     author:
     - name: V. Bertocci
       org: Okta
-    - name: B. Cambpell
+    - name: B. Campbell
       org: Ping
     date: April 2021
     target: https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01
@@ -114,7 +114,7 @@ informative:
     author:
     - ins: D. Fett
       org: yes.com
-    - ins: B. Cambpell
+    - ins: B. Campbell
       org: Ping Identity
     - ins: J. Bradley
       org: Yubico
