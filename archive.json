@@ -1,0 +1,3581 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-07-21T00:05:49.014646+00:00",
+  "repo": "oauth-wg/oauth-browser-based-apps",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWUzODI0NjQ1MTI=",
+      "title": "Add security considerations for refresh tokens",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/1",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "https://www.ietf.org/mail-archive/web/oauth/current/msg18518.html\r\n\r\n> > > First of all the AS decides whether it issues refresh tokens or not. Having the ability does not mean the AS must do it. If you feel it\u2019s safer to not do it. Fine. \r\n> > \r\n> > Sure, and this should be mentioned then somewhere (either in the threats doc or in this proposed best practice doc). Not all end developers using these protocols fully understand the ramifications. \r\n> \r\n> Aaron: I suggest this goes to the SPA BCP since this is client specific.\r\n",
+      "createdAt": "2018-11-20T01:47:07Z",
+      "updatedAt": "2018-12-09T20:19:07Z",
+      "closedAt": "2018-12-09T20:19:07Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Added in 5cd12e9d5f7e58d614073ef5b073c40ae1ad5091",
+          "createdAt": "2018-12-09T20:19:07Z",
+          "updatedAt": "2018-12-09T20:19:07Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU1NTA4OTE2NTY=",
+      "title": "Add a section about storing tokens in JS",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/2",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "* storing tokens available to JS opens up new XSS attack vectors\r\n* LocalStorage and IndexedDB are protected by the [same origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) so at least third party scripts can't access data there",
+      "createdAt": "2020-01-16T15:45:44Z",
+      "updatedAt": "2022-12-01T00:51:02Z",
+      "closedAt": "2022-12-01T00:51:02Z",
+      "comments": [
+        {
+          "author": "eZanmoto",
+          "authorAssociation": "NONE",
+          "body": "I think it would be good to have such a section to promote such best practices in a concrete way, but I see a problem in having it be too reliant on existing technologies since it can go out of date so quickly. I don't keep up to date with browser developments too much, but it seems like the recommendation has gone from keeping tokens solely in memory (possible with silent renew), to keeping tokens in the storage mechanisms you mentioned, to possibly keeping them in WebWorkers (pending investigation). We may even see this change again if browsers support a secure local storage system, or once the WebID proposal makes it, etc. Because of these, it might make more sense to have the section detail the desired properties that tokens would be stored with, and like you mentioned, the different attack vectors that we know are associated with each. For example:\r\n\r\n* Access tokens should ideally be:\r\n  * Stored in memory only, and not saved to persistent storage. This prevents malicious third-party scripts included in the first party application (e.g. NPM dependencies) from retrieving the token from the persistent storage.\r\n  * Stored in WebWorkers, if in-memory storage isn't possible. (Reasons)\r\n  * Stored in LocalStorage or IndexedDB, if WebWorkers storage isn't possible. (Reasons)\r\n  * Stored in a closure variable, as opposed to an object property. This prevents malicious third-party scripts included in the first party application (e.g. NPM dependencies) from accessing the variable via reflection. (NOTE Does marking a property as `private` achieve this behaviour?)\r\n  * Managed by a \"token manager\" class, which only provides access to the access token (in the case where the token manager also handles refresh tokens). The \"token manager\" class should only have one, non-global instance, which should only be accessible by a service class, which uses the access tokens directly in service calls. Having a token manager class allows for separation of concerns in the codebase, and reducing the number of objects that can use this manager be limited to a single service instance reduces the possibility of an access token being retrieved by an object that doesn't require it.\r\n* Refresh tokens should follow the same storage precautions as access tokens, but should additionally be:\r\n  * Not returned to the frontend. (Reasons)\r\n  * Managed by WebWorkers, if handled on the frontend. (Reasons)\r\n\r\nNote that JS isn't my speciality so take these suggestions with a pinch of salt.",
+          "createdAt": "2020-07-28T08:30:22Z",
+          "updatedAt": "2020-07-28T08:30:22Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Alright, this is a lot, but I finally put together the start to this section. I'm definitely open to suggestions and corrections. Here's the link to the current draft:\r\n\r\nhttps://drafts.oauth.net/oauth-browser-based-apps/draft-ietf-oauth-browser-based-apps.html#name-token-storage-in-the-browse\r\n\r\nIt's kind of a wall of text right now, so probably could use some help breaking it up into different sub-headers.",
+          "createdAt": "2022-11-29T02:59:21Z",
+          "updatedAt": "2022-11-29T02:59:21Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This now has section headers and is a lot more readable. I also added a new section about sender-constrained tokens as well as a reference to DPoP.",
+          "createdAt": "2022-12-01T00:51:01Z",
+          "updatedAt": "2022-12-01T00:51:01Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU3MTM5NTI0Nzk=",
+      "title": "Add architectural pattern of using a Service Worker as the OAuth client",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/3",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "keeps the access token and refresh token out of the DOM-accessible JS, only accessible from within the Service Worker\r\n\r\nhttps://gitlab.com/jimdigriz/oauth2-worker\r\n",
+      "createdAt": "2020-10-02T23:31:15Z",
+      "updatedAt": "2022-11-07T10:13:06Z",
+      "closedAt": "2022-09-06T18:08:32Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Done in #19 ",
+          "createdAt": "2022-09-06T18:08:31Z",
+          "updatedAt": "2022-09-06T18:08:31Z"
+        },
+        {
+          "author": "jimdigriz",
+          "authorAssociation": "NONE",
+          "body": "> https://gitlab.com/jimdigriz/oauth2-worker\r\n\r\nFor the history books, now at https://github.com/jimdigriz/oauth2-worker",
+          "createdAt": "2022-11-07T10:13:06Z",
+          "updatedAt": "2022-11-07T10:13:06Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU3MTM5NTMwNTg=",
+      "title": "Clarify \"JS apps with a backend\"",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/4",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "> When differentiating between the 3 \u201cApplication Architecture Patterns\u201d, it would be very helpful if an example is given for each pattern so that readers better understand which pattern applies to them. For example, in 6.2, when it says \u201cJavaScript Applications with a Backend\u201d, it is possible to interpret that as the \u201cbackend\u201d meaning the application\u2019s API.",
+      "createdAt": "2020-10-02T23:33:28Z",
+      "updatedAt": "2022-03-07T23:08:17Z",
+      "closedAt": "2022-03-07T23:08:17Z",
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU4ODY4NzQ2OTI=",
+      "title": "Update draft to cover latest changes of the security BCP",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/6",
+      "state": "CLOSED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "## PR #7:\r\n\r\n- [x] Mix-up mitigations\r\n- [x] Updated references to security BCP\r\n\r\n## Todo:\r\n\r\n- [x] Implicit grant: Is not forbidden in security BCP.\r\n[Security BCP](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-2.1.2-3): `clients SHOULD NOT use the implicit grant`\r\n[Draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-9.8): `Authorization servers MUST NOT issue access tokens in the authorization response` (Section )\r\n\r\n- [x] Refresh tokens: Different guidance on expiration.\r\n[Security BCP](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-2.1.2-3): `Refresh tokens SHOULD expire if the client has been inactive for some time, i.e., the refresh token has not been used to obtain fresh access tokens for some time. The expiration time is at the discretion of the authorization server.`\r\n[Draft](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-2.1.2-3): `[AS] MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time`\r\nAlso the security BCP does not say anything about this part: `MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token`\r\n\r\n- [x] Refresh token rotation: Security BCP requires PoP RTs or using RT rotation. Draft recommends RT rotation.\r\n[Security BCP](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-4.13.2-4): `Authorization server MUST utilize one of these methods [...] Sender-constrained refresh tokens [...] Refresh token rotation`\r\n[Draft](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-2.1.2-3): `SHOULD rotate refresh tokens on each use`\r\n\r\n- [x] Update [Overview](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-4) section after all other updates are finished\r\n- [x] Update [Server Support Checklist](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#appendix-A) in appendix after all other updates are finished\r\n\r\nMaybe the first three points should be discussed on the mailing list.",
+      "createdAt": "2021-05-11T10:54:49Z",
+      "updatedAt": "2022-11-29T03:00:12Z",
+      "closedAt": "2022-11-29T03:00:12Z",
+      "comments": [
+        {
+          "author": "kmzs",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For sender-constraining refresh tokens the security BCP only mentions mTLS and Token Binding in [Section 4.13.2](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-4.13.2-5.1.1). It should also mention DPoP there as DPoP is mentioned in [Section 4.9.1.1.2](https://www.ietf.org/archive/id/draft-ietf-oauth-security-topics-18.html#section-4.9.1.1.2-5.2.1) for `sender-constraining for access and refresh tokens`.\r\n\r\nThis draft should mention sender-constraining RTs using DPoP as an alternative for RT rotation.",
+          "createdAt": "2021-05-11T11:19:05Z",
+          "updatedAt": "2021-05-11T11:27:08Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I went ahead and updated the refresh token rotation issue to match the security BCP. For some reason draft 07 changed it from \"MUST\" to \"SHOULD\", but I can't find any notes in the meeting minutes or mailing list that motivated that change. So instead I updated it to match the current security BCP text: MUST either use refresh token rotation or sender-constrained refresh tokens.",
+          "createdAt": "2021-05-18T01:04:06Z",
+          "updatedAt": "2021-05-18T01:04:06Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I believe it was intentional to have the refresh token expiration be more strict in this draft compared to the security BCP. I've added the sentence about not extending the refresh token lifetime.",
+          "createdAt": "2021-05-18T01:06:33Z",
+          "updatedAt": "2021-05-18T01:06:33Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Same with the implicit grant, it was intentional that the browser-based app spec is more strict than the Security BCP in that instance.",
+          "createdAt": "2021-05-18T01:11:02Z",
+          "updatedAt": "2021-05-18T01:11:02Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This should be caught up now. Will probably have to do one more pass once the Security BCP is finished but I'll close this for now.",
+          "createdAt": "2022-11-29T03:00:12Z",
+          "updatedAt": "2022-11-29T03:00:12Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOCUe3lM5Ok9S1",
+      "title": "Add reference to TMI BFF as an additional variation on the BFF pattern",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/14",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "https://datatracker.ietf.org/doc/draft-bertocci-oauth2-tmi-bff/\r\n",
+      "createdAt": "2022-07-26T14:15:47Z",
+      "updatedAt": "2022-09-12T21:52:19Z",
+      "closedAt": "2022-09-12T21:52:19Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Discussed in the side meeting: we'll start by describing the pattern (without defining the endpoints, and without actually referencing the expired draft), bring that to the next meeting, and see if there is further interest.",
+          "createdAt": "2022-07-28T18:51:08Z",
+          "updatedAt": "2022-07-28T18:51:08Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOCUe3lM5YSqlS",
+      "title": "BFF proxy storing access tokens in browser as `HttpOnly` cookies",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/22",
+      "state": "CLOSED",
+      "author": "johakoch",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In some cases, the BFF proxy itself may not be able to store access tokens, e.g. if it is a load-balanced gateway without a centralized persistence layer. However, the BFF proxy can make the browser store the tokens as `HttpOnly` cookies (with a configurable `Path`) by adding a `Set-Cookie` response header.\r\n\r\nWhat do you think?",
+      "createdAt": "2022-12-07T08:07:42Z",
+      "updatedAt": "2023-06-29T23:19:38Z",
+      "closedAt": "2023-06-29T23:19:38Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Sounds like a reasonable middle ground, noting that you do lose out on some protections of avoiding the tokens ever hitting the browser.",
+          "createdAt": "2023-03-13T19:02:15Z",
+          "updatedAt": "2023-03-13T19:02:15Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Now that I think about it, a better option would be to encrypt the tokens with a key known only to the proxies, that way the token value itself is never available to the browser. \r\n\r\nI don't know if this needs to be called out specifically, since this type of \"encrypted-cookie-as-stateless-storage\" pattern is pretty commonplace.",
+          "createdAt": "2023-03-13T19:06:31Z",
+          "updatedAt": "2023-03-13T19:06:31Z"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOCUe3lM50tMuk",
+      "title": "6.1.4.3 Suggestion: change text and remove significant burden ",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/25",
+      "state": "CLOSED",
+      "author": "damienbod",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "6.1.4.3. \r\n\r\n_Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF, which puts a significant burden on the server-side component._\r\n\r\nI usually use the BFF architecture without requiring a downstream API or a resource server and thus no proxy is required.  My server logic is deployed as part of the BFF server application.  \r\n",
+      "createdAt": "2023-10-23T20:53:23Z",
+      "updatedAt": "2024-02-22T17:26:47Z",
+      "closedAt": "2024-02-22T17:26:46Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "That sounds like that falls under the \"Not Using OAuth\" model: https://www.ietf.org/archive/id/draft-ietf-oauth-browser-based-apps-15.html#name-single-domain-browser-based",
+          "createdAt": "2023-10-23T20:57:24Z",
+          "updatedAt": "2023-10-23T20:57:24Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi @aaronpk yes it does sound like this, but I'm a bit confused because this is in the \"Discouraged and Deprecated Architecture Patterns\"  I still use OIDC (Confidential client Code flow with PKCE)\r\n\r\nThis is in effect the BFF without a downstream API. If I need a downstream API, then I add a proxy and request the scope when required. I see the proxy, downstream API as an add-on to the BFF. ",
+          "createdAt": "2023-10-23T21:16:16Z",
+          "updatedAt": "2023-10-23T21:19:49Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Can you elaborate on that? Are you using OIDC only for user authentication, e.g. no access tokens involved then? I'm trying to figure out how your use of OIDC/OAuth fits in when there is no API.",
+          "createdAt": "2023-10-23T21:20:28Z",
+          "updatedAt": "2023-10-23T21:20:28Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes. The UI and the backend are authenticated as one using OIDC against any third party IDP etc. The session is stored in the form of a cookie as described in the doc. The APIs uses cookie authentication like the BFF. The backend APIs implement the business logic directly and there is no need for further API calls to different domains. Authz still needs a solution. If I need to use separate APIs on different domains, then I implement OAuth and add new scopes as required. At this point I would add the proxy, or just implement a Http Client. I don't always require a delegated user access token for the downstream APIs. I usually get an AT back from the OIDC server and can persist the claims to the cookie session as required. \r\n\r\nSo this is the BFF pattern described in section 6.1.1. The resource server part is not separated \"always\" from the BFF part, only when required.\r\n\r\nThis removes the  \"significant burden on the server-side component\"\r\n\r\nSection **6.1.2.4.  Deployment Scenarios** already mentions this pattern as well:\r\n\r\n_Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF)_",
+          "createdAt": "2023-10-23T21:32:57Z",
+          "updatedAt": "2023-10-23T22:03:59Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@aaronpk This discussion is related to our discussion when we restructured the document. The \"no oauth\" model is indeed valid and would just rely on a session between the frontend and the \"API\" to keep track of user's authentication state.\n\nBack then, we weren't sure if this was discouraged, but agreed that it is not a core pattern of this spec, since it focuses on API-access with access tokens.\n\nTwo options: Either we rename this entire section (not my favorite), or we move the \"no oauth\" pattern upwards to section 4.\n\nLet me know what you think",
+          "createdAt": "2023-11-21T16:15:07Z",
+          "updatedAt": "2023-11-21T16:15:07Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This sounds like what's described [in 6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.1.2.4)\r\n\r\n> an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network.\r\n\r\nThe intent of the \"significant burden\" line is to capture the difficulty in deploying this pattern at scale. Perhaps there is a better way to phrase it. The same difficulty applies whether the resource server is internal to the backend or if it calls external resources. The point is you have to deal with either more network traffic or doing things like geographically distributing your databases. ",
+          "createdAt": "2024-02-13T18:52:22Z",
+          "updatedAt": "2024-02-13T18:52:22Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I have [proposed](https://github.com/oauth-wg/oauth-browser-based-apps/pull/36)  a slight rewording to resolve this issue according to comments made by @aaronpk and @damienbod ",
+          "createdAt": "2024-02-18T10:19:17Z",
+          "updatedAt": "2024-02-18T10:19:17Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you, closing as PR #36 resolves this.",
+          "createdAt": "2024-02-22T17:26:46Z",
+          "updatedAt": "2024-02-22T17:26:46Z"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOCUe3lM50td4Y",
+      "title": "Suggestion: add new section 6.1.3.3.3. Use Anti-forgery cookies",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/26",
+      "state": "CLOSED",
+      "author": "damienbod",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Because the UI and the backend APIs can be hosted from the same backend application, Anti-forgery tokens can also be used to protect against CSRF.",
+      "createdAt": "2023-10-23T21:46:41Z",
+      "updatedAt": "2024-02-21T21:36:20Z",
+      "closedAt": "2024-02-21T21:36:20Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There are indeed various CSRF defenses that could be used in this architecture. The two options discussed in the current document explicitly focus on defenses that are part of the core web platform, and require minimal effort from the developer to implement. \n\nThe use of anti-forgery cookies requires code on both the frontend and the backend to guarantee their effectiveness.\n\nAre there benefits to using anti-forgery cookies over samesite cookies/CORS that we're missing?\n",
+          "createdAt": "2023-11-21T16:11:35Z",
+          "updatedAt": "2023-11-21T16:11:35Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I thought it would be good to add this as it is per default supported in some tech stacks and so easy to use. People reading the doc might read it as only the mentioned ways protect against CSRF. Adding this would make the recommendations more complete.\r\n\r\n\u201cAre there benefits to using anti-forgery cookies over samesite cookies/CORS that we're missing?\u201d\r\n\r\nIn my opinion, there are no benefits compared with the other two options, just another option. Samesite cookies/ anti-forgery cookies are also a viable option. If the used tech stack has this already supported per default, then there is less to do as a developer. This would make it an option.\r\n",
+          "createdAt": "2023-11-21T18:40:16Z",
+          "updatedAt": "2023-11-21T18:40:16Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@damienbod  I am open to listing out this option as well for the scenario you mention. Do you have text you could suggest that captures this?",
+          "createdAt": "2024-02-13T18:54:10Z",
+          "updatedAt": "2024-02-13T18:54:10Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi @aaronpk I'll write something\r\n\r\nKind regards Damien",
+          "createdAt": "2024-02-17T07:23:04Z",
+          "updatedAt": "2024-02-17T07:23:04Z"
+        },
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@aaronpk @philippederyck \r\n\r\nI created a PR with an initial draft. I don't think we should explain how it works because this is not the scope of this doc. \r\n\r\nkind regards Damien",
+          "createdAt": "2024-02-18T07:24:25Z",
+          "updatedAt": "2024-02-18T07:24:25Z"
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "I_kwDOCUe3lM50tf5f",
+      "title": "security advantage BFF makes nonce based CSP possible",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/27",
+      "state": "CLOSED",
+      "author": "damienbod",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm not sure where this belongs, but I think it would be good to add it. \r\n\r\nBecause the BFF APIs and the UI can be hosted in the same application, it is easy  to implement a nonce based CSP for the UI scripts and styles. Modern JS framework now support this. This is very easy to implement when using BFF security architecture where the same application is used to host the APIs and the UI .",
+      "createdAt": "2023-10-23T21:53:55Z",
+      "updatedAt": "2023-11-21T18:40:37Z",
+      "closedAt": "2023-11-21T18:40:37Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The use of CSP nonces requires the ability to insert a fresh nonce on every page load. \n\nWhile this is indeed possible by hosting the HTML page of the frontend application (SPA) on the BFF, it is not required to deploy a frontend this way. It is a perfectly valid pattern to deploy the SPA on a CDN and have it call the dynamic BFF component. In that case, nonces would not work, but hashes might.\n\nGiven that this advice is highly specific for CSP and less related to the BFF pattern, I'd opt to not go into these details in this spec.",
+          "createdAt": "2023-11-21T16:04:06Z",
+          "updatedAt": "2023-11-21T16:04:06Z"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOCUe3lM5-gK-_",
+      "title": "6.1.3.2 Question: benefits of encrypting cookie contents in BFF security",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/31",
+      "state": "CLOSED",
+      "author": "nike61",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I was unable to find an explanation for the following point:\r\n_Additionally, the BFF SHOULD encrypt its cookie contents, to ensure that tokens stored in cookies are never written to disk in plaintext format. This security measure helps to ensure protection of the access token against malware that actively scans the user's hard drive to extract sensitive browser artifacts, such as cookies and locally stored data (see Section 8)._\r\n\r\nWhat is the advantage of encrypting cookies? If a malicious actor steals the cookie as plain text, couldn't they just send the entire cookie in a request?",
+      "createdAt": "2024-02-07T07:30:57Z",
+      "updatedAt": "2024-02-13T22:51:55Z",
+      "closedAt": "2024-02-13T22:51:55Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "emphasis mine:\r\n\r\n> Additionally, the BFF SHOULD encrypt its cookie contents, to ensure that **tokens stored in cookies** are never written to disk in plaintext format. This security measure helps to ensure protection of the **access token** against malware...\r\n\r\nI believe this is meant to be an additional layer of security when the cookie actually contains the access token. While someone who steals the cookie can use the cookie regardless of whether the contents are encrypted, they can only use it at the BFF, whereas the access token itself might be able to be used elsewhere. I will add some text to clarify this.",
+          "createdAt": "2024-02-13T21:46:53Z",
+          "updatedAt": "2024-02-13T21:46:53Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOCUe3lM5_KnbF",
+      "title": "DPoP",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/32",
+      "state": "CLOSED",
+      "author": "criztovyl",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> The application can use DPoP to ensure its access tokens are bound to non-exportable key linked to the browser.\r\n\r\nthis reads strange, not sure, but is there an \"a\" or \"s\" missing?\r\n\r\n> [...] bound to ***a*** non-exportable key linked to the browser.\r\n\r\n> [...] bound to non-exportable key***s*** linked to the browser.\r\n\r\nhttps://github.com/oauth-wg/oauth-browser-based-apps/blob/11ee6bc7997b3226c140fca219b9bcb629188089/draft-ietf-oauth-browser-based-apps.md?plain=1#L322",
+      "createdAt": "2024-02-14T03:45:23Z",
+      "updatedAt": "2024-02-17T00:21:44Z",
+      "closedAt": "2024-02-17T00:21:44Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Good catch, thanks",
+          "createdAt": "2024-02-17T00:16:22Z",
+          "updatedAt": "2024-02-17T00:16:22Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Fixed in c593337de1055185b9d41783bf3e16ac922f9231",
+          "createdAt": "2024-02-17T00:21:44Z",
+          "updatedAt": "2024-02-17T00:21:44Z"
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOCUe3lM5_m5mK",
+      "title": "Follow up on review for merged PR",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/35",
+      "state": "CLOSED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "PR #30 merges a bunch of changes suggested by @panva. After merging, I have added [a couple of notes](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30#pullrequestreview-1887186225) that require following up. This issue is to keep track of that work.",
+      "createdAt": "2024-02-18T10:09:29Z",
+      "updatedAt": "2024-02-28T23:05:43Z",
+      "closedAt": "2024-02-28T23:05:43Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you!",
+          "createdAt": "2024-02-28T23:05:43Z",
+          "updatedAt": "2024-02-28T23:05:43Z"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOCUe3lM6DYVBb",
+      "title": "Consistently use *applications* or *apps*",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/42",
+      "state": "CLOSED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In his review, Justin Richer pointed out that the spec inconsistently uses both the term *applications* and *apps* in the title and the document. It makes sense to settle for one and be consistent about it. \r\n\r\nMy vote goes to *applications*, which is most common in the context of web applications. *Apps* is more related to native/mobile apps. \r\n\r\nA quick Google search on *Angular apps* vs *Angular applications* or *js apps* vs *js applications* also indicates that applications is more common. \r\n\r\nWhen not updating, include *applications* vs *apps* in the terminology section.",
+      "createdAt": "2024-03-24T05:47:29Z",
+      "updatedAt": "2024-04-11T04:52:25Z",
+      "closedAt": "2024-04-11T04:52:25Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "+1 for \"applications\"",
+          "createdAt": "2024-03-26T00:20:25Z",
+          "updatedAt": "2024-03-26T00:20:25Z"
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "I_kwDOCUe3lM6DYZrC",
+      "title": "Properly render sublists",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/43",
+      "state": "CLOSED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 5.1.2 contains a sublist, but it is not rendered properly\r\n\r\n```\r\n### Persistent Token Theft {#payload-persistent-theft}\r\n\r\nThis attack scenario is a more advanced variation on the Single-Execution Token Theft scenario ({{payload-single-theft}}). Instead of immediately stealing tokens upon the execution of the malicious payload, the attacker sets up the necessary handlers to steal the application's tokens on a continuous basis. This scenario consists of the following steps:\r\n\r\n- Execute malicious JS code\r\n- Setup a continuous token theft mechanism (e.g., on a 10-second time interval)\r\n\t  - Obtain tokens from the application's preferred storage mechanism (See {{token-storage}})\r\n\t  - Send the tokens to a server controlled by the attacker\r\n\t  - Store the tokens\r\n- Wait until the opportune moment to abuse the latest version of the stolen tokens\r\n\r\nThe crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the payload already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.\r\n\r\nFor access tokens, the attacker now obtains the latest acce\r\n```",
+      "createdAt": "2024-03-24T06:54:28Z",
+      "updatedAt": "2024-05-01T17:10:56Z",
+      "closedAt": "2024-05-01T17:10:56Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@aaronpk I don't know where to find an updated draft from #45, so I cannot check if this now renders correctly. It should though ...",
+          "createdAt": "2024-04-11T05:09:12Z",
+          "updatedAt": "2024-04-11T16:03:07Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Yep looks good now \r\n<img width=\"647\" alt=\"image\" src=\"https://github.com/oauth-wg/oauth-browser-based-apps/assets/113001/e453c98c-11c1-4db7-b75b-b1d2f0c22344\">\r\n",
+          "createdAt": "2024-05-01T17:10:56Z",
+          "updatedAt": "2024-05-01T17:10:56Z"
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "id": "I_kwDOCUe3lM6DYnD2",
+      "title": "Address outstanding comments from Justin Richer",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/44",
+      "state": "CLOSED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Issues from Justin Richer's review that need to be addressed\r\n\r\n### Details\r\n\r\n> \u00a75 is the bold formatting really necessary to make this point?\r\n\r\n__Comment__: Leave it for now, see what happens during review\r\n\r\n\r\n> \u00a76.1 what does \"Payload\" refer to here? The sections above are not referred to as \"Payloads\" in the titles\r\n\r\n- [x] Update refs \"Payload Section XXX\" to the name of the actual attack scenario with a simple reference to the section (Without any text content)\r\n- [x] Refer to them as \"attack scenarios\" instead of payloads throughout the document\r\n- [x] Also look for \"attack scenarios\" and make them consistent\r\n\r\n\r\n\r\n> diagram nit: suggest using aasvg or similar tooling instead of plain ASCII\r\n\r\n- [x] Create an issue for Aaron\r\n\r\n\r\n> \u00a76.1 diagram nit: this might read better as a vertical time sequence diagram, with concise labels on the arrows\r\n\r\n__Comment:__ The diagrams show the deployment quite well, so we decided to keep them as is.\r\n\r\n\r\n> \u00a76.1.2.1 are these items \"recommended\" or \"RECOMMENDED\"? ie, is this intentionally informative?\r\n\r\n- [x] Refer to 4.14 from the security bcp\r\n- [x] Rephrase to avoid giving a recommendation on refresh tokens\r\n- [x] Apply the same changes to 6.2.2.1.\r\n\r\n\r\n\r\n> \u00a76.1.3.2 \r\n> Why is AEAD the only encryption method called out here? What's particularly special about this algorithm? \r\n> \r\n> There are no requirements for key management. It's obvious to a seasoned developer or security engineer that the BFF holds the decryption keys and doesn't give them out but that's never talked about. Are there any other considerations? Like, is it OK for the BFF to use the same encryption keys with each client? Does the key need to be identified? \r\n\r\n- [x] Avoid the algo language\r\n- [x] Update language to make clear cookie is not being prevented from being extracted\r\n- [x] Also mention that the stolen cookie can still be used\r\n\r\n\r\n> \u00a76.1.3.3.2  \u00b66 it is considered bad practice to create `X-` header field names, and probably even worse practice to recommend making up an unregistered and ignored header field name just to force CORS. I don't think this is good and actionable advice and will likely run afoul of the HTTP directorate review during publication. If this actually does need to be kept, perhaps seek out advice from HTTP WG?\r\n\r\n- [x] Add language that states the BFF has to check the static header\r\n- [x] Rename the custom header to `My-Static-Header` and make very clear this is just an example\r\n\r\n\r\n> \u00a76.2.1 question, is the \"Editor's note\" intended to survive to the full RFC? it seems useful reference if sufficiently caveated\r\n\r\n- [x] Keep it in, but rephrase this as \"an early draft documenting this concept\"\r\n\r\n\r\n> \u00a76.2.4.3.1 this \"note\" is pretty serious and deserves more than a note in terms of attention\r\n\r\nI have reworded this slightly, but this is quite inherent to the nature of the pattern. Not sure how to put more emphasis on it and whether it is needed.\r\n\r\n- [x] Add more language to make explicit that the malicious JS code can get it from the endpoint. This should be the same language as for a browser-basaed app with a new flow\r\n\r\n\r\n> the advice on refresh token expiration seems confusing at first read, particularly if my lifetime is based on use in the first place. What is this advice in the last bullet trying to prevent?\r\n\r\nDo you think this sentence needs rewording: \"when issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the original refresh token if the refresh token has a preestablished expiration time\"?\r\n\r\n- [x] There should be an implementation details (6.3.2)\r\n- [x] First sentence of 6.3.2.1 moves up as the intro. The rest of 6.3.2.1 is removed (but not the subsections)\r\n- [x] CSRF and RT go to implementation details\r\n- [x] Security considerations become 6.3.2.3, 6.3.2.4, 6.3.2.5, CORS\r\n- [x] Move the sentence with \"limiting the overall...\" above the example in the text\r\n\r\n\r\n> \u00a76.3.2.2\r\n> again this restriction to public clients predates several specs that remove it and the advice shouldn't be parroted here. better to say that they usually are going to be public because of the problem of registering a client ID and storing a secret of any kind at configuration time associated with that client ID.\r\n\r\n- [x] Drop 6.3.2.2\r\n\r\n> \u00a76.3.2.7 \r\n> aren't these the same requirements as above in \u00a76.3.2.1? Does it need to be listed as requirements in both places? Are they identical?\r\n\r\n__Comment:__ Addressed by the restructuring above\r\n\r\n> \u00a76.3.2.8\r\n> \u00b62 what is a \"proper CORS configuration\" as per this spec? I don't think we have quite enough details to require that as such.\r\n\r\n- [x] Replace \"proper\" with \"necessary\"\r\n- [x] Replace \"allows\" with \"enable\"\r\n\r\n> \u00a79 security considerations sections should be about \"why\" and really shouldn't have normative requirements, please remove them from the subsequent sections\r\n\r\n- [x] Everything is fine, except for mixup attacks. Only keep first and last sentence with the ref to the BCP and we are good\r\n\r\n\r\n> \u00a7A it feels wrong to have normative requirements in an appendix (point 7), and points 2 and 3 both have a weird uppercase NOT which isn't a keyword\r\n\r\n- [x] Drop appendix A\r\n\r\n\r\n> \u00a79+ this draft should add privacy considerations, particularly for BFF pattern's proxy architecture.e\r\n> I think it does warrant mentioning, because the main assumptions about an spa are that everything goes from the browser to the api itself. It might be surprising to a user or even a naive developer that every request goes through another party as a black box. Even if it's all first party abd deployed together, that model should be called out by the draft as an assumption for privacy. After all, this section is for considerations - things you should think about that might not be obvious. \r\n\r\n- [x] Add a new item under security considerations of the BFF to discuss prviacy considerations. Mainly relevant for off the shelf BFF libraries / components (e.g. offered by Cloudlfare) that may now see all customer data. A third party could observe all the data",
+      "createdAt": "2024-03-24T09:39:43Z",
+      "updatedAt": "2024-04-11T16:02:27Z",
+      "closedAt": "2024-04-11T16:02:26Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "All resolved in #45 ",
+          "createdAt": "2024-04-11T16:02:26Z",
+          "updatedAt": "2024-04-11T16:02:26Z"
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "id": "I_kwDOCUe3lM6FVTXP",
+      "title": "Add BCP references to the normative section",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/48",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Adding BCP references by including the items below in the list of normative references breaks the build. \r\n\r\n```\r\n-  BCP14:\r\n-  BCP212:\r\n```\r\n\r\n### Tasks to solve this issue\r\n\r\n- [ ] Add the references in the normative section the right way\r\n- [ ] Re-add the references in the text (search for BCP14/BCP212 and add a reference)\r\n",
+      "createdAt": "2024-04-11T05:44:03Z",
+      "updatedAt": "2024-04-12T07:17:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 49,
+      "id": "I_kwDOCUe3lM6FX1eA",
+      "title": "Draw diagrams with tools instead of raw ASCII",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/49",
+      "state": "CLOSED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Use `aasvg` or similar tooling instead of plain ASCII for diagrams",
+      "createdAt": "2024-04-11T12:30:34Z",
+      "updatedAt": "2024-05-01T17:09:49Z",
+      "closedAt": "2024-05-01T17:09:49Z",
+      "comments": []
+    },
+    {
+      "number": 51,
+      "id": "I_kwDOCUe3lM6HshJ2",
+      "title": "Working Group Last Call",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/51",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This is a placeholder issue for working group last call comments. If you have any minor comments, feel free to add them below. If you have reviewed the draft and have no comments, please note below that you are happy with the current draft! If you have any substantial comments, feel free to open them as a new issue.",
+      "createdAt": "2024-05-02T22:15:55Z",
+      "updatedAt": "2024-05-09T21:45:35Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "rossajmcd",
+          "authorAssociation": "NONE",
+          "body": "Looks good to me, thanks for all the hard work.",
+          "createdAt": "2024-05-03T07:36:20Z",
+          "updatedAt": "2024-05-03T07:36:20Z"
+        },
+        {
+          "author": "sdesen",
+          "authorAssociation": "NONE",
+          "body": "Looks good to me! Great work.",
+          "createdAt": "2024-05-09T21:45:34Z",
+          "updatedAt": "2024-05-09T21:45:34Z"
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "id": "I_kwDOCUe3lM6IAiJv",
+      "title": "Fragments, performance, and historic notes.",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/52",
+      "state": "OPEN",
+      "author": "will-bartlett",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In 7.2.1, \"historic note\", the current draft says:\r\n\r\n> Historically, the Implicit grant type provided an advantage to browser-based applications since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. This was necessary in order to remove the access token from the URL after it was obtained by the app.\r\n\r\n> [...] Modern browsers now have the Session History API [...] which provides a mechanism to modify the path and query string component of the URL without triggering a page reload.\r\n\r\nThe historic note is missing some context. Had RFC 6749 recommended query responses for browser-based apps, there would have been the additional page load AND an additional app download. Additionally, the document as a whole makes no mention of `response_type=fragment`. \r\n\r\nConsider the following sequence of requests (\"the authorization code flow\"):\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com?code=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nWhen RFC 6749 was published, this flow would have included:\r\n - Three navigations (1=>2, 2=>3, 3=>4)\r\n - Two downloads of the browser-based application (1 and 3) - 4 would have hit the cache entry created by 1.\r\n\r\nCompare to the implicit flow:\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com#token=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nWhen RFC 6749 was published, this flow would have included:\r\n - Two navigations (1=>2, 2=>3)\r\n - One download of the browser-based application (1) - 3 would have hit the cache entry created by 1, and 4 does not create a network request.\r\n\r\nThe document as it currently stands seems to recommend the authorization code flow as described by RFC 6749 (with query response). In today's world, that flow includes:\r\n - Two navigations (1=>2, 2=>3)\r\n - Two downloads of the browser-based application (1 and 3) - 4 does not make a network request.\r\n\r\nMicrosoft Entra (and other OpenID Connect providers) rely on the [OAuth 2.0 Multiple Response Type Encoding Practices\r\n](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html) standard and use the authorization code flow in combination with response_mode=fragment. That looks like this:\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com#code=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nThis flow includes:\r\n - Two navigations (1=>2, 2=>3)\r\n - One download of the browser-based application (1) - 3 would have hit the cache entry created by 1, and 4 does not create a network request.\r\n\r\nProblem summary:\r\n 1. The document as it currently stands (without mention of response_mode=fragment) recommends a version of OAuth for browser-based apps that is less performant than the implicit flow recommended by RFC 6749.\r\n 2. The historic note only mentions one of the two reasons RFC 6479 recommended the implicit flow for browser based apps. Those two reasons are: reduced navigations AND reduced downloading.\r\n\r\nSuggestions:\r\n - The document should definitely mention response_mode=fragment. The document should probably either recommend or recommend against response_mode=fragment (I think: recommend).\r\n - The historic note should explain both the motivations for the implicit flow and why neither applies (session history AND response_mode=fragment). ",
+      "createdAt": "2024-05-06T21:48:50Z",
+      "updatedAt": "2024-05-20T15:14:03Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for the details.\r\n\r\nJust to note, `response_mode=fragment` only applies to the third architectural pattern ([section 6.3](https://drafts.oauth.net/oauth-browser-based-apps/draft-ietf-oauth-browser-based-apps.html#section-6.3)), since the other two are server backend flows.\r\n\r\n> The document should definitely mention response_mode=fragment. The document should probably either recommend or recommend against response_mode=fragment (I think: recommend).\r\n\r\nIt seems like your suggestion on https://github.com/oauthstuff/draft-ietf-oauth-security-topics/issues/97 was to include a mention that this response mode is also susceptible to one of the attacks on the implicit flow. Did you mean to say that the Browser BCP should also not recommend response_mode=fragment then?\r\n\r\n> The historic note should explain both the motivations for the implicit flow and why neither applies (session history AND response_mode=fragment).\r\n\r\nCan you suggest a sentence to include that describes why response_mode=fragment doesn't apply anymore?\r\n\r\n",
+          "createdAt": "2024-05-11T00:40:52Z",
+          "updatedAt": "2024-05-11T00:41:50Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @will-bartlett just wanted to check on this again",
+          "createdAt": "2024-05-20T15:14:02Z",
+          "updatedAt": "2024-05-20T15:14:02Z"
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "id": "I_kwDOCUe3lM6KnLp5",
+      "title": "Discussing the usage of localStorage/sessionStorage for session management",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/53",
+      "state": "OPEN",
+      "author": "randomstuff",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The BFF and the Token Mediating pattern assume that *cookies* are used for user session tracking:\r\n\r\n> The BFF relies on traditional browser cookies to keep track of the user's session, which is used to access the user's tokens.\r\n\r\n> Similar to the BFF, the token-mediating backend relies on traditional browser cookies to keep track of the user's session.\r\n\r\nSome applications (SPAs) might want to rely on storing a session token in `localStorage`/`sessionStorage` and use `Authorization: Bearer` for passing the session token to the backend. Should some wording discussing this be included?\r\n\r\nThis is only discussed in the context of the storage of the access/refresh tokens in the browser (for the token mediating backed and browser-based OAuth 2.0 client patterns).",
+      "createdAt": "2024-05-30T12:11:26Z",
+      "updatedAt": "2024-05-31T07:24:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Only by using cookies as discussed in the document can you get the security guarantees offered by the BFF. Making the BFF session data accessible to JavaScript would negate the majority of the security benefits of the BFF. There would also be little to no technical reason to do this, since cookies are universally supported by browsers and do not require any code. ",
+          "createdAt": "2024-05-30T15:40:19Z",
+          "updatedAt": "2024-05-30T15:40:19Z"
+        },
+        {
+          "author": "randomstuff",
+          "authorAssociation": "NONE",
+          "body": "> Only by using cookies as discussed in the document can you get the security guarantees offered by the BFF.\r\n\r\n> The BFF interacts with the authorization server as a confidential OAuth client\r\n\r\nThe client credentials are still not exposed to the user agent and the client.\r\n\r\n> The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the JavaScript application\r\n\r\nYou still wouldn't expose the OAuth access/refresh tokens which would otherwise be visible by the frontend (i.e. by the frontend code and by the actual end user).\r\n\r\n> There would also be little to no technical reason to do this, since cookies are universally supported by browsers and do not require any code.\r\n\r\nHttpOnly cookies are isolated from frontend JavaScript and therefore protected from exfiltration through XSS. However, they are are (still) not origin-bound which makes them vulnerable from cross-origin/same-domain injection (such as session fixation).\r\n\r\n* You can use `__Host-` cookies to protect against cross-origin/same-domain cookie injection but this is very rarely used in practice <del>and would not work if the frontend and the backend are in different origins</del>.\r\n* You can use `__Secure-` cookies to protect against cookie injection from non-secured origins in the same domain.\r\n\r\nlocalStorage is origin-bound and is inherently protected from these things.\r\n\r\nI'm not sure that this would really negate the majority of the security benefits of the BFF.",
+          "createdAt": "2024-05-30T16:43:07Z",
+          "updatedAt": "2024-05-30T21:00:15Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> The client credentials are still not exposed to the user agent and the client.\r\n> \r\n> You still wouldn't expose the OAuth access/refresh tokens which would otherwise be visible by the frontend (i.e. by the frontend code and by the actual end user).\r\n\r\nYes, that's true, but the security properties are still worse than having a cookie-based BFF solution. As described in the spec, the BFF reduces the attack surface to a *client hijacking* attack (in an __online__ fashion, where the attack only works as long as the application is active). By having the session accessible to the frontend (and thus malicious JS), you would enable a scenario that is best described as __offline__ client hijacking. The attacker would be able to steal the BFF's session data and abuse it for as long as the session is active, even after the user has closed the application (but not logged out).\r\n\r\nI would even say that the security properties of this setup are worse than using the Token Mediating Backend, since the BFF session is likely longer-lived than the access tokens in a Token Mediating Backend solution. \r\n\r\nConcretely, I don't think this pattern improves anything or warrants a recommendation.\r\n\r\n\r\n> > There would also be little to no technical reason to do this, since cookies are universally supported by browsers and do not require any code.\r\n> \r\n> HttpOnly cookies are isolated from frontend JavaScript and therefore protected from exfiltration through XSS. However, they are are (still) not origin-bound which makes them vulnerable from cross-origin/same-domain injection (such as session fixation).\r\n> \r\n> * You can use `__Host-` cookies to protect against cross-origin/same-domain cookie injection but this is very rarely used in practice ~and would not work if the frontend and the backend are in different origins~.\r\n> * You can use `__Secure-` cookies to protect against cookie injection from non-secured origins in the same domain.\r\n> \r\n> localStorage is origin-bound and is inherently protected from these things.\r\n> \r\n> I'm not sure that this would really negate the majority of the security benefits of the BFF.\r\n\r\nI don't think these statements help prove your point. I will list a couple of reasons below:\r\n\r\n- The `__Host-` prefix is explicitly recommended by the spec. The fact that it is not often used does not impact its security properties.\r\n- The `__Host-` prefix explicitly prevents setting a cookie from a different domain (i.e., it neutralizes the `Domain` attribute and effectively prevents subdomain-based session fixation)\r\n- Nothing prevents the use of the `__Host-` prefix from being used between two different origins or even domains. The SameSite flag can affect this, and so does third-party cookie blocking, but not the `__Host-` prefix.\r\n- A cookie configured with `__Host-` also requires the `Secure` flag, making them mostly origin-bound (to be precise: ports are part of the origin and are not taken into account with this prefix, but most real-world deployments rely on default ports anyway)\r\n\r\nIf you are not convinced that I am right, I encourage you to try this out in an actual deployment, to help you understand the precise browser behavior. \r\n",
+          "createdAt": "2024-05-31T04:20:04Z",
+          "updatedAt": "2024-05-31T04:20:04Z"
+        },
+        {
+          "author": "randomstuff",
+          "authorAssociation": "NONE",
+          "body": "> Concretely, I don't think this pattern improves anything or warrants a recommendation.\r\n\r\nNote that stating this explicitly would actually count as \"discussing the usage of localStorage/sessionStorage for session management\" :) I mean, people will wonder about this and will want to try to implement these patterns using localStorage instead of cookies. It might be a good idea to mention these arguments in a short paragraph (?).\r\n\r\n> If you are not convinced that I am right, I encourage you to try this out in an actual deployment, to help you understand the precise browser behavior.\r\n\r\nYes agreed.\r\n",
+          "createdAt": "2024-05-31T07:24:44Z",
+          "updatedAt": "2024-05-31T07:24:44Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 5,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwMDk3NDYx",
+      "title": "Typos and minor fixes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/5",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Just some minor mistakes I stumbled upon while working through the draft.",
+      "createdAt": "2021-05-11T10:40:04Z",
+      "updatedAt": "2021-05-18T00:04:08Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "ef1bfb0bd48fbbf878a64086cadb080612bf01ab",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "typos-and-minor-fixes",
+      "headRefOid": "6cb9f79ddf6290127d9e55d7117f12b627be9b8b",
+      "closedAt": "2021-05-18T00:04:08Z",
+      "mergedAt": "2021-05-18T00:04:08Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "5b62b2b701c752582663d2658115a47bd1c72e20"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjYxNTEwNTUx",
+          "commit": {
+            "abbreviatedOid": "956bf36"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2021-05-17T23:29:03Z",
+          "updatedAt": "2021-05-17T23:29:09Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "This one is actually correct not hyphenated. It should only be hyphenated when used as an adjective.",
+              "createdAt": "2021-05-17T23:29:03Z",
+              "updatedAt": "2021-05-17T23:29:09Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwMTM1NTY3",
+      "title": "Security bcp update",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/7",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Updates draft to cover some of the latest changes in the security (see #6)",
+      "createdAt": "2021-05-11T10:55:00Z",
+      "updatedAt": "2021-05-17T23:47:13Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "security-bcp-update",
+      "headRefOid": "d5fd1d30723531f97b4e09833db1b1f29348ffbc",
+      "closedAt": "2021-05-17T23:47:13Z",
+      "mergedAt": "2021-05-17T23:47:13Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "8363ef58009a3f44a82fa3e065c71df82c14263b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwMjY1NjIw",
+      "title": "Improve without backend",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/8",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Arrow C is referenced in the text \"[The code in the browser] obtains an access token via a POST request (C).\". The arrow should have an arrowhead on both ends as it symbolizes both the token request and token response.\r\n- \"The JavaScript app is then responsible for storing the access token (and optional refresh token) securely using appropriate browser APIs.\" I think this sentence was misleading, because as of today there is no way for the app to store tokens securely in the browser.\r\n- Arrow E was not referenced in the text.",
+      "createdAt": "2021-05-11T11:46:03Z",
+      "updatedAt": "2021-05-17T23:48:41Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "improve-without-backend",
+      "headRefOid": "db91595c8ee9c9d44aa6f09baf43e2a8a91d70df",
+      "closedAt": "2021-05-17T23:48:41Z",
+      "mergedAt": "2021-05-17T23:48:41Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "896ab335e5f3b9de9844e4af66b663f41de8b54f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwMzQ0OTEz",
+      "title": "Improve implicit flow",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/9",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-05-11T12:17:31Z",
+      "updatedAt": "2021-05-17T23:56:30Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "improve-implicit-flow",
+      "headRefOid": "95361a4122d92657ab48fc4c1527dafce720457c",
+      "closedAt": "2021-05-17T23:56:30Z",
+      "mergedAt": "2021-05-17T23:56:30Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "7dd71d355d8ea83a5ce6b54da34adbebfd18b940"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwNDE0ODg1",
+      "title": "Improve code flow",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/10",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-05-11T12:45:13Z",
+      "updatedAt": "2021-05-17T23:57:02Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "improve-code-flow",
+      "headRefOid": "02058d6ad96e2f83065d4ed263c8d51b23527678",
+      "closedAt": "2021-05-17T23:57:02Z",
+      "mergedAt": "2021-05-17T23:57:02Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "0fb4a1669ed666f002cb7475c8f2b5c50f5e7508"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwNDE1OTU2",
+      "title": "Added note to use Secure cookie attribute to first architecture",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/11",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-05-11T12:45:39Z",
+      "updatedAt": "2021-05-17T23:57:22Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "improve-first-architecture",
+      "headRefOid": "6e970d0bf5a2e84ddb82cc47a4da00c46a4c6955",
+      "closedAt": "2021-05-17T23:57:21Z",
+      "mergedAt": "2021-05-17T23:57:21Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "8a27f409bffe6445e03dd6b152ac63d5faa94065"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjQwNDE2Nzg5",
+      "title": "Improve with backend",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/12",
+      "state": "MERGED",
+      "author": "kmzs",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-05-11T12:45:59Z",
+      "updatedAt": "2021-05-17T23:59:03Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "107aa0519a2ca037da5ff8cf9b25b2002960555e",
+      "headRepository": "kmzs/oauth-browser-based-apps",
+      "headRefName": "improve-with-backend",
+      "headRefOid": "ad9fd712c94b2ffeade913ac68882c5a9baa40aa",
+      "closedAt": "2021-05-17T23:59:03Z",
+      "mergedAt": "2021-05-17T23:59:03Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "ef1bfb0bd48fbbf878a64086cadb080612bf01ab"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOCUe3lM46Yyzp",
+      "title": "Introducing Service Worker. Refactored section about architectural pa\u2026",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/13",
+      "state": "CLOSED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Here is a very first version.\r\n\r\nI think all information is present. However, I'm still trying to find out where everything should go. I think we should consider having separate _security concerns_ for each flow. Or maybe splitting the document in a section describing the architectural patterns, and another one about their security concerns, along with attacks and their mitigations. Both have merits IMO.",
+      "createdAt": "2022-06-27T05:09:57Z",
+      "updatedAt": "2022-09-01T05:09:03Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "e9a9af82465ccec90d507b0afc92c5e6046d3a64",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "serviceworker",
+      "headRefOid": "8968862383dee273cdcfc6d4a5ac29cf7ea1d958",
+      "closedAt": "2022-09-01T05:09:03Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Refactored this in multiple PRs",
+          "createdAt": "2022-09-01T05:09:03Z",
+          "updatedAt": "2022-09-01T05:09:03Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM4-HuP3",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-18T17:18:00Z",
+          "updatedAt": "2022-07-18T17:18:01Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "Doesn't PKCE prevent this attack from succeeding?",
+              "createdAt": "2022-07-18T17:18:00Z",
+              "updatedAt": "2022-07-18T17:18:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-HunO",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-18T17:19:18Z",
+          "updatedAt": "2022-07-18T17:19:19Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "I think we should avoid using the term \"stateful\" here since that's not actually a relevant property of this architecture. It's possible to make the BFF stateless and use encrypted cookies to store all the session data and things still work as described in this pattern. ",
+              "createdAt": "2022-07-18T17:19:18Z",
+              "updatedAt": "2022-07-18T17:19:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-HvPb",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-18T17:21:38Z",
+          "updatedAt": "2022-07-18T17:21:39Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "Similar to above, this isn't true when using PKCE",
+              "createdAt": "2022-07-18T17:21:39Z",
+              "updatedAt": "2022-07-18T17:21:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-HvW6",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-18T17:22:03Z",
+          "updatedAt": "2022-07-18T17:22:04Z",
+          "comments": [
+            {
+              "originalPosition": 241,
+              "body": "This could use some clarification. In particular, what is being sanitized?",
+              "createdAt": "2022-07-18T17:22:03Z",
+              "updatedAt": "2022-07-18T17:22:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-YkkP",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-21T14:24:29Z",
+          "updatedAt": "2022-07-21T14:24:30Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "This attack will indeed only succeed if authorization flow is initiated from the browser. PKCE can protect against this IF that code is on the backend, and the code verifier is kept securely from the frontend. I'll rework that to make that clear.",
+              "createdAt": "2022-07-21T14:24:30Z",
+              "updatedAt": "2022-07-21T14:24:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-Ymgd",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-21T14:29:08Z",
+          "updatedAt": "2022-07-21T14:29:09Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "The relevant property that I wanted to underline was the fact that some state needed to be kept, and that it needed to be inaccessible from the frontend. A kind of viewstate solution would indeed work too. \r\n\r\nMy point was that this wasn't just any backend: SPA with stateless backends are very common nowadays, in contrast to stateful backends or viewstate approaches. This makes big difference though: this implies some infrastructure requirements that just aren't needed in other solutions (local/session storage or service workers).\r\n\r\n I'll try to find some better wording.",
+              "createdAt": "2022-07-21T14:29:08Z",
+              "updatedAt": "2022-07-21T14:29:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-YpLS",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-21T14:35:34Z",
+          "updatedAt": "2022-07-21T14:35:35Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "I'll indeed remove the last sentence, as a well implemented oauth2 initiating BFF would indeed solve that too.",
+              "createdAt": "2022-07-21T14:35:34Z",
+              "updatedAt": "2022-07-21T14:35:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-YrNh",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-21T14:39:39Z",
+          "updatedAt": "2022-07-21T14:39:39Z",
+          "comments": [
+            {
+              "originalPosition": 241,
+              "body": "I'll rework that part too. To keep the security principles of this architecture safe, it shouldn't be possible to get an authorization code or a token in the frontend, bypassing the safe storage in a service worker.",
+              "createdAt": "2022-07-21T14:39:39Z",
+              "updatedAt": "2022-07-21T14:39:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-Y4DA",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-21T15:04:24Z",
+          "updatedAt": "2022-07-21T15:04:25Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "After some reflection: I tried to remove that \"stateful\" aspect, but I'm actually quite convinced that this property is indeed characteristic of this architecture: even if that state can be stored in the frontend (in cookies or otherwise), which typically helps for scaling across multiple backend nodes, there is still backend state that needs to be maintained.\r\n\r\nMy suggestion is to keep the \"stateful\" wording, maybe with a word of clarification.\r\n\r\nDo you have another proposal or view about how to describe the architecture in the best possible way?",
+              "createdAt": "2022-07-21T15:04:24Z",
+              "updatedAt": "2022-07-21T15:04:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-3Axw",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "dwaite",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-28T19:00:17Z",
+          "updatedAt": "2022-07-28T19:00:17Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "While service workers cannot be invoked from a third party context calling the origin, XSS or some script injection into the origin can make API calls (which will have the access token automatically applied.)\r\n\r\nIt is probably worth calling this out, referencing the existing CSP section (and perhaps SRI, I don't remember if there was a reason SRI was not mentioned at this point).",
+              "createdAt": "2022-07-28T19:00:17Z",
+              "updatedAt": "2022-07-28T19:00:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-41eW",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-29T06:52:09Z",
+          "updatedAt": "2022-07-29T06:52:10Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "XSS can indeed lead to spoofed calls to the resource server, and a token would automatically be added. That is true for all described architectures, though. An attacker can certainly add the token if it's stored in local/session storage or even browser memory (and it will typically be done automatically from an http interceptor). And BFFs are even worse in this case, as they not only make that a fact through XSS, but also open a bunch of CSRF issues which will lead to tokens being added automatically to any call, not only those originating from injected scripts.\r\n\r\nSo, should we rather, from a general section concerning all architectures, reference either a security section in this document or in another one (e.g. OAuth Security Topics 2.0)?",
+              "createdAt": "2022-07-29T06:52:09Z",
+              "updatedAt": "2022-07-29T06:52:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM4-6sqt",
+          "commit": {
+            "abbreviatedOid": "cc6d8d0"
+          },
+          "author": "dwaite",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-29T13:30:48Z",
+          "updatedAt": "2022-07-29T13:30:48Z",
+          "comments": [
+            {
+              "originalPosition": 240,
+              "body": "Absolutely should be a common section. There are subtle differences in some security actions - for instance,  I can reduce the accessible API surface via limiting accessing functions (in-memory), via BFF logic, or serviceworker rules. \r\n\r\nOnly BFF needs to think about SameSite cookies or other CSRF protections of the three AFAICT. ",
+              "createdAt": "2022-07-29T13:30:48Z",
+              "updatedAt": "2022-07-29T13:30:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOCUe3lM4-Bd2r",
+      "title": "reworked some architectural patterns",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/15",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Refactoring some architectural patterns:\r\n- Single-Domain Browser-Based Apps (not using OAuth)\r\n- Backend For Frontend (BFF) Proxy",
+      "createdAt": "2022-08-30T07:29:16Z",
+      "updatedAt": "2022-09-01T05:16:17Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "0ee751f7660e29912366abcf11505bb192b32898",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "bffproxy",
+      "headRefOid": "3bff1fe221d96e39df87f8a7d3be0e40f342a652",
+      "closedAt": "2022-09-01T05:16:17Z",
+      "mergedAt": "2022-09-01T05:16:16Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "e9c6fc1683e1a183932629f14a5364372ef96a3e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5BGkAR",
+          "commit": {
+            "abbreviatedOid": "023af4d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-08-31T17:13:51Z",
+          "updatedAt": "2022-08-31T17:13:55Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "Looks like an incomplete thought? We can just remove this for now to merge this in if you like.",
+              "createdAt": "2022-08-31T17:13:51Z",
+              "updatedAt": "2022-08-31T17:13:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BH3xu",
+          "commit": {
+            "abbreviatedOid": "023af4d"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-08-31T22:33:42Z",
+          "updatedAt": "2022-08-31T22:33:42Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "Indeed, removed for now.",
+              "createdAt": "2022-08-31T22:33:42Z",
+              "updatedAt": "2022-08-31T22:33:42Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOCUe3lM4-BxvY",
+      "title": "refactor: js client",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/16",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "reworked some architectural patterns: Javascript applications accessing resource servers directly (js = oauth client)",
+      "createdAt": "2022-08-30T08:38:27Z",
+      "updatedAt": "2022-08-31T17:21:14Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "0ee751f7660e29912366abcf11505bb192b32898",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "javascript-oauth-client",
+      "headRefOid": "a9667d1dab05deb43044290576d672838ae56b43",
+      "closedAt": "2022-08-31T17:21:13Z",
+      "mergedAt": "2022-08-31T17:21:13Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "c6f99e8e81fe39b37c28f3d9b29a94995fa4b081"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5BGlxg",
+          "commit": {
+            "abbreviatedOid": "a9667d1"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-08-31T17:20:06Z",
+          "updatedAt": "2022-08-31T17:20:06Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOCUe3lM4-Bx6s",
+      "title": "about storing tokens in local or session storage",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/17",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T08:38:51Z",
+      "updatedAt": "2022-08-31T17:31:58Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "0ee751f7660e29912366abcf11505bb192b32898",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "localstorage",
+      "headRefOid": "9783e9844eed712d711db9f81315d8bb89dbcd35",
+      "closedAt": "2022-08-31T17:31:58Z",
+      "mergedAt": "2022-08-31T17:31:58Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "18ad753f12d780ead52b6432f647ce664bda77d2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5BGpMi",
+          "commit": {
+            "abbreviatedOid": "9783e98"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-08-31T17:31:51Z",
+          "updatedAt": "2022-08-31T17:31:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOCUe3lM4-ByUn",
+      "title": "about constricting all authentication to a service worker",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/18",
+      "state": "CLOSED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T08:40:05Z",
+      "updatedAt": "2022-09-01T08:08:10Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "e9c6fc1683e1a183932629f14a5364372ef96a3e",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "serviceworker-only",
+      "headRefOid": "297a79c40b339511140d712f77f0f379a3371258",
+      "closedAt": "2022-09-01T08:08:10Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5BHGUZ",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-08-31T19:05:16Z",
+          "updatedAt": "2022-08-31T19:05:17Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "I think this line needs to be broken into two steps, to show that the application is asking the service worker to initiate the authorization request.",
+              "createdAt": "2022-08-31T19:05:16Z",
+              "updatedAt": "2022-08-31T19:05:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BHGkk",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-08-31T19:06:11Z",
+          "updatedAt": "2022-08-31T19:06:11Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "it's not clear whether this \"rest call\" label is associated with the return from the authorization server or is the application calling the service worker. If the latter, then I don't think calling that a \"rest call\" is correct. Maybe just leave this label off?",
+              "createdAt": "2022-08-31T19:06:11Z",
+              "updatedAt": "2022-08-31T19:06:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BHGwR",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-08-31T19:06:53Z",
+          "updatedAt": "2022-08-31T19:06:54Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "let's leave off \"rest\" here since this isn't necessarily limited to REST architectures (and also because people have like 5 different definitions of what a REST API actually is and it's really not important)",
+              "createdAt": "2022-08-31T19:06:53Z",
+              "updatedAt": "2022-08-31T19:06:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BI-6l",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-01T07:08:37Z",
+          "updatedAt": "2022-09-01T07:08:37Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Split it. Please keep in mind that the application doesn't  communicate with the service worker: it does that on its own whenever it is needed. It acts as an authenticating reverse proxy.\r\n\r\nI tried to improve the explanation in my last commit to reflect that better. It could also be further refined in another PR, if needed.",
+              "createdAt": "2022-09-01T07:08:37Z",
+              "updatedAt": "2022-09-01T07:08:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BJBY6",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-01T07:17:17Z",
+          "updatedAt": "2022-09-01T07:17:18Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "Replaced \"rest call\" with \"resource request\". Also added some further explanations.",
+              "createdAt": "2022-09-01T07:17:17Z",
+              "updatedAt": "2022-09-01T07:17:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5BJCN5",
+          "commit": {
+            "abbreviatedOid": "347219e"
+          },
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-01T07:20:05Z",
+          "updatedAt": "2022-09-01T07:20:06Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Indeed, this is too context-specific. Just replaced it as mentionned above, with some additional explanations.",
+              "createdAt": "2022-09-01T07:20:06Z",
+              "updatedAt": "2022-09-01T07:20:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOCUe3lM4-MKMA",
+      "title": "about constricting all authentication to a service worker",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/19",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-01T08:17:22Z",
+      "updatedAt": "2022-09-06T17:50:31Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "e9c6fc1683e1a183932629f14a5364372ef96a3e",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "serviceworker-only",
+      "headRefOid": "921c35a4ceaeaf19b4902378a80f9161cb667d29",
+      "closedAt": "2022-09-06T17:50:31Z",
+      "mergedAt": "2022-09-06T17:50:31Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "e514a8d4b2a81d93e47d0e7ad168a1a76a5255ac"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This looks great. I'm going to merge this and make a few minor tweaks to it.",
+          "createdAt": "2022-09-06T17:50:26Z",
+          "updatedAt": "2022-09-06T17:50:26Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOCUe3lM4-mC4S",
+      "title": "review of latest feedbacks: restructuring, mitigating attack where a service worker is bypassed",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/20",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-08T12:35:40Z",
+      "updatedAt": "2022-09-08T13:10:42Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "b45051375518a6e60474fe54ad182e2c19cc791e",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "after-draft10",
+      "headRefOid": "e002298e239d1b1c2430a49b2a20ef44b482bfaa",
+      "closedAt": "2022-09-08T13:10:41Z",
+      "mergedAt": "2022-09-08T13:10:41Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "7424feaa74b764633dc404392d9713d8d12613ea"
+      },
+      "comments": [
+        {
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I moved the considerations about XSS to a general section: all architectures are concerned.\r\n\r\nI added some words about bypassing the Service Worker: this would need a very broad successful XSS, with a much broader attack surface than what is typically the case. This can be mitigated by making sure that registering the service worker is the very first thing happening. There is also no API for unregistering a SW, so it can't be removed after the fact.",
+          "createdAt": "2022-09-08T12:42:31Z",
+          "updatedAt": "2022-09-08T12:42:31Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I haven't dug too deep yet but isn't this an API to unregister a service worker? https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/unregister",
+          "createdAt": "2022-09-08T12:45:58Z",
+          "updatedAt": "2022-09-08T12:45:58Z"
+        },
+        {
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Indeed, this mitigation won't work. I oversaw the registration itself and focused on https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer . I'll rework this and focus on what can be guaranteed by specs.",
+          "createdAt": "2022-09-08T13:00:58Z",
+          "updatedAt": "2022-09-08T13:00:58Z"
+        },
+        {
+          "author": "ymajoros",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I removed the part about service workers for now. I'll see if I can further improve it in another PR.",
+          "createdAt": "2022-09-08T13:07:46Z",
+          "updatedAt": "2022-09-08T13:07:46Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOCUe3lM4-nPov",
+      "title": "review feedback: mitigating unregistering SW",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/21",
+      "state": "MERGED",
+      "author": "ymajoros",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-08T15:34:08Z",
+      "updatedAt": "2022-09-12T17:00:08Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "7424feaa74b764633dc404392d9713d8d12613ea",
+      "headRepository": "ymajoros/oauth-browser-based-apps",
+      "headRefName": "after-draft10-sw",
+      "headRefOid": "d5db7507e742bcae798e49b6d2a55f11cb9cb59b",
+      "closedAt": "2022-09-12T17:00:08Z",
+      "mergedAt": "2022-09-12T17:00:07Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "41f98c94cddbe444c2623a61b27c7ff71a05b656"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOCUe3lM5YdLu6",
+      "title": "Restructured document",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/23",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Restructured the document and added a few TODOs following the discussion with Aaron Parecki at OSW2023.\r\n\r\n- Added more focus on best practices at the start of the document\r\n- Consolidated guidelines for public JS clients in a single section\r\n- Added a section on alternative architectures\r\n\r\nNote that this restructuring is just a first step, leaving the detailed text to be reworded for consistency",
+      "createdAt": "2023-08-22T06:18:35Z",
+      "updatedAt": "2023-09-01T14:40:11Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "deb248704f4a7911e90db0574df546772e0b8f86",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/restructuring",
+      "headRefOid": "3f930e66851bb765f2b9c69009bbc78363899cda",
+      "closedAt": "2023-09-01T14:40:11Z",
+      "mergedAt": "2023-09-01T14:40:11Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "ba0a5d287fa4bdeb62661f58da6debb7246f049b"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks, I like this for the most part. \r\n\r\nI am not sure I agree with moving the Implicit Flow section into the \"Alternative Architecture Patterns\" section, since that makes it look like a legitimate choice. The idea of including it in the \"Security Considerations\" section was to provide the historical context for it without making it look like a current recommendation. If you are thinking that it isn't appropriate in the Security Considerations section, then maybe we can include it as a new top-level section.",
+          "createdAt": "2023-08-28T17:52:34Z",
+          "updatedAt": "2023-08-28T17:52:34Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "FYI I pushed this to a branch to trigger the auto-build to review it in the final form, you can view it here:\r\n\r\nhttps://drafts.oauth.net/oauth-browser-based-apps/restructuring/draft-ietf-oauth-browser-based-apps.html",
+          "createdAt": "2023-08-28T17:58:34Z",
+          "updatedAt": "2023-08-28T17:58:34Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "My bad for the delay, I glanced this thread before and assumed that your last comment implied it was being merged. Otherwise I would have given feedback sooner.\r\n\r\nI agree with your comment on the Implicit flow being a bad fit. How about the following changes:\r\n- Move or integrate 6.1 (single-domain apps) in section 4\r\n- Now section 6 only contains \"not relevant\" patterns, so we can rename it to \"Discouraged and Deprecated Architecture Patterns\", which sends a much clearer message",
+          "createdAt": "2023-09-01T07:05:44Z",
+          "updatedAt": "2023-09-01T07:05:44Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Yes that sounds good to me. I think we also need to rename the header \"First-Party Applications\" to \"Resource Owner Password Grant\" in that case.",
+          "createdAt": "2023-09-01T14:07:11Z",
+          "updatedAt": "2023-09-01T14:07:11Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I actually think we can keep the \"same-domain\" pattern in the \"discouraged\" section, since the point of that section was to demonstrate why you might want to use OAuth even in the same-domain situation. \r\n\r\nI just pushed a commit to this PR with the reworked headers, so I'll go ahead and merge this now!",
+          "createdAt": "2023-09-01T14:39:59Z",
+          "updatedAt": "2023-09-01T14:39:59Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOCUe3lM5ZT3kC",
+      "title": "Added section on the threats of malicious JS",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/24",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR contains a major rewrite of this document to better reflect the security challenges of browser-based OAuth clients. The updated spec includes an in-depth analysis of attacks, consequences, and architecture patterns that can be used.\r\n\r\nConcrete changes in this document:\r\n- Added a section on threats of malicios JS (attack payloads and consequences)\r\n- Added a threat analysis to each of the major patterns\r\n- Expanded the three main patterns with relevant details\r\n- Added in-depth discussion of the limitations of Service Workers\r\n- Updated refresh token example (made lifetimes more relevant, clarified that the session is needed instead of the user presence)\r\n- Revisited and expanded the Token Storage section\r\n- Fixed inconsistent capitalization (authorization/resource server, Authorization Code flow)\r\n- Added references",
+      "createdAt": "2023-09-01T07:13:07Z",
+      "updatedAt": "2023-10-19T14:31:37Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "ab2b41cc24802e3bc575bd8a738dd85bd799adc4",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/threat-malicious-js",
+      "headRefOid": "7dd3bc5c6f0b0d2abe424b91711df97e342084d3",
+      "closedAt": "2023-10-19T14:31:37Z",
+      "mergedAt": "2023-10-19T14:31:37Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "b1479a4c477a596c80ab234d5156a9ddf01a1090"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This is fantastic!",
+          "createdAt": "2023-09-01T14:24:12Z",
+          "updatedAt": "2023-09-01T14:24:12Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5fyXNV",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:13:07Z",
+          "updatedAt": "2023-09-01T14:13:08Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "I think we need another paragraph here to explain that the only countermeasure against this is to not allow flows that transparently redirect. Interrupting the flow and requiring the user to take manual action (e.g. full user authentication each time, or even just clicking \"yes I want to log in\") will prevent this attack. However, such measures are typically unacceptable from a user experience perspective.",
+              "createdAt": "2023-09-01T14:13:07Z",
+              "updatedAt": "2023-09-01T14:13:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyYPY",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:15:32Z",
+          "updatedAt": "2023-09-01T14:15:32Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "```suggestion\r\nThis attack scenario takes a different approach. Instead of abusing the application to obtain tokens, the attacker will send requests directly from within the OAuth client application running in the user's browser. The requests sent by the attacker are indistinguishable from requests sent by the legitimate application. This scenario consists of the following steps:\r\n```",
+              "createdAt": "2023-09-01T14:15:32Z",
+              "updatedAt": "2023-09-01T14:15:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyYkV",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:16:22Z",
+          "updatedAt": "2023-09-01T14:16:22Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nThis section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios range from extremely trivial ({{payload-single-theft}}) to highly sophisticated ({{payload-new-flow}}). Note that this enumeration is non-exhaustive and presented in no particular order.\r\n```",
+              "createdAt": "2023-09-01T14:16:22Z",
+              "updatedAt": "2023-09-01T14:16:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyZ1A",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:19:20Z",
+          "updatedAt": "2023-09-01T14:19:20Z",
+          "comments": [
+            {
+              "originalPosition": 102,
+              "body": "```suggestion\r\nThe attack ends when the access token expires, or when a token is revoked with the authorization server. In a typical browser-based OAuth client, access token lifetimes can be quite short, ranging from minutes to hours.\r\n```\r\n\r\n(it's possible to have revocation lists for JWT tokens, see [JWT and CWT status list](https://www.ietf.org/archive/id/draft-looker-oauth-jwt-cwt-status-list-01.html) for a mechanism that was discussed at the last IETF meeting)",
+              "createdAt": "2023-09-01T14:19:20Z",
+              "updatedAt": "2023-09-01T14:19:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyaAL",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:19:44Z",
+          "updatedAt": "2023-09-01T14:19:45Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "```suggestion\r\nNote that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.\r\n```",
+              "createdAt": "2023-09-01T14:19:44Z",
+              "updatedAt": "2023-09-01T14:19:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fybqx",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:23:24Z",
+          "updatedAt": "2023-09-01T14:23:24Z",
+          "comments": [
+            {
+              "originalPosition": 105,
+              "body": "This should include a paragraph discussing DPoP, to mention both:\r\n\r\n* DPoP does effectively prevent the attacker from using a stolen token (if bound to a nonexportable key), but\r\n* the attacker may be able to obtain their own DPoP-bound tokens as described in {{payload-new-flow}}",
+              "createdAt": "2023-09-01T14:23:24Z",
+              "updatedAt": "2023-09-01T14:23:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyodZ",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:46:19Z",
+          "updatedAt": "2023-09-01T14:46:19Z",
+          "comments": [
+            {
+              "originalPosition": 112,
+              "body": "```suggestion\r\nThere are no security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP ({{DPoP}}) are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens.\r\n```",
+              "createdAt": "2023-09-01T14:46:19Z",
+              "updatedAt": "2023-09-01T14:46:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5fyojL",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-01T14:46:33Z",
+          "updatedAt": "2023-09-01T14:46:33Z",
+          "comments": [
+            {
+              "originalPosition": 124,
+              "body": "```suggestion\r\nThis attack pattern is well-known and also occurs with traditional applications using HttpOnly session cookies. It is commonly accepted that this scenario cannot be stopped or prevented by application-level security measures. For example, the DPoP specification ({{DPoP}}) explicitly considers this attack scenario to be out of scope.\r\n```",
+              "createdAt": "2023-09-01T14:46:33Z",
+              "updatedAt": "2023-09-01T14:46:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5hHL2F",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-15T15:50:42Z",
+          "updatedAt": "2023-09-15T15:50:42Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "Fixed in upcoming commit",
+              "createdAt": "2023-09-15T15:50:42Z",
+              "updatedAt": "2023-09-15T15:50:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5hHL8P",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-15T15:50:56Z",
+          "updatedAt": "2023-09-15T15:50:57Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Fixed in upcoming commit",
+              "createdAt": "2023-09-15T15:50:57Z",
+              "updatedAt": "2023-09-15T15:50:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5hHM5_",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-15T15:52:32Z",
+          "updatedAt": "2023-09-15T15:52:32Z",
+          "comments": [
+            {
+              "originalPosition": 102,
+              "body": "cool, I did not know this. updated text.",
+              "createdAt": "2023-09-15T15:52:32Z",
+              "updatedAt": "2023-09-15T15:52:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5hHNGQ",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-15T15:52:54Z",
+          "updatedAt": "2023-09-15T15:52:54Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "Fixed",
+              "createdAt": "2023-09-15T15:52:54Z",
+              "updatedAt": "2023-09-15T15:52:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5hHQgZ",
+          "commit": {
+            "abbreviatedOid": "38ede31"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-09-15T16:01:21Z",
+          "updatedAt": "2023-09-15T16:01:22Z",
+          "comments": [
+            {
+              "originalPosition": 105,
+              "body": "Added in new commit",
+              "createdAt": "2023-09-15T16:01:21Z",
+              "updatedAt": "2023-09-15T16:01:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5kDt6Z",
+          "commit": {
+            "abbreviatedOid": "b00130c"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2023-10-15T06:38:24Z",
+          "updatedAt": "2023-10-15T06:38:24Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "The last sentence already covers this case: `Additionally, authorization server behavior that would force every authorization code flow to require user interaction would significantly impact widely-established patterns, such as silently bootstrapping an application with tokens, or Single Sign-On across multiple related applications.`. I have not changed this, but if you feel it warrants more explanation, we should look into that when finetuning everything.",
+              "createdAt": "2023-10-15T06:38:24Z",
+              "updatedAt": "2023-10-15T06:38:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5km3Re",
+          "commit": {
+            "abbreviatedOid": "7dd3bc5"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2023-10-19T14:31:30Z",
+          "updatedAt": "2023-10-19T14:31:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOCUe3lM5iA1_9",
+      "title": "Fix minor editorial issues",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/28",
+      "state": "MERGED",
+      "author": "iphoneintosh",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* Remove doubled \"... section Section ...\"\r\n* Replace \"BFF\" with \"token-mediating backend\" in token-mediating backend section\r\n* Remote redundant \"In browser\" wording",
+      "createdAt": "2023-12-14T15:09:44Z",
+      "updatedAt": "2024-02-13T22:14:51Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
+      "headRepository": "iphoneintosh/oauth-browser-based-apps",
+      "headRefName": "fix-editorial-issues",
+      "headRefOid": "48be6c1bcb6fc63fc6e75b51bf04bd6a0d3434eb",
+      "closedAt": "2024-02-13T22:14:51Z",
+      "mergedAt": "2024-02-13T22:14:51Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "ba6c495f0f0ac5017543aa0936ec87a5d5537e1d"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOCUe3lM5iluJO",
+      "title": "Added section on the security of in-browser communication flows",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/29",
+      "state": "MERGED",
+      "author": "iphoneintosh",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed on the OSW, this PR adds a small section with security considerations on the use of `postMessage` (a.k.a. \"web messaging\") to this draft. It makes reference to [Section 4.18 of the OAuth BCP](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-24#name-attacks-on-in-browser-commu), which already discusses the security implications of in-browser communication flows in detail.\r\n\r\nSince (silent) iframe flows and popup flows are especially used in browser-based apps, we think that it makes sense to include security considerations of their in-browser communication into this draft. Please let us know what you think about this. We appreciate any feedback.",
+      "createdAt": "2023-12-21T16:43:52Z",
+      "updatedAt": "2024-02-17T00:14:52Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
+      "headRepository": "iphoneintosh/oauth-browser-based-apps",
+      "headRefName": "inbc-security-considerations",
+      "headRefOid": "e1da28f8eb77ac158e145f4118b6723c236d5bbf",
+      "closedAt": "2024-02-17T00:14:52Z",
+      "mergedAt": "2024-02-17T00:14:52Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "de70195fda83a6a563ebfd4bd1342a346312b188"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Sounds good to me, thanks!",
+          "createdAt": "2024-02-17T00:14:42Z",
+          "updatedAt": "2024-02-17T00:14:42Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOCUe3lM5kP4yT",
+      "title": "IETF 118 followup review",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/30",
+      "state": "MERGED",
+      "author": "panva",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "A followup review with suggestions as requested at IETF 118",
+      "createdAt": "2024-01-16T21:18:24Z",
+      "updatedAt": "2024-02-25T08:24:26Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "5d2a4cd84e8d4ce47ef3f0bfcf74404b5d22a3f8",
+      "headRepository": "panva/oauth-browser-based-apps",
+      "headRefName": "filip-review",
+      "headRefOid": "e718520f2c1151625b07781927624d241dcf5a05",
+      "closedAt": "2024-02-13T18:28:33Z",
+      "mergedAt": "2024-02-13T18:28:33Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "6f12ac032a426d52f5a471f21872c5442d5f8cf0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5vlVzp",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:18:47Z",
+          "updatedAt": "2024-02-09T10:18:47Z",
+          "comments": [
+            {
+              "originalPosition": 66,
+              "body": "Note: flows may be referred to as silent, iframes in such flows OTOH are hidden",
+              "createdAt": "2024-02-09T10:18:47Z",
+              "updatedAt": "2024-02-09T10:18:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlWfN",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:20:24Z",
+          "updatedAt": "2024-02-09T10:20:24Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "Note: we cannot say this pattern exlusively uses client_secret based flows, it may also use private key jwt or mtls.",
+              "createdAt": "2024-02-09T10:20:24Z",
+              "updatedAt": "2024-02-09T10:20:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlX35",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:23:47Z",
+          "updatedAt": "2024-02-09T10:23:47Z",
+          "comments": [
+            {
+              "originalPosition": 135,
+              "body": "there is no interoperable mechanism for signalling refresh token expiration, it may be known or disclosed but we cannot say that all clients know how long their refresh tokens will survive",
+              "createdAt": "2024-02-09T10:23:47Z",
+              "updatedAt": "2024-02-09T10:23:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlZKN",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:26:53Z",
+          "updatedAt": "2024-02-09T10:26:53Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "I would actually suggest to include a guideline here which is to\r\n\r\n- have Origin allow-list pre-registerable or even required for browser based applications\r\n- implement preflights that are wildcard and/or limited\r\n- figure out the client_id from the actual request (client_id in body, aud/azp in tokens) and check the origin matches one that is pre-registered, otherwise error the response and/or remove the actual responses' CORS headers to have the browser hide the response properties.",
+              "createdAt": "2024-02-09T10:26:53Z",
+              "updatedAt": "2024-02-09T10:26:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlaMz",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:29:20Z",
+          "updatedAt": "2024-02-09T10:29:20Z",
+          "comments": [
+            {
+              "originalPosition": 189,
+              "body": "If we don't mention the intended way to persist non-extractable CryptoKey instances a developer will realize they can't serialize the non-extractable key and resolve into making it extractable and subsequently just serializing it to JWK and store it using other storage mechanisms.\r\n\r\nUsing IndexedDB and non-extractable CryptoKey has at least the benefit of not allowing the CryptoKey to be exfiltrated by an online attack.\r\n\r\nYes it's still vulnerable to reading the serialized data off disk but that's a different vector.",
+              "createdAt": "2024-02-09T10:29:20Z",
+              "updatedAt": "2024-02-09T10:29:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vlaeK",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T10:29:59Z",
+          "updatedAt": "2024-02-09T10:29:59Z",
+          "comments": [
+            {
+              "originalPosition": 207,
+              "body": "Note: we're not using unmodified, we require the PKCE extension to be used.",
+              "createdAt": "2024-02-09T10:29:59Z",
+              "updatedAt": "2024-02-09T10:29:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5vm7lb",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-09T14:02:06Z",
+          "updatedAt": "2024-02-09T14:02:06Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "Note: the javascript application has no way of determining the access token is *expired* given the only reliable information it would get is a www-authenticate header with an error=invalid_token property, the optional error_description may include this detail but should not be relied on because of its free form unstructured contents.",
+              "createdAt": "2024-02-09T14:02:06Z",
+              "updatedAt": "2024-02-09T14:02:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2TjK",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:49:50Z",
+          "updatedAt": "2024-02-12T22:49:50Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "I believe the idea was to pass the `expires_in` [back to the browser](https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01#name-access-token-response) for this, but I agree this reads better anyway.",
+              "createdAt": "2024-02-12T22:49:50Z",
+              "updatedAt": "2024-02-12T22:49:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VPG",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:56:23Z",
+          "updatedAt": "2024-02-12T22:56:23Z",
+          "comments": [
+            {
+              "originalPosition": 144,
+              "body": "```suggestion\r\nclient, since there is no way to provision it with client credentials in this model.\r\n```",
+              "createdAt": "2024-02-12T22:56:23Z",
+              "updatedAt": "2024-02-12T22:56:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2Vgy",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:57:29Z",
+          "updatedAt": "2024-02-12T22:57:29Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "```suggestion\r\nWhen no active session is found, the JavaScript application calls out to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in {{pattern-tmb-flow}}), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.\r\n```",
+              "createdAt": "2024-02-12T22:57:29Z",
+              "updatedAt": "2024-02-12T22:57:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VnJ",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:57:51Z",
+          "updatedAt": "2024-02-12T22:57:51Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "```suggestion\r\nextension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.\r\n```",
+              "createdAt": "2024-02-12T22:57:51Z",
+              "updatedAt": "2024-02-12T22:57:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2VuE",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T22:58:16Z",
+          "updatedAt": "2024-02-12T22:58:16Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "How about \"credentials\" instead of secret? The point is to make an obvious distinction that this client is using credentials in this version.",
+              "createdAt": "2024-02-12T22:58:16Z",
+              "updatedAt": "2024-02-12T22:58:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2WqP",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T23:01:58Z",
+          "updatedAt": "2024-02-12T23:01:59Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "```suggestion\r\nhowever, that the browser will typically do a \"preflight\" request to check to see\r\n```",
+              "createdAt": "2024-02-12T23:01:58Z",
+              "updatedAt": "2024-02-12T23:01:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2g3s",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-12T23:39:13Z",
+          "updatedAt": "2024-02-12T23:39:13Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "That sounds like it will require a lot of additional text to justify those recommendations.",
+              "createdAt": "2024-02-12T23:39:13Z",
+              "updatedAt": "2024-02-12T23:39:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v2hgG",
+          "commit": {
+            "abbreviatedOid": "d015b2d"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "see suggestions inline",
+          "createdAt": "2024-02-12T23:40:04Z",
+          "updatedAt": "2024-02-12T23:40:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5v-igg",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-13T18:26:57Z",
+          "updatedAt": "2024-02-13T18:26:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfC0x",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Hey @panva, thanks for the detailed review!\r\n\r\n@aaronpk I am aware that this is merged already, but I added a bunch of comments that I believe need addressing. Let me know if you need any more input from me.",
+          "createdAt": "2024-02-18T09:53:37Z",
+          "updatedAt": "2024-02-18T10:08:29Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "I don't believe that the consistent rewording to `execution context` is accurate in this context. It is true that the code runs in the execution context, but the underlying security model of the browser is based on origins (Same-Origin Policy). When two execution contexts have the same origin and have a direct reference to each other, they are not isolated (e.g., a parent window and a frame). \r\n\r\nI strongly recommend to stick with `origin`. Alternatively, we should add a note to explain this context.",
+              "createdAt": "2024-02-18T09:53:38Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "Doesn't the silent apply to the \"flow\" here? As in `silent ... flow`? The attack does not rely on the frame being hidden, but on the attackers ability to run a flow that does not require user interaction, so the __silent__ modifier is more important/accurate than the __hidden__ modifier.",
+              "createdAt": "2024-02-18T09:55:56Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 169,
+              "body": "This is not correct. The browser only uses preflights for CORS-safelisted requests (i.e., anything that cannot be sent without modifying a request through JS). A simple GET or POST without custom headers or without a custom content type will not require a preflight.",
+              "createdAt": "2024-02-18T10:02:57Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            },
+            {
+              "originalPosition": 180,
+              "body": "I am assuming you are hinting at a dynamic CORS configuration where the AS uses the client ID to lookup a configuration and determine if this origin is legitimate? If that is indeed true, I don't think enforcement through CORS would be a correct implementation technique. I consider it application-level logic, akin to checking a redirect URI during an OAuth flow. As such, I would handle this as an application-level error instead of an *invalid CORS request*.\r\n\r\nI am not objecting against this, but I believe it needs a bit more explaining when it is left in. This will not be obvious to someone without proper context.",
+              "createdAt": "2024-02-18T10:06:22Z",
+              "updatedAt": "2024-02-18T10:08:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfE0B",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:11:48Z",
+          "updatedAt": "2024-02-18T10:11:48Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Explaining either one of the two that you think is more appropriate is definitely needed. I don't think origin is any better to execution context without an explanation of what we mean by it.",
+              "createdAt": "2024-02-18T10:11:48Z",
+              "updatedAt": "2024-02-18T10:11:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfFmz",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:26:05Z",
+          "updatedAt": "2024-02-18T10:26:05Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "A simple request won't get a preflight, right, feel free to reword the conditions which are currently summarized as \"typically\".\r\n\r\nIt needs to be mentioned (at least here) that when one uses DPoP there are no more simple requests. Having had written not one browser based client I am no longer envisioning typical operation to be without preflights.",
+              "createdAt": "2024-02-18T10:26:05Z",
+              "updatedAt": "2024-02-18T10:28:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfF1p",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T10:29:57Z",
+          "updatedAt": "2024-02-18T10:29:57Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "It is not enforced through CORS, the request would still fail with a proper oauth error, but it is through CORS that we ensure even these error responses don't get read from unintended origins.",
+              "createdAt": "2024-02-18T10:29:57Z",
+              "updatedAt": "2024-02-18T10:29:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfLbj",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T11:57:27Z",
+          "updatedAt": "2024-02-18T11:57:27Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "So the scenario would be as follows:\r\n\r\nThe AS has client 1 with origin A and client B with origin B. Upon handling a preflight, it sees a request coming from origin B, so it allows the request to go through. Upon handling the request, the AS sees that client 1 does not have origin B approved, so it issues an error message. However, additionally, it should not set the CORS header that allows origin B to read this response.\r\n\r\nIs that a correct description? If so, I think we need to add this context in the document to make this point clear. We probably also need to make this a SHOULD requirement for the AS (as I don't think we can make it a MUST)",
+              "createdAt": "2024-02-18T11:57:27Z",
+              "updatedAt": "2024-02-18T11:57:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5wfLib",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T12:00:22Z",
+          "updatedAt": "2024-02-18T12:00:22Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "It's currently a Note and I think that's enough to give guidance. I wouldn't make this normative in any way.",
+              "createdAt": "2024-02-18T12:00:22Z",
+              "updatedAt": "2024-02-18T12:00:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOfXL",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:03:56Z",
+          "updatedAt": "2024-02-25T08:03:56Z",
+          "comments": [
+            {
+              "originalPosition": 52,
+              "body": "Reworded to clarify what it means.",
+              "createdAt": "2024-02-25T08:03:56Z",
+              "updatedAt": "2024-02-25T08:03:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOf2I",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:16:18Z",
+          "updatedAt": "2024-02-25T08:16:18Z",
+          "comments": [
+            {
+              "originalPosition": 169,
+              "body": "I understand your point of view, but vanilla OAuth requests with form encoding would be simple requests. Reworded the text to add the necessary context.",
+              "createdAt": "2024-02-25T08:16:18Z",
+              "updatedAt": "2024-02-25T08:16:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xOgKE",
+          "commit": {
+            "abbreviatedOid": "e718520"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-25T08:24:25Z",
+          "updatedAt": "2024-02-25T08:24:26Z",
+          "comments": [
+            {
+              "originalPosition": 180,
+              "body": "Sounds good. I have rephrased this to include a bit more details on an example.",
+              "createdAt": "2024-02-25T08:24:25Z",
+              "updatedAt": "2024-02-25T08:24:26Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOCUe3lM5nKFKi",
+      "title": "more silent frame edits",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/33",
+      "state": "MERGED",
+      "author": "panva",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-17T09:15:43Z",
+      "updatedAt": "2024-02-22T06:31:39Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "panva/oauth-browser-based-apps",
+      "headRefName": "more-edit",
+      "headRefOid": "776a156f18527511982ff33f8955a67989a549ee",
+      "closedAt": "2024-02-21T21:34:05Z",
+      "mergedAt": "2024-02-21T21:34:05Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "5715598fdf2964a2af01277755540f0882aa1e00"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w6y5H",
+          "commit": {
+            "abbreviatedOid": "776a156"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:34:00Z",
+          "updatedAt": "2024-02-21T21:34:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOCUe3lM5nNIxR",
+      "title": "6.1.3.3.3. Use Anti-forgery/double submit cookies",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/34",
+      "state": "MERGED",
+      "author": "damienbod",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "fixes https://github.com/oauth-wg/oauth-browser-based-apps/issues/26\r\n",
+      "createdAt": "2024-02-18T07:23:03Z",
+      "updatedAt": "2024-02-21T21:36:19Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "damienbod/oauth-browser-based-apps",
+      "headRefName": "feature/6-1-3-3-use-Anti-forgery",
+      "headRefOid": "7831ad2b4eb688a846ddc8a22aed592f895ed120",
+      "closedAt": "2024-02-21T21:36:18Z",
+      "mergedAt": "2024-02-21T21:36:18Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "38c71730d16b1b5da783e644aaa4a33b02331040"
+      },
+      "comments": [
+        {
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks @philippederyck I like it, I updated the PR",
+          "createdAt": "2024-02-18T10:52:37Z",
+          "updatedAt": "2024-02-18T10:52:37Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5wfCiY",
+          "commit": {
+            "abbreviatedOid": "df048fb"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks for the suggestion @damienbod. I believe it is important to explain why this addition is there, so I've taken a stab at rewording (see below). \r\n\r\nI have also removed some of the implementation details that are not necessarily relevant (e.g., the use of HTTPS). I also removed the note on encryption, since the value in the cookie is typically random, so there would be no need to encrypt the cookie. \r\n\r\nLet me know what you think.\r\n\r\n\r\n\r\n```\r\nSome technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identity legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.\r\n\r\nNote that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.\r\n```",
+          "createdAt": "2024-02-18T09:47:13Z",
+          "updatedAt": "2024-02-18T09:47:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5w6zc-",
+          "commit": {
+            "abbreviatedOid": "7831ad2"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:35:28Z",
+          "updatedAt": "2024-02-21T21:35:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOCUe3lM5nNjJe",
+      "title": "Reworded *significant burden*",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/36",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR resolves issue #25 by rephrasing the *significant burden* of having a BFF",
+      "createdAt": "2024-02-18T10:18:10Z",
+      "updatedAt": "2024-02-22T17:25:34Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "c593337de1055185b9d41783bf3e16ac922f9231",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/25-address-language",
+      "headRefOid": "545b9aec335a524b6ddd1317a230240a68fe043f",
+      "closedAt": "2024-02-22T17:25:34Z",
+      "mergedAt": "2024-02-22T17:25:34Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "afe2b1ea6436c9d9fe54e1fdca179ea40196b8eb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5wfS6x",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "damienbod",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-18T14:28:42Z",
+          "updatedAt": "2024-02-18T14:28:42Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "How about adding this as well?\r\n\r\n```\r\nA proxy is not required, if the resource server and the BFF server are the same. \r\n```\r\n",
+              "createdAt": "2024-02-18T14:28:42Z",
+              "updatedAt": "2024-02-18T14:28:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5w7FK8",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-21T22:28:35Z",
+          "updatedAt": "2024-02-21T22:28:36Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I feel like this needs to link to [6.1.2.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps-16#section-6.1.2.4), which already mentions that no proxying is necessary in that situation. How about this instead:\r\n\r\n> See Section 6.1.2.4 for additional notes if the BFF is acting as the resource server.",
+              "createdAt": "2024-02-21T22:28:35Z",
+              "updatedAt": "2024-02-21T22:28:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM5xCTcZ",
+          "commit": {
+            "abbreviatedOid": "ca5aa7b"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T17:23:27Z",
+          "updatedAt": "2024-02-22T17:23:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nTo summarize, the architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See {{practical-deployment-scenarios}} for additional notes if the BFF is acting as the resource server.\r\n```",
+              "createdAt": "2024-02-22T17:23:27Z",
+              "updatedAt": "2024-02-22T17:23:28Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOCUe3lM5nNsQY",
+      "title": "Addressed comments from Elar Lang",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/37",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR incorporates a bunch of comments made by Elar Lang via mail.",
+      "createdAt": "2024-02-18T11:47:22Z",
+      "updatedAt": "2024-02-21T21:52:03Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "b5baa7e8d4c1c85997e7b2bd5023c510222cdb82",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/review-elar-lang",
+      "headRefOid": "9119a78421ddbc2ca650e478267080211ea53225",
+      "closedAt": "2024-02-21T21:52:03Z",
+      "mergedAt": "2024-02-21T21:52:03Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "c807e83ca1c0a0084264c4ba593096e77441093c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w65Jx",
+          "commit": {
+            "abbreviatedOid": "9119a78"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:51:57Z",
+          "updatedAt": "2024-02-21T21:51:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOCUe3lM5nNsdt",
+      "title": "Moved new section on in-browser flows",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/38",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The new section on the security of in-browser communication flows only applies to the browser-based OAuth client. It does not apply to the BFF or TM Backend. Therefore, I moved this section to the security considerations of the relevant pattern.",
+      "createdAt": "2024-02-18T11:50:41Z",
+      "updatedAt": "2024-02-21T21:47:08Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "38c71730d16b1b5da783e644aaa4a33b02331040",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/move-inbrowser-flows",
+      "headRefOid": "8fbf58f134fb39c2f533cdf1a40e1ff0e7760d95",
+      "closedAt": "2024-02-21T21:47:08Z",
+      "mergedAt": "2024-02-21T21:47:08Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "b5baa7e8d4c1c85997e7b2bd5023c510222cdb82"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5w63R3",
+          "commit": {
+            "abbreviatedOid": "8fbf58f"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-21T21:46:30Z",
+          "updatedAt": "2024-02-21T21:46:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOCUe3lM5n1gdm",
+      "title": "Reworded text based on PR comments",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/39",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Reworded the text based on the discussion in [PR #30](https://github.com/oauth-wg/oauth-browser-based-apps/pull/30)\r\n\r\nThis PR resolves issue #35 ",
+      "createdAt": "2024-02-25T08:26:03Z",
+      "updatedAt": "2024-02-28T23:05:29Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "afe2b1ea6436c9d9fe54e1fdca179ea40196b8eb",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/35-review-pr-30",
+      "headRefOid": "9c7d6f471ebd1cbcea49bdf1a8e0a37e9f8d0411",
+      "closedAt": "2024-02-28T23:05:29Z",
+      "mergedAt": "2024-02-28T23:05:29Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "7cd74c4c81d422f96864fc2bc3b316366ebfdc6b"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you both!",
+          "createdAt": "2024-02-28T23:05:24Z",
+          "updatedAt": "2024-02-28T23:05:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM5xOlxK",
+          "commit": {
+            "abbreviatedOid": "9c7d6f4"
+          },
+          "author": "panva",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-25T10:45:47Z",
+          "updatedAt": "2024-02-25T10:45:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOCUe3lM5p23Zt",
+      "title": "Add BFF advice for performance purposes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/40",
+      "state": "CLOSED",
+      "author": "emmanuelgautier",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "As the Token Mediating Backend may be considered for performance reason sometimes, this PR shared an alternative solution.\r\nMost of the time, the resource servers are deployed with a proxy handling incoming request. Re-using those components may be a solution to not degrade security, not degrades performance, and be an alternative to use Token Mediating Backend pattern.\r\n\r\nA not answered question in this PR is how to shared relevant informations to handle cookies decryption when applied. Does this RFC should handle this question?",
+      "createdAt": "2024-03-17T10:46:26Z",
+      "updatedAt": "2024-04-13T15:00:35Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "emmanuelgautier/oauth-browser-based-apps",
+      "headRefName": "resource-proxy-reusage",
+      "headRefOid": "8da66994e92b7683d1d3a16f5c03d1789474f48f",
+      "closedAt": "2024-04-13T15:00:31Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "You're absolutely right that there is a lot of freedom in deciding how to implement the BFF or TM-BFF pattern. If there are pre-existing architecture components that can handle some of the heavy lifting, you are definitely encouraged to do so. \r\n\r\nWith that in mind, it is important to note that neither the BFF nor the TM-BFF require actual changes on the part of the resource server. It received an access token before, and it still receives an access token now. The specifics of how you implement the handling of that access token are out of scope for OAuth in general, and for this document as well. \r\n\r\nIn a nutshell, I don't think this PR addresses a core issue or adds an in-scope clarification, so I would not include it. ",
+          "createdAt": "2024-03-18T05:47:00Z",
+          "updatedAt": "2024-03-18T05:47:00Z"
+        },
+        {
+          "author": "emmanuelgautier",
+          "authorAssociation": "NONE",
+          "body": "Thanks for your review @philippederyck. I agree with you, this is not a core issue but more a deployment advice as it already exist some in the draft.\r\n\r\nThis PR intends to add a reminder about this implementation freedom and avoid wrong choice with TM-BFF based on performance reasons.\r\n\r\nAs there exists some architecture where the performance is critical but still exists some misconception on how to implement BFF, the latency reason could drive the decision to choose TM-BFF instead of BFF.\r\n\r\nMaybe the latency reason to choose TM-BFF can be removed to avoid confusion? ",
+          "createdAt": "2024-03-18T09:27:50Z",
+          "updatedAt": "2024-03-18T09:27:50Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Maybe the latency reason to choose TM-BFF can be removed to avoid confusion?\r\n\r\nI agree that this suggestion makes sense. I have made the necessary changes in #47. \r\n\r\n@aaronpk if #47 is acceptable, this PR can be closed.",
+          "createdAt": "2024-04-11T05:27:36Z",
+          "updatedAt": "2024-04-11T05:27:46Z"
+        },
+        {
+          "author": "emmanuelgautier",
+          "authorAssociation": "NONE",
+          "body": "I am OK with the new PR. Thanks for the rewording.",
+          "createdAt": "2024-04-13T15:00:31Z",
+          "updatedAt": "2024-04-13T15:00:31Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 45,
+      "id": "PR_kwDOCUe3lM5qlIv5",
+      "title": "Processed review from Justin Richer",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/45",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-03-24T09:40:52Z",
+      "updatedAt": "2024-05-01T17:03:17Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/review-justin-richer",
+      "headRefOid": "5cbdc2233c68a482fa8b48240b1724076ca2766d",
+      "closedAt": "2024-05-01T17:03:16Z",
+      "mergedAt": "2024-05-01T17:03:16Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "6b9d710c032187891f9153ea7972562ebd10bf3e"
+      },
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@aaronpk Everything is handled. The author error is also fixed, so LGTM",
+          "createdAt": "2024-04-11T16:03:47Z",
+          "updatedAt": "2024-04-11T16:03:47Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM50wIPd",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T20:59:20Z",
+          "updatedAt": "2024-03-25T20:59:20Z",
+          "comments": [
+            {
+              "originalPosition": 102,
+              "body": "Was there a reason to remove the mention of Web Assembly?",
+              "createdAt": "2024-03-25T20:59:20Z",
+              "updatedAt": "2024-03-25T20:59:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wNza",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:13:53Z",
+          "updatedAt": "2024-03-25T21:13:53Z",
+          "comments": [
+            {
+              "originalPosition": 292,
+              "body": "```suggestion\r\nWhen the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.\r\n```",
+              "createdAt": "2024-03-25T21:13:53Z",
+              "updatedAt": "2024-03-25T21:13:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wN3K",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:14:03Z",
+          "updatedAt": "2024-03-25T21:14:03Z",
+          "comments": [
+            {
+              "originalPosition": 292,
+              "body": "this one should stay as \"flow\"",
+              "createdAt": "2024-03-25T21:14:03Z",
+              "updatedAt": "2024-03-25T21:14:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wOF3",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:14:45Z",
+          "updatedAt": "2024-03-25T21:14:46Z",
+          "comments": [
+            {
+              "originalPosition": 162,
+              "body": "```suggestion\r\nIn this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:\r\n```\r\n\r\nThis one reads better as \"flow\"",
+              "createdAt": "2024-03-25T21:14:46Z",
+              "updatedAt": "2024-03-25T21:14:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wOrJ",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:16:26Z",
+          "updatedAt": "2024-03-25T21:16:26Z",
+          "comments": [
+            {
+              "originalPosition": 175,
+              "body": "```suggestion\r\nThe most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.\r\n```\r\n\r\nThis one should stay as \"flow\" since the paragraph started by referring to \"a new OAuth flow\".",
+              "createdAt": "2024-03-25T21:16:26Z",
+              "updatedAt": "2024-03-25T21:16:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wRcY",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:24:36Z",
+          "updatedAt": "2024-03-25T21:24:36Z",
+          "comments": [
+            {
+              "originalPosition": 199,
+              "body": "```suggestion\r\nWhen the attacker obtains a valid refresh token from a browser-based OAuth client, they can abuse the refresh token by running a Refresh Token grant with the authorization server. The response of the Refresh Token grant contains an access token, which gives the attacker the ability to access protected resources (See {{consequence-at}}). In essence, abusing a stolen refresh token enables long-term impersonation of the legitimate client application to resource servers.\r\n```\r\n\r\nIt is a either a \"grant\" or \"flow\" when referring to the actual request.",
+              "createdAt": "2024-03-25T21:24:36Z",
+              "updatedAt": "2024-03-25T21:24:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wRvF",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:25:31Z",
+          "updatedAt": "2024-03-25T21:25:31Z",
+          "comments": [
+            {
+              "originalPosition": 289,
+              "body": "```suggestion\r\nIf the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.\r\n```",
+              "createdAt": "2024-03-25T21:25:31Z",
+              "updatedAt": "2024-03-25T21:25:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wSBq",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:26:26Z",
+          "updatedAt": "2024-03-25T21:26:26Z",
+          "comments": [
+            {
+              "originalPosition": 310,
+              "body": "```suggestion\r\n#### The Authorization Code Grant {#pattern-bff-flow}\r\n```",
+              "createdAt": "2024-03-25T21:26:26Z",
+              "updatedAt": "2024-03-25T21:26:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wShx",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:27:59Z",
+          "updatedAt": "2024-03-25T21:27:59Z",
+          "comments": [
+            {
+              "originalPosition": 382,
+              "body": "This should be \"triggers a navigation\" instead of \"calls out\" just like [this line](https://github.com/oauth-wg/oauth-browser-based-apps/pull/45/files#diff-b8a39beaf896e9ec278c32c7ce5f353a35d1a54b46cc14edd775e65183f51c70R436), right?",
+              "createdAt": "2024-03-25T21:27:59Z",
+              "updatedAt": "2024-03-25T21:28:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wS-j",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:29:24Z",
+          "updatedAt": "2024-03-25T21:29:24Z",
+          "comments": [
+            {
+              "originalPosition": 411,
+              "body": "```suggestion\r\nWhen the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.\r\n```",
+              "createdAt": "2024-03-25T21:29:24Z",
+              "updatedAt": "2024-03-25T21:29:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTWa",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:30:32Z",
+          "updatedAt": "2024-03-25T21:30:32Z",
+          "comments": [
+            {
+              "originalPosition": 607,
+              "body": "```suggestion\r\nThe authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in \"consent fatigue\", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.\r\n```",
+              "createdAt": "2024-03-25T21:30:32Z",
+              "updatedAt": "2024-03-25T21:30:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTi5",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:09Z",
+          "updatedAt": "2024-03-25T21:31:09Z",
+          "comments": [
+            {
+              "originalPosition": 631,
+              "body": "```suggestion\r\nOAuth Implicit Grant {#implicit_flow}\r\n```\r\n\r\nMatches the section heading of RFC6749 this way",
+              "createdAt": "2024-03-25T21:31:09Z",
+              "updatedAt": "2024-03-25T21:31:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTs3",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:38Z",
+          "updatedAt": "2024-03-25T21:31:38Z",
+          "comments": [
+            {
+              "originalPosition": 672,
+              "body": "```suggestion\r\n### Further Attacks on the Implicit Grant\r\n```",
+              "createdAt": "2024-03-25T21:31:38Z",
+              "updatedAt": "2024-03-25T21:31:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wTy8",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:31:55Z",
+          "updatedAt": "2024-03-25T21:31:56Z",
+          "comments": [
+            {
+              "originalPosition": 719,
+              "body": "```suggestion\r\n### Disadvantages of the Implicit Grant\r\n```",
+              "createdAt": "2024-03-25T21:31:55Z",
+              "updatedAt": "2024-03-25T21:31:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX09",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:24Z",
+          "updatedAt": "2024-03-25T21:45:25Z",
+          "comments": [
+            {
+              "originalPosition": 788,
+              "body": "```suggestion\r\nOnce registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack payloads discussed in {{payloads}}.\r\n```",
+              "createdAt": "2024-03-25T21:45:24Z",
+              "updatedAt": "2024-03-25T21:45:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX6P",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:42Z",
+          "updatedAt": "2024-03-25T21:45:42Z",
+          "comments": [
+            {
+              "originalPosition": 791,
+              "body": "```suggestion\r\nTo meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant, an attack discussed in {{payload-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.\r\n```",
+              "createdAt": "2024-03-25T21:45:42Z",
+              "updatedAt": "2024-03-25T21:45:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wX-O",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:45:54Z",
+          "updatedAt": "2024-03-25T21:45:55Z",
+          "comments": [
+            {
+              "originalPosition": 796,
+              "body": "```suggestion\r\nOne of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run an Authorization Code grant, extract the code from the frame's URL, and exchange it for tokens.\r\n```",
+              "createdAt": "2024-03-25T21:45:54Z",
+              "updatedAt": "2024-03-25T21:45:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYGi",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:46:18Z",
+          "updatedAt": "2024-03-25T21:46:18Z",
+          "comments": [
+            {
+              "originalPosition": 803,
+              "body": "```suggestion\r\nFinally, note that the use of a Service Worker by itself does not increase the attack surface of the application. In practice, Service Workers are often used to retrofit a legacy application with support for including OAuth access tokens on outgoing requests. The Service Worker in these scenarios does not change the security properties of the application, but merely simplifies development and maintenance of the application.\r\n```",
+              "createdAt": "2024-03-25T21:46:18Z",
+              "updatedAt": "2024-03-25T21:46:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYTf",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:46:59Z",
+          "updatedAt": "2024-03-25T21:46:59Z",
+          "comments": [
+            {
+              "originalPosition": 848,
+              "body": "```suggestion\r\nOne common use of Web Workers is to isolate the refresh token. In such a scenario, the application runs an Authorization Code flow to obtain the authorization code. This code is forwarded to a Web Worker, which exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.\r\n```",
+              "createdAt": "2024-03-25T21:46:59Z",
+              "updatedAt": "2024-03-25T21:47:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM50wYZf",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-25T21:47:18Z",
+          "updatedAt": "2024-03-25T21:47:19Z",
+          "comments": [
+            {
+              "originalPosition": 851,
+              "body": "```suggestion\r\nIn this scenario, the application's existing refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code flow.\r\n```",
+              "createdAt": "2024-03-25T21:47:18Z",
+              "updatedAt": "2024-03-25T21:47:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM52zyjc",
+          "commit": {
+            "abbreviatedOid": "a8db1b8"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-04-11T05:01:00Z",
+          "updatedAt": "2024-04-11T05:01:00Z",
+          "comments": [
+            {
+              "originalPosition": 102,
+              "body": "AFAIK, WebAssembly runs in a sandboxed environment (unlike JS). To carry out the attacks we list in this spec, WASM would rely on JS anyway. With this context, it felt unfair to call out WASM here (without much reason), so I opted to reword this and keep it more generic. ",
+              "createdAt": "2024-04-11T05:01:00Z",
+              "updatedAt": "2024-04-11T05:01:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM52zzhZ",
+          "commit": {
+            "abbreviatedOid": "23bbfc2"
+          },
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-04-11T05:06:28Z",
+          "updatedAt": "2024-04-11T05:06:29Z",
+          "comments": [
+            {
+              "originalPosition": 382,
+              "body": "Yes.",
+              "createdAt": "2024-04-11T05:06:28Z",
+              "updatedAt": "2024-04-11T05:06:29Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOCUe3lM5qtWCN",
+      "title": "Feedback",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/46",
+      "state": "CLOSED",
+      "author": "0xandybarlow",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Overall the spec reads very well, I didn't have trouble following.\r\n\r\nI did spot a missing word perhaps? And also I was curious if there was a better way to describe the intent behind \"Authenticated Encryption with Authenticated Data\" statements - cipher? suite? algorithm? I couldn't decide on a better way - feel free to reject!\r\n\r\nGreat work!",
+      "createdAt": "2024-03-25T20:53:57Z",
+      "updatedAt": "2024-05-01T17:03:39Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "0xandybarlow/oauth-browser-based-apps",
+      "headRefName": "andy-review",
+      "headRefOid": "d0fab5e707a6db95df3c3bb39ee94cef5cbdff5c",
+      "closedAt": "2024-05-01T17:03:39Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you for your feedback @0xandybarlow. I have incorporated the missing word in PR #45, which is pending anyway. The text about AEAD encryption does need to be improved, but this is already pending in issue #44.\r\n\r\n@aaronpk This PR can be closed, since both items are addressed/being tracked in an issue.",
+          "createdAt": "2024-04-11T05:32:16Z",
+          "updatedAt": "2024-04-11T05:32:16Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 47,
+      "id": "PR_kwDOCUe3lM5sUXqE",
+      "title": "Reworded the benefits of the Token Mediating Backend",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/47",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR offers an alternative to #40. Compared to PR #40 it makes two changes:\r\n\r\n1. I removed the newly added text to avoid creating confusion between the responsibilities of a BFF. While it is technically possible to deploy a BFF as part of an API gateway, I believe this suggestion may create confusion for someone trying to grasp the pattern. An API Gateway is closely linked to an API, while a BFF is (in theory) closely linked to a frontend.\r\n\r\n2. Reworded the benefits of the Token Mediating Backend to more accurately represent the advantages/disadvantages of the pattern, as correctly suggested by this PR\r\n\r\nIf this PR is merged, #40 can be closed.",
+      "createdAt": "2024-04-11T05:26:47Z",
+      "updatedAt": "2024-05-01T17:04:26Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/alternative-for-pr-40",
+      "headRefOid": "dd09298cd5912df1a99266ed1e96f474d3b3da8c",
+      "closedAt": "2024-05-01T17:04:26Z",
+      "mergedAt": "2024-05-01T17:04:26Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "84e0a8519fed6485a4b728a40bad13adf8e79eb2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM53Ko8X",
+          "commit": {
+            "abbreviatedOid": "dd09298"
+          },
+          "author": "emmanuelgautier",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-04-13T14:59:04Z",
+          "updatedAt": "2024-04-13T14:59:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "id": "PR_kwDOCUe3lM5s3NBN",
+      "title": "feat: narrowing ascii-art and adding svg support",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/50",
+      "state": "MERGED",
+      "author": "duncanwd",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #49\r\n\r\n1. Narrows the existing ASCII diagrams to 72 characters for better plain-text layout.\r\n2. Extracts the narrowed ASCII art into separate files.\r\n3. Modifies the markdown to invoke aasvg for automated SVG generation and inclusion in the HTML version\r\n\r\n**Note:** The aasvg npm package must be installed for the Makefile to function correctly. See the instructions link at the bottom of the main README.md for the install procedure.\r\n\r\nPlease check for errors in the modified ASCII diagrams, figure labels, and figure titles.",
+      "createdAt": "2024-04-17T01:43:57Z",
+      "updatedAt": "2024-05-01T17:09:49Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "741f8820be57a2a29c60d7713b5655031279a04a",
+      "headRepository": "duncanwd/oauth-browser-based-apps",
+      "headRefName": "feature/artwork",
+      "headRefOid": "ab3750d2d0592b55fdc506bee9b1e84af2d422a3",
+      "closedAt": "2024-05-01T17:09:48Z",
+      "mergedAt": "2024-05-01T17:09:48Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "c97fa1fa473205e22a219b509533ddf688404a3a"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
