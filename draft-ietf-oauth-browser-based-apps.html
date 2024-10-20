@@ -12,23 +12,22 @@
        This specification details the threats, attack consequences, security considerations and best practices that must be
 taken into account when developing browser-based applications that use OAuth 2.0. 
     " name="description">
-<meta content="xml2rfc 3.21.0" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-oauth-browser-based-apps-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.21.0
-    Python 3.11.9
+  xml2rfc 3.23.2
+    Python 3.12.7
     ConfigArgParse 1.7
-    google-i18n-address 3.1.0
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.2
-    lxml 4.9.3
-    platformdirs 4.2.1
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.3.6
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.31.0
-    setuptools 68.2.2
-    six 1.16.0
+    requests 2.32.3
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-ietf-oauth-browser-based-apps.xml" rel="alternate" type="application/rfc+xml">
@@ -1028,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">OAuth 2.0 for Browser-Based Applications</td>
-<td class="right">May 2024</td>
+<td class="right">October 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Parecki, et al.</td>
-<td class="center">Expires 7 November 2024</td>
+<td class="center">Expires 23 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-oauth-browser-based-apps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-05-06" class="published">6 May 2024</time>
+<time datetime="2024-10-20" class="published">20 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-11-07">7 November 2024</time></dd>
+<dd class="expires"><time datetime="2025-04-23">23 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1104,7 +1103,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3147,6 +3146,7 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <p id="section-10-1">This document does not require any IANA actions.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="sec-combined-references">
 <section id="section-11">
       <h2 id="name-references">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -3171,7 +3171,7 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <dd class="break"></dd>
 <dt id="oauth-security-topics">[oauth-security-topics]</dt>
         <dd>
-<span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Labunets, A.</span>, and <span class="refAuthor">D. Fett</span>, <span class="refTitle">"OAuth 2.0 Security Best Current Practice"</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics">https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics</a>&gt;</span>. </dd>
+<span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Labunets, A.</span>, and <span class="refAuthor">D. Fett</span>, <span class="refTitle">"OAuth 2.0 Security Best Current Practice"</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics">https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3216,19 +3216,19 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <dl class="references">
 <dt id="CSP3">[CSP3]</dt>
         <dd>
-<span class="refAuthor">West, M.</span>, <span class="refTitle">"Content Security Policy"</span>, <time datetime="2018-10" class="refDate">October 2018</time>, <span>&lt;<a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>&gt;</span>. </dd>
+<span class="refAuthor">West, M.</span> and <span class="refAuthor">A. Sartori</span>, <span class="refTitle">"Content Security Policy"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="HTML">[HTML]</dt>
         <dd>
-<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML"</span>, <time datetime="2020" class="refDate">2020</time>, <span>&lt;<a href="https://html.spec.whatwg.org/">https://html.spec.whatwg.org/</a>&gt;</span>. </dd>
+<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/">https://html.spec.whatwg.org/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="indexeddb">[indexeddb]</dt>
         <dd>
-<span class="refAuthor">Bell, J.</span>, <span class="refTitle">"Indexed Database API 3.0"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.w3.org/TR/IndexedDB/">https://www.w3.org/TR/IndexedDB/</a>&gt;</span>. </dd>
+<span class="refAuthor">Bell, J.</span>, <span class="refTitle">"Indexed Database API 3.0"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://www.w3.org/TR/IndexedDB/">https://www.w3.org/TR/IndexedDB/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="OpenID">[OpenID]</dt>
         <dd>
-<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">de Medeiros, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"OpenID Connect"</span>, <time datetime="2014-11" class="refDate">November 2014</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">de Medeiros, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"OpenID Connect Core 1.0 incorporating errata set 2"</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8707">[RFC8707]</dt>
         <dd>
@@ -3240,7 +3240,7 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <dd class="break"></dd>
 <dt id="serviceworker">[serviceworker]</dt>
         <dd>
-<span class="refAuthor">Archibald, J.</span> and <span class="refAuthor">M. Kruisselbrink</span>, <span class="refTitle">"Service Workers"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.w3.org/TR/service-workers/">https://www.w3.org/TR/service-workers/</a>&gt;</span>. </dd>
+<span class="refAuthor">Archibald, J.</span> and <span class="refAuthor">M. Kruisselbrink</span>, <span class="refTitle">"Service Workers"</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.w3.org/TR/service-workers/">https://www.w3.org/TR/service-workers/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="Site">[Site]</dt>
         <dd>
@@ -3248,28 +3248,29 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <dd class="break"></dd>
 <dt id="tmi-bff">[tmi-bff]</dt>
         <dd>
-<span class="refAuthor">Bertocci, V.</span> and <span class="refAuthor">B. Campbell</span>, <span class="refTitle">"Token Mediating and session Information Backend For Frontend"</span>, <time datetime="2021-04" class="refDate">April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01">https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Bertocci, V.</span> and <span class="refAuthor">B. Campbell</span>, <span class="refTitle">"Token Mediating and session Information Backend For Frontend"</span>, <time datetime="2021-11" class="refDate">November 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-bertocci-oauth2-tmi-bff/">https://datatracker.ietf.org/doc/draft-bertocci-oauth2-tmi-bff/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebCryptographyAPI">[WebCryptographyAPI]</dt>
         <dd>
-<span class="refAuthor">Huigens, D.</span>, <span class="refTitle">"Web Cryptography API"</span>, <time datetime="2022-11" class="refDate">November 2022</time>, <span>&lt;<a href="https://w3c.github.io/webcrypto/">https://w3c.github.io/webcrypto/</a>&gt;</span>. </dd>
+<span class="refAuthor">Watson, M.</span>, <span class="refTitle">"Web Cryptography API"</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.w3.org/TR/WebCryptoAPI/">https://www.w3.org/TR/WebCryptoAPI/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebMessaging">[WebMessaging]</dt>
         <dd>
-<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Cross-document messaging"</span>, <time datetime="2024-03" class="refDate">March 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging">https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging</a>&gt;</span>. </dd>
+<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Cross-document messaging"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging">https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebStorage">[WebStorage]</dt>
         <dd>
-<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Web Storage"</span>, <time datetime="2024-03" class="refDate">March 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/webstorage.html#webstorage">https://html.spec.whatwg.org/multipage/webstorage.html#webstorage</a>&gt;</span>. </dd>
+<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Web Storage"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/webstorage.html#webstorage">https://html.spec.whatwg.org/multipage/webstorage.html#webstorage</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebWorker">[WebWorker]</dt>
       <dd>
-<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Web workers"</span>, <time datetime="2024-03" class="refDate">March 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/workers.html">https://html.spec.whatwg.org/multipage/workers.html</a>&gt;</span>. </dd>
+<span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML Living Standard - Web workers"</span>, <time datetime="2024-10" class="refDate">October 2024</time>, <span>&lt;<a href="https://html.spec.whatwg.org/multipage/workers.html">https://html.spec.whatwg.org/multipage/workers.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
 </section>
+</div>
 <div id="document-history">
 <section id="appendix-A">
       <h2 id="name-document-history">

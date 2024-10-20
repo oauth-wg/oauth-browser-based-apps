@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 7 November 2024                                   Ping Identity
+Expires: 23 April 2025                                     Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                              6 May 2024
+                                                         20 October 2024
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 November 2024.
+   This Internet-Draft will expire on 23 April 2025.
 
 Copyright Notice
 
@@ -2452,7 +2452,7 @@ Table of Contents
 
    [oauth-security-topics]
               Lodderstedt, T., Bradley, J., Labunets, A., and D. Fett,
-              "OAuth 2.0 Security Best Current Practice", April 2021,
+              "OAuth 2.0 Security Best Current Practice", June 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-oauth-
               security-topics>.
 
@@ -2495,17 +2495,18 @@ Table of Contents
 
 11.2.  Informative References
 
-   [CSP3]     West, M., "Content Security Policy", October 2018,
-              <https://www.w3.org/TR/CSP3/>.
+   [CSP3]     West, M. and A. Sartori, "Content Security Policy",
+              October 2024, <https://www.w3.org/TR/CSP3/>.
 
-   [HTML]     whatwg, "HTML", 2020, <https://html.spec.whatwg.org/>.
+   [HTML]     whatwg, "HTML", 2024, <https://html.spec.whatwg.org/>.
 
    [indexeddb]
-              Bell, J., "Indexed Database API 3.0", n.d.,
+              Bell, J., "Indexed Database API 3.0", October 2024,
               <https://www.w3.org/TR/IndexedDB/>.
 
    [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
-              C. Mortimore, "OpenID Connect", November 2014,
+              C. Mortimore, "OpenID Connect Core 1.0 incorporating
+              errata set 2", December 2023,
               <https://openid.net/specs/openid-connect-core-1_0.html>.
 
    [RFC8707]  Campbell, B., Bradley, J., and H. Tschofenig, "Resource
@@ -2519,32 +2520,33 @@ Table of Contents
 
    [serviceworker]
               Archibald, J. and M. Kruisselbrink, "Service Workers",
-              n.d., <https://www.w3.org/TR/service-workers/>.
+              July 2022, <https://www.w3.org/TR/service-workers/>.
 
    [Site]     Contributors, M., "Site", n.d.,
               <https://developer.mozilla.org/en-US/docs/Glossary/Site>.
 
    [tmi-bff]  Bertocci, V. and B. Campbell, "Token Mediating and session
-              Information Backend For Frontend", April 2021,
-              <https://datatracker.ietf.org/doc/html/draft-bertocci-
-              oauth2-tmi-bff-01>.
+              Information Backend For Frontend", November 2021,
+              <https://datatracker.ietf.org/doc/draft-bertocci-oauth2-
+              tmi-bff/>.
 
    [WebCryptographyAPI]
-              Huigens, D., "Web Cryptography API", November 2022,
-              <https://w3c.github.io/webcrypto/>.
+              Watson, M., "Web Cryptography API", January 2017,
+              <https://www.w3.org/TR/WebCryptoAPI/>.
 
    [WebMessaging]
               whatwg, "HTML Living Standard - Cross-document messaging",
-              March 2024, <https://html.spec.whatwg.org/multipage/web-
+              October 2024, <https://html.spec.whatwg.org/multipage/web-
               messaging.html#web-messaging>.
 
    [WebStorage]
-              whatwg, "HTML Living Standard - Web Storage", March 2024,
-              <https://html.spec.whatwg.org/multipage/
+              whatwg, "HTML Living Standard - Web Storage", October
+              2024, <https://html.spec.whatwg.org/multipage/
               webstorage.html#webstorage>.
 
    [WebWorker]
-              whatwg, "HTML Living Standard - Web workers", March 2024,
+              whatwg, "HTML Living Standard - Web workers", October
+              2024,
               <https://html.spec.whatwg.org/multipage/workers.html>.
 
 Appendix A.  Document History
