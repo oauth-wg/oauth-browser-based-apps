@@ -1366,6 +1366,9 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-19
+* Updated references
+
 -18
 
 * Addressed last call comments from Justin Richer
