@@ -83,7 +83,7 @@ normative:
     - name: Daniel Fett
       ins: D. Fett
       org: yes.com
-    date: April 2021
+    date: June 2024
     target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
 informative:
   HTML:
@@ -91,7 +91,7 @@ informative:
     author:
       name: whatwg
       ins: whatwg
-    date: 2020
+    date: 2024
     target: https://html.spec.whatwg.org/
   tmi-bff:
     title: Token Mediating and session Information Backend For Frontend
@@ -100,19 +100,19 @@ informative:
       org: Okta
     - name: B. Campbell
       org: Ping
-    date: April 2021
-    target: https://datatracker.ietf.org/doc/html/draft-bertocci-oauth2-tmi-bff-01
+    date: November 2021
+    target: https://datatracker.ietf.org/doc/draft-bertocci-oauth2-tmi-bff/
   WebCryptographyAPI:
     title: Web Cryptography API
     author:
-    - name: Daniel Huigens
-      org: Proton AG
-    date: November 2022
-    target: https://w3c.github.io/webcrypto/
+    - name: Mark Watson
+      org: Netflix
+    date: January 2017
+    target: https://www.w3.org/TR/WebCryptoAPI/
   OpenID:
-    title: OpenID Connect
+    title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0.html
-    date: November 8, 2014
+    date: December 2023
     author:
       - ins: N. Sakimura
       - ins: J. Bradley
@@ -127,28 +127,31 @@ informative:
     - name: Mike West
       ins: M. West
       org: Google, Inc
-    date: October 2018
+    - name: Antonio Sartori
+      ins: A. Sartori
+      org: Google, Inc
+    date: October 2024
     target: https://www.w3.org/TR/CSP3/
   WebMessaging:
     title: HTML Living Standard - Cross-document messaging
     author:
       name: whatwg
       ins: whatwg
-    date:  March 2024
+    date:  October 2024
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
       name: whatwg
       ins: whatwg
-    date: March 2024
+    date: October 2024
     target: https://html.spec.whatwg.org/multipage/webstorage.html#webstorage
   WebWorker:
     title: HTML Living Standard - Web workers
     author:
       name: whatwg
       ins: whatwg
-    date: March 2024
+    date: October 2024
     target: https://html.spec.whatwg.org/multipage/workers.html
   Site:
     title: Site
@@ -162,6 +165,7 @@ informative:
       name: Joshua Bell
       org: Google
     target: https://www.w3.org/TR/IndexedDB/
+    date: October 2024
   serviceworker:
     title: Service Workers
     author:
@@ -170,6 +174,7 @@ informative:
     - name: Marijn Kruisselbrink
       org: Google
     target: https://www.w3.org/TR/service-workers/
+    date: July 2022
 
 
 --- abstract
