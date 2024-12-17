@@ -1371,9 +1371,14 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-20
+
+* Handled review comments from Rifaat (email 2024-11-13)
+
 -19
 
-* Updated references
+* Updated DPoP references to RFC9449
+* Corrected spelling of Brian Campbell's name
 
 -18
 
