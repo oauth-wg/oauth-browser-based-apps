@@ -385,6 +385,8 @@ This section describes the architecture of a JavaScript application that relies 
 2. The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the JavaScript application
 3. The BFF proxies all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server
 
+In this architecture, the BFF runs as a server-side component, but it is a component of the frontend application. To avoid confusion with other architectural concepts, such as API gateways and reverse proxies, it is important to keep in mind that the BFF becomes the OAuth client for the frontend application.
+
 If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to withstand most of the attack scenarios discussed before. Since tokens are only available to the BFF, there are no tokens available to extract from JavaScript (Single-Execution Token Theft ({{scenario-single-theft}}) and Persistent Token Theft ({{scenario-persistent-theft}})). The BFF is a confidential client, which prevents the attacker from running a new flow within the browser (Acquisition and Extraction of New Tokens ({{scenario-new-flow}})). Since the malicious JavaScript code still runs within the application's origin, the attacker is able to send requests to the BFF from within the user's browser (Proxying Requests via the User's Browser ({{scenario-proxy}})).
 
 
@@ -401,7 +403,7 @@ In this architecture, the JavaScript code is first loaded from a static web host
 When no active session is found, the JavaScript application triggers a navigation to the BFF (C) to initiate the Authorization Code flow with the PKCE
 extension (described in {{pattern-bff-flow}}), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.
 
-The BFF associates the obtained tokens with the user's session (See {{pattern-bff-sessions}}) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the BFF for an existing session (I), allowing the JavaScript application to resume its authenticated state.
+The BFF associates the obtained tokens with the user's session (See {{pattern-bff-sessions}}) and sets a cookie in the response to keep track of this session (G). At this point, the redirect-based Authorization Code flow has been completed, so the BFF can hand control back to the frontend application. It does so by including a redirect in the response (G), triggering the browser to fetch the frontend from the server (H). Note that step (H) is identical to step (A), which likely means that the requested resources can be loaded from the browser's cache. When the frontend loads, it will check with the BFF for an existing session (I), allowing the JavaScript application to resume its authenticated state.
 
 When the JavaScript application in the browser wants to make a request to the resource server, it sends a request to the corresponding endpoint on the BFF (J). This request will include the cookie set in step G, allowing the BFF to obtain the proper tokens for this user's session. The BFF removes the cookie from the request, attaches the user's access token to the request, and forwards it to the actual resource server (K). The BFF then forwards the response back to the browser-based application (L).
 
@@ -414,9 +416,9 @@ The BFF provides a set of endpoints that are crucial to implement the interactio
 
 The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the BFF to check for an active session. The response should indicate to the browser-based application whether the session is active. Additionally, the BFF can include other information, such as identity information about the authenticated user.
 
-The endpoint that initializes the Authorization Code flow (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initialize this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initialize the Authorization Code flow in step B, when it detects the absence of an active session. In that case, the BFF would return the initialization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.
+The endpoint that initiates the Authorization Code flow (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initiate this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initiate the Authorization Code flow in step B, when it detects the absence of an active session. In that case, the BFF would return the authorization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.
 
-The endpoint that receives the authorization code (step E) is called by a navigation event from within the browser. At this point, the JavaScript application is not loaded and not in a position to handle the redirect. Similar to the initialization of the flow, the endpoint to handle the redirect is offered by standard OAuth libraries. The BFF can respond to this request with a redirect that triggers the browser to load the  JavaScript application.
+The endpoint that receives the authorization code (step E) is called by a navigation event from within the browser. At this point, the JavaScript application is not loaded and not in a position to handle the redirect. Similar to the initiation of the flow, the endpoint to handle the redirect is offered by standard OAuth libraries. The BFF can respond to this request with a redirect that triggers the browser to load the  JavaScript application.
 
 Finally, the BFF can also offer a "logout" endpoint to the JavaScript application, which is not depicted in the diagram above. The exact behavior of the logout endpoint depends on the application requirements. Note that standard OAuth libraries typically also offer an implementation of the "logout" endpoint.
 
@@ -425,9 +427,9 @@ Finally, the BFF can also offer a "logout" endpoint to the JavaScript applicatio
 
 When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the BFF obtains the refresh token (step F) and associates it with the user's session.
 
-If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. These steps are not shown in the diagram, but would occur between step J and K. Note that this BFF client is a confidential client, so it will use its client authentication in the refresh token request.
+If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between step J and K. BFFs that keep all token information available on the server-side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.
 
-When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it is recommended to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
+When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it makes sense to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it also makes sense to invalidate the session.
 
 
 #### Cookie-based Session Management {#pattern-bff-sessions}
@@ -476,9 +478,12 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
 
+In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
+
 Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. This ensures that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps ensure the  confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
 
 For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series (<https://cheatsheetseries.owasp.org>).
+
 
 
 #### Cross-Site Request Forgery Protections {#pattern-bff-csrf}
@@ -621,7 +626,7 @@ Note that an early draft ({{tmi-bff}}) already documented this concept, although
 Most of the endpoint implementations of the token-mediating backend are similar to those described for a BFF.
 
 - The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the backend to check for an active session. The response should indicate to the browser-based application whether the session is active. If an active session is found, the backend includes the access token in the response. Additionally, the backend can include other information, such as identity information about the authenticated user.
-- The endpoint that initializes the Authorization Code flow (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
+- The endpoint that initiates the Authorization Code flow (step C) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 - The endpoint that receives the authorization code (step E) is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 - The endpoint that supports logout is identical to the endpoint described for the BFF architecture. See section {{bff_endpoints}} for more details.
 
@@ -632,7 +637,7 @@ When using refresh tokens, as described in Section 4.14 of {{oauth-security-topi
 
 If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, thus requires client authentication.
 
-When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it is recommended to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it is recommended to invalidate the session.
+When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it makes sense to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it makes sense to invalidate the session.
 
 
 #### Access Token Scopes
@@ -806,7 +811,7 @@ the authorization code is the same one that initiated the flow.
 Browser-based applications MUST prevent CSRF attacks against their redirect URI. This can be
 accomplished by any of the below:
 
-* using PKCE, and confirming that the authorization server supports PKCE
+* configuring the authorization server to require PKCE for this client
 * using and verifying unique value for the OAuth `state` parameter to carry a CSRF token
 * if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
 
@@ -840,7 +845,7 @@ For example:
 * After 10 minutes, the initial access token expires, so the application uses the refresh token to get a new access token
 * The authorization server returns a new access token that lasts 10 minutes, and a new refresh token that lasts 7 hours and 50 minutes
 * This continues until 8 hours pass from the initial authorization
-* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initialize an Authorization Code flow that relies on the user's authentication or previously established session
+* At this point, when the application attempts to use the refresh token after 8 hours, the request will fail and the application will have to re-initiate an Authorization Code flow that relies on the user's authentication or previously established session
 
 Authorization servers SHOULD link the lifetime of the refresh token to the user's authenticated session with the authorization server. Doing so ensures that when a user logs out, previously issued refresh tokens to browser-based applications become invalid, mimicking a single-logout scenario. Authorization servers MAY set different policies around refresh token issuance, lifetime and expiration for browser-based applications compared to other public clients.
 
@@ -858,8 +863,8 @@ of OAuth 2.0 {{RFC6749}}.
 Secrets that are statically included as part of an app distributed to
 multiple users should not be treated as confidential secrets, as one
 user may inspect their copy and learn the shared secret.  For this
-reason, and those stated in Section 5.3.1 of {{RFC6819}}, it is NOT RECOMMENDED
-for authorization servers to require client authentication of browser-based
+reason, and those stated in Section 5.3.1 of {{RFC6819}}, authorization
+servers MUST NOT require client authentication of browser-based
 applications using a shared secret, as this serves no value beyond
 client identification which is already provided by the `client_id` parameter.
 
@@ -969,7 +974,7 @@ For completeness, this BCP lists a few options below. Note that none of these de
 
 The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{scenario-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
-The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initialized by the attacker.
+The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initiated by the attacker.
 
 
 #### Summary
@@ -1198,7 +1203,7 @@ The seemingly promising security benefits of using a Service Worker warrant a mo
 
 Once registered, the Service Worker runs an Authorization Code flow and obtains the tokens. Since the Service Worker keeps track of tokens in its own isolated execution environment, they are out of reach for any application code, including potentially malicious code. Consequentially, the Service Worker meets the first requirement of preventing token exfiltration. This essentially neutralizes the first two attack scenarios discussed in {{attackscenarios}}.
 
-To meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant, an attack discussed in {{scenario-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initialize such a new flow, even when they occur in a frame or a new window.
+To meet the second security requirement, the Service Worker must be able to guarantee that an attacker controlling the legitimate application cannot execute a new Authorization Code grant, an attack discussed in {{scenario-new-flow}}. Due to the nature of Service Workers, the registered Service Worker will be able to block all outgoing requests that initiate such a new flow, even when they occur in a frame or a new window.
 
 However, the malicious code running inside the application can unregister this Service Worker. Unregistering a Service Worker can have a significant functional impact on the application, so it is not an operation the browser handles lightly. Therefore, an unregistered Service Worker is marked as such, but all currently running instances remain active until their corresponding browsing context is terminated (e.g., by closing the tab or window). So even when an attacker unregisters a Service Worker, it remains active and able to prevent the attacker from reaching the authorization server.
 
