@@ -2014,19 +2014,6 @@ Table of Contents
       [RFC8252] also requires the use of the Authorization Code grant
       type with PKCE anyway.
 
-   In OpenID Connect, the ID Token is sent in a known format (as a JWT),
-   and digitally signed.  Returning an ID token using the Implicit grant
-   type (response_type=id_token) requires the client validate the JWT
-   signature, as malicious parties could otherwise craft and supply
-   fraudulent ID tokens.  Performing OpenID Connect using the
-   Authorization Code grant type provides the benefit of the client not
-   needing to verify the JWT signature, as the ID token will have been
-   fetched over an HTTPS connection directly from the authorization
-   server's token endpoint.  Additionally, in many cases an application
-   will request both an ID token and an access token, so it is simpler
-   and provides fewer attack vectors to obtain both via the
-   Authorization Code flow.
-
 7.3.  Resource Owner Password Grant
 
    The Resource Owner Password Credentials Grant MUST NOT be used, as
