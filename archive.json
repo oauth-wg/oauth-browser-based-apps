@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-19T00:06:17.858992+00:00",
+  "timestamp": "2024-12-22T00:06:34.402244+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -733,7 +733,7 @@
       "labels": [],
       "body": "Thank you for proposing the OAuth Browser Based Apps spec. I have been thinking specifically about the token mediating backend and wanted to propose a method to use DPoP to secure the token usage.\r\n\r\n## Goal\r\n\r\n- Use DPoP as a mechanism to provide proof of possession when making use of the access token exposed on the untrusted user agent.\r\n\r\n- Prevent an attacker who is able to inject JS in the browser to leverage a SSO session and use their own key-pair to present a DPoP proof to obtain a token.\r\n\r\n\r\n\r\n## Possible approach\r\n\r\n**New session and no token**\r\n\r\n1. `Frontend client` generates a DPoP proof.\r\n\r\n2. `Frontend client` requests for a new token from the `Token Mediating Backend` (also called Token Mediator below). As part of this, the DPoP proof is included as a dpop header.\r\n\r\n3. `Token Mediator` checks that there is no existing session for this browser, so it kicks off a new authcode flow. Auth code flow kicked off with PKCE.\r\n\r\n4. Browser is redirected to the authorize endpoint. User performs authentication and consent. The authcode is generated and included in the redirect back to Token Mediator callback endpoint.\r\n\r\n5. `Token Mediator` calls the token endpoint with the authcode, DPoP proof (provided by the front-end), and a strong client auth method like private_key_jwt.\r\n\r\n6. `Token mediator` recieves and stores the refresh token in a session-bound cache, _along with the the jkt associated with the DPoP proof (effectively binding the client to the session)_. The access token is returned to the Frontend client.\r\n\r\n7. `Frontend client` uses the access token as needed. It will need to include a signed DPoP proof when calling the resource endpoints.\r\n\r\n\r\n**Expired token**\r\n\r\n1. Frontend client generates a DPoP proof signed using the same private key that is used when establishing the token mediator session.\r\n\r\n2. Frontend client calls the get-token API on the Token Mediator with the DPoP proof.\r\n\r\n3. Token Mediator validates that the jkt matches the one in the session.\r\n\r\n4. Token Mediator kicks off a refresh token flow or a new auth code flow (if the refresh token has expired).\r\n\r\n\r\n**Threat model**\r\n\r\nBy binding the jkt associated with the DPoP proof to the session, the session is \u201cbound\u201d to the client. Possible threats:\r\n\r\n1. Attacker injects JS on a client with no session and uses a generated key-pair for the DPoP proof: This leads the user through an authentication, authorization and consent flow, which can be used to mitigate this attack vector. However, there is no real way to prevent this attack if the JS executes before the app requests for the token. In this scenario, when the app does request the token, the flow will fail and the user will see an error message, indicating a possible compromise. Appropriate remediation action can be taken at this point to, for example, log the user out with an appropriate message.\r\n\r\n2. Attacker injects JS after the client has established a session with the mediating backend: Since the session is bound to the jkt of the key used to sign the DPoP proof, this attack will fail.\r\n\r\n\r\nI was hoping to get some thoughts on this proposed approach. This is specifically to solicit opinions for a plausible implementation to address https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.2.4.3.2.",
       "createdAt": "2024-12-12T18:37:15Z",
-      "updatedAt": "2024-12-18T20:50:03Z",
+      "updatedAt": "2024-12-19T02:15:16Z",
       "closedAt": "2024-12-18T20:50:03Z",
       "comments": [
         {
@@ -777,6 +777,13 @@
           "body": "I believe that section 5 and the DPoP spec are sufficient to demonstrate why this proposal doesn't change anything about the security properties.",
           "createdAt": "2024-12-17T22:55:08Z",
           "updatedAt": "2024-12-17T22:55:08Z"
+        },
+        {
+          "author": "vivshankar",
+          "authorAssociation": "NONE",
+          "body": "@aaronpk @philippederyck Thanks for taking the time.\r\n\r\nThe purpose of my post was to ask if the approach laid out in this proposal is an acceptable implementation pattern for [section 6.2.4.3.2](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.2.4.3.2). I realize we went a bit afield to that original goal, mostly because of how I phrased the threat model.\r\n\r\nMy proposal is weird in the sense that the party producing the DPoP proof is not the OAuth client (which lives in the token mediating backend) but the token is ultimately used by the party to call into resource APis. Do you see any concerns with the approach that I have put here?",
+          "createdAt": "2024-12-19T02:15:15Z",
+          "updatedAt": "2024-12-19T02:15:15Z"
         }
       ]
     },
