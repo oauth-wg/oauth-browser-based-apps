@@ -35,13 +35,13 @@ author:
 
 normative:
   RFC2119:
-  RFC5116:
   RFC6749:
   RFC6750:
   RFC6819:
   RFC7636:
   RFC8252:
-  RFC9207:
+  RFC8707:
+  RFC9449:
   draft-ietf-httpbis-rfc6265bis:
     title: "Cookies: HTTP State Management Mechanism"
     date: October 2021
@@ -85,6 +85,22 @@ normative:
       org: yes.com
     date: June 2024
     target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
+  serviceworker:
+    title: Service Workers
+    author:
+    - name: Jake Archibald
+      org: Google
+    - name: Marijn Kruisselbrink
+      org: Google
+    target: https://www.w3.org/TR/service-workers/
+    date: July 2022
+  WebMessaging:
+    title: HTML Living Standard - Cross-document messaging
+    author:
+      name: whatwg
+      ins: whatwg
+    date:  December 2024
+    target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
 informative:
   HTML:
     title: HTML
@@ -93,15 +109,6 @@ informative:
       ins: whatwg
     date: 2024
     target: https://html.spec.whatwg.org/
-  tmi-bff:
-    title: Token Mediating and session Information Backend For Frontend
-    author:
-    - name: V. Bertocci
-      org: Okta
-    - name: B. Campbell
-      org: Ping
-    date: November 2021
-    target: https://datatracker.ietf.org/doc/draft-bertocci-oauth2-tmi-bff/
   WebCryptographyAPI:
     title: Web Cryptography API
     author:
@@ -119,8 +126,6 @@ informative:
       - ins: M. Jones
       - ins: B. de Medeiros
       - ins: C. Mortimore
-  RFC8707:
-  RFC9449:
   CSP3:
     title: Content Security Policy
     author:
@@ -130,15 +135,8 @@ informative:
     - name: Antonio Sartori
       ins: A. Sartori
       org: Google, Inc
-    date: October 2024
+    date: December 2024
     target: https://www.w3.org/TR/CSP3/
-  WebMessaging:
-    title: HTML Living Standard - Cross-document messaging
-    author:
-      name: whatwg
-      ins: whatwg
-    date:  October 2024
-    target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
@@ -165,16 +163,7 @@ informative:
       name: Joshua Bell
       org: Google
     target: https://www.w3.org/TR/IndexedDB/
-    date: October 2024
-  serviceworker:
-    title: Service Workers
-    author:
-    - name: Jake Archibald
-      org: Google
-    - name: Marijn Kruisselbrink
-      org: Google
-    target: https://www.w3.org/TR/service-workers/
-    date: July 2022
+    date: November 2024
 
 
 --- abstract
@@ -615,8 +604,6 @@ When no active session is found, the JavaScript application triggers a navigatio
 The token-mediating backend associates the obtained tokens with the user's session (See {{pattern-tmb-sessions}}) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the JavaScript application to resume its authenticated state and obtain the access token from the token-mediating backend.
 
 The JavaScript application in the browser can use the access token obtained in step I to directly make requests to the resource server (J).
-
-Note that an early draft ({{tmi-bff}}) already documented this concept, although the draft is is currently expired and has not been proposed for adoption to the OAuth Working Group.
 
 
 
@@ -1362,6 +1349,12 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-21
+
+* Removed unused references
+* Removed reference to TMI-BFF individual draft
+* Moved some references to the normative reference section
 
 -20
 
