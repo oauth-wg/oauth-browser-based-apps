@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 21 June 2025                                      Ping Identity
+Expires: 26 June 2025                                      Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                        18 December 2024
+                                                        23 December 2024
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 June 2025.
+   This Internet-Draft will expire on 26 June 2025.
 
 Copyright Notice
 
@@ -1139,10 +1139,6 @@ Table of Contents
    The JavaScript application in the browser can use the access token
    obtained in step I to directly make requests to the resource server
    (J).
-
-   Note that an early draft ([tmi-bff]) already documented this concept,
-   although the draft is is currently expired and has not been proposed
-   for adoption to the OAuth Working Group.
 
 6.2.2.  Implementation Details
 
@@ -2477,10 +2473,6 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC5116]  McGrew, D., "An Interface and Algorithms for Authenticated
-              Encryption", RFC 5116, DOI 10.17487/RFC5116, January 2008,
-              <https://www.rfc-editor.org/info/rfc5116>.
-
    [RFC6749]  Hardt, D., Ed., "The OAuth 2.0 Authorization Framework",
               RFC 6749, DOI 10.17487/RFC6749, October 2012,
               <https://www.rfc-editor.org/info/rfc6749>.
@@ -2504,27 +2496,6 @@ Table of Contents
               BCP 212, RFC 8252, DOI 10.17487/RFC8252, October 2017,
               <https://www.rfc-editor.org/info/rfc8252>.
 
-   [RFC9207]  Meyer zu Selhausen, K. and D. Fett, "OAuth 2.0
-              Authorization Server Issuer Identification", RFC 9207,
-              DOI 10.17487/RFC9207, March 2022,
-              <https://www.rfc-editor.org/info/rfc9207>.
-
-11.2.  Informative References
-
-   [CSP3]     West, M. and A. Sartori, "Content Security Policy",
-              October 2024, <https://www.w3.org/TR/CSP3/>.
-
-   [HTML]     whatwg, "HTML", 2024, <https://html.spec.whatwg.org/>.
-
-   [indexeddb]
-              Bell, J., "Indexed Database API 3.0", October 2024,
-              <https://www.w3.org/TR/IndexedDB/>.
-
-   [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
-              C. Mortimore, "OpenID Connect Core 1.0 incorporating
-              errata set 2", December 2023,
-              <https://openid.net/specs/openid-connect-core-1_0.html>.
-
    [RFC8707]  Campbell, B., Bradley, J., and H. Tschofenig, "Resource
               Indicators for OAuth 2.0", RFC 8707, DOI 10.17487/RFC8707,
               February 2020, <https://www.rfc-editor.org/info/rfc8707>.
@@ -2538,22 +2509,33 @@ Table of Contents
               Archibald, J. and M. Kruisselbrink, "Service Workers",
               July 2022, <https://www.w3.org/TR/service-workers/>.
 
+   [WebMessaging]
+              whatwg, "HTML Living Standard - Cross-document messaging",
+              December 2024, <https://html.spec.whatwg.org/multipage/
+              web-messaging.html#web-messaging>.
+
+11.2.  Informative References
+
+   [CSP3]     West, M. and A. Sartori, "Content Security Policy",
+              December 2024, <https://www.w3.org/TR/CSP3/>.
+
+   [HTML]     whatwg, "HTML", 2024, <https://html.spec.whatwg.org/>.
+
+   [indexeddb]
+              Bell, J., "Indexed Database API 3.0", November 2024,
+              <https://www.w3.org/TR/IndexedDB/>.
+
+   [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
+              C. Mortimore, "OpenID Connect Core 1.0 incorporating
+              errata set 2", December 2023,
+              <https://openid.net/specs/openid-connect-core-1_0.html>.
+
    [Site]     Contributors, M., "Site", n.d.,
               <https://developer.mozilla.org/en-US/docs/Glossary/Site>.
-
-   [tmi-bff]  Bertocci, V. and B. Campbell, "Token Mediating and session
-              Information Backend For Frontend", November 2021,
-              <https://datatracker.ietf.org/doc/draft-bertocci-oauth2-
-              tmi-bff/>.
 
    [WebCryptographyAPI]
               Watson, M., "Web Cryptography API", January 2017,
               <https://www.w3.org/TR/WebCryptoAPI/>.
-
-   [WebMessaging]
-              whatwg, "HTML Living Standard - Cross-document messaging",
-              October 2024, <https://html.spec.whatwg.org/multipage/web-
-              messaging.html#web-messaging>.
 
    [WebStorage]
               whatwg, "HTML Living Standard - Web Storage", October
@@ -2568,6 +2550,14 @@ Table of Contents
 Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -21
+
+   *  Removed unused references
+
+   *  Removed reference to TMI-BFF individual draft
+
+   *  Moved some references to the normative reference section
 
    -20
 
