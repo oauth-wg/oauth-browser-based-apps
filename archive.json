@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-02T00:05:55.897612+00:00",
+  "timestamp": "2025-01-05T00:06:37.148056+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -866,6 +866,22 @@
           "updatedAt": "2024-12-17T23:02:57Z"
         }
       ]
+    },
+    {
+      "number": 62,
+      "id": "I_kwDOCUe3lM6k1dAp",
+      "title": "Using Web Workers to refresh access tokens adds implementation complexity for marginal security benefit",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/62",
+      "state": "OPEN",
+      "author": "micolous",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "[Section 6.3.4.2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.3.4.2.1) (Browser-Based OAuth Applications - Secure Token Storage) discourages using \"universally accessible storage areas\" such as Local Storage, and suggests a pattern of using a Web Worker to \"isolate the refresh token, and provide the application with the access token to make requests\".\r\n\r\n[Section 8.3 (Token Storage in a Web Worker) paragraphs 3 and 4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-8.3-3) describe using Web Workers to isolate the refresh token, like what is proposed in Section 6.3.4.2.1.\r\n\r\nBut [Section 8.3 paragraph 2](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-8.3-2) notes:\r\n\r\n> The security properties of using a Web Worker are identical to using Service Workers. When tokens are exposed to the application, they become vulnerable. When tokens need to be used, the operation that relies on them has to be carried out by the Web Worker.\r\n\r\nThis would seem to *discourage* the pattern proposed in Section 6.3.4.2.1, where a Web Worker provides the access token for the application to make requests directly.\r\n\r\nSection 8.3 paragraph 2 proposes a pattern similar to that in [Section 7.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-7.4) (Discouraged and Deprecated Architecture Patterns - Handling the OAuth Flow in a Service Worker). [Section 7.4.1.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-7.4.1.1) (Attacking the Service Worker) notes several security shortcomings with the pattern, and that there is significant complexity to implementing, registering and maintaining a Service Worker.\r\n\r\nI believe that the shortcomings identified in Section 7.4.1.1 *also* apply to using a Web Worker to isolate the refresh token alone. Using a (shared) Web Worker is still a source of complexity \u2013 even if that worker doesn't need to do quite as much.\r\n\r\nAs a result, I don't think there is a significant *security* benefit to using Web Workers to store the refresh token over using Local Storage. An attacker who can execute arbitrary JavaScript within the context of the application (ie: via XSS) to access Local Storage can also send messages to Web Workers, and so [it's still pretty much game over for a Browser-Based OAuth Application](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.3.4.3).\r\n\r\nOne potential benefit to using *Shared* Web Workers for refresh tokens is that the Worker could block requests for the access token on completion of any in-flight refresh request, thus preventing the application from attempting to use a single refresh token multiple times.\r\n\r\nHowever, it'd also be possible to do that with Local Storage and the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API).\r\n\r\n## Related issues\r\n\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/issues/3\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/pull/19\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/pull/24 \r\n",
+      "createdAt": "2025-01-02T05:46:28Z",
+      "updatedAt": "2025-01-02T05:46:28Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
