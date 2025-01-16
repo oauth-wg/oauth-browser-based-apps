@@ -67,8 +67,8 @@ normative:
     author:
       name: whatwg
       ins: whatwg
-    date: 2024
-    target: https://fetch.spec.whatwg.org/
+    date: December 19, 2024
+    target: https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/
   oauth-security-topics:
     title: OAuth 2.0 Security Best Current Practice
     author:
@@ -93,30 +93,30 @@ normative:
       org: Google
     - name: Marijn Kruisselbrink
       org: Google
-    target: https://www.w3.org/TR/service-workers/
-    date: July 2022
+    target: https://www.w3.org/TR/2022/CRD-service-workers-20220712/
+    date: July 12, 2022
   WebMessaging:
-    title: HTML Living Standard - Cross-document messaging
+    title: HTML - Cross-document messaging
     author:
       name: whatwg
       ins: whatwg
-    date:  December 2024
-    target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
+    date:  January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#web-messaging
 informative:
   HTML:
     title: HTML
     author:
       name: whatwg
       ins: whatwg
-    date: 2024
-    target: https://html.spec.whatwg.org/
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/
   WebCryptographyAPI:
     title: Web Cryptography API
     author:
     - name: Mark Watson
       org: Netflix
     date: January 2017
-    target: https://www.w3.org/TR/WebCryptoAPI/
+    target: https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0.html
@@ -136,22 +136,22 @@ informative:
     - name: Antonio Sartori
       ins: A. Sartori
       org: Google, Inc
-    date: December 2024
-    target: https://www.w3.org/TR/CSP3/
+    date: December 17, 2024
+    target: https://www.w3.org/TR/2024/WD-CSP3-20241217/
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
       name: whatwg
       ins: whatwg
-    date: October 2024
-    target: https://html.spec.whatwg.org/multipage/webstorage.html#webstorage
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#webstorage
   WebWorker:
     title: HTML Living Standard - Web workers
     author:
       name: whatwg
       ins: whatwg
-    date: October 2024
-    target: https://html.spec.whatwg.org/multipage/workers.html
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#toc-workers
   Site:
     title: Site
     author:
@@ -163,8 +163,8 @@ informative:
     author:
       name: Joshua Bell
       org: Google
-    target: https://www.w3.org/TR/IndexedDB/
-    date: November 2024
+    target: https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/
+    date: January 10, 2025
 
 
 --- abstract
