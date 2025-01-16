@@ -813,7 +813,7 @@ Table of Contents
    *  The BFF SHOULD NOT set the _Domain_ attribute for cookies
 
    *  The BFF SHOULD start the name of its cookies with the ___Host-_
-      prefix ([CookiePrefixes])
+      prefix ([draft-ietf-httpbis-rfc6265bis])
 
    In a typical BFF deployment scenario, there is no reason to use more
    relaxed cookie security settings.  Deviating from these settings
@@ -2449,11 +2449,6 @@ Table of Contents
 11.  References
 
 11.1.  Normative References
-
-   [CookiePrefixes]
-              Contributors, M., "Using HTTP cookies", n.d.,
-              <https://developer.mozilla.org/en-US/docs/Web/HTTP/
-              Cookies>.
 
    [draft-ietf-httpbis-rfc6265bis]
               Chen, L., Englehardt, S., West, M., and J. Wilander,
