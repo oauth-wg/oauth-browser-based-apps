@@ -2461,7 +2461,9 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
               rfc6265bis>.
 
-   [Fetch]    whatwg, "Fetch", 2024, <https://fetch.spec.whatwg.org/>.
+   [Fetch]    whatwg, "Fetch", December 2024,
+              <https://fetch.spec.whatwg.org/commit-
+              snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/>.
 
    [oauth-security-topics]
               Lodderstedt, T., Bradley, J., Labunets, A., and D. Fett,
@@ -2512,23 +2514,27 @@ Table of Contents
 
    [serviceworker]
               Archibald, J. and M. Kruisselbrink, "Service Workers",
-              July 2022, <https://www.w3.org/TR/service-workers/>.
+              July 2022, <https://www.w3.org/TR/2022/CRD-service-
+              workers-20220712/>.
 
    [WebMessaging]
-              whatwg, "HTML Living Standard - Cross-document messaging",
-              December 2024, <https://html.spec.whatwg.org/multipage/
-              web-messaging.html#web-messaging>.
+              whatwg, "HTML - Cross-document messaging", January 2025,
+              <https://html.spec.whatwg.org/commit-snapshots/
+              b4233430fe410f67b7022ec8b28f55795dcc4110/#web-messaging>.
 
 11.2.  Informative References
 
    [CSP3]     West, M. and A. Sartori, "Content Security Policy",
-              December 2024, <https://www.w3.org/TR/CSP3/>.
+              December 2024,
+              <https://www.w3.org/TR/2024/WD-CSP3-20241217/>.
 
-   [HTML]     whatwg, "HTML", 2024, <https://html.spec.whatwg.org/>.
+   [HTML]     whatwg, "HTML", January 2025,
+              <https://html.spec.whatwg.org/commit-snapshots/
+              b4233430fe410f67b7022ec8b28f55795dcc4110/>.
 
    [indexeddb]
-              Bell, J., "Indexed Database API 3.0", November 2024,
-              <https://www.w3.org/TR/IndexedDB/>.
+              Bell, J., "Indexed Database API 3.0", January 2025,
+              <https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/>.
 
    [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
               C. Mortimore, "OpenID Connect Core 1.0 incorporating
@@ -2540,17 +2546,17 @@ Table of Contents
 
    [WebCryptographyAPI]
               Watson, M., "Web Cryptography API", January 2017,
-              <https://www.w3.org/TR/WebCryptoAPI/>.
+              <https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/>.
 
    [WebStorage]
-              whatwg, "HTML Living Standard - Web Storage", October
-              2024, <https://html.spec.whatwg.org/multipage/
-              webstorage.html#webstorage>.
+              whatwg, "HTML Living Standard - Web Storage", January
+              2025, <https://html.spec.whatwg.org/commit-snapshots/
+              b4233430fe410f67b7022ec8b28f55795dcc4110/#webstorage>.
 
    [WebWorker]
-              whatwg, "HTML Living Standard - Web workers", October
-              2024,
-              <https://html.spec.whatwg.org/multipage/workers.html>.
+              whatwg, "HTML Living Standard - Web workers", January
+              2025, <https://html.spec.whatwg.org/commit-snapshots/
+              b4233430fe410f67b7022ec8b28f55795dcc4110/#toc-workers>.
 
 Appendix A.  Document History
 
