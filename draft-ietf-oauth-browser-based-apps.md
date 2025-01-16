@@ -56,12 +56,6 @@ normative:
       org: Google LLC
     - name: J. Wilander
       org: Apple, Inc
-  CookiePrefixes:
-    title: Using HTTP cookies
-    author:
-    - name: MDN Contributors
-      org: Mozilla Developer Network
-    target: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
   Fetch:
     title: Fetch
     author:
@@ -468,7 +462,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD enable the *SameSite=Strict* flag for its cookies
 - The BFF SHOULD set its cookie path to */*
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
-- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
+- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{draft-ietf-httpbis-rfc6265bis}})
 
 In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
