@@ -37,7 +37,6 @@ normative:
   RFC2119:
   RFC6749:
   RFC6750:
-  RFC6819:
   RFC7636:
   RFC8252:
   RFC8707:
@@ -102,6 +101,7 @@ normative:
     date:  December 2024
     target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
 informative:
+  RFC6819:
   HTML:
     title: HTML
     author:
@@ -1349,6 +1349,11 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-22
+
+* Addressed AD review
+* Moved RFC6819 reference to informal
 
 -21
 
