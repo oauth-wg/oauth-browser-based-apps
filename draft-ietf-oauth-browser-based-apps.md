@@ -39,6 +39,7 @@ normative:
   RFC6750:
   RFC6819:
   RFC7636:
+  RFC8174:
   RFC8252:
   RFC8707:
   RFC9449:
@@ -196,9 +197,11 @@ as well. This document expands on and further restricts various recommendations 
 Notational Conventions
 ======================
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP14.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they
+appear in all capitals, as shown here.
 
 
 Terminology
