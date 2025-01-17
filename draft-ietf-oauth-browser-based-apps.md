@@ -38,6 +38,7 @@ normative:
   RFC6749:
   RFC6750:
   RFC7636:
+  RFC8174:
   RFC8252:
   RFC8707:
   RFC9449:
@@ -54,19 +55,13 @@ normative:
       org: Google LLC
     - name: J. Wilander
       org: Apple, Inc
-  CookiePrefixes:
-    title: Using HTTP cookies
-    author:
-    - name: MDN Contributors
-      org: Mozilla Developer Network
-    target: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
   Fetch:
     title: Fetch
     author:
       name: whatwg
       ins: whatwg
-    date: 2024
-    target: https://fetch.spec.whatwg.org/
+    date: December 19, 2024
+    target: https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/
   oauth-security-topics:
     title: OAuth 2.0 Security Best Current Practice
     author:
@@ -91,15 +86,15 @@ normative:
       org: Google
     - name: Marijn Kruisselbrink
       org: Google
-    target: https://www.w3.org/TR/service-workers/
-    date: July 2022
+    target: https://www.w3.org/TR/2022/CRD-service-workers-20220712/
+    date: July 12, 2022
   WebMessaging:
-    title: HTML Living Standard - Cross-document messaging
+    title: HTML - Cross-document messaging
     author:
       name: whatwg
       ins: whatwg
-    date:  December 2024
-    target: https://html.spec.whatwg.org/multipage/web-messaging.html#web-messaging
+    date:  January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#web-messaging
 informative:
   RFC6819:
   HTML:
@@ -107,15 +102,15 @@ informative:
     author:
       name: whatwg
       ins: whatwg
-    date: 2024
-    target: https://html.spec.whatwg.org/
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/
   WebCryptographyAPI:
     title: Web Cryptography API
     author:
     - name: Mark Watson
       org: Netflix
     date: January 2017
-    target: https://www.w3.org/TR/WebCryptoAPI/
+    target: https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0.html
@@ -135,22 +130,22 @@ informative:
     - name: Antonio Sartori
       ins: A. Sartori
       org: Google, Inc
-    date: December 2024
-    target: https://www.w3.org/TR/CSP3/
+    date: December 17, 2024
+    target: https://www.w3.org/TR/2024/WD-CSP3-20241217/
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
       name: whatwg
       ins: whatwg
-    date: October 2024
-    target: https://html.spec.whatwg.org/multipage/webstorage.html#webstorage
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#webstorage
   WebWorker:
     title: HTML Living Standard - Web workers
     author:
       name: whatwg
       ins: whatwg
-    date: October 2024
-    target: https://html.spec.whatwg.org/multipage/workers.html
+    date: January 15, 2025
+    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#toc-workers
   Site:
     title: Site
     author:
@@ -162,8 +157,8 @@ informative:
     author:
       name: Joshua Bell
       org: Google
-    target: https://www.w3.org/TR/IndexedDB/
-    date: November 2024
+    target: https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/
+    date: January 10, 2025
 
 
 --- abstract
@@ -196,9 +191,11 @@ as well. This document expands on and further restricts various recommendations 
 Notational Conventions
 ======================
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP14.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they
+appear in all capitals, as shown here.
 
 
 Terminology
@@ -465,7 +462,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD enable the *SameSite=Strict* flag for its cookies
 - The BFF SHOULD set its cookie path to */*
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
-- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{CookiePrefixes}})
+- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{draft-ietf-httpbis-rfc6265bis}})
 
 In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
