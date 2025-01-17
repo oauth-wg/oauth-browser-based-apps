@@ -832,8 +832,7 @@ Table of Contents
    session hijacking attack.
 
    For further guidance on cookie security best practices, we refer to
-   the OWASP Cheat Sheet series (https://cheatsheetseries.owasp.org
-   (https://cheatsheetseries.owasp.org)).
+   the OWASP Cheat Sheet series ([OWASPCheatSheet]).
 
 6.1.3.3.  Cross-Site Request Forgery Protections
 
