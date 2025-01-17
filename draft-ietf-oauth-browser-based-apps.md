@@ -159,6 +159,9 @@ informative:
       org: Google
     target: https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/
     date: January 10, 2025
+  OWASPCheatSheet:
+    title: OWASP Cheat Sheet
+    target: https://cheatsheetseries.owasp.org/
 
 
 --- abstract
