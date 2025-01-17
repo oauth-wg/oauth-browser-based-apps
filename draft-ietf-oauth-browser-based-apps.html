@@ -2590,7 +2590,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
               <h6 id="name-using-sender-constrained-tok">
 <a href="#section-6.3.4.2.2" class="section-number selfRef">6.3.4.2.2. </a><a href="#name-using-sender-constrained-tok" class="section-name selfRef">Using Sender-Constrained Tokens</a>
               </h6>
-<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <a href="https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair">CryptoKeyPair</a> is stored using <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <span>[<a href="#CryptoKeyPair" class="cite xref">CryptoKeyPair</a>]</span> is stored using <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.2-2">Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.<a href="#section-6.3.4.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2851,7 +2851,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-handling-the-oauth-flow-in-">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-handling-the-oauth-flow-in-" class="section-name selfRef">Handling the OAuth Flow in a Service Worker</a>
         </h3>
-<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restriction aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <span id="name-oauth-20-service-worker-pat"></span><div id="fig-bbapp-pattern-serviceworker">
 <figure id="figure-4">
@@ -3233,6 +3233,10 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="CryptoKeyPair">[CryptoKeyPair]</dt>
+        <dd>
+<span class="refAuthor">Contributors, M.</span>, <span class="refTitle">"CryptoKeyPair"</span>, <span>n.d.</span>, <span>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair">https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="CSP3">[CSP3]</dt>
         <dd>
 <span class="refAuthor">West, M.</span> and <span class="refAuthor">A. Sartori</span>, <span class="refTitle">"Content Security Policy"</span>, <time datetime="2024-12" class="refDate">December 2024</time>, <span>&lt;<a href="https://www.w3.org/TR/2024/WD-CSP3-20241217/">https://www.w3.org/TR/2024/WD-CSP3-20241217/</a>&gt;</span>. </dd>
@@ -3293,7 +3297,10 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
           <p id="appendix-A-3.2.1">Moved RFC6819 reference to informal<a href="#appendix-A-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-A-3.3">
-          <p id="appendix-A-3.3.1">Replaced references to living standards with references to snapshots<a href="#appendix-A-3.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-A-3.3.1">Added missing references from prose<a href="#appendix-A-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.4">
+          <p id="appendix-A-3.4.1">Replaced references to living standards with references to snapshots<a href="#appendix-A-3.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-A-4">-21<a href="#appendix-A-4" class="pilcrow">¶</a></p>

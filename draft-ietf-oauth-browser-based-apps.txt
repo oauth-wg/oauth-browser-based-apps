@@ -1740,8 +1740,7 @@ Table of Contents
    transition from bearer access tokens and bearer refresh tokens to
    sender-constrained tokens.  In such an implementation, the private
    key used to sign DPoP proofs is handled by the browser (a non-
-   extractable CryptoKeyPair (https://developer.mozilla.org/en-
-   US/docs/Web/API/CryptoKeyPair) is stored using [IndexedDB]).  As a
+   extractable [CryptoKeyPair] is stored using [IndexedDB]).  As a
    result, the use of DPoP effectively prevents scenarios where the
    attacker exfiltrates the application's tokens (See Section 5.1.1 and
    Section 5.1.2).
@@ -2039,7 +2038,7 @@ Table of Contents
    requests to the resource server with the proper access token.
    Additionally, the Service Worker blocks the client application's code
    from making direct calls to the authorization server's endpoints.
-   This restrictions aims to target the attack scenario "Acquisition and
+   This restriction aims to target the attack scenario "Acquisition and
    Extraction of New Tokens" (Section 5.1.3).
 
    The sequence diagram included below illustrates the interactions
@@ -2514,6 +2513,11 @@ Table of Contents
 
 11.2.  Informative References
 
+   [CryptoKeyPair]
+              Contributors, M., "CryptoKeyPair", n.d.,
+              <https://developer.mozilla.org/en-US/docs/Web/API/
+              CryptoKeyPair>.
+
    [CSP3]     West, M. and A. Sartori, "Content Security Policy",
               December 2024,
               <https://www.w3.org/TR/2024/WD-CSP3-20241217/>.
@@ -2566,6 +2570,8 @@ Appendix A.  Document History
    *  Addressed AD review
 
    *  Moved RFC6819 reference to informal
+
+   *  Added missing references from prose
 
    *  Replaced references to living standards with references to
       snapshots
