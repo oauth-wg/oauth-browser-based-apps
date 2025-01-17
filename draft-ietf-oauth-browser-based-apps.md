@@ -1351,6 +1351,7 @@ Document History
 
 * Addressed AD review
 * Moved RFC6819 reference to informal
+* Replaced references to living standards with references to snapshots
 
 -21
 
