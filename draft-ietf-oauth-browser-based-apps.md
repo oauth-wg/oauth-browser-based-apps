@@ -79,7 +79,7 @@ normative:
       org: yes.com
     date: June 2024
     target: https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics
-  serviceworker:
+  ServiceWorker:
     title: Service Workers
     author:
     - name: Jake Archibald
@@ -152,7 +152,7 @@ informative:
     - name: MDN Contributors
       org: Mozilla Developer Network
     target: https://developer.mozilla.org/en-US/docs/Glossary/Site
-  indexeddb:
+  IndexedDB:
     title: Indexed Database API 3.0
     author:
       name: Joshua Bell
@@ -946,7 +946,7 @@ Note that even a perfect token storage mechanism does not prevent the attacker f
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable [CryptoKeyPair](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair) is stored using IndexedDB ({{indexeddb}})). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
+Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable [CryptoKeyPair](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair) is stored using {{IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
 Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
@@ -1144,7 +1144,7 @@ as described in this document.
 Handling the OAuth Flow in a Service Worker {#service-worker}
 -------------------------------------------
 
-In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{serviceworker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
+In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{ServiceWorker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
 
 The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.
 
@@ -1228,7 +1228,7 @@ Note that this practice is different from the use of cookies in a BFF (discussed
 Token Storage in a Service Worker {#token-storage-service-worker}
 ---------------------------------
 
-A Service Worker ({{serviceworker}}) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.
+A Service Worker ({{ServiceWorker}}) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.
 
 When aiming to isolate tokens from the application's execution context, the Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window. Consequentially, the Service Worker currently does not have access to an isolated persistent storage area.
 
@@ -1262,7 +1262,7 @@ While closures work well in simple, isolated environments, they are tricky to se
 Persistent Token Storage {#token-storage-persistent}
 ------------------------
 
-The persistent storage APIs currently available as of this writing are localStorage ({{WebStorage}}), sessionStorage ({{WebStorage}}), and IndexedDB ({{indexeddb}}).
+The persistent storage APIs currently available as of this writing are localStorage ({{WebStorage}}), sessionStorage ({{WebStorage}}), and {{IndexedDB}}.
 
 localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.
 
