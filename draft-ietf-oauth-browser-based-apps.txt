@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 20 July 2025                                      Ping Identity
+Expires: 21 July 2025                                      Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                         16 January 2025
+                                                         17 January 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 July 2025.
+   This Internet-Draft will expire on 21 July 2025.
 
 Copyright Notice
 
@@ -2480,11 +2480,6 @@ Table of Contents
               DOI 10.17487/RFC6750, October 2012,
               <https://www.rfc-editor.org/info/rfc6750>.
 
-   [RFC6819]  Lodderstedt, T., Ed., McGloin, M., and P. Hunt, "OAuth 2.0
-              Threat Model and Security Considerations", RFC 6819,
-              DOI 10.17487/RFC6819, January 2013,
-              <https://www.rfc-editor.org/info/rfc6819>.
-
    [RFC7636]  Sakimura, N., Ed., Bradley, J., and N. Agarwal, "Proof Key
               for Code Exchange by OAuth Public Clients", RFC 7636,
               DOI 10.17487/RFC7636, September 2015,
@@ -2536,6 +2531,11 @@ Table of Contents
               errata set 2", December 2023,
               <https://openid.net/specs/openid-connect-core-1_0.html>.
 
+   [RFC6819]  Lodderstedt, T., Ed., McGloin, M., and P. Hunt, "OAuth 2.0
+              Threat Model and Security Considerations", RFC 6819,
+              DOI 10.17487/RFC6819, January 2013,
+              <https://www.rfc-editor.org/info/rfc6819>.
+
    [Site]     Contributors, M., "Site", n.d.,
               <https://developer.mozilla.org/en-US/docs/Glossary/Site>.
 
@@ -2556,6 +2556,12 @@ Table of Contents
 Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -22
+
+   *  Addressed AD review
+
+   *  Moved RFC6819 reference to informal
 
    -21
 
