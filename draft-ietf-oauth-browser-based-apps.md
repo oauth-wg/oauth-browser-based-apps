@@ -113,8 +113,8 @@ informative:
     target: https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
-    target: https://openid.net/specs/openid-connect-core-1_0.html
-    date: December 2023
+    target: https://openid.net/specs/openid-connect-core-1_0-errata2.html
+    date: December 15, 2023
     author:
       - ins: N. Sakimura
       - ins: J. Bradley
