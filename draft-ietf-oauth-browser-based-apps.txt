@@ -2531,6 +2531,10 @@ Table of Contents
               errata set 2", December 2023, <https://openid.net/specs/
               openid-connect-core-1_0-errata2.html>.
 
+   [OWASPCheatSheet]
+              "OWASP Cheat Sheet", n.d.,
+              <https://cheatsheetseries.owasp.org/>.
+
    [RFC6819]  Lodderstedt, T., Ed., McGloin, M., and P. Hunt, "OAuth 2.0
               Threat Model and Security Considerations", RFC 6819,
               DOI 10.17487/RFC6819, January 2013,
