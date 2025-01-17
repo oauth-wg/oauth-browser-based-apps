@@ -2590,7 +2590,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
               <h6 id="name-using-sender-constrained-tok">
 <a href="#section-6.3.4.2.2" class="section-number selfRef">6.3.4.2.2. </a><a href="#name-using-sender-constrained-tok" class="section-name selfRef">Using Sender-Constrained Tokens</a>
               </h6>
-<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <a href="https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair">CryptoKeyPair</a> is stored using IndexedDB (<span>[<a href="#indexeddb" class="cite xref">indexeddb</a>]</span>)). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <a href="https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair">CryptoKeyPair</a> is stored using <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.2-2">Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.<a href="#section-6.3.4.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2851,7 +2851,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-handling-the-oauth-flow-in-">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-handling-the-oauth-flow-in-" class="section-name selfRef">Handling the OAuth Flow in a Service Worker</a>
         </h3>
-<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#serviceworker" class="cite xref">serviceworker</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restrictions aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <span id="name-oauth-20-service-worker-pat"></span><div id="fig-bbapp-pattern-serviceworker">
 <figure id="figure-4">
@@ -3046,7 +3046,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-token-storage-in-a-service-">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-token-storage-in-a-service-" class="section-name selfRef">Token Storage in a Service Worker</a>
         </h3>
-<p id="section-8.2-1">A Service Worker (<span>[<a href="#serviceworker" class="cite xref">serviceworker</a>]</span>) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">A Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">When aiming to isolate tokens from the application's execution context, the Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window. Consequentially, the Service Worker currently does not have access to an isolated persistent storage area.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">As discussed before, the use of a Service Worker does not prevent an attacker from obtaining a new set of tokens. Similarly, if the application is responsible for obtaining tokens from the authorization server and passing them to a Service Worker for further management, the attacker can perform the same operation as the legitimate application to obtain these tokens.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -3077,7 +3077,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-persistent-token-storage">
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-persistent-token-storage" class="section-name selfRef">Persistent Token Storage</a>
         </h3>
-<p id="section-8.5-1">The persistent storage APIs currently available as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and IndexedDB (<span>[<a href="#indexeddb" class="cite xref">indexeddb</a>]</span>).<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-1">The persistent storage APIs currently available as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.5-2">localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.5-3">sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
 <p id="section-8.5-4">IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
@@ -3216,7 +3216,7 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refAuthor">Fett, D.</span>, <span class="refAuthor">Campbell, B.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Jones, M.</span>, and <span class="refAuthor">D. Waite</span>, <span class="refTitle">"OAuth 2.0 Demonstrating Proof of Possession (DPoP)"</span>, <span class="seriesInfo">RFC 9449</span>, <span class="seriesInfo">DOI 10.17487/RFC9449</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9449">https://www.rfc-editor.org/info/rfc9449</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="serviceworker">[serviceworker]</dt>
+<dt id="ServiceWorker">[ServiceWorker]</dt>
         <dd>
 <span class="refAuthor">Archibald, J.</span> and <span class="refAuthor">M. Kruisselbrink</span>, <span class="refTitle">"Service Workers"</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.w3.org/TR/2022/CRD-service-workers-20220712/">https://www.w3.org/TR/2022/CRD-service-workers-20220712/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
@@ -3241,13 +3241,13 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML"</span>, <time datetime="2025-01" class="refDate">January 2025</time>, <span>&lt;<a href="https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/">https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="indexeddb">[indexeddb]</dt>
+<dt id="IndexedDB">[IndexedDB]</dt>
         <dd>
 <span class="refAuthor">Bell, J.</span>, <span class="refTitle">"Indexed Database API 3.0"</span>, <time datetime="2025-01" class="refDate">January 2025</time>, <span>&lt;<a href="https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/">https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="OpenID">[OpenID]</dt>
         <dd>
-<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">de Medeiros, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"OpenID Connect Core 1.0 incorporating errata set 2"</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">de Medeiros, B.</span>, and <span class="refAuthor">C. Mortimore</span>, <span class="refTitle">"OpenID Connect Core 1.0 incorporating errata set 2"</span>, <time datetime="2023-12" class="refDate">December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-core-1_0-errata2.html">https://openid.net/specs/openid-connect-core-1_0-errata2.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6819">[RFC6819]</dt>
         <dd>
@@ -3287,6 +3287,9 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 </li>
         <li class="normal" id="appendix-A-3.2">
           <p id="appendix-A-3.2.1">Moved RFC6819 reference to informal<a href="#appendix-A-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.3">
+          <p id="appendix-A-3.3.1">Replaced references to living standards with references to snapshots<a href="#appendix-A-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-A-4">-21<a href="#appendix-A-4" class="pilcrow">¶</a></p>
