@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-16T00:05:57.926841+00:00",
+  "timestamp": "2025-01-19T00:06:23.346365+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -573,16 +573,24 @@
       "id": "I_kwDOCUe3lM6FVTXP",
       "title": "Add BCP references to the normative section",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/48",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Adding BCP references by including the items below in the list of normative references breaks the build. \r\n\r\n```\r\n-  BCP14:\r\n-  BCP212:\r\n```\r\n\r\n### Tasks to solve this issue\r\n\r\n- [ ] Add the references in the normative section the right way\r\n- [ ] Re-add the references in the text (search for BCP14/BCP212 and add a reference)\r\n",
       "createdAt": "2024-04-11T05:44:03Z",
-      "updatedAt": "2024-04-12T07:17:33Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-01-17T02:46:32Z",
+      "closedAt": "2025-01-17T02:46:31Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This is fixed in 639b69dc9e0dd98890da3b03d3bd209c6bc2f7f7 by using `RFC2119 RFC8174` instead of `BCP14`, and `RFC8252` instead of `BCP212`",
+          "createdAt": "2025-01-17T02:46:31Z",
+          "updatedAt": "2025-01-17T02:46:31Z"
+        }
+      ]
     },
     {
       "number": 49,
@@ -643,15 +651,15 @@
       "id": "I_kwDOCUe3lM6IAiJv",
       "title": "Fragments, performance, and historic notes.",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/52",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "will-bartlett",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "In 7.2.1, \"historic note\", the current draft says:\r\n\r\n> Historically, the Implicit grant type provided an advantage to browser-based applications since JavaScript could always arbitrarily read and manipulate the fragment portion of the URL without triggering a page reload. This was necessary in order to remove the access token from the URL after it was obtained by the app.\r\n\r\n> [...] Modern browsers now have the Session History API [...] which provides a mechanism to modify the path and query string component of the URL without triggering a page reload.\r\n\r\nThe historic note is missing some context. Had RFC 6749 recommended query responses for browser-based apps, there would have been the additional page load AND an additional app download. Additionally, the document as a whole makes no mention of `response_type=fragment`. \r\n\r\nConsider the following sequence of requests (\"the authorization code flow\"):\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com?code=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nWhen RFC 6749 was published, this flow would have included:\r\n - Three navigations (1=>2, 2=>3, 3=>4)\r\n - Two downloads of the browser-based application (1 and 3) - 4 would have hit the cache entry created by 1.\r\n\r\nCompare to the implicit flow:\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com#token=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nWhen RFC 6749 was published, this flow would have included:\r\n - Two navigations (1=>2, 2=>3)\r\n - One download of the browser-based application (1) - 3 would have hit the cache entry created by 1, and 4 does not create a network request.\r\n\r\nThe document as it currently stands seems to recommend the authorization code flow as described by RFC 6749 (with query response). In today's world, that flow includes:\r\n - Two navigations (1=>2, 2=>3)\r\n - Two downloads of the browser-based application (1 and 3) - 4 does not make a network request.\r\n\r\nMicrosoft Entra (and other OpenID Connect providers) rely on the [OAuth 2.0 Multiple Response Type Encoding Practices\r\n](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html) standard and use the authorization code flow in combination with response_mode=fragment. That looks like this:\r\n 1. User navigates to https://contoso.com/\r\n 2. Contoso redirects the user to the OAuth provider https://oauth.example/authorize?parameters.\r\n 3. The OAuth provider navigates back to Contoso with https://contoso.com#code=foobar\r\n 4. Contoso clears the code from the URL bar, navigating to https://contoso.com\r\n\r\nThis flow includes:\r\n - Two navigations (1=>2, 2=>3)\r\n - One download of the browser-based application (1) - 3 would have hit the cache entry created by 1, and 4 does not create a network request.\r\n\r\nProblem summary:\r\n 1. The document as it currently stands (without mention of response_mode=fragment) recommends a version of OAuth for browser-based apps that is less performant than the implicit flow recommended by RFC 6749.\r\n 2. The historic note only mentions one of the two reasons RFC 6479 recommended the implicit flow for browser based apps. Those two reasons are: reduced navigations AND reduced downloading.\r\n\r\nSuggestions:\r\n - The document should definitely mention response_mode=fragment. The document should probably either recommend or recommend against response_mode=fragment (I think: recommend).\r\n - The historic note should explain both the motivations for the implicit flow and why neither applies (session history AND response_mode=fragment). ",
       "createdAt": "2024-05-06T21:48:50Z",
-      "updatedAt": "2024-05-20T15:14:03Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-17T02:47:57Z",
+      "closedAt": "2025-01-17T02:47:57Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -666,6 +674,13 @@
           "body": "Hi @will-bartlett just wanted to check on this again",
           "createdAt": "2024-05-20T15:14:02Z",
           "updatedAt": "2024-05-20T15:14:02Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Closing due to lack of a response and since this is in \"Submitted to IESG for Publication\" status",
+          "createdAt": "2025-01-17T02:47:57Z",
+          "updatedAt": "2025-01-17T02:47:57Z"
         }
       ]
     },
@@ -824,15 +839,15 @@
       "id": "I_kwDOCUe3lM6jj5-m",
       "title": "Remove reference to TMI-BFF draft",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/58",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Rifaat Shekh-Yusef mentioned the following in a review (mail 13/11/2024):\r\n\r\n> Section 6.2.1\r\n> \u201cNote that an early draft ([tmi-bff]) already documented this concept, although the draft is is currently expired and has not been proposed for adoption to the OAuth Working Group.\u201d\r\n> Is this paragraph really needed? How would that help the implementer?\r\n",
       "createdAt": "2024-12-17T07:02:49Z",
-      "updatedAt": "2024-12-17T22:42:19Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-17T02:49:17Z",
+      "closedAt": "2025-01-17T02:49:16Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -840,6 +855,13 @@
           "body": "I believe this came out of the discussions at IETF 114. After that meeting, we added the TMI-BFF pattern to the draft, and left this reference to a concrete proposal for implementing the pattern. While this draft was not developed further, it could be picked up again in the future, in which case leaving this reference here would give someone the breadcrumb trail to find.",
           "createdAt": "2024-12-17T22:42:17Z",
           "updatedAt": "2024-12-17T22:42:17Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "This reference was removed in f1365ae987038e3681c56a9671af60895cb328a0 and replaced by the document replacing tmi-bff in datatracker.",
+          "createdAt": "2025-01-17T02:49:16Z",
+          "updatedAt": "2025-01-17T02:49:16Z"
         }
       ]
     },
@@ -872,15 +894,15 @@
       "id": "I_kwDOCUe3lM6k1dAp",
       "title": "Using Web Workers to refresh access tokens adds implementation complexity for marginal security benefit",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/62",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "micolous",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "[Section 6.3.4.2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.3.4.2.1) (Browser-Based OAuth Applications - Secure Token Storage) discourages using \"universally accessible storage areas\" such as Local Storage, and suggests a pattern of using a Web Worker to \"isolate the refresh token, and provide the application with the access token to make requests\".\r\n\r\n[Section 8.3 (Token Storage in a Web Worker) paragraphs 3 and 4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-8.3-3) describe using Web Workers to isolate the refresh token, like what is proposed in Section 6.3.4.2.1.\r\n\r\nBut [Section 8.3 paragraph 2](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-8.3-2) notes:\r\n\r\n> The security properties of using a Web Worker are identical to using Service Workers. When tokens are exposed to the application, they become vulnerable. When tokens need to be used, the operation that relies on them has to be carried out by the Web Worker.\r\n\r\nThis would seem to *discourage* the pattern proposed in Section 6.3.4.2.1, where a Web Worker provides the access token for the application to make requests directly.\r\n\r\nSection 8.3 paragraph 2 proposes a pattern similar to that in [Section 7.4](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-7.4) (Discouraged and Deprecated Architecture Patterns - Handling the OAuth Flow in a Service Worker). [Section 7.4.1.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-7.4.1.1) (Attacking the Service Worker) notes several security shortcomings with the pattern, and that there is significant complexity to implementing, registering and maintaining a Service Worker.\r\n\r\nI believe that the shortcomings identified in Section 7.4.1.1 *also* apply to using a Web Worker to isolate the refresh token alone. Using a (shared) Web Worker is still a source of complexity \u2013 even if that worker doesn't need to do quite as much.\r\n\r\nAs a result, I don't think there is a significant *security* benefit to using Web Workers to store the refresh token over using Local Storage. An attacker who can execute arbitrary JavaScript within the context of the application (ie: via XSS) to access Local Storage can also send messages to Web Workers (to acquire a short-term access token) or [bypass them](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-5.1.3) (to acquire a new, longer-lived refresh token), and so [it's still pretty much game over for a Browser-Based OAuth Application](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-6.3.4.3).\r\n\r\nOne potential benefit to using *Shared* Web Workers for refresh tokens is that the Worker could block requests for the access token on completion of any in-flight refresh request, thus preventing the application from attempting to use a single refresh token multiple times.\r\n\r\nHowever, it'd also be possible to do that with Local Storage and the [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API).\r\n\r\n## Related issues\r\n\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/issues/3\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/pull/19\r\n* https://github.com/oauth-wg/oauth-browser-based-apps/pull/24 \r\n\r\n**Edit (2024-01-06)**: noted that web workers don't stop [acquiring new tokens](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps#section-5.1.3).\r\n",
       "createdAt": "2025-01-02T05:46:28Z",
-      "updatedAt": "2025-01-08T05:38:22Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-17T22:51:54Z",
+      "closedAt": "2025-01-17T22:51:54Z",
       "comments": [
         {
           "author": "pavinduLakshan",
@@ -923,6 +945,96 @@
           "body": "> I don't really see the complexity issue you are referring to. Web workers are not shared across browsing contexts, and are simply a piece of code running in a separate context. The complexity is no more than running a silent flow in an iframe for example. \r\n\r\nThe main source of complexity is Web Workers require a separate JS module served at a separate URL, and implementing an RPC interface with JSON-serialisable objects. For a JS/TS application, that also requires that your framework's build process/bundler emitting separate modules like this. For WASM-based applications, that means setting up another build target for the authentication process, which is complicated, and crossing the JS-WASM boundary in more places.\r\n\r\nComparing to the alternative: storing the `access_token` and `refresh_token` in LocalStorage:\r\n\r\n* When the main execution context reloads, it doesn't need to spawn a `Worker` \u2013 it can acquire and refresh those values directly.\r\n\r\n* You call your OAuth2 implementation the same way as all your other code, without needing to worry about indirection, serialisation and deserialisation through an RPC interface.\r\n\r\n* There's no need for your framework, bundler or build process to support Web Workers at all. You also don't need to build a separate content security policy for the worker.\r\n\r\n* For WASM applications, token access and updates cross the JS-WASM boundary only once.\r\n\r\nFor non-shared Web Workers and Local Storage based token storage, you'd also want to have a Lock around the token to ensure that only one of them tries to mutate the token (ie: refresh it if expired) at any time, and have some mechanism to allow the user to explicitly override it (eg: \"we're trying to log you in again already from another tab, but you can log in here instead\") for non-silent flows.\r\n\r\n> This pattern is also actively used, for example in the Auth0 SDK (https://github.com/auth0/auth0-spa-js/blob/main/src/worker/token.worker.ts).\r\n> \r\n> So instead of redeeming the authorization code in the main execution context, the application forwards it to the worker, which exchanges it for tokens. There is a one-on-one relationship between the main execution context and the worker. If the main execution context reloads, so does the worker (hence the need for the silent flow to obtain fresh tokens).\r\n\r\nI already had a look at the Auth0 JS SPA SDK before making that assertion. When configured to use a Web Worker with storage in memory, it appears to roughly:\r\n\r\n1. When the `access_token` is expired, the main context messages the worker with a `response_type=refresh_token` request\r\n2. If it is a `response_type=refresh_token` request, the worker adds in any `refresh_token` from its closure (memory)\r\n3. The worker then sends the request to the IdP\r\n4. When the IdP responds, it stores the `refresh_token` in its closure (memory) and deletes it from the structure, before returning it to the main context.\r\n5. The main context stores the response in session storage or a cookie.\r\n6. When the `access_token` is missing or it can't be refreshed, the main context performs a `/authorize?response_type=code` request, and can attempt it in an iframe or with navigation (various conditions not relevant)\r\n7. When the IdP returns to the `redirect_uri` handler, the main context messages the worker with a `response_type=code` request to fetch the `access_token`.\r\n8. Worker sends the actual request to the IdP, caches the `refresh_token` from the response and strips it from the response passed back to the main context.\r\n9. Main context stores the response in session storage or a cookie.\r\n\r\nWith the Auth0 library, the main execution context is responsible for figuring out if a token has expired, and the worker is responsible for fetching any tokens, essentially proxying all (`/token`) requests.\r\n\r\nHowever, as above, there's nothing stopping a malicious script running in the main execution context from fetching the token directly, and caching it for itself. If the IdP allows silent flows (as it appears the Auth0 library may depend on), then this can all be done without the user noticing.\r\n\r\nI'm pretty sure I've found a weakness in the Auth0 worker implementation which would allow malicious code running in the main execution context to trick the worker into leaking the refresh token to a location other than the identity provider. I've emailed them privately about that. \ud83d\ude04 \r\n\r\nAs such, there's limited *benefit* to building it this way \u2013 possibly even none... and that complexity can end up introducing _more_ bugs in the process.\r\n\r\n> Also note that the use of a Web Worker is an implementation suggestion, not a normative requirement of the spec.\r\n\r\nUnderstood. I acknowledge that this is a hard problem, and it may not be possible to solve. \ud83d\ude04 \r\n",
           "createdAt": "2025-01-08T04:06:19Z",
           "updatedAt": "2025-01-08T05:38:22Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for the discussion. It sounds like this has concluded with no suggested changes to the document. I'll close this issue shortly unless someone chimes in otherwise.",
+          "createdAt": "2025-01-17T02:50:35Z",
+          "updatedAt": "2025-01-17T02:50:35Z"
+        }
+      ]
+    },
+    {
+      "number": 63,
+      "id": "I_kwDOCUe3lM6mjoDw",
+      "title": "When can the BFF ignore \"SHOULD encrypt its cookie contents\"?",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/63",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "From the AD review:\n\n> Section 6.1.3.2, para 4: '...the BFF SHOULD encrypt its cookie contents.' Why not a MUST?  Under what circumstances would it be reasonable to ignore this SHOULD?\n\nWe should either change this to a MUST, or add a sentence justifying the SHOULD.",
+      "createdAt": "2025-01-17T02:54:10Z",
+      "updatedAt": "2025-01-17T22:50:59Z",
+      "closedAt": "2025-01-17T22:50:59Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@philippederyck I'd appreciate your insights here",
+          "createdAt": "2025-01-17T02:54:43Z",
+          "updatedAt": "2025-01-17T02:54:43Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This is written as a SHOULD because it is not strictly necessary to benefit from the use of a BFF. The spec focuses on an attacker model where the attacker can control the client. Malware is \"out of scope\", since an attacker controlling the user's machine can also circumvent all the other protections of the BFF. \n\nThat said, there appears to be this common case where the malware mainly steals credentials, and then encryption could be helpful (to hide the tokens, not to prevent session hijacking). Whether you want to implement this or not depends on the sensitivity of the application. \n\nMaking this a MUST will make the BFF pattern (slightly) harder to implement, and might cause people to shy away from it. \n\n\nDoes this modified text help?\n\n> Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. __While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure__ that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps ensure the confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.\n",
+          "createdAt": "2025-01-17T06:06:35Z",
+          "updatedAt": "2025-01-17T06:06:35Z"
+        },
+        {
+          "author": "randomstuff",
+          "authorAssociation": "NONE",
+          "body": "> This security measure helps ensure the confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer.\n\nThe attacker can be the user as well, bypassing any restriction on the protected resource requests imposed by the the client backend.\n\nAn alternative solution to client-side session encryption is to use sender(backend)-constrained tokens.\n",
+          "createdAt": "2025-01-17T08:27:40Z",
+          "updatedAt": "2025-01-17T08:27:40Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@randomstuff This is talking about storing tokens in cookies, not storing something like a user ID. The token should already be an opaque/signed/encrypted token that is resistant to user tampering. Besides, cookies can be signed instead of encrypted, and signed cookies are also protected against the user tampering with the cookie values intentionally.",
+          "createdAt": "2025-01-17T22:25:00Z",
+          "updatedAt": "2025-01-17T22:25:00Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@philippederyck thank you, I think that is a good addition, I'm going to add it now and respond to the AD review, thanks.",
+          "createdAt": "2025-01-17T22:50:20Z",
+          "updatedAt": "2025-01-17T22:50:20Z"
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "id": "I_kwDOCUe3lM6mjp1s",
+      "title": "Address SEC AD review comments",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/64",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "> General:  There are more than a couple of Normative references that are pointing to 'living documents'.  From my reading of the draft these include:  Cookie Prefixes, Fetch, Web-messaging, service-workers, webstorage. If at all possible, we need to find a way to specify a particular version via commit, snapshot, archive to make an immutable version.  Or find a way to make them Informative.  Basically this draft will be an RFC - immutable, yet a few of the Normative references are changeable.\n\nI was able to find links to snapshots of all the living documents referenced. All references now link to the stable URL versions.\n\n> BCP 14 boilerplate:  idnits (a little blue button '! Nits' on the line above the text of the draft on the main datatracker page). is throwing errors on the BCP14 boilerplate.  Ideally, I'd like these fixed before moving this along (it just eliminates problems down the road).\n\nIt looks like these nits fall into a few categories:\n\n* Date issue (will be fixed on publication of a new version)\n* Wrong RFC 2219 boilerplate (fixed)\n* Non-RFC references (will still be nits, but now reference stable versions)\n\n> Section 6.1.3.2, para 4: '...the BFF SHOULD encrypt its cookie contents.' Why not a MUST?  Under what circumstances would it be reasonable to ignore this SHOULD?\n\nWe added a sentence following this to clarify that the difference of encrypting the cookie contents doesn't affect the security properties of the BFF pattern.\n\n> Section 6.1.3.2, last para:  Add this to the (Informative) references.\n\nDone\n\n> Section 6.3.4.2.2, first para:  Add 'CrytoKeyPair' to the (Informative) references.\n\nDone\n\n> Section 7.4, first para, last sentence:  Nit:  'This restrictions' should either be 'these restrictions' or 'this restriction'.\n\nDone\n\n> Section 11:  RFC6819 is a normative reference, but it is Informational.  We need to call that out in the IETF Last Call, and I have to approve the downref (which I will do).\n\nMoved this to an informative reference\n",
+      "createdAt": "2025-01-17T02:58:31Z",
+      "updatedAt": "2025-01-17T23:00:13Z",
+      "closedAt": "2025-01-17T23:00:11Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "All comments are addressed other than #63",
+          "createdAt": "2025-01-17T02:58:56Z",
+          "updatedAt": "2025-01-17T02:58:56Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I've published version 22 and sent an email to the list with the notes above:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/JMpMU-seAMSpMUs3-qIkIeCY3mg/\n\nhttps://www.ietf.org/archive/id/draft-ietf-oauth-browser-based-apps-22.html",
+          "createdAt": "2025-01-17T23:00:11Z",
+          "updatedAt": "2025-01-17T23:00:11Z"
         }
       ]
     }
