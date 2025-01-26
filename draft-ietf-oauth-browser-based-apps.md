@@ -233,7 +233,7 @@ At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}
 
 However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in {{oauth-security-topics}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}}, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding PKCE to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}}, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain applications.
 
@@ -295,7 +295,7 @@ For access tokens, the attacker now obtains the latest access token for as long 
 In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:
 
 - Execute malicious JS code
-- Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging ({{WebMessaging}}))
+- Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging {{WebMessaging}})
 - Insert a hidden iframe into the page and initialize it with an authorization request. The authorization request in the iframe will occur within the user's session and, if the session is still active, result in the issuing of an authorization code. Note that this step relies on the Authorization Server supporting silent frame-based flows, as discussed in the last paragraph of this scenario.
 - Extract the authorization code from the iframe using the previously installed handler
 - Send the authorization code to a server controlled by the attacker
@@ -345,7 +345,7 @@ The attack ends when the access token expires or when a token is revoked with th
 
 Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.
 
-The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of {{RFC9449}}. However, when the attacker obtains a fresh set of tokens, as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
+The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in {{Section 11.4 of RFC9449}}. However, when the attacker obtains a fresh set of tokens, as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
 
 
 
@@ -368,7 +368,7 @@ There are three main architectural patterns available when building browser-base
 - A JavaScript application that relies on a backend component for handling OAuth responsibilities, but calls resource servers directly using the access token (Token-Mediating Backend)
 - A JavaScript application acting as the client, handling all OAuth responsibilities in the browser (Browser-based OAuth Client)
 
-Each of these architecture patterns offer a different trade-off between security and simplicity. The patterns in this section are presented in decreasing order of security.
+Each of these architectural patterns offers a different trade-off between security and simplicity. The patterns in this section are presented in decreasing order of security.
 
 
 Backend For Frontend (BFF) {#pattern-bff}
@@ -422,7 +422,7 @@ Finally, the BFF can also offer a "logout" endpoint to the JavaScript applicatio
 
 When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the BFF obtains the refresh token (step F) and associates it with the user's session.
 
-If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between step J and K. BFFs that keep all token information available on the server-side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.
+If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between steps J and K. BFFs that keep all token information available on the server side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.
 
 When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it makes sense to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it also makes sense to invalidate the session.
 
@@ -516,7 +516,7 @@ It is also possible to deploy the JavaScript application on the same origin as t
 
 ##### Use anti-forgery/double submit cookies
 
-Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.
+Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state-changing requests, this mechanism effectively mitigates CSRF.
 
 Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.
 
@@ -525,7 +525,7 @@ Note that this mechanism is not necessarily recommended over the CORS approach. 
 
 The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.
 
-When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third-party, this privacy impact needs to be taken into account.
+When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.
 
 
 #### Advanced Security
@@ -550,7 +550,7 @@ Note that this attack scenario results in the following consequences:
 
 Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy ({{CSP3}}).
 
-In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of scope for this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.
+In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of the scope of this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.
 
 Finally, the BFF is uniquely placed to observe all traffic between the JavaScript application and the resource servers. If a high-security application would prefer to implement anomaly detection or rate limiting, such a BFF would be the ideal place to do so. Such restrictions can further help to mitigate the consequences of client hijacking.
 
@@ -629,7 +629,7 @@ Most of the endpoint implementations of the token-mediating backend are similar 
 
 When using refresh tokens, as described in Section 4.14 of {{oauth-security-topics}}, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.
 
-If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, thus requires client authentication.
+If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, and thus requires client authentication.
 
 When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it makes sense to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it makes sense to invalidate the session.
 
@@ -640,7 +640,7 @@ Depending on the resource servers being accessed and the configuration of scopes
 
 The JavaScript application can inform the token-mediating backend of the desired scopes when it checks for the active session (Step A/I). It is up to the token-mediating backend to decide if previously obtained access tokens fall within the desired scope criteria.
 
-It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.
+It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead, it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.
 
 The token-mediating backend can use a similar mechanism to downscoping when relying on {{RFC8707}} to obtain access token for a specific resource server.
 
@@ -737,7 +737,7 @@ Be aware that even when the access token is stored out of reach of malicious Jav
 
 ##### Using Sender-Constrained Tokens
 
-Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP {{RFC9449}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document.
+Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP {{RFC9449}} would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of the scope of this document.
 
 
 #### Summary
@@ -820,7 +820,7 @@ continue using the stolen refresh token to obtain new access tokens potentially 
 detectable by the authorization server.
 
 Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. However, in light of the impact of third-party cookie blocking mechanisms, the use of refresh tokens has become significantly more attractive. The {{oauth-security-topics}} describes some additional requirements around refresh tokens
+applications. However, in light of the impact of third-party cookie-blocking mechanisms, the use of refresh tokens has become significantly more attractive. The {{oauth-security-topics}} describes some additional requirements around refresh tokens
 on top of the recommendations of {{RFC6749}}. Applications and authorization servers
 conforming to this BCP MUST also follow the recommendations in {{oauth-security-topics}}
 around refresh tokens if refresh tokens are issued to browser-based applications.
@@ -910,9 +910,9 @@ In this scenario, the application sends JavaScript-based requests to the authori
 
 For the authorization server, the CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for supporting CORS on these endpoints.
 
-This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends their approval in the preflight response.
+This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends its approval in the preflight response.
 
-Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different than the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.
+Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different from the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.
 
 
 
@@ -964,7 +964,7 @@ Note that the use of DPoP does not prevent the attacker from running a new flow 
 
 The scenario where the attacker obtains a fresh set of tokens (See {{scenario-new-flow}}) relies on the ability to directly interact with the authorization server from within the browser. In theory, a defense that prevents the attacker from silently interacting with the authorization server could solve the most dangerous attack scenario. However, in practice, such defenses are ineffective or impractical.
 
-For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.
+For completeness, this BCP lists a few options below. Note that none of these defenses is recommended, as they do not offer practically usable security benefits.
 
 The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{scenario-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
@@ -1136,9 +1136,9 @@ Resource Owner Password Grant
 -----------------------------
 
 The Resource Owner Password Credentials Grant MUST NOT be used, as described in
-{{oauth-security-topics}} Section 2.4. Instead, by using the Authorization Code grant type
-and redirecting the user to the authorization server,
-this provides the authorization server the opportunity to prompt the user for
+{{oauth-security-topics}} Section 2.4. Instead, using the Authorization Code grant type
+and redirecting the user to the authorization server
+provides the authorization server the opportunity to prompt the user for
 secure non-phishable authentication options, take advantage of single sign-on sessions,
 or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
 provide any built-in mechanism for these, and would instead need to be extended with custom protocols.
@@ -1211,7 +1211,7 @@ Token Storage in the Browser {#token-storage}
 
 When a browser-based application handles tokens directly, it becomes responsible for ephemerally or persistently storing tokens. As a consequence, the application needs to decide how to manage tokens (e.g., in-memory vs persistent storage), and which steps to take to further isolate tokens from the main application code. This section discusses a few different storage mechanisms and their properties.
 
-When discussing the security properties of browser-based token storage solutions, it is important to understand the attacker's capabilities when they compromise a browser-based application. Similar to previous discussions, there are two main attack scenarios that should be taken into account:
+When discussing the security properties of browser-based token storage solutions, it is important to understand the attacker's capabilities when they compromise a browser-based application. Similar to previous discussions, two main attack scenarios should be taken into account:
 
 1. The attacker obtaining tokens from storage
 2. The attacker obtaining tokens from the provider (e.g., the authorization server or the token-mediating backend)
@@ -1226,9 +1226,9 @@ Cookies
 
 Browser cookies are both a storage mechanism and a transport mechanism. The browser automatically supports both through the corresponding request and response headers, resulting in the storage of cookies in the browser and the automatic inclusion of cookies on outgoing requests given it matches the cookie's domain, path, or other properties.
 
-Next to header-based control over cookies, browsers also offer a JavaScript Cookie API to get and set cookies. This Cookie API is often mistaken as an easy way to store data in the browser. In such a scenario, the JavaScript code stores a token in a cookie, with the intent to retrieve the token for later for inclusion in the Authorization header of an API call. However, since the cookie is associated with the domain of the browser-based application, the browser will also send the cookie containing the token when making a request to the server running on this domain. One example of such a request is the browser loading the application after a previous visit to the application (step A in the diagram of {{pattern-oauth-browser}}).
+Next to header-based control over cookies, browsers also offer a JavaScript Cookie API to get and set cookies. This Cookie API is often mistaken as an easy way to store data in the browser. In such a scenario, the JavaScript code stores a token in a cookie, with the intent to retrieve the token for later inclusion in the Authorization header of an API call. However, since the cookie is associated with the domain of the browser-based application, the browser will also send the cookie containing the token when making a request to the server running on this domain. One example of such a request is the browser loading the application after a previous visit to the application (step A in the diagram of {{pattern-oauth-browser}}).
 
-Because of these unintentional side effect of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.
+Because of these unintentional side effects of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.
 
 Note that this practice is different from the use of cookies in a BFF (discussed in {{pattern-bff-cookie-security}}), where the cookie is inaccessible to JavaScript and is supposed to be sent to the backend.
 
@@ -1260,7 +1260,7 @@ In this scenario, the application's existing refresh token is effectively protec
 In-Memory Token Storage {#token-storage-in-memory}
 -----------------------
 
-Another option is keeping tokens in-memory, without using any persistent storage. Doing so limits the exposure of the tokens to the current execution context only, but has the downside of not being able to persist tokens between page loads.
+Another option is keeping tokens in memory, without using any persistent storage. Doing so limits the exposure of the tokens to the current execution context only, but has the downside of not being able to persist tokens between page loads.
 
 In a JavaScript execution environment, the security of in-memory token storage can be further enhanced by using a closure variable to effectively shield the token from direct access. By using closures, the token is only accessible to the pre-defined functions inside the closure, such as a function to make a request to the resource server.
 
@@ -1300,7 +1300,7 @@ Security Considerations
 Reducing the Authority of Tokens
 --------------------------------
 
-A general security best practice in the OAuth world is to minimize the authority associated with access tokens. This best practice is applicable to all the architectures discussed in this specification. Concretely, the following considerations can be helpful in reducing the authority of access tokens:
+A general security best practice in the OAuth world is to minimize the authority associated with access tokens. This best practice is applicable to all the architectures discussed in this specification. Concretely, the following considerations can help reducing the authority of access tokens:
 
 * Reduce the lifetime of access tokens and rely on refresh tokens for access token renewal
 * Reduce the scopes or permissions associated with the access token
@@ -1314,11 +1314,11 @@ Sender-Constrained Tokens {#sender-constrained-tokens}
 
 As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is DPoP {{RFC9449}}.
 
-When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
-While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the {{WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
+While a non-exportable key is protected from exfiltration from within JavaScript, the exfiltration of the underlying private key from the filesystem is still a concern. At the time of writing, there is no guarantee made by the {{WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
 
 
 
