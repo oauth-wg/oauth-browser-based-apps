@@ -42,19 +42,7 @@ normative:
   RFC8252:
   RFC8707:
   RFC9449:
-  draft-ietf-httpbis-rfc6265bis:
-    title: "Cookies: HTTP State Management Mechanism"
-    date: October 2021
-    target: https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis
-    author:
-    - name: L. Chen
-      org: Google LLC
-    - name: S. Englehardt
-      org: Mozilla
-    - name: M. West
-      org: Google LLC
-    - name: J. Wilander
-      org: Apple, Inc
+  I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
   Fetch:
     title: Fetch
     author:
@@ -63,15 +51,7 @@ normative:
     date: December 19, 2024
     target: https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/
   I-D.ietf-oauth-security-topics: oauth-security-topics
-  ServiceWorker:
-    title: Service Workers
-    author:
-    - name: Jake Archibald
-      org: Google
-    - name: Marijn Kruisselbrink
-      org: Google
-    target: https://www.w3.org/TR/2022/CRD-service-workers-20220712/
-    date: July 12, 2022
+  W3C.service-workers: ServiceWorker
   WebMessaging:
     title: HTML - Cross-document messaging
     author:
@@ -88,13 +68,7 @@ informative:
       ins: whatwg
     date: January 15, 2025
     target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/
-  WebCryptographyAPI:
-    title: Web Cryptography API
-    author:
-    - name: Mark Watson
-      org: Netflix
-    date: January 2017
-    target: https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/
+  W3C.WebCryptoAPI: WebCryptographyAPI
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0-errata2.html
@@ -105,17 +79,7 @@ informative:
       - ins: M. Jones
       - ins: B. de Medeiros
       - ins: C. Mortimore
-  CSP3:
-    title: Content Security Policy
-    author:
-    - name: Mike West
-      ins: M. West
-      org: Google, Inc
-    - name: Antonio Sartori
-      ins: A. Sartori
-      org: Google, Inc
-    date: December 17, 2024
-    target: https://www.w3.org/TR/2024/WD-CSP3-20241217/
+  W3C.CSP3: CSP3
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
@@ -136,13 +100,7 @@ informative:
     - name: MDN Contributors
       org: Mozilla Developer Network
     target: https://developer.mozilla.org/en-US/docs/Glossary/Site
-  IndexedDB:
-    title: Indexed Database API 3.0
-    author:
-      name: Joshua Bell
-      org: Google
-    target: https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/
-    date: January 10, 2025
+  W3C.IndexedDB: IndexedDB
   OWASPCheatSheet:
     title: OWASP Cheat Sheet
     target: https://cheatsheetseries.owasp.org/
@@ -413,7 +371,7 @@ When the refresh token expires, there is no way to obtain a valid access token w
 
 #### Cookie-based Session Management {#pattern-bff-sessions}
 
-The BFF relies on browser cookies ({{draft-ietf-httpbis-rfc6265bis}}) to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.
+The BFF relies on browser cookies ({{-draft-ietf-httpbis-rfc6265bis}}) to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.
 
 Server-side sessions expose only a session identifier and keep all data on the server. Doing so ensures a great level of control over active sessions, along with the possibility to revoke any session at will. The downside of this approach is the impact on scalability, requiring solutions such as "sticky sessions", or "session replication". Given these downsides, using server-side sessions with a BFF is only recommended in small-scale scenarios.
 
@@ -455,7 +413,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD enable the *SameSite=Strict* flag for its cookies
 - The BFF SHOULD set its cookie path to */*
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
-- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{draft-ietf-httpbis-rfc6265bis}})
+- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{-draft-ietf-httpbis-rfc6265bis}})
 
 In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
@@ -532,7 +490,7 @@ Note that this attack scenario results in the following consequences:
 
 * Client Hijacking ({{consequence-hijack}})
 
-Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy ({{CSP3}}).
+Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy ({{-CSP3}}).
 
 In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of the scope of this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.
 
@@ -939,7 +897,7 @@ Note that even a perfect token storage mechanism does not prevent the attacker f
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
+Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
 Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
@@ -1137,7 +1095,7 @@ as described in this document.
 Handling the OAuth Flow in a Service Worker {#service-worker}
 -------------------------------------------
 
-In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{ServiceWorker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restriction aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
+In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker ({{-ServiceWorker}}) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restriction aims to target the attack scenario "Acquisition and Extraction of New Tokens" ({{scenario-new-flow}}).
 
 The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.
 
@@ -1221,7 +1179,7 @@ Note that this practice is different from the use of cookies in a BFF (discussed
 Token Storage in a Service Worker {#token-storage-service-worker}
 ---------------------------------
 
-A Service Worker ({{ServiceWorker}}) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.
+A Service Worker ({{-ServiceWorker}}) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.
 
 When aiming to isolate tokens from the application's execution context, the Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window. Consequentially, the Service Worker currently does not have access to an isolated persistent storage area.
 
@@ -1255,7 +1213,7 @@ While closures work well in simple, isolated environments, they are tricky to se
 Persistent Token Storage {#token-storage-persistent}
 ------------------------
 
-The persistent storage APIs currently available as of this writing are localStorage ({{WebStorage}}), sessionStorage ({{WebStorage}}), and {{IndexedDB}}.
+The persistent storage APIs currently available as of this writing are localStorage ({{WebStorage}}), sessionStorage ({{WebStorage}}), and {{-IndexedDB}}.
 
 localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.
 
@@ -1271,7 +1229,7 @@ Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 
 In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.
 
-While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The {{WebCryptographyAPI}} provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{WebCryptographyAPI}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
+While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The {{-WebCryptographyAPI}} provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{-WebCryptographyAPI}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
 In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.
 
@@ -1298,11 +1256,11 @@ Sender-Constrained Tokens {#sender-constrained-tokens}
 
 As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is DPoP {{RFC9449}}.
 
-When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the {{WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the {{-WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
-While a non-exportable key is protected from exfiltration from within JavaScript, the exfiltration of the underlying private key from the filesystem is still a concern. At the time of writing, there is no guarantee made by the {{WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
+While a non-exportable key is protected from exfiltration from within JavaScript, the exfiltration of the underlying private key from the filesystem is still a concern. At the time of writing, there is no guarantee made by the {{-WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
 
 
 
