@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-26T00:06:18.189919+00:00",
+  "timestamp": "2025-01-28T00:05:44.027862+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -4010,6 +4010,32 @@
       "mergeCommit": {
         "oid": "1f50e8837dc4af5c27a6a74c1f521b4efa5f4c8b"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 65,
+      "id": "PR_kwDOCUe3lM6JArac",
+      "title": "Gen-ART review: simple editorial fixes and suggestion",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/65",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-26T14:45:06Z",
+      "updatedAt": "2025-01-26T17:02:24Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "64eaa586f5a109ab8e6b731b88d757270758beab",
+      "headRepository": "thomas-fossati/oauth-browser-based-apps",
+      "headRefName": "main",
+      "headRefOid": "2e24901a6197892856444822cfad14501a101310",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
