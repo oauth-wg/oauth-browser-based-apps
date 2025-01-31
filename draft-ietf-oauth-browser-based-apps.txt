@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 21 July 2025                                      Ping Identity
+Expires: 4 August 2025                                     Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                         17 January 2025
+                                                         31 January 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 July 2025.
+   This Internet-Draft will expire on 4 August 2025.
 
 Copyright Notice
 
