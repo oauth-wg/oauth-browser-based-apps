@@ -1298,6 +1298,10 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-23
+
+* Addressed feedback from Gen-ART review
+
 -22
 
 * Addressed AD review
@@ -1471,7 +1475,7 @@ Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, D
 Daniel Fett, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
-Sean Kelleher, Thomas Broyer, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
+Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
 William Duncan, and Yannick Majoros.
 
 
