@@ -2573,6 +2573,10 @@ Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
 
+   -23
+
+   *  Addressed feedback from Gen-ART review
+
    -22
 
    *  Addressed AD review
@@ -2863,9 +2867,9 @@ Appendix B.  Acknowledgements
    Gautier, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
    Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
    Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill,
-   Louis Jannett, Mike Jones, Sean Kelleher, Thomas Broyer, Tomek
-   Stojecki, Torsten Lodderstedt, Vittorio Bertocci, William Duncan, and
-   Yannick Majoros.
+   Louis Jannett, Mike Jones, Sean Kelleher, Thomas Broyer, Thomas
+   Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
+   William Duncan, and Yannick Majoros.
 
 Authors' Addresses
 
