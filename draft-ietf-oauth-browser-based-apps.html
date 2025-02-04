@@ -12,11 +12,11 @@
        This specification details the threats, attack consequences, security considerations and best practices that must be
 taken into account when developing browser-based applications that use OAuth 2.0. 
     " name="description">
-<meta content="xml2rfc 3.25.0" name="generator">
+<meta content="xml2rfc 3.26.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-oauth-browser-based-apps-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.25.0
+  xml2rfc 3.26.0
     Python 3.12.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">OAuth 2.0 for Browser-Based Applications</td>
-<td class="right">January 2025</td>
+<td class="right">February 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Parecki, et al.</td>
-<td class="center">Expires 4 August 2025</td>
+<td class="center">Expires 8 August 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-oauth-browser-based-apps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-31" class="published">31 January 2025</time>
+<time datetime="2025-02-04" class="published">4 February 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-08-04">4 August 2025</time></dd>
+<dd class="expires"><time datetime="2025-08-08">8 August 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1123,7 +1123,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 4 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1379,8 +1379,8 @@ applications, including incorporating additional OAuth extensions where needed.<
 <p id="section-1-3">This specification, OAuth 2.0 for Browser-Based Applications, addresses the similarities between implementing
 OAuth clients as native applications and browser-based applications, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
-<span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> and browser-based applications are expected to follow those recommendations
-as well. This document expands on and further restricts various recommendations given in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> and browser-based applications are expected to follow those recommendations
+as well. This document expands on and further restricts various recommendations given in <span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="notational-conventions">
@@ -1424,8 +1424,8 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-history-of-oauth-20-in-brow" class="section-name selfRef">History of OAuth 2.0 in Browser-Based Applications</a>
       </h2>
 <p id="section-4-1">At the time that OAuth 2.0 was initially specified in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> and <span>[<a href="#RFC6750" class="cite xref">RFC6750</a>]</span>, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit grant type, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See <a href="#implicit_flow" class="auto internal xref">Section 7.2</a> for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>.<a href="#section-4-2" class="pilcrow">¶</a></p>
-<p id="section-4-3">In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding PKCE to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-2">However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See <a href="#implicit_flow" class="auto internal xref">Section 7.2</a> for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in <span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) <span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span> to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain applications.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1511,7 +1511,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
               <p id="section-5.1.3-2.1.1">Execute malicious JS code<a href="#section-5.1.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.3-2.2">
-              <p id="section-5.1.3-2.2.1">Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging (<span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>))<a href="#section-5.1.3-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.3-2.2.1">Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>)<a href="#section-5.1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.3-2.3">
               <p id="section-5.1.3-2.3.1">Insert a hidden iframe into the page and initialize it with an authorization request. The authorization request in the iframe will occur within the user's session and, if the session is still active, result in the issuing of an authorization code. Note that this step relies on the Authorization Server supporting silent frame-based flows, as discussed in the last paragraph of this scenario.<a href="#section-5.1.3-2.3.1" class="pilcrow">¶</a></p>
@@ -1577,7 +1577,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
 <p id="section-5.2.2-1">If the attacker obtains a valid access token, they gain the ability to impersonate the legitimate client application in a request to a resource server. Concretely, possession of an access token allows the attacker to send arbitrary requests to any resource server that accepts the valid access token. In essence, abusing a stolen access token enables short-term impersonation of the legitimate client application to resource servers.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">The attack ends when the access token expires or when a token is revoked with the authorization server. In a typical browser-based OAuth client, access token lifetimes can be quite short, ranging from minutes to hours.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-3">Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.2-4">The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in section 11.4 of <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span>. However, when the attacker obtains a fresh set of tokens, as described in <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-4">The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in <span><a href="https://rfc-editor.org/rfc/rfc9449#section-11.4" class="relref">Section 11.4</a> of [<a href="#RFC9449" class="cite xref">RFC9449</a>]</span>. However, when the attacker obtains a fresh set of tokens, as described in <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="consequence-hijack">
@@ -1610,7 +1610,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
           <p id="section-6-2.3.1">A JavaScript application acting as the client, handling all OAuth responsibilities in the browser (Browser-based OAuth Client)<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-6-3">Each of these architecture patterns offer a different trade-off between security and simplicity. The patterns in this section are presented in decreasing order of security.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-3">Each of these architectural patterns offers a different trade-off between security and simplicity. The patterns in this section are presented in decreasing order of security.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div id="pattern-bff">
 <section id="section-6.1">
         <h3 id="name-backend-for-frontend-bff">
@@ -1751,8 +1751,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-refresh-tokens">
 <a href="#section-6.1.2.2" class="section-number selfRef">6.1.2.2. </a><a href="#name-refresh-tokens" class="section-name selfRef">Refresh Tokens</a>
             </h5>
-<p id="section-6.1.2.2-1">When using refresh tokens, as described in Section 4.14 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>, the BFF obtains the refresh token (step F) and associates it with the user's session.<a href="#section-6.1.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.2.2-2">If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between step J and K. BFFs that keep all token information available on the server-side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.<a href="#section-6.1.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.2-1">When using refresh tokens, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.14" class="relref">Section 4.14</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>, the BFF obtains the refresh token (step F) and associates it with the user's session.<a href="#section-6.1.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.2-2">If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between steps J and K. BFFs that keep all token information available on the server side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.<a href="#section-6.1.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.2-3">When the refresh token expires, there is no way to obtain a valid access token without running an entirely new Authorization Code flow. Therefore, it makes sense to configure the lifetime of the cookie-based session managed by the BFF to be equal to the maximum lifetime of the refresh token. Additionally, when the BFF learns that a refresh token for an active session is no longer valid, it also makes sense to invalidate the session.<a href="#section-6.1.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1761,7 +1761,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-cookie-based-session-manage">
 <a href="#section-6.1.2.3" class="section-number selfRef">6.1.2.3. </a><a href="#name-cookie-based-session-manage" class="section-name selfRef">Cookie-based Session Management</a>
             </h5>
-<p id="section-6.1.2.3-1">The BFF relies on browser cookies (<span>[<a href="#draft-ietf-httpbis-rfc6265bis" class="cite xref">draft-ietf-httpbis-rfc6265bis</a>]</span>) to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.<a href="#section-6.1.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.3-1">The BFF relies on browser cookies (<span>[<a href="#I-D.ietf-httpbis-rfc6265bis" class="cite xref">I-D.ietf-httpbis-rfc6265bis</a>]</span>) to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.<a href="#section-6.1.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.3-2">Server-side sessions expose only a session identifier and keep all data on the server. Doing so ensures a great level of control over active sessions, along with the possibility to revoke any session at will. The downside of this approach is the impact on scalability, requiring solutions such as "sticky sessions", or "session replication". Given these downsides, using server-side sessions with a BFF is only recommended in small-scale scenarios.<a href="#section-6.1.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.3-3">Client-side sessions push all data to the browser in a signed, and optionally encrypted, object. This pattern absolves the server of keeping track of any session data, but severely limits control over active sessions and makes it difficult to handle session revocation. However, when client-side sessions are used in the context of a BFF, these properties change significantly. Since the cookie-based session is only used to obtain a user's tokens, all control and revocation properties follow from the use of access tokens and refresh tokens. It suffices to revoke the user's access token and/or refresh token to prevent ongoing access to protected resources, without the need to explicitly invalidate the cookie-based session.<a href="#section-6.1.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.3-4">Best practices to secure the session cookie are discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>.<a href="#section-6.1.2.3-4" class="pilcrow">¶</a></p>
@@ -1797,7 +1797,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-the-authorization-code-gran">
 <a href="#section-6.1.3.1" class="section-number selfRef">6.1.3.1. </a><a href="#name-the-authorization-code-gran" class="section-name selfRef">The Authorization Code Grant</a>
             </h5>
-<p id="section-6.1.3.1-1">The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described by Section 2.1.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> to initiate a request for an access token.<a href="#section-6.1.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.1-1">The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> to initiate a request for an access token.<a href="#section-6.1.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-bff-cookie-security">
@@ -1824,7 +1824,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.1.3.2-3.5.1">The BFF SHOULD NOT set the <em>Domain</em> attribute for cookies<a href="#section-6.1.3.2-3.5.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.1.3.2-3.6">
-                <p id="section-6.1.3.2-3.6.1">The BFF SHOULD start the name of its cookies with the <em>__Host-</em> prefix (<span>[<a href="#draft-ietf-httpbis-rfc6265bis" class="cite xref">draft-ietf-httpbis-rfc6265bis</a>]</span>)<a href="#section-6.1.3.2-3.6.1" class="pilcrow">¶</a></p>
+                <p id="section-6.1.3.2-3.6.1">The BFF SHOULD start the name of its cookies with the <em>__Host-</em> prefix (<span>[<a href="#I-D.ietf-httpbis-rfc6265bis" class="cite xref">I-D.ietf-httpbis-rfc6265bis</a>]</span>)<a href="#section-6.1.3.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-6.1.3.2-4">In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.<a href="#section-6.1.3.2-4" class="pilcrow">¶</a></p>
@@ -1868,7 +1868,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
               <h6 id="name-use-anti-forgery-double-sub">
 <a href="#section-6.1.3.3.3" class="section-number selfRef">6.1.3.3.3. </a><a href="#name-use-anti-forgery-double-sub" class="section-name selfRef">Use anti-forgery/double submit cookies</a>
               </h6>
-<p id="section-6.1.3.3.3-1">Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state changing requests, this mechanism effectively mitigates CSRF.<a href="#section-6.1.3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3.3-1">Some technology stacks and frameworks have built-in CRSF protection using anti-forgery cookies. This mechanism relies on a session-specific secret that is stored in a cookie, which can only be read by the legitimate frontend running in the domain associated with the cookie. The frontend is expected to read the cookie and insert its value into the request, typically by adding a custom request header. The backend verifies the value in the cookie to the value provided by the frontend to identify legitimate requests. When implemented correctly for all state-changing requests, this mechanism effectively mitigates CSRF.<a href="#section-6.1.3.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3.3-2">Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.<a href="#section-6.1.3.3.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1878,7 +1878,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <a href="#section-6.1.3.3.4" class="section-number selfRef">6.1.3.3.4. </a><a href="#name-privacy-considerations-in-t" class="section-name selfRef">Privacy considerations in the BFF architecture</a>
               </h6>
 <p id="section-6.1.3.3.4-1">The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.<a href="#section-6.1.3.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.3.4-2">When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third-party, this privacy impact needs to be taken into account.<a href="#section-6.1.3.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3.4-2">When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.<a href="#section-6.1.3.3.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1916,8 +1916,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.1.4.1-4.1.1">Client Hijacking (<a href="#consequence-hijack" class="auto internal xref">Section 5.2.3</a>)<a href="#section-6.1.4.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.1.4.1-5">Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy (<span>[<a href="#CSP3" class="cite xref">CSP3</a>]</span>).<a href="#section-6.1.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-6.1.4.1-6">In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of scope for this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.<a href="#section-6.1.4.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.1-5">Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy (<span>[<a href="#W3C.CSP3" class="cite xref">W3C.CSP3</a>]</span>).<a href="#section-6.1.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.1-6">In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of the scope of this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.<a href="#section-6.1.4.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.1-7">Finally, the BFF is uniquely placed to observe all traffic between the JavaScript application and the resource servers. If a high-security application would prefer to implement anomaly detection or rate limiting, such a BFF would be the ideal place to do so. Such restrictions can further help to mitigate the consequences of client hijacking.<a href="#section-6.1.4.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2095,8 +2095,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-refresh-tokens-2">
 <a href="#section-6.2.2.2" class="section-number selfRef">6.2.2.2. </a><a href="#name-refresh-tokens-2" class="section-name selfRef">Refresh Tokens</a>
             </h5>
-<p id="section-6.2.2.2-1">When using refresh tokens, as described in Section 4.14 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.<a href="#section-6.2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2.2-2">If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, thus requires client authentication.<a href="#section-6.2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.2-1">When using refresh tokens, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.14" class="relref">Section 4.14</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.<a href="#section-6.2.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.2-2">If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, and thus requires client authentication.<a href="#section-6.2.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.2-3">When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it makes sense to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it makes sense to invalidate the session.<a href="#section-6.2.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2107,7 +2107,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             </h5>
 <p id="section-6.2.2.3-1">Depending on the resource servers being accessed and the configuration of scopes at the authorization server, the JavaScript application may wish to request access tokens with different scope configurations. This behavior would allow the JavaScript application to follow the best practice of using minimally-scoped access tokens.<a href="#section-6.2.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.3-2">The JavaScript application can inform the token-mediating backend of the desired scopes when it checks for the active session (Step A/I). It is up to the token-mediating backend to decide if previously obtained access tokens fall within the desired scope criteria.<a href="#section-6.2.2.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.2.3-3">It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.<a href="#section-6.2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.3-3">It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead, it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.<a href="#section-6.2.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.3-4">The token-mediating backend can use a similar mechanism to downscoping when relying on <span>[<a href="#RFC8707" class="cite xref">RFC8707</a>]</span> to obtain access token for a specific resource server.<a href="#section-6.2.2.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2147,7 +2147,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-the-authorization-code-grant">
 <a href="#section-6.2.3.1" class="section-number selfRef">6.2.3.1. </a><a href="#name-the-authorization-code-grant" class="section-name selfRef">The Authorization Code Grant</a>
             </h5>
-<p id="section-6.2.3.1-1">The main benefit of using a token-mediating backend is the backend's ability to act as a confidential client. Therefore, the token-mediating backend MUST act as a confidential client. Furthermore, the token-mediating backend MUST use the OAuth 2.0 Authorization Code grant as described by Section 2.1.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> to initiate a request for an access token.<a href="#section-6.2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3.1-1">The main benefit of using a token-mediating backend is the backend's ability to act as a confidential client. Therefore, the token-mediating backend MUST act as a confidential client. Furthermore, the token-mediating backend MUST use the OAuth 2.0 Authorization Code grant as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> to initiate a request for an access token.<a href="#section-6.2.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-bmf-cookie-security">
@@ -2259,7 +2259,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
               <h6 id="name-using-sender-constrained-to">
 <a href="#section-6.2.4.3.2" class="section-number selfRef">6.2.4.3.2. </a><a href="#name-using-sender-constrained-to" class="section-name selfRef">Using Sender-Constrained Tokens</a>
               </h6>
-<p id="section-6.2.4.3.2-1">Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of scope for this document.<a href="#section-6.2.4.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.3.2-1">Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of the scope of this document.<a href="#section-6.2.4.3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2396,7 +2396,7 @@ accomplished by any of the below:<a href="#section-6.3.2.2-1" class="pilcrow">¶
                 <p id="section-6.3.2.2-2.3.1">if the application is using OpenID Connect, by using and verifying the OpenID Connect <code>nonce</code> parameter as described in <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span><a href="#section-6.3.2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.3.2.2-3">See Section 2.1 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> for additional details on selecting a proper CSRF defense for the Authorization Code flow.<a href="#section-6.3.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.2.2-3">See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-2.1" class="relref">Section 2.1</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> for additional details on selecting a proper CSRF defense for the Authorization Code flow.<a href="#section-6.3.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-rt">
@@ -2409,14 +2409,14 @@ is greater than leaked access tokens, since an attacker may be able to
 continue using the stolen refresh token to obtain new access tokens potentially without being
 detectable by the authorization server.<a href="#section-6.3.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.2.3-2">Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. However, in light of the impact of third-party cookie blocking mechanisms, the use of refresh tokens has become significantly more attractive. The <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> describes some additional requirements around refresh tokens
+applications. However, in light of the impact of third-party cookie-blocking mechanisms, the use of refresh tokens has become significantly more attractive. <span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> describes some additional requirements around refresh tokens
 on top of the recommendations of <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>. Applications and authorization servers
-conforming to this BCP MUST also follow the recommendations in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>
+conforming to this BCP MUST also follow the recommendations in <span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>
 around refresh tokens if refresh tokens are issued to browser-based applications.<a href="#section-6.3.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.2.3-3">In particular, authorization servers:<a href="#section-6.3.2.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.2.3-4.1">
-                <p id="section-6.3.2.3-4.1.1">MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.14.2<a href="#section-6.3.2.3-4.1.1" class="pilcrow">¶</a></p>
+                <p id="section-6.3.2.3-4.1.1">MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.14.2" class="relref">Section 4.14.2</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span><a href="#section-6.3.2.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.3.2.3-4.2">
                 <p id="section-6.3.2.3-4.2.1">MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time<a href="#section-6.3.2.3-4.2.1" class="pilcrow">¶</a></p>
@@ -2498,7 +2498,7 @@ has already been approved.<a href="#section-6.3.3.2-2" class="pilcrow">¶</a></p
               </h6>
 <p id="section-6.3.3.2.1-1">Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.<a href="#section-6.3.3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.2.1-2">Authorization servers MUST require an exact match of a registered redirect URI
-as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 4.1.1. This helps to prevent attacks targeting the authorization code.<a href="#section-6.3.3.2.1-2" class="pilcrow">¶</a></p>
+as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.1.1" class="relref">Section 4.1.1</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>. This helps to prevent attacks targeting the authorization code.<a href="#section-6.3.3.2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2512,7 +2512,7 @@ as described in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-
 In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or to run frame-based flows silently.<a href="#section-6.3.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.3-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-6.3.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.3.3-3">Section 4.18. of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.3.3-3"><span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.18." class="relref">Section 4.18.</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.3.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-cors">
@@ -2522,8 +2522,8 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
             </h5>
 <p id="section-6.3.3.4-1">In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send necessary CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to enable the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.4-2">For the authorization server, the CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for supporting CORS on these endpoints.<a href="#section-6.3.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.3.4-3">This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends their approval in the preflight response.<a href="#section-6.3.3.4-3" class="pilcrow">¶</a></p>
-<p id="section-6.3.3.4-4">Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different than the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.<a href="#section-6.3.3.4-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.3.4-3">This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends its approval in the preflight response.<a href="#section-6.3.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.3.4-4">Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different from the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.<a href="#section-6.3.3.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2590,7 +2590,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
               <h6 id="name-using-sender-constrained-tok">
 <a href="#section-6.3.4.2.2" class="section-number selfRef">6.3.4.2.2. </a><a href="#name-using-sender-constrained-tok" class="section-name selfRef">Using Sender-Constrained Tokens</a>
               </h6>
-<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <span>[<a href="#CryptoKeyPair" class="cite xref">CryptoKeyPair</a>]</span> is stored using <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.2-1">Browser-based OAuth clients can implement DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable <span>[<a href="#CryptoKeyPair" class="cite xref">CryptoKeyPair</a>]</span> is stored using <span>[<a href="#W3C.IndexedDB" class="cite xref">W3C.IndexedDB</a>]</span>). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See <a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a> and <a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>).<a href="#section-6.3.4.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.2-2">Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.<a href="#section-6.3.4.2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2600,7 +2600,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
 <a href="#section-6.3.4.2.3" class="section-number selfRef">6.3.4.2.3. </a><a href="#name-restricting-access-to-the-a" class="section-name selfRef">Restricting Access to the Authorization Server</a>
               </h6>
 <p id="section-6.3.4.2.3-1">The scenario where the attacker obtains a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>) relies on the ability to directly interact with the authorization server from within the browser. In theory, a defense that prevents the attacker from silently interacting with the authorization server could solve the most dangerous attack scenario. However, in practice, such defenses are ineffective or impractical.<a href="#section-6.3.4.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.4.2.3-2">For completeness, this BCP lists a few options below. Note that none of these defenses are recommended, as they do not offer practically usable security benefits.<a href="#section-6.3.4.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.3-2">For completeness, this BCP lists a few options below. Note that none of these defenses is recommended, as they do not offer practically usable security benefits.<a href="#section-6.3.4.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.3-3">The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.<a href="#section-6.3.4.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.3-4">The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initiated by the attacker.<a href="#section-6.3.4.2.3-4" class="pilcrow">¶</a></p>
 </section>
@@ -2734,7 +2734,7 @@ app can obtain tokens even if the authorization server is on a different domain.
           <h4 id="name-further-attacks-on-the-impl">
 <a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-further-attacks-on-the-impl" class="section-name selfRef">Further Attacks on the Implicit Grant</a>
           </h4>
-<p id="section-7.2.3-1">Apart from the attack scenarios and consequences that were already discussed, there are a few additional attacks that further support the deprecation of the Implicit grant type. Many attacks on the Implicit grant type described by <span>[<a href="#RFC6819" class="cite xref">RFC6819</a>]</span> and Section 4.1.2 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>
+<p id="section-7.2.3-1">Apart from the attack scenarios and consequences that were already discussed, there are a few additional attacks that further support the deprecation of the Implicit grant type. Many attacks on the Implicit grant type described by <span>[<a href="#RFC6819" class="cite xref">RFC6819</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.1.2" class="relref">Section 4.1.2</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>
 do not have sufficient mitigation strategies. The following sections describe the specific
 attacks that cannot be mitigated while continuing to use the Implicit grant type.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
 <div id="manipulation-of-the-redirect-uri">
@@ -2744,7 +2744,7 @@ attacks that cannot be mitigated while continuing to use the Implicit grant type
             </h5>
 <p id="section-7.2.3.1-1">If an attacker is able to cause the authorization response to be sent to a URI under
 their control, they will directly get access to the authorization response including the access token.
-Several methods of performing this attack are described in detail in <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>.<a href="#section-7.2.3.1-1" class="pilcrow">¶</a></p>
+Several methods of performing this attack are described in detail in <span>[<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>.<a href="#section-7.2.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="access-token-leak-in-browser-history">
@@ -2759,7 +2759,7 @@ Neither of these fully prevent this attack, they only reduce the potential damag
 <p id="section-7.2.3.2-2">Additionally, many browsers now also sync browser history to cloud services and to
 multiple devices, providing an even wider attack surface to extract access tokens
 out of the URL.<a href="#section-7.2.3.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2.3.2-3">This is discussed in more detail in Section 4.3.2 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span>.<a href="#section-7.2.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.3.2-3">This is discussed in more detail in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.3.2" class="relref">Section 4.3.2</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>.<a href="#section-7.2.3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="manipulation-of-scripts">
@@ -2835,9 +2835,9 @@ also requires the use of the Authorization Code grant type with PKCE anyway.<a h
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-resource-owner-password-gra" class="section-name selfRef">Resource Owner Password Grant</a>
         </h3>
 <p id="section-7.3-1">The Resource Owner Password Credentials Grant MUST NOT be used, as described in
-<span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> Section 2.4. Instead, by using the Authorization Code grant type
-and redirecting the user to the authorization server,
-this provides the authorization server the opportunity to prompt the user for
+<span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-2.4" class="relref">Section 2.4</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span>. Instead, using the Authorization Code grant type
+and redirecting the user to the authorization server
+provides the authorization server the opportunity to prompt the user for
 secure non-phishable authentication options, take advantage of single sign-on sessions,
 or use third-party identity providers. In contrast, the Resource Owner Password Credentials Grant does not
 provide any built-in mechanism for these, and would instead need to be extended with custom protocols.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
@@ -2851,7 +2851,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-handling-the-oauth-flow-in-">
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-handling-the-oauth-flow-in-" class="section-name selfRef">Handling the OAuth Flow in a Service Worker</a>
         </h3>
-<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restriction aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">In an attempt to limit the attacker's ability to extract existing tokens or acquire a new set of tokens, a pattern using a Service Worker (<span>[<a href="#W3C.service-workers" class="cite xref">W3C.service-workers</a>]</span>) has been suggested in the past. In this pattern, the application's first action upon loading is registering a Service Worker. The Service Worker becomes responsible for executing the Authorization Code flow to obtain tokens and to augment outgoing requests to the resource server with the proper access token. Additionally, the Service Worker blocks the client application's code from making direct calls to the authorization server's endpoints. This restriction aims to target the attack scenario "Acquisition and Extraction of New Tokens" (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <span id="name-oauth-20-service-worker-pat"></span><div id="fig-bbapp-pattern-serviceworker">
 <figure id="figure-4">
@@ -3019,7 +3019,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-token-storage-in-the-browse" class="section-name selfRef">Token Storage in the Browser</a>
       </h2>
 <p id="section-8-1">When a browser-based application handles tokens directly, it becomes responsible for ephemerally or persistently storing tokens. As a consequence, the application needs to decide how to manage tokens (e.g., in-memory vs persistent storage), and which steps to take to further isolate tokens from the main application code. This section discusses a few different storage mechanisms and their properties.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">When discussing the security properties of browser-based token storage solutions, it is important to understand the attacker's capabilities when they compromise a browser-based application. Similar to previous discussions, there are two main attack scenarios that should be taken into account:<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-2">When discussing the security properties of browser-based token storage solutions, it is important to understand the attacker's capabilities when they compromise a browser-based application. Similar to previous discussions, two main attack scenarios should be taken into account:<a href="#section-8-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8-3">
 <li id="section-8-3.1">
           <p id="section-8-3.1.1">The attacker obtaining tokens from storage<a href="#section-8-3.1.1" class="pilcrow">¶</a></p>
@@ -3036,8 +3036,8 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-cookies" class="section-name selfRef">Cookies</a>
         </h3>
 <p id="section-8.1-1">Browser cookies are both a storage mechanism and a transport mechanism. The browser automatically supports both through the corresponding request and response headers, resulting in the storage of cookies in the browser and the automatic inclusion of cookies on outgoing requests given it matches the cookie's domain, path, or other properties.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">Next to header-based control over cookies, browsers also offer a JavaScript Cookie API to get and set cookies. This Cookie API is often mistaken as an easy way to store data in the browser. In such a scenario, the JavaScript code stores a token in a cookie, with the intent to retrieve the token for later for inclusion in the Authorization header of an API call. However, since the cookie is associated with the domain of the browser-based application, the browser will also send the cookie containing the token when making a request to the server running on this domain. One example of such a request is the browser loading the application after a previous visit to the application (step A in the diagram of <a href="#pattern-oauth-browser" class="auto internal xref">Section 6.3</a>).<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">Because of these unintentional side effect of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">Next to header-based control over cookies, browsers also offer a JavaScript Cookie API to get and set cookies. This Cookie API is often mistaken as an easy way to store data in the browser. In such a scenario, the JavaScript code stores a token in a cookie, with the intent to retrieve the token for later inclusion in the Authorization header of an API call. However, since the cookie is associated with the domain of the browser-based application, the browser will also send the cookie containing the token when making a request to the server running on this domain. One example of such a request is the browser loading the application after a previous visit to the application (step A in the diagram of <a href="#pattern-oauth-browser" class="auto internal xref">Section 6.3</a>).<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">Because of these unintentional side effects of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 <p id="section-8.1-4">Note that this practice is different from the use of cookies in a BFF (discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>), where the cookie is inaccessible to JavaScript and is supposed to be sent to the backend.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3046,7 +3046,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-token-storage-in-a-service-">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-token-storage-in-a-service-" class="section-name selfRef">Token Storage in a Service Worker</a>
         </h3>
-<p id="section-8.2-1">A Service Worker (<span>[<a href="#ServiceWorker" class="cite xref">ServiceWorker</a>]</span>) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">A Service Worker (<span>[<a href="#W3C.service-workers" class="cite xref">W3C.service-workers</a>]</span>) offers a fully isolated environment to keep track of tokens. These tokens are inaccessible to the client application, effectively protecting them against exfiltration. To guarantee the security of these tokens, the Service Worker cannot share these tokens with the application. Consequentially, whenever the application wants to perform an operation with a token, it has to ask the Service Worker to perform this operation and return the result.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">When aiming to isolate tokens from the application's execution context, the Service Worker MUST NOT store tokens in any persistent storage API that is shared with the main window. For example, currently, the IndexedDB storage is shared between the browsing context and Service Worker, so is not a suitable place for the Service Worker to persist data that should remain inaccessible to the main window. Consequentially, the Service Worker currently does not have access to an isolated persistent storage area.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">As discussed before, the use of a Service Worker does not prevent an attacker from obtaining a new set of tokens. Similarly, if the application is responsible for obtaining tokens from the authorization server and passing them to a Service Worker for further management, the attacker can perform the same operation as the legitimate application to obtain these tokens.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -3067,7 +3067,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-in-memory-token-storage">
 <a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-in-memory-token-storage" class="section-name selfRef">In-Memory Token Storage</a>
         </h3>
-<p id="section-8.4-1">Another option is keeping tokens in-memory, without using any persistent storage. Doing so limits the exposure of the tokens to the current execution context only, but has the downside of not being able to persist tokens between page loads.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">Another option is keeping tokens in memory, without using any persistent storage. Doing so limits the exposure of the tokens to the current execution context only, but has the downside of not being able to persist tokens between page loads.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <p id="section-8.4-2">In a JavaScript execution environment, the security of in-memory token storage can be further enhanced by using a closure variable to effectively shield the token from direct access. By using closures, the token is only accessible to the pre-defined functions inside the closure, such as a function to make a request to the resource server.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
 <p id="section-8.4-3">While closures work well in simple, isolated environments, they are tricky to secure in a complex environment like the browser's execution environment. For example, a closure relies on a variety of outside functions to execute its operations, such as <em>toString</em> functions or networking APIs. Using prototype poisoning, an attacker can substitute these functions with malicious versions, causing the closure's future operations to use these malicious versions. Inside the malicious function, the attacker can gain access to the function arguments, which may expose the tokens from within the closure to the attacker.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
 </section>
@@ -3077,7 +3077,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-persistent-token-storage">
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-persistent-token-storage" class="section-name selfRef">Persistent Token Storage</a>
         </h3>
-<p id="section-8.5-1">The persistent storage APIs currently available as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#IndexedDB" class="cite xref">IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-1">The persistent storage APIs currently available as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#W3C.IndexedDB" class="cite xref">W3C.IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.5-2">localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.5-3">sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
 <p id="section-8.5-4">IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
@@ -3090,7 +3090,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-filesystem-considerations-f" class="section-name selfRef">Filesystem Considerations for Browser Storage APIs</a>
         </h3>
 <p id="section-8.6-1">In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
-<p id="section-8.6-2">While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
+<p id="section-8.6-2">While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span> provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span> specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
 <p id="section-8.6-3">In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3106,7 +3106,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-reducing-the-authority-of-t">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-reducing-the-authority-of-t" class="section-name selfRef">Reducing the Authority of Tokens</a>
         </h3>
-<p id="section-9.1-1">A general security best practice in the OAuth world is to minimize the authority associated with access tokens. This best practice is applicable to all the architectures discussed in this specification. Concretely, the following considerations can be helpful in reducing the authority of access tokens:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-1">A general security best practice in the OAuth world is to minimize the authority associated with access tokens. This best practice is applicable to all the architectures discussed in this specification. Concretely, the following considerations can help reducing the authority of access tokens:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.1-2.1">
             <p id="section-9.1-2.1.1">Reduce the lifetime of access tokens and rely on refresh tokens for access token renewal<a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
@@ -3127,9 +3127,9 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-sender-constrained-tokens" class="section-name selfRef">Sender-Constrained Tokens</a>
         </h3>
 <p id="section-9.2-1">As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend (<a href="#pattern-tmb" class="auto internal xref">Section 6.2</a>) or a browser-only OAuth client (<a href="#pattern-oauth-browser" class="auto internal xref">Section 6.3</a>) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span>.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally the application should use a non-exportable private key, such as generating one with the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span>. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span>. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
 <p id="section-9.2-3">If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in <a href="#token-storage" class="auto internal xref">Section 8</a>.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
-<p id="section-9.2-4">While a non-exportable key is protected from exfiltration from within JavaScript, exfiltration of the underlying private key from the filesystem is still a concern. As of the time of this writing, there is no guarantee made by the <span>[<a href="#WebCryptographyAPI" class="cite xref">WebCryptographyAPI</a>]</span> that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.2-4">While a non-exportable key is protected from exfiltration from within JavaScript, the exfiltration of the underlying private key from the filesystem is still a concern. At the time of writing, there is no guarantee made by the <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span> that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="auth_server_mixup">
@@ -3138,7 +3138,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-authorization-server-mix-up" class="section-name selfRef">Authorization Server Mix-Up Mitigation</a>
         </h3>
 <p id="section-9.3-1">Authorization server mix-up attacks mark a severe threat to every client that supports
-at least two authorization servers. Section 4.4 of <span>[<a href="#oauth-security-topics" class="cite xref">oauth-security-topics</a>]</span> provides additional details about mix-up attacks
+at least two authorization servers. <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-oauth-security-topics" class="cite xref">I-D.ietf-oauth-security-topics</a>]</span> provides additional details about mix-up attacks
 and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3172,17 +3172,17 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="draft-ietf-httpbis-rfc6265bis">[draft-ietf-httpbis-rfc6265bis]</dt>
-        <dd>
-<span class="refAuthor">Chen, L.</span>, <span class="refAuthor">Englehardt, S.</span>, <span class="refAuthor">West, M.</span>, and <span class="refAuthor">J. Wilander</span>, <span class="refTitle">"Cookies: HTTP State Management Mechanism"</span>, <time datetime="2021-10" class="refDate">October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="Fetch">[Fetch]</dt>
         <dd>
 <span class="refAuthor">whatwg</span>, <span class="refTitle">"Fetch"</span>, <time datetime="2024-12" class="refDate">December 2024</time>, <span>&lt;<a href="https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/">https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="oauth-security-topics">[oauth-security-topics]</dt>
+<dt id="I-D.ietf-httpbis-rfc6265bis">[I-D.ietf-httpbis-rfc6265bis]</dt>
         <dd>
-<span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Labunets, A.</span>, and <span class="refAuthor">D. Fett</span>, <span class="refTitle">"OAuth 2.0 Security Best Current Practice"</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics">https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics</a>&gt;</span>. </dd>
+<span class="refAuthor">Bingler, S.</span>, <span class="refAuthor">West, M.</span>, and <span class="refAuthor">J. Wilander</span>, <span class="refTitle">"Cookies: HTTP State Management Mechanism"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-httpbis-rfc6265bis-19</span>, <time datetime="2025-01-07" class="refDate">7 January 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-19">https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis-19</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-oauth-security-topics">[I-D.ietf-oauth-security-topics]</dt>
+        <dd>
+<span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Labunets, A.</span>, and <span class="refAuthor">D. Fett</span>, <span class="refTitle">"OAuth 2.0 Security Best Current Practice"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-oauth-security-topics-29</span>, <time datetime="2024-06-03" class="refDate">3 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29">https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics-29</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3216,9 +3216,9 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refAuthor">Fett, D.</span>, <span class="refAuthor">Campbell, B.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Lodderstedt, T.</span>, <span class="refAuthor">Jones, M.</span>, and <span class="refAuthor">D. Waite</span>, <span class="refTitle">"OAuth 2.0 Demonstrating Proof of Possession (DPoP)"</span>, <span class="seriesInfo">RFC 9449</span>, <span class="seriesInfo">DOI 10.17487/RFC9449</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9449">https://www.rfc-editor.org/info/rfc9449</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="ServiceWorker">[ServiceWorker]</dt>
+<dt id="W3C.service-workers">[W3C.service-workers]</dt>
         <dd>
-<span class="refAuthor">Archibald, J.</span> and <span class="refAuthor">M. Kruisselbrink</span>, <span class="refTitle">"Service Workers"</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.w3.org/TR/2022/CRD-service-workers-20220712/">https://www.w3.org/TR/2022/CRD-service-workers-20220712/</a>&gt;</span>. </dd>
+<span class="refTitle">"Service Workers"</span>, <span class="seriesInfo">W3C CR service-workers</span>, <span class="seriesInfo">W3C service-workers</span>, <span>&lt;<a href="https://www.w3.org/TR/service-workers/">https://www.w3.org/TR/service-workers/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebMessaging">[WebMessaging]</dt>
       <dd>
@@ -3237,17 +3237,9 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refAuthor">Contributors, M.</span>, <span class="refTitle">"CryptoKeyPair"</span>, <span>n.d.</span>, <span>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair">https://developer.mozilla.org/en-US/docs/Web/API/CryptoKeyPair</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="CSP3">[CSP3]</dt>
-        <dd>
-<span class="refAuthor">West, M.</span> and <span class="refAuthor">A. Sartori</span>, <span class="refTitle">"Content Security Policy"</span>, <time datetime="2024-12" class="refDate">December 2024</time>, <span>&lt;<a href="https://www.w3.org/TR/2024/WD-CSP3-20241217/">https://www.w3.org/TR/2024/WD-CSP3-20241217/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="HTML">[HTML]</dt>
         <dd>
 <span class="refAuthor">whatwg</span>, <span class="refTitle">"HTML"</span>, <time datetime="2025-01" class="refDate">January 2025</time>, <span>&lt;<a href="https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/">https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="IndexedDB">[IndexedDB]</dt>
-        <dd>
-<span class="refAuthor">Bell, J.</span>, <span class="refTitle">"Indexed Database API 3.0"</span>, <time datetime="2025-01" class="refDate">January 2025</time>, <span>&lt;<a href="https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/">https://www.w3.org/TR/2025/WD-IndexedDB-3-20250110/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="OpenID">[OpenID]</dt>
         <dd>
@@ -3265,9 +3257,17 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refAuthor">Contributors, M.</span>, <span class="refTitle">"Site"</span>, <span>n.d.</span>, <span>&lt;<a href="https://developer.mozilla.org/en-US/docs/Glossary/Site">https://developer.mozilla.org/en-US/docs/Glossary/Site</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="WebCryptographyAPI">[WebCryptographyAPI]</dt>
+<dt id="W3C.CSP3">[W3C.CSP3]</dt>
         <dd>
-<span class="refAuthor">Watson, M.</span>, <span class="refTitle">"Web Cryptography API"</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/">https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/</a>&gt;</span>. </dd>
+<span class="refTitle">"Content Security Policy Level 3"</span>, <span class="seriesInfo">W3C WD CSP3</span>, <span class="seriesInfo">W3C CSP3</span>, <span>&lt;<a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="W3C.IndexedDB">[W3C.IndexedDB]</dt>
+        <dd>
+<span class="refTitle">"Indexed Database API"</span>, <span class="seriesInfo">W3C REC IndexedDB</span>, <span class="seriesInfo">W3C IndexedDB</span>, <span>&lt;<a href="https://www.w3.org/TR/IndexedDB/">https://www.w3.org/TR/IndexedDB/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="W3C.WebCryptoAPI">[W3C.WebCryptoAPI]</dt>
+        <dd>
+<span class="refTitle">"Web Cryptography API"</span>, <span class="seriesInfo">W3C REC WebCryptoAPI</span>, <span class="seriesInfo">W3C WebCryptoAPI</span>, <span>&lt;<a href="https://www.w3.org/TR/WebCryptoAPI/">https://www.w3.org/TR/WebCryptoAPI/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="WebStorage">[WebStorage]</dt>
         <dd>
