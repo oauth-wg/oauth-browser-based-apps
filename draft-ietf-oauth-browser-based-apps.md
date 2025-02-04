@@ -42,6 +42,7 @@ normative:
   RFC8252:
   RFC8707:
   RFC9449:
+  RFC9700:
   I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
   Fetch:
     title: Fetch
@@ -50,7 +51,6 @@ normative:
       ins: whatwg
     date: December 19, 2024
     target: https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/
-  I-D.ietf-oauth-security-topics: oauth-security-topics
   W3C.service-workers: ServiceWorker
   WebMessaging:
     title: HTML - Cross-document messaging
@@ -135,8 +135,8 @@ This specification, OAuth 2.0 for Browser-Based Applications, addresses the simi
 OAuth clients as native applications and browser-based applications, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.
 
 Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
-{{-oauth-security-topics}} and browser-based applications are expected to follow those recommendations
-as well. This document expands on and further restricts various recommendations given in {{-oauth-security-topics}}.
+{{RFC9700}} and browser-based applications are expected to follow those recommendations
+as well. This document expands on and further restricts various recommendations given in {{RFC9700}}.
 
 
 Notational Conventions
@@ -173,7 +173,7 @@ History of OAuth 2.0 in Browser-Based Applications
 
 At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}}, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit grant type, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
-However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in {{-oauth-security-topics}}.
+However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in {{RFC9700}}.
 
 In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}}, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
@@ -362,7 +362,7 @@ Finally, the BFF can also offer a "logout" endpoint to the JavaScript applicatio
 
 #### Refresh Tokens
 
-When using refresh tokens, as described in {{Section 4.14 of -oauth-security-topics}}, the BFF obtains the refresh token (step F) and associates it with the user's session.
+When using refresh tokens, as described in {{Section 4.14 of RFC9700}}, the BFF obtains the refresh token (step F) and associates it with the user's session.
 
 If the BFF notices that the user's access token has expired and the BFF has a refresh token, it can use the refresh token to obtain a fresh access token. Since the BFF OAuth client is a confidential client, it will use client authentication on the refresh token request. Typically, the BFF performs these steps inline when handling an API call from the frontend. In that case, these steps, which are not explicitly shown on the diagram, would occur between steps J and K. BFFs that keep all token information available on the server side can also request fresh access tokens when they observe a token expiration event to increase the performance of API requests.
 
@@ -399,7 +399,7 @@ Note that it is possible to further customize this architecture to tailor to spe
 
 #### The Authorization Code Grant {#pattern-bff-flow}
 
-The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of -oauth-security-topics}} to initiate a request for an access token.
+The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
 
 
 #### Cookie Security {#pattern-bff-cookie-security}
@@ -569,7 +569,7 @@ Most of the endpoint implementations of the token-mediating backend are similar 
 
 #### Refresh Tokens
 
-When using refresh tokens, as described in {{Section 4.14 of -oauth-security-topics}}, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.
+When using refresh tokens, as described in {{Section 4.14 of RFC9700}}, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.
 
 If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, and thus requires client authentication.
 
@@ -607,7 +607,7 @@ Serving the static JavaScript code is a separate responsibility from handling in
 
 #### The Authorization Code Grant {#pattern-tmb-flow}
 
-The main benefit of using a token-mediating backend is the backend's ability to act as a confidential client. Therefore, the token-mediating backend MUST act as a confidential client. Furthermore, the token-mediating backend MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of -oauth-security-topics}} to initiate a request for an access token.
+The main benefit of using a token-mediating backend is the backend's ability to act as a confidential client. Therefore, the token-mediating backend MUST act as a confidential client. Furthermore, the token-mediating backend MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
 
 
 #### Cookie Security {#pattern-bmf-cookie-security}
@@ -751,7 +751,7 @@ accomplished by any of the below:
 * using and verifying unique value for the OAuth `state` parameter to carry a CSRF token
 * if the application is using OpenID Connect, by using and verifying the OpenID Connect `nonce` parameter as described in {{OpenID}}
 
-See {{Section 2.1 of -oauth-security-topics}} for additional details on selecting a proper CSRF defense for the Authorization Code flow.
+See {{Section 2.1 of RFC9700}} for additional details on selecting a proper CSRF defense for the Authorization Code flow.
 
 
 #### Refresh Tokens {#pattern-oauth-browser-rt}
@@ -762,14 +762,14 @@ continue using the stolen refresh token to obtain new access tokens potentially 
 detectable by the authorization server.
 
 Authorization servers may choose whether or not to issue refresh tokens to browser-based
-applications. However, in light of the impact of third-party cookie-blocking mechanisms, the use of refresh tokens has become significantly more attractive. {{-oauth-security-topics}} describes some additional requirements around refresh tokens
+applications. However, in light of the impact of third-party cookie-blocking mechanisms, the use of refresh tokens has become significantly more attractive. {{RFC9700}} describes some additional requirements around refresh tokens
 on top of the recommendations of {{RFC6749}}. Applications and authorization servers
-conforming to this BCP MUST also follow the recommendations in {{-oauth-security-topics}}
+conforming to this BCP MUST also follow the recommendations in {{RFC9700}}
 around refresh tokens if refresh tokens are issued to browser-based applications.
 
 In particular, authorization servers:
 
-* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{Section 4.14.2 of -oauth-security-topics}}
+* MUST either rotate refresh tokens on each use OR use sender-constrained refresh tokens as described in {{Section 4.14.2 of RFC9700}}
 * MUST either set a maximum lifetime on refresh tokens OR expire if the refresh token has not been used within some amount of time
 * upon issuing a rotated refresh token, MUST NOT extend the lifetime of the new refresh token beyond the lifetime of the initial refresh token if the refresh token has a preestablished expiration time
 
@@ -831,7 +831,7 @@ has already been approved.
 Clients MUST register one or more redirect URIs with the authorization server, and use only exact registered redirect URIs in the authorization request.
 
 Authorization servers MUST require an exact match of a registered redirect URI
-as described in {{Section 4.1.1 of -oauth-security-topics}}. This helps to prevent attacks targeting the authorization code.
+as described in {{Section 4.1.1 of RFC9700}}. This helps to prevent attacks targeting the authorization code.
 
 
 
@@ -843,7 +843,7 @@ In these flows, the browser-based app holds control of the primary window, for i
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
 
-{{Section 4.18. of -oauth-security-topics}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
+{{Section 4.18. of RFC9700}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
 
 
 #### Cross-Origin Requests {#pattern-oauth-browser-cors}
@@ -1005,7 +1005,7 @@ As a result, this pattern can lead to the following consequences:
 
 ### Further Attacks on the Implicit Grant
 
-Apart from the attack scenarios and consequences that were already discussed, there are a few additional attacks that further support the deprecation of the Implicit grant type. Many attacks on the Implicit grant type described by {{RFC6819}} and {{Section 4.1.2 of -oauth-security-topics}}
+Apart from the attack scenarios and consequences that were already discussed, there are a few additional attacks that further support the deprecation of the Implicit grant type. Many attacks on the Implicit grant type described by {{RFC6819}} and {{Section 4.1.2 of RFC9700}}
 do not have sufficient mitigation strategies. The following sections describe the specific
 attacks that cannot be mitigated while continuing to use the Implicit grant type.
 
@@ -1013,7 +1013,7 @@ attacks that cannot be mitigated while continuing to use the Implicit grant type
 
 If an attacker is able to cause the authorization response to be sent to a URI under
 their control, they will directly get access to the authorization response including the access token.
-Several methods of performing this attack are described in detail in {{-oauth-security-topics}}.
+Several methods of performing this attack are described in detail in {{RFC9700}}.
 
 #### Access Token Leak in Browser History
 
@@ -1026,7 +1026,7 @@ Additionally, many browsers now also sync browser history to cloud services and 
 multiple devices, providing an even wider attack surface to extract access tokens
 out of the URL.
 
-This is discussed in more detail in {{Section 4.3.2 of -oauth-security-topics}}.
+This is discussed in more detail in {{Section 4.3.2 of RFC9700}}.
 
 #### Manipulation of Scripts
 
@@ -1078,7 +1078,7 @@ Resource Owner Password Grant
 -----------------------------
 
 The Resource Owner Password Credentials Grant MUST NOT be used, as described in
-{{Section 2.4 of -oauth-security-topics}}. Instead, using the Authorization Code grant type
+{{Section 2.4 of RFC9700}}. Instead, using the Authorization Code grant type
 and redirecting the user to the authorization server
 provides the authorization server the opportunity to prompt the user for
 secure non-phishable authentication options, take advantage of single sign-on sessions,
@@ -1270,7 +1270,7 @@ Authorization Server Mix-Up Mitigation   {#auth_server_mixup}
 --------------------------------------
 
 Authorization server mix-up attacks mark a severe threat to every client that supports
-at least two authorization servers. {{Section 4.4 of -oauth-security-topics}} provides additional details about mix-up attacks
+at least two authorization servers. {{Section 4.4 of RFC9700}} provides additional details about mix-up attacks
 and the countermeasures mentioned above.
 
 
