@@ -152,10 +152,10 @@ Table of Contents
    provides additional considerations.
 
    Many of these recommendations are derived from the OAuth 2.0 Security
-   Best Current Practice [I-D.ietf-oauth-security-topics] and browser-
-   based applications are expected to follow those recommendations as
-   well.  This document expands on and further restricts various
-   recommendations given in [I-D.ietf-oauth-security-topics].
+   Best Current Practice [RFC9700] and browser-based applications are
+   expected to follow those recommendations as well.  This document
+   expands on and further restricts various recommendations given in
+   [RFC9700].
 
 2.  Notational Conventions
 
@@ -208,7 +208,7 @@ Table of Contents
    the access token in the URL.  See Section 7.2 for an analysis of
    these attacks and the drawbacks of using the Implicit grant type in
    browsers.  Additional attacks and security considerations can be
-   found in [I-D.ietf-oauth-security-topics].
+   found in [RFC9700].
 
    In recent years, widespread adoption of Cross-Origin Resource Sharing
    (CORS) [Fetch], which enables exceptions to the same-origin policy,
@@ -697,9 +697,9 @@ Table of Contents
 
 6.1.2.2.  Refresh Tokens
 
-   When using refresh tokens, as described in Section 4.14 of
-   [I-D.ietf-oauth-security-topics], the BFF obtains the refresh token
-   (step F) and associates it with the user's session.
+   When using refresh tokens, as described in Section 4.14 of [RFC9700],
+   the BFF obtains the refresh token (step F) and associates it with the
+   user's session.
 
    If the BFF notices that the user's access token has expired and the
    BFF has a refresh token, it can use the refresh token to obtain a
@@ -790,9 +790,8 @@ Table of Contents
    The main benefit of using a BFF is the BFF's ability to act as a
    confidential client.  Therefore, the BFF MUST act as a confidential
    client.  Furthermore, the BFF MUST use the OAuth 2.0 Authorization
-   Code grant as described in Section 2.1.1 of
-   [I-D.ietf-oauth-security-topics] to initiate a request for an access
-   token.
+   Code grant as described in Section 2.1.1 of [RFC9700] to initiate a
+   request for an access token.
 
 6.1.3.2.  Cookie Security
 
@@ -1174,10 +1173,9 @@ Table of Contents
 
 6.2.2.2.  Refresh Tokens
 
-   When using refresh tokens, as described in Section 4.14 of
-   [I-D.ietf-oauth-security-topics], the token-mediating backend obtains
-   the refresh token in step F and associates it with the user's
-   session.
+   When using refresh tokens, as described in Section 4.14 of [RFC9700],
+   the token-mediating backend obtains the refresh token in step F and
+   associates it with the user's session.
 
    If the resource server rejects the access token, the JavaScript
    application can contact the token-mediating backend to request a new
@@ -1260,9 +1258,8 @@ Table of Contents
    ability to act as a confidential client.  Therefore, the token-
    mediating backend MUST act as a confidential client.  Furthermore,
    the token-mediating backend MUST use the OAuth 2.0 Authorization Code
-   grant as described in Section 2.1.1 of
-   [I-D.ietf-oauth-security-topics] to initiate a request for an access
-   token.
+   grant as described in Section 2.1.1 of [RFC9700] to initiate a
+   request for an access token.
 
 6.2.3.2.  Cookie Security
 
@@ -1491,9 +1488,8 @@ Table of Contents
    *  if the application is using OpenID Connect, by using and verifying
       the OpenID Connect nonce parameter as described in [OpenID]
 
-   See Section 2.1 of [I-D.ietf-oauth-security-topics] for additional
-   details on selecting a proper CSRF defense for the Authorization Code
-   flow.
+   See Section 2.1 of [RFC9700] for additional details on selecting a
+   proper CSRF defense for the Authorization Code flow.
 
 6.3.2.3.  Refresh Tokens
 
@@ -1507,19 +1503,18 @@ Table of Contents
    Authorization servers may choose whether or not to issue refresh
    tokens to browser-based applications.  However, in light of the
    impact of third-party cookie-blocking mechanisms, the use of refresh
-   tokens has become significantly more attractive.
-   [I-D.ietf-oauth-security-topics] describes some additional
-   requirements around refresh tokens on top of the recommendations of
-   [RFC6749].  Applications and authorization servers conforming to this
-   BCP MUST also follow the recommendations in
-   [I-D.ietf-oauth-security-topics] around refresh tokens if refresh
-   tokens are issued to browser-based applications.
+   tokens has become significantly more attractive.  [RFC9700] describes
+   some additional requirements around refresh tokens on top of the
+   recommendations of [RFC6749].  Applications and authorization servers
+   conforming to this BCP MUST also follow the recommendations in
+   [RFC9700] around refresh tokens if refresh tokens are issued to
+   browser-based applications.
 
    In particular, authorization servers:
 
    *  MUST either rotate refresh tokens on each use OR use sender-
       constrained refresh tokens as described in Section 4.14.2 of
-      [I-D.ietf-oauth-security-topics]
+      [RFC9700]
 
    *  MUST either set a maximum lifetime on refresh tokens OR expire if
       the refresh token has not been used within some amount of time
@@ -1605,9 +1600,8 @@ Table of Contents
    the authorization request.
 
    Authorization servers MUST require an exact match of a registered
-   redirect URI as described in Section 4.1.1 of
-   [I-D.ietf-oauth-security-topics].  This helps to prevent attacks
-   targeting the authorization code.
+   redirect URI as described in Section 4.1.1 of [RFC9700].  This helps
+   to prevent attacks targeting the authorization code.
 
 6.3.3.3.  Security of In-Browser Communication Flows
 
@@ -1626,10 +1620,10 @@ Table of Contents
    inherently provided by the postMessage API (Section 9.3.2 in
    [WebMessaging]).
 
-   Section 4.18. of [I-D.ietf-oauth-security-topics] provides additional
-   details about the security of in-browser communication flows and the
-   countermeasures that browser-based applications and authorization
-   servers MUST apply to defend against these attacks.
+   Section 4.18. of [RFC9700] provides additional details about the
+   security of in-browser communication flows and the countermeasures
+   that browser-based applications and authorization servers MUST apply
+   to defend against these attacks.
 
 6.3.3.4.  Cross-Origin Requests
 
@@ -1935,18 +1929,16 @@ Table of Contents
    discussed, there are a few additional attacks that further support
    the deprecation of the Implicit grant type.  Many attacks on the
    Implicit grant type described by [RFC6819] and Section 4.1.2 of
-   [I-D.ietf-oauth-security-topics] do not have sufficient mitigation
-   strategies.  The following sections describe the specific attacks
-   that cannot be mitigated while continuing to use the Implicit grant
-   type.
+   [RFC9700] do not have sufficient mitigation strategies.  The
+   following sections describe the specific attacks that cannot be
+   mitigated while continuing to use the Implicit grant type.
 
 7.2.3.1.  Manipulation of the Redirect URI
 
    If an attacker is able to cause the authorization response to be sent
    to a URI under their control, they will directly get access to the
    authorization response including the access token.  Several methods
-   of performing this attack are described in detail in
-   [I-D.ietf-oauth-security-topics].
+   of performing this attack are described in detail in [RFC9700].
 
 7.2.3.2.  Access Token Leak in Browser History
 
@@ -1960,8 +1952,7 @@ Table of Contents
    services and to multiple devices, providing an even wider attack
    surface to extract access tokens out of the URL.
 
-   This is discussed in more detail in Section 4.3.2 of
-   [I-D.ietf-oauth-security-topics].
+   This is discussed in more detail in Section 4.3.2 of [RFC9700].
 
 7.2.3.3.  Manipulation of Scripts
 
@@ -2020,10 +2011,10 @@ Table of Contents
 7.3.  Resource Owner Password Grant
 
    The Resource Owner Password Credentials Grant MUST NOT be used, as
-   described in Section 2.4 of [I-D.ietf-oauth-security-topics].
-   Instead, using the Authorization Code grant type and redirecting the
-   user to the authorization server provides the authorization server
-   the opportunity to prompt the user for secure non-phishable
+   described in Section 2.4 of [RFC9700].  Instead, using the
+   Authorization Code grant type and redirecting the user to the
+   authorization server provides the authorization server the
+   opportunity to prompt the user for secure non-phishable
    authentication options, take advantage of single sign-on sessions, or
    use third-party identity providers.  In contrast, the Resource Owner
    Password Credentials Grant does not provide any built-in mechanism
@@ -2430,8 +2421,8 @@ Table of Contents
 
    Authorization server mix-up attacks mark a severe threat to every
    client that supports at least two authorization servers.  Section 4.4
-   of [I-D.ietf-oauth-security-topics] provides additional details about
-   mix-up attacks and the countermeasures mentioned above.
+   of [RFC9700] provides additional details about mix-up attacks and the
+   countermeasures mentioned above.
 
 9.4.  Isolating Applications using Origins
 
@@ -2466,14 +2457,6 @@ Table of Contents
               Draft, draft-ietf-httpbis-rfc6265bis-19, 7 January 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
               rfc6265bis-19>.
-
-   [I-D.ietf-oauth-security-topics]
-              Lodderstedt, T., Bradley, J., Labunets, A., and D. Fett,
-              "OAuth 2.0 Security Best Current Practice", Work in
-              Progress, Internet-Draft, draft-ietf-oauth-security-
-              topics-29, 3 June 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-oauth-
-              security-topics-29>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2510,6 +2493,11 @@ Table of Contents
               Jones, M., and D. Waite, "OAuth 2.0 Demonstrating Proof of
               Possession (DPoP)", RFC 9449, DOI 10.17487/RFC9449,
               September 2023, <https://www.rfc-editor.org/info/rfc9449>.
+
+   [RFC9700]  Lodderstedt, T., Bradley, J., Labunets, A., and D. Fett,
+              "Best Current Practice for OAuth 2.0 Security", BCP 240,
+              RFC 9700, DOI 10.17487/RFC9700, January 2025,
+              <https://www.rfc-editor.org/info/rfc9700>.
 
    [W3C.service-workers]
               "Service Workers", W3C CR service-workers, W3C service-
