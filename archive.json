@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-04T00:05:36.177105+00:00",
+  "timestamp": "2025-02-06T00:05:47.314615+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1044,6 +1044,22 @@
           "updatedAt": "2025-01-17T23:00:11Z"
         }
       ]
+    },
+    {
+      "number": 68,
+      "id": "I_kwDOCUe3lM6oncTl",
+      "title": "Consider alternative phrasing for \"scenarios\"",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/68",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "From Thomas's review\n\n> One editorial nit regarding the use of the term \"scenario\" in sentences like:\n>\n>    \"scenarios that attackers can use\"\n>    \"[...] scenarios that an attacker can execute\"\n>\n> To my (non-native) ears, to \"use/execute a scenario\" sounds a bit\n> weird :-) Maybe \"attack _strategies_ that an attacker can _exploit_\"?\n",
+      "createdAt": "2025-02-04T01:32:35Z",
+      "updatedAt": "2025-02-04T01:32:35Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -4018,24 +4034,104 @@
       "id": "PR_kwDOCUe3lM6JArac",
       "title": "Gen-ART review: simple editorial fixes and suggestion",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/65",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "thomas-fossati",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-01-26T14:45:06Z",
-      "updatedAt": "2025-01-26T17:02:24Z",
+      "updatedAt": "2025-02-04T01:06:16Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "64eaa586f5a109ab8e6b731b88d757270758beab",
       "headRepository": "thomas-fossati/oauth-browser-based-apps",
       "headRefName": "main",
       "headRefOid": "2e24901a6197892856444822cfad14501a101310",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-02-04T01:06:07Z",
+      "mergedAt": "2025-02-04T01:06:07Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "1b8c5bead30f79b8f743270df7097b165734df40"
+      },
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks so much Thomas!",
+          "createdAt": "2025-02-04T01:06:15Z",
+          "updatedAt": "2025-02-04T01:06:15Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM6adsDX",
+          "commit": {
+            "abbreviatedOid": "2e24901"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-04T01:05:55Z",
+          "updatedAt": "2025-02-04T01:05:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 66,
+      "id": "PR_kwDOCUe3lM6J7F-t",
+      "title": "delete old circleci action",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/66",
+      "state": "MERGED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-04T01:08:42Z",
+      "updatedAt": "2025-02-04T01:08:54Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "1b8c5bead30f79b8f743270df7097b165734df40",
+      "headRepository": "oauth-wg/oauth-browser-based-apps",
+      "headRefName": "circleci-cleanup",
+      "headRefOid": "899111fad1031a866c460abba921908f4928ac73",
+      "closedAt": "2025-02-04T01:08:50Z",
+      "mergedAt": "2025-02-04T01:08:50Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "d28c587c66f3b49d43fd4141bd0353b5403128d3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 67,
+      "id": "PR_kwDOCUe3lM6J7Hz3",
+      "title": "update references to Security BCP",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/67",
+      "state": "MERGED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "now that it is RFC9700",
+      "createdAt": "2025-02-04T01:17:10Z",
+      "updatedAt": "2025-02-04T01:21:06Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "94ad778148ff8439a9a15d9176e7501a4694f6d0",
+      "headRepository": "oauth-wg/oauth-browser-based-apps",
+      "headRefName": "rfc9700",
+      "headRefOid": "c923c420a888df0f38eab74ff8cb408038066865",
+      "closedAt": "2025-02-04T01:21:02Z",
+      "mergedAt": "2025-02-04T01:21:01Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "aa65c16926f64a4828a3fe0062ab6de7ab33524f"
+      },
       "comments": [],
       "reviews": []
     }
