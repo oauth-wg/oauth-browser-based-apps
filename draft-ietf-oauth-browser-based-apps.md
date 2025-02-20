@@ -727,7 +727,7 @@ and receives the resource server's response (E).
 ### Implementation Details
 
 Browser-based applications that are public clients and use the Authorization Code grant type described in
-Section 4.1 of OAuth 2.0 {{RFC6749}} MUST also follow these additional requirements
+{{Section 4.1 RFC6749}} MUST also follow these additional requirements
 described in this section.
 
 #### The Authorization Code Grant {#pattern-oauth-browser-flow}
@@ -793,13 +793,13 @@ Authorization servers SHOULD link the lifetime of the refresh token to the user'
 #### Client Authentication {#client_authentication}
 
 Since a browser-based application's source code is delivered to the end-user's
-browser, it is unfit to contain provisioned secrets. As a consequence, browser-based applications are typically deployed as public clients as defined by Section 2.1
-of OAuth 2.0 {{RFC6749}}.
+browser, it is unfit to contain provisioned secrets. As a consequence, browser-based applications are typically deployed as public clients as defined by {{Section 2.1
+of RFC6749}}.
 
 Secrets that are statically included as part of an app distributed to
 multiple users should not be treated as confidential secrets, as one
 user may inspect their copy and learn the shared secret.  For this
-reason, and those stated in Section 5.3.1 of {{RFC6819}}, authorization
+reason, and those stated in {{Section 5.3.1 of RFC6819}}, authorization
 servers MUST NOT require client authentication of browser-based
 applications using a shared secret, as this serves no value beyond
 client identification which is already provided by the `client_id` parameter.
@@ -813,7 +813,7 @@ additional measures, such clients are subject to client impersonation
 
 #### Client Impersonation {#client_impersonation}
 
-As stated in Section 10.2 of OAuth 2.0 {{RFC6749}}, the authorization
+As stated in {{Section 10.2 RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
 without user consent or interaction, except when the identity of the
 client can be assured.
@@ -910,7 +910,7 @@ For completeness, this BCP lists a few options below. Note that none of these de
 
 The authorization server could block authorization requests that originate from within an iframe. While this would prevent the exact scenario from {{scenario-new-flow}}, it would not work for slight variations of the attack scenario. For example, the attacker can launch the silent flow in a popup window, or a pop-under window. Additionally, browser-only OAuth clients typically rely on a hidden iframe-based flow to bootstrap the user's authentication state, so this approach would significantly impact the user experience.
 
-The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in Section 10.2 OAuth 2.0 {{RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initiated by the attacker.
+The authorization server could opt to make user consent mandatory in every Authorization Code flow (as described in {{Section 10.2 of RFC6749}}), thus requiring user interaction before issuing an authorization code. This approach would make it harder for an attacker to run a silent flow to obtain a fresh set of tokens. However, it also significantly impacts the user experience by continuously requiring consent. As a result, this approach would result in "consent fatigue", which makes it likely that the user will blindly approve the consent, even when it is associated with a flow that was initiated by the attacker.
 
 
 #### Summary
@@ -957,8 +957,8 @@ Due to the lack of using OAuth, this architecture pattern is only vulnerable to 
 OAuth Implicit Grant {#implicit_flow}
 -------------------
 
-The OAuth 2.0 Implicit grant type (defined in Section 4.2 of
-OAuth 2.0 {{RFC6749}}) works by the authorization server issuing an access token in the
+The OAuth 2.0 Implicit grant type (defined in {{Section 4.2 of RFC6749}})
+works by the authorization server issuing an access token in the
 authorization response (front channel) without an authorization code exchange step. In this case, the access
 token is returned in the fragment part of the redirect URI, providing an attacker
 with several opportunities to intercept and steal the access token.
