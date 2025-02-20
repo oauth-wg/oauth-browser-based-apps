@@ -727,7 +727,7 @@ and receives the resource server's response (E).
 ### Implementation Details
 
 Browser-based applications that are public clients and use the Authorization Code grant type described in
-{{Section 4.1 RFC6749}} MUST also follow these additional requirements
+{{Section 4.1 of RFC6749}} MUST also follow these additional requirements
 described in this section.
 
 #### The Authorization Code Grant {#pattern-oauth-browser-flow}
@@ -813,7 +813,7 @@ additional measures, such clients are subject to client impersonation
 
 #### Client Impersonation {#client_impersonation}
 
-As stated in {{Section 10.2 RFC6749}}, the authorization
+As stated in {{Section 10.2 of RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
 without user consent or interaction, except when the authorization
 server can assure the the identity of the client application.
@@ -843,7 +843,7 @@ In these flows, the browser-based app holds control of the primary window, for i
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
 
-{{Section 4.18. of RFC9700}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
+{{Section 4.18 of RFC9700}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
 
 
 #### Cross-Origin Requests {#pattern-oauth-browser-cors}
