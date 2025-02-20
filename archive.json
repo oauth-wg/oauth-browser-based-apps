@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-18T00:05:50.025620+00:00",
+  "timestamp": "2025-02-20T00:06:01.128047+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1058,6 +1058,69 @@
       "body": "From Thomas's review\n\n> One editorial nit regarding the use of the term \"scenario\" in sentences like:\n>\n>    \"scenarios that attackers can use\"\n>    \"[...] scenarios that an attacker can execute\"\n>\n> To my (non-native) ears, to \"use/execute a scenario\" sounds a bit\n> weird :-) Maybe \"attack _strategies_ that an attacker can _exploit_\"?\n",
       "createdAt": "2025-02-04T01:32:35Z",
       "updatedAt": "2025-02-04T01:32:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 69,
+      "id": "I_kwDOCUe3lM6qvoqV",
+      "title": "Process last call reviews",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/69",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "- [ ] httpdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/)\n- [ ] opsdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/) #71 \n- [ ] artart [mail](https://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/)\n- [x] genart [mail](https://mailarchive.ietf.org/arch/msg/oauth/LZMIEjWy3o0Royfa4Opw6m8woyk/) #65 \n- [ ] rtgdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/4PRDjLyQlZh5yr-De2XaNhUF4a8/)\n- [ ] secdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/) #70 \n- [x] iana \n\n",
+      "createdAt": "2025-02-19T23:29:58Z",
+      "updatedAt": "2025-02-19T23:44:30Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "IANA review: \n\n> We understand that this document doesn't require any registry actions. \n> While it's often helpful for a document's IANA Considerations section to remain in place upon publication even if there are no actions, if the authors strongly prefer to remove it, we do not object.",
+          "createdAt": "2025-02-19T23:30:47Z",
+          "updatedAt": "2025-02-19T23:30:47Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "genart review PR processed: https://github.com/oauth-wg/oauth-browser-based-apps/pull/65",
+          "createdAt": "2025-02-19T23:32:11Z",
+          "updatedAt": "2025-02-19T23:32:11Z"
+        }
+      ]
+    },
+    {
+      "number": 70,
+      "id": "I_kwDOCUe3lM6qvrLf",
+      "title": "secdir review notes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/70",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/\n\n- [ ] clarify that the resource server, application, and oauth server may be in separate domains\n- [ ] PKCE not defined when first introduced\n- [ ] justify why the 5 specific attacks are the right ones as opposed to other things that might be possible with javascript injection\n- [ ] describe the confusion risk of adding the relaying server (section 6.1.3)\n- [ ] describe relationship to session fixation attacks",
+      "createdAt": "2025-02-19T23:39:11Z",
+      "updatedAt": "2025-02-19T23:40:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 71,
+      "id": "I_kwDOCUe3lM6qvsfp",
+      "title": "opsdir review notes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/71",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/\n\n- [ ] clarify why filesystem storage of private key is a concern. (Question about whether there is another secure storage mechanism or remote server as a private storage mechanism)\n- [ ] add PKCE to terminology section\n- [ ] clarify that \"JavaScript applications\" and \"malicious JavaScript\" is talking about JS vs non-JS browser runtimes\n- [ ] add reference to section 5.1 in \"when discussing attack patterns\"\n- [ ] add CORS and CSP to terminology",
+      "createdAt": "2025-02-19T23:44:21Z",
+      "updatedAt": "2025-02-19T23:44:21Z",
       "closedAt": null,
       "comments": []
     }
