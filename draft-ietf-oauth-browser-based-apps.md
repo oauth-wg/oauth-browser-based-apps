@@ -175,7 +175,7 @@ This document discusses the security of browser-based applications, which are ex
 : CORS refers to Cross-Origin Resource Sharing {{Fetch}}, a mechanism that enables exceptions to the browser's same-origin policy.
 
 "CSP":
-: CSP refers to Content Security Policy {{CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
+: CSP refers to Content Security Policy {{-CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
 
 
 History of OAuth 2.0 in Browser-Based Applications
