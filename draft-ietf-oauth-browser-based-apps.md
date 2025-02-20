@@ -164,8 +164,18 @@ the following terms:
 
 This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser.
 
+"PKCE":
+: PKCE refers to Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
+  to protect OAuth authorization codes.
 
+"DPoP":
+: DPoP {{RFC9449}} is a mechanism to restrict access tokens to be used only by the client they were issued to.
 
+"CORS":
+: CORS refers to Cross-Origin Resource Sharing {{Fetch}}, a mechanism that enables exceptions to the browser's same-origin policy.
+
+"CSP":
+: CSP refers to Content Security Policy {{CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
 
 
 History of OAuth 2.0 in Browser-Based Applications
