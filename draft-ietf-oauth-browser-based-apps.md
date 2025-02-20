@@ -815,14 +815,14 @@ additional measures, such clients are subject to client impersonation
 
 As stated in {{Section 10.2 RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
-without user consent or interaction, except when the identity of the
-client can be assured.
+without user consent or interaction, except when the authorization
+server can assure the the identity of the client application.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
 HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components,
 this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
 proof of identity of the client for the purpose of deciding whether to automatically
-process an authorization request when a previous request for the client_id
+process an authorization request when a previous request for the `client_id`
 has already been approved.
 
 
