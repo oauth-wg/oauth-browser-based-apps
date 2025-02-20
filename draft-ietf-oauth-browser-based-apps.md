@@ -244,7 +244,7 @@ In this advanced attack scenario, the attacker completely disregards any tokens 
 - Exchange the authorization code for a new set of tokens
 - Abuse the stolen tokens
 
-The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
+The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism that is able to completely isolate the stored tokens from the attacker, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
 
 This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.
 
@@ -872,7 +872,7 @@ If the attacker has the ability to execute malicious JavaScript code in the appl
 * Acquisition and Extraction of New Tokens ({{scenario-new-flow}})
 * Proxying Requests via the User's Browser ({{scenario-proxy}})
 
-The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a perfectly secure token storage mechanism, the attacker will still be able to obtain tokens from the authorization server.
+The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a way to completely isolate the tokens from the attacker, the attacker will still be able to obtain tokens from the authorization server.
 
 Note that these attack scenarios result in the following consequences:
 
@@ -892,7 +892,7 @@ When handling tokens directly, the application can choose different storage mech
 
 A practical implementation pattern can use a Web Worker {{WebWorker}} to isolate the refresh token, and provide the application with the access token making requests to resource servers.
 
-Note that even a perfect token storage mechanism does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
+Note that even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
 
 
 ##### Using Sender-Constrained Tokens
@@ -1158,7 +1158,7 @@ When discussing the security properties of browser-based token storage solutions
 1. The attacker obtaining tokens from storage
 2. The attacker obtaining tokens from the provider (e.g., the authorization server or the token-mediating backend)
 
-Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even the perfect token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.
+Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even a completely isolated token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.
 
 That said, the different security properties of browser-based storage solutions will impact the attacker's ability to obtain existing tokens from storage.
 
