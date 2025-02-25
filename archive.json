@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-23T00:06:33.633315+00:00",
+  "timestamp": "2025-02-25T00:08:45.178662+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1141,9 +1141,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/\n\n- [ ] mention malicious javascript as the foundation of the threat analysis early in the document\n- [x] expand PKCE reference in Section 4\n- [ ] scope section 8 to OAuth tokens, mention that these recommendations are specific to OAuth but may overlap with general browser security recommendations",
+      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/\n\n- [x] expand PKCE reference in Section 4\n",
       "createdAt": "2025-02-20T00:08:26Z",
-      "updatedAt": "2025-02-20T00:52:57Z",
+      "updatedAt": "2025-02-24T19:22:38Z",
       "closedAt": null,
       "comments": []
     },
@@ -1159,7 +1159,7 @@
       "labels": [],
       "body": "Summarized action items based on httpdir review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/\n\n- [ ] clarify threat model up front (suggestion in email)\n- [x] clarify \"client\" is the application in 6.3.3.2 (the \"identity\" term is throwing this off)\n- [ ] Section 6.3.4.2.1 clarify how refresh token isolation helps\n- [x] Find an alternative to \"perfectly secure storage mechanism\"\n- [ ] make DPoP guidance more prominent (Section 6.3.4.2.2)\n- [ ] Section 6.3.4.2.3: Clarify why there is no distinguishing between refresh tokens and access tokens\n- [ ] Section 7.4.1.1: Clarify why this is relevant to the authorization code + PKCE flow, not just implicit\n- [ ] Section 8.3: TBD, see email\n- [ ] Section 8.5: Mention sync downside of LocalStorage to deemphasize it further\n- [x] Section 8.6: Change \"ultimately store data in plain text\" to \"cannot rely on encryption at rest\"\n- [ ] Expand on protections that CSP can provide\n- [x] cite first uses of PKCE, DPoP, etc\n- [x] fix references to \"section X of Y\" markup\n- [ ] Find stable reference to webstorage",
       "createdAt": "2025-02-20T00:24:34Z",
-      "updatedAt": "2025-02-20T15:52:52Z",
+      "updatedAt": "2025-02-23T16:35:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -1184,6 +1184,54 @@
           "updatedAt": "2025-02-20T15:52:50Z"
         }
       ]
+    },
+    {
+      "number": 75,
+      "id": "I_kwDOCUe3lM6ra2Yh",
+      "title": "mention malicious javascript as the foundation of the threat analysis early in the document",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/75",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-24T19:21:59Z",
+      "updatedAt": "2025-02-24T19:23:19Z",
+      "closedAt": "2025-02-24T19:23:19Z",
+      "comments": []
+    },
+    {
+      "number": 76,
+      "id": "I_kwDOCUe3lM6ra2u1",
+      "title": "scope section 8 to OAuth tokens, mention that these recommendations are specific to OAuth but may overlap with general browser security recommendations",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/76",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-24T19:22:31Z",
+      "updatedAt": "2025-02-24T19:22:31Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 77,
+      "id": "I_kwDOCUe3lM6ra22p",
+      "title": "mention malicious javascript as the foundation of the threat analysis early in the document",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/77",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-24T19:22:37Z",
+      "updatedAt": "2025-02-24T19:22:37Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
