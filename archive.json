@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-25T00:08:45.178662+00:00",
+  "timestamp": "2025-02-27T00:05:59.479354+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1109,9 +1109,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/\n\n- [ ] clarify that the resource server, application, and oauth server may be in separate domains\n- [x] PKCE not defined when first introduced\n- [ ] justify why the 5 specific attacks are the right ones as opposed to other things that might be possible with javascript injection\n- [ ] describe the confusion risk of adding the relaying server (section 6.1.3)\n- [ ] describe relationship to session fixation attacks",
+      "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/\n\n",
       "createdAt": "2025-02-19T23:39:11Z",
-      "updatedAt": "2025-02-20T00:53:07Z",
+      "updatedAt": "2025-02-25T10:06:08Z",
       "closedAt": null,
       "comments": []
     },
@@ -1230,6 +1230,94 @@
       "body": "",
       "createdAt": "2025-02-24T19:22:37Z",
       "updatedAt": "2025-02-24T19:22:37Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 78,
+      "id": "I_kwDOCUe3lM6riJM6",
+      "title": "clarify that the resource server, application, and oauth server may be in separate domains",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/78",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T10:05:29Z",
+      "updatedAt": "2025-02-25T10:05:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 79,
+      "id": "I_kwDOCUe3lM6riJPO",
+      "title": "PKCE not defined when first introduced",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/79",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T10:05:33Z",
+      "updatedAt": "2025-02-25T10:05:59Z",
+      "closedAt": "2025-02-25T10:05:56Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "fixed in https://github.com/oauth-wg/oauth-browser-based-apps/commit/0c02a09ed2f77ae22d7e26019cf5e6ae6c61f791",
+          "createdAt": "2025-02-25T10:05:56Z",
+          "updatedAt": "2025-02-25T10:05:56Z"
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "id": "I_kwDOCUe3lM6riJmc",
+      "title": "justify why the 5 specific attacks are the right ones as opposed to other things that might be possible with javascript injection",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/80",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T10:06:02Z",
+      "updatedAt": "2025-02-25T10:06:02Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 81,
+      "id": "I_kwDOCUe3lM6riJod",
+      "title": "describe the confusion risk of adding the relaying server (section 6.1.3)",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/81",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T10:06:05Z",
+      "updatedAt": "2025-02-25T10:06:05Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 82,
+      "id": "I_kwDOCUe3lM6riJqf",
+      "title": "describe relationship to session fixation attacks",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/82",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-25T10:06:08Z",
+      "updatedAt": "2025-02-25T10:06:08Z",
       "closedAt": null,
       "comments": []
     }
