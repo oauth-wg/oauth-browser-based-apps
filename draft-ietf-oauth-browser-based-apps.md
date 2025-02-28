@@ -191,7 +191,7 @@ Malicious JavaScript poses a significant risk to browser-based applications. Att
 
 When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
 
-This section explores the threats malicious JS code poses to browser-based applications that assume the role of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
+The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth grant. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
 
 The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.
 
@@ -200,7 +200,7 @@ The remainder of this specification will refer back to these attack scenarios an
 Malicious JavaScript Scenarios {#attackscenarios}
 ------------------------------
 
-This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive and presented in no particular order.
+This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.
 
 
 ### Single-Execution Token Theft {#scenario-single-theft}
