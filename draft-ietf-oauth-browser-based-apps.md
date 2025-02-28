@@ -124,6 +124,8 @@ Introduction {#introduction}
 
 This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns address these challenges.
 
+Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect for user authentication, after which they maintain the user's authentication state. Such a scenario, which does not use OAuth 2.0, is not within scope for this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization server to obtain tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all independent parties, either in a first-party or third-party context.
+
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
 This document is formally known as {{RFC8252}} or BCP212, but often referred to as "AppAuth" after
