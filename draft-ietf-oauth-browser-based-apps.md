@@ -1227,13 +1227,13 @@ As discussed before, the use of a Service Worker does not prevent an attacker fr
 Token Storage in a Web Worker
 -----------------------------
 
-The application can use a Web Worker ({{WebWorker}}), which results in an almost identical scenario as the previous one that relies on a Service Worker. The difference between a Service Worker and a Web Worker is the level of access and its runtime properties. Service Workers can intercept and modify outgoing requests, while Web Workers are just a way to run background tasks. Web Workers are ephemeral and disappear when the browsing context is closed, while Service Workers are persistent services registered in the browser.
+The application can use a Web Worker {{WebWorker}}, which results in an almost identical scenario as the previous one that relies on a Service Worker. The difference between a Service Worker and a Web Worker is the level of access and its runtime properties. Service Workers can intercept and modify outgoing requests, while Web Workers are just a way to run background tasks. Web Workers are ephemeral and disappear when the browsing context is closed, while Service Workers are persistent services registered in the browser.
 
 The security properties of using a Web Worker are identical to using Service Workers. When tokens are exposed to the application, they become vulnerable. When tokens need to be used, the operation that relies on them has to be carried out by the Web Worker.
 
-One common use of Web Workers is to isolate the refresh token. In such a scenario, the application runs an Authorization Code flow to obtain the authorization code. This code is forwarded to a Web Worker, which exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.
+One common method to isolate the refresh token is to use Web Workers. In such a scenario, the application starts an Authorization Code flow from a Web Worker. The authorization code from the redirect is forwarded to the Web Worker, which then exchanges it for tokens. The Web Worker keeps the refresh token in memory and sends the access token to the main application. The main application uses the access token as desired. When the application needs to run a refresh token flow, it asks the Web Worker to do so, after which the application obtains a fresh access token.
 
-In this scenario, the application's existing refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code flow.
+In this scenario, the application's own refresh token is effectively protected against exfiltration, but the access token is not. Additionally, nothing would prevent an attacker from obtaining their own tokens by running a new Authorization Code flow {{scenario-new-flow}}.
 
 
 In-Memory Token Storage {#token-storage-in-memory}
@@ -1352,6 +1352,7 @@ Document History
 * Clarified "attacking the service worker" to be explicit that this is about the authorization code flow
 * Clarified the intent of storing the refresh token in a web worker
 * Mention explicitly access token and refresh token instead of "set of tokens" on first use per section
+* Slightly rephrased Web Worker section to not sound like a recommendation
 
 -22
 
