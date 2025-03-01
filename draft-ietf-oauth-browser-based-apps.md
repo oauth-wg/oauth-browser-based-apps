@@ -1340,13 +1340,11 @@ Document History
 
 -23
 
-* Addressed feedback from Gen-ART review
-* Addressed feedback from opsdir review
+* Ensure acronyms and other specifications are defined and referenced on first use, and added to terminology
+* Clarified mailicious JavaScript is the basis of the threat analysis earlier in the document
 * Clarified why filesystem storage of private key is a concern
 * Clarified JS runtimes in intro
 * Addressed feedback from secdir review
-* Clarified mailicious JavaScript is the basis of the threat analysis earlier in the document
-* Ensure acronyms and other specifications are defined and referenced on first use, and added to terminology
 * Clarified that the specific attacks described are the relevant ones for this document because they are OAuth-specific
 * Described the relationship to session fixation attacks
 * Clarified that section 8 is talking about OAuth tokens specifically
@@ -1356,6 +1354,9 @@ Document History
 * Clarified the intent of storing the refresh token in a web worker
 * Mention explicitly access token and refresh token instead of "set of tokens" on first use per section
 * Slightly rephrased Web Worker section to not sound like a recommendation
+* Editorial edits to remove the phrase "perfect storage mechanism"
+* Fixed references
+* Addressed all feedback from the genart, opsdir, artart, secdir, and httpdir reviews
 
 -22
 
