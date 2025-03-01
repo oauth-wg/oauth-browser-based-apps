@@ -196,7 +196,18 @@ First and foremost, it is crucial to take proactive measures to avoid the attack
 - Using a nonce-based or hash-based Content Security Policy ({{-CSP3}}) to prevent the execution of unauthorized script code
 - Using origin isolation and HTML5 sandboxing to create boundaries between different parts of the application
 
-Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
+Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. All JS applications are exposed to this risk in some degree.
+
+Applications might obtain OAuth tokens that confer authorization
+necessary to their functioning. In combination, this effectively gives
+compromised code the ability to use that authorization for malicious ends
+Though the risk of attacker abuse of authorization is unavoidable, there are
+ways to limit the extent to which a compromised application can abuse that
+authorization. For instance, this access might be limited to times when the
+application is in active use, by limiting the type of tokens that might be obtained, or by binding
+the tokens to the browser.
+
+When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
 
 The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth grant. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
 
@@ -1329,6 +1340,7 @@ Document History
 * Described the relationship to session fixation attacks
 * Clarified that section 8 is talking about OAuth tokens specifically
 * Mentioned that localStorage is synchronous
+* Applied suggestions about scope of malicious JS code from Martin Thompson's review
 
 -22
 
