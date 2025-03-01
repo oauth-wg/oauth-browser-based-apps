@@ -2221,9 +2221,8 @@ Table of Contents
    the attacker first unregisters the Service Worker, and then starts a
    new flow in a frame, there will be no Service Worker associated with
    the browsing context of the frame.  Consequentially, the attacker
-   will be able to run an Authorization Code grant, extract the code
-   from the frame's URL, and exchange it for tokens.
-
+   will be able to run its own new Authorization Code grant, extract the
+   authorization code from the frame's URL, and exchange it for tokens.
    In essence, the Service Worker fails to meet the second security
    requirement, leaving it vulnerable to the scenario where the attacker
    acquires a new set of tokens (Section 5.1.3).
@@ -2682,6 +2681,9 @@ Appendix A.  Document History
 
    *  Applied suggestions about scope of malicious JS code from Martin
       Thompson's review
+
+   *  Clarified "attacking the service worker" to be explicit that this
+      is about the authorization code flow
 
    -22
 
