@@ -927,11 +927,11 @@ While this architecture is inherently vulnerable to malicious JavaScript code, t
 
 ##### Secure Token Storage
 
-When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage* ({{WebStorage}}), are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker* ({{WebWorker}}). {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
+When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage* {{WebStorage}}, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker* {{WebWorker}}. {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
 
-A practical implementation pattern can use a Web Worker {{WebWorker}} to isolate the refresh token, and provide the application with the access token making requests to resource servers.
+A practical implementation pattern can use a Web Worker {{WebWorker}} to isolate the refresh token, and provide the application with the access token making requests to resource servers. This prevents an attacker from using the application's refresh token to obtain new tokens.
 
-Note that even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
+However, even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
 
 
 ##### Using Sender-Constrained Tokens
@@ -1350,6 +1350,7 @@ Document History
 * Mentioned that localStorage is synchronous
 * Applied suggestions about scope of malicious JS code from Martin Thompson's review
 * Clarified "attacking the service worker" to be explicit that this is about the authorization code flow
+* Clarified the intent of storing the refresh token in a web worker
 
 -22
 
