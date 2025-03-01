@@ -280,7 +280,19 @@ Table of Contents
    trigger the execution of malicious JavaScript.  When analyzing the
    security of browser-based applications in light of the presence of
    malicious JS, it is crucial to realize that the *malicious JavaScript
-   code has the same privileges as the legitimate application code*.
+   code has the same privileges as the legitimate application code*. All
+   JS applications are exposed to this risk in some degree.
+
+   Applications might obtain OAuth tokens that confer authorization
+   necessary to their functioning.  In combination, this effectively
+   gives compromised code the ability to use that authorization for
+   malicious ends Though the risk of attacker abuse of authorization is
+   unavoidable, there are ways to limit the extent to which a
+   compromised application can abuse that authorization.  For instance,
+   this access might be limited to times when the application is in
+   active use, by limiting the type of tokens that might be obtained, or
+   by binding the tokens to the browser.
+
    When the application code can access variables or call functions, the
    malicious JS code can do exactly the same.  Furthermore, the
    malicious JS code can tamper with the regular execution flow of the
@@ -2384,7 +2396,8 @@ Table of Contents
    and persists longer term. localStorage does not protect against XSS
    attacks, as the attacker would be running code within the same
    origin, and as such, would be able to read the contents of the
-   localStorage.
+   localStorage.  Additionally, localStorage is a synchronous API,
+   blocking other JavaScript until the operation completes.
 
    sessionStorage is similar to localStorage, except that the lifetime
    of sessionStorage is linked to the lifetime of a browser tab.
@@ -2639,7 +2652,15 @@ Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
 
-   -24
+   -23
+
+   *  Addressed feedback from Gen-ART review
+
+   *  Addressed feedback from opsdir review
+
+   *  Clarified why filesystem storage of private key is a concern
+
+   *  Clarified JS runtimes in intro
 
    *  Addressed feedback from secdir review
 
@@ -2647,7 +2668,7 @@ Appendix A.  Document History
       analysis earlier in the document
 
    *  Ensure acronyms and other specifications are defined and
-      referenced on first use
+      referenced on first use, and added to terminology
 
    *  Clarified that the specific attacks described are the relevant
       ones for this document because they are OAuth-specific
@@ -2657,9 +2678,10 @@ Appendix A.  Document History
    *  Clarified that section 8 is talking about OAuth tokens
       specifically
 
-   -23
+   *  Mentioned that localStorage is synchronous
 
-   *  Addressed feedback from Gen-ART review
+   *  Applied suggestions about scope of malicious JS code from Martin
+      Thompson's review
 
    -22
 
