@@ -1163,9 +1163,7 @@ To meet the second security requirement, the Service Worker must be able to guar
 
 However, the malicious code running inside the application can unregister this Service Worker. Unregistering a Service Worker can have a significant functional impact on the application, so it is not an operation the browser handles lightly. Therefore, an unregistered Service Worker is marked as such, but all currently running instances remain active until their corresponding browsing context is terminated (e.g., by closing the tab or window). So even when an attacker unregisters a Service Worker, it remains active and able to prevent the attacker from reaching the authorization server.
 
-One of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run an Authorization Code grant, extract the code from the frame's URL, and exchange it for tokens.
-
-In essence, the Service Worker fails to meet the second security requirement, leaving it vulnerable to the scenario where the attacker acquires a new set of tokens ({{scenario-new-flow}}).
+One of the consequences of unregistering a Service Worker is that it will not be present when a new browsing context is opened. So when the attacker first unregisters the Service Worker, and then starts a new flow in a frame, there will be no Service Worker associated with the browsing context of the frame. Consequentially, the attacker will be able to run its own new Authorization Code grant, extract the authorization code from the frame's URL, and exchange it for tokens. In essence, the Service Worker fails to meet the second security requirement, leaving it vulnerable to the scenario where the attacker acquires a new set of tokens ({{scenario-new-flow}}).
 
 Due to these shortcomings, combined with the significant complexity of registering and maintaining a Service Worker, this pattern is not recommended.
 
@@ -1341,6 +1339,7 @@ Document History
 * Clarified that section 8 is talking about OAuth tokens specifically
 * Mentioned that localStorage is synchronous
 * Applied suggestions about scope of malicious JS code from Martin Thompson's review
+* Clarified "attacking the service worker" to be explicit that this is about the authorization code flow
 
 -22
 
