@@ -228,10 +228,10 @@ The remainder of this specification will refer back to these attack scenarios an
 
 
 
-Malicious JavaScript Scenarios {#attackscenarios}
+Attack Scenarios {#attackscenarios}
 ------------------------------
 
-This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.
+This section presents several attack scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.
 
 
 ### Single-Execution Token Theft {#scenario-single-theft}
@@ -420,9 +420,9 @@ The OAuth flow used by this application architecture can be combined with OpenID
 When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.
 
 
-#### Practical Deployment Scenarios
+#### Practical Deployment Strategies
 
-Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).
+Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployments, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).
 
 Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.
 
