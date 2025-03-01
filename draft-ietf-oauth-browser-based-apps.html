@@ -1568,7 +1568,7 @@ the tokens to the browser.<a href="#section-5-4" class="pilcrow">¶</a></p>
               <p id="section-5.1.3-2.7.1">Abuse the stolen tokens<a href="#section-5.1.3-2.7.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.3-3">The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-3">The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism that is able to completely isolate the stored tokens from the attacker, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-4">This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.<a href="#section-5.1.3-4" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-5">There are no practical security mechanisms for frontend applications that counter this attack scenario. Short access token lifetimes and refresh token rotation are ineffective, since the attacker has a fresh, independent set of tokens. Advanced security mechanism, such as DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> are equally ineffective, since the attacker can use their own key pair to setup and use DPoP for the newly obtained tokens. Requiring user interaction with every Authorization Code flow would effectively stop the automatic silent issuance of new tokens, but this would significantly impact widely-established patterns, such as bootstrapping an application on its first page load, or single sign-on across multiple related applications, and is not a practical measure.<a href="#section-5.1.3-5" class="pilcrow">¶</a></p>
 </section>
@@ -2531,13 +2531,13 @@ additional measures, such clients are subject to client impersonation
             </h5>
 <p id="section-6.3.3.2-1">As stated in <span><a href="https://rfc-editor.org/rfc/rfc6749#section-10.2" class="relref">Section 10.2</a> of [<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>, the authorization
 server SHOULD NOT process authorization requests automatically
-without user consent or interaction, except when the identity of the
-client can be assured.<a href="#section-6.3.3.2-1" class="pilcrow">¶</a></p>
+without user consent or interaction, except when the authorization
+server can assure the the identity of the client application.<a href="#section-6.3.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.2-2">If authorization servers restrict redirect URIs to a fixed set of absolute
 HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components,
 this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
 proof of identity of the client for the purpose of deciding whether to automatically
-process an authorization request when a previous request for the client_id
+process an authorization request when a previous request for the <code>client_id</code>
 has already been approved.<a href="#section-6.3.3.2-2" class="pilcrow">¶</a></p>
 <div id="auth_code_redirect">
 <section id="section-6.3.3.2.1">
@@ -2560,7 +2560,7 @@ as described in <span><a href="https://rfc-editor.org/rfc/rfc9700#section-4.1.1"
 In these flows, the browser-based app holds control of the primary window, for instance, to avoid page refreshes or to run frame-based flows silently.<a href="#section-6.3.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.3-2">If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in <span>[<a href="#WebMessaging" class="cite xref">WebMessaging</a>]</span>).<a href="#section-6.3.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.3.3-3"><span><a href="https://rfc-editor.org/rfc/rfc9700#section-4.18." class="relref">Section 4.18.</a> of [<a href="#RFC9700" class="cite xref">RFC9700</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.3.3-3"><span><a href="https://rfc-editor.org/rfc/rfc9700#section-4.18" class="relref">Section 4.18</a> of [<a href="#RFC9700" class="cite xref">RFC9700</a>]</span> provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.<a href="#section-6.3.3.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-oauth-browser-cors">
@@ -2602,7 +2602,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
                 <p id="section-6.3.4.1-2.4.1">Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)<a href="#section-6.3.4.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.3.4.1-3">The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a perfectly secure token storage mechanism, the attacker will still be able to obtain tokens from the authorization server.<a href="#section-6.3.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.1-3">The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a way to completely isolate the tokens from the attacker, the attacker will still be able to obtain tokens from the authorization server.<a href="#section-6.3.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.1-4">Note that these attack scenarios result in the following consequences:<a href="#section-6.3.4.1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.4.1-5.1">
@@ -2630,7 +2630,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
               </h6>
 <p id="section-6.3.4.2.1-1">When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as <em>Local Storage</em> (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), are easier to access from malicious JavaScript than highly isolated storage areas, such as a <em>Web Worker</em> (<span>[<a href="#WebWorker" class="cite xref">WebWorker</a>]</span>). <a href="#token-storage" class="auto internal xref">Section 8</a> discusses different storage mechanisms with their trade-off in more detail.<a href="#section-6.3.4.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.1-2">A practical implementation pattern can use a Web Worker <span>[<a href="#WebWorker" class="cite xref">WebWorker</a>]</span> to isolate the refresh token, and provide the application with the access token making requests to resource servers.<a href="#section-6.3.4.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.4.2.1-3">Note that even a perfect token storage mechanism does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-6.3.4.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.1-3">Note that even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-6.3.4.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="using-sender-constrained-tokens-1">
@@ -3075,7 +3075,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
           <p id="section-8-3.2.1">The attacker obtaining tokens from the provider (e.g., the authorization server or the token-mediating backend)<a href="#section-8-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-8-4">Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even the perfect token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-4">Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even a completely isolated token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.<a href="#section-8-4" class="pilcrow">¶</a></p>
 <p id="section-8-5">That said, the different security properties of browser-based storage solutions will impact the attacker's ability to obtain existing tokens from storage.<a href="#section-8-5" class="pilcrow">¶</a></p>
 <div id="cookies">
 <section id="section-8.1">
@@ -3136,7 +3136,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-filesystem-considerations-f">
 <a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-filesystem-considerations-f" class="section-name selfRef">Filesystem Considerations for Browser Storage APIs</a>
         </h3>
-<p id="section-8.6-1">In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+<p id="section-8.6-1">In all cases, as of this writing, there is no guarantee that browser storage is encrypted at rest. This behavior potentially exposes tokens to attackers that have the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and session cookies, resulting in account takeover attacks.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
 <p id="section-8.6-2">While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span> provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the <span>[<a href="#W3C.WebCryptoAPI" class="cite xref">W3C.WebCryptoAPI</a>]</span> specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
 <p id="section-8.6-3">In order to protect against token exfiltration from the filesystem, the encryption keys would need to be stored somewhere other than the filesystem, such as on a remote server. This introduces new complexity for a purely browser-based app, and is out of scope of this document.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
 </section>
