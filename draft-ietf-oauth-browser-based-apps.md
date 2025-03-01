@@ -1233,7 +1233,7 @@ Persistent Token Storage {#token-storage-persistent}
 
 The persistent storage APIs currently available as of this writing are localStorage ({{WebStorage}}), sessionStorage ({{WebStorage}}), and {{-IndexedDB}}.
 
-localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage.
+localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage. Additionally, localStorage is a synchronous API, blocking other JavaScript until the operation completes.
 
 sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.
 
@@ -1316,18 +1316,19 @@ Document History
 
 [[ To be removed from the final specification ]]
 
--24
-
-* Addressed feedback from secdir review
-* Clarified mailicious JavaScript is the basis of the threat analysis earlier in the document
-* Ensure acronyms and other specifications are defined and referenced on first use
-* Clarified that the specific attacks described are the relevant ones for this document because they are OAuth-specific
-* Described the relationship to session fixation attacks
-* Clarified that section 8 is talking about OAuth tokens specifically
-
 -23
 
 * Addressed feedback from Gen-ART review
+* Addressed feedback from opsdir review
+* Clarified why filesystem storage of private key is a concern
+* Clarified JS runtimes in intro
+* Addressed feedback from secdir review
+* Clarified mailicious JavaScript is the basis of the threat analysis earlier in the document
+* Ensure acronyms and other specifications are defined and referenced on first use, and added to terminology
+* Clarified that the specific attacks described are the relevant ones for this document because they are OAuth-specific
+* Described the relationship to session fixation attacks
+* Clarified that section 8 is talking about OAuth tokens specifically
+* Mentioned that localStorage is synchronous
 
 -22
 
