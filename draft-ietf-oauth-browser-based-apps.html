@@ -1168,7 +1168,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-the-threat-of-malicious-jav" class="internal xref">The Threat of Malicious JavaScript</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-malicious-javascript-scenar" class="internal xref">Malicious JavaScript Scenarios</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-attack-scenarios" class="internal xref">Attack Scenarios</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-single-execution-token-thef" class="internal xref">Single-Execution Token Theft</a></p>
@@ -1369,18 +1369,17 @@ taken into account when developing browser-based applications that use OAuth 2.0
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns address these challenges.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect for user authentication, after which they maintain the user's authentication state. Such a scenario, which only uses OAuth 2.0 as the underlying specification of OpenID Connect, is not within scope for this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same party.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns can help address some of these challenges.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect <span>[<a href="#OpenID" class="cite xref">OpenID</a>]</span> for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization Server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same entity.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
 This document is formally known as <span>[<a href="#RFC8252" class="cite xref">RFC8252</a>]</span> or BCP212, but often referred to as "AppAuth" after
 the OpenID Foundation-sponsored set of libraries that assist developers in adopting
 these practices. <span>[<a href="#RFC8252" class="cite xref">RFC8252</a>]</span> makes specific recommendations for how to securely implement OAuth clients in native
 applications, including incorporating additional OAuth extensions where needed.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This specification, OAuth 2.0 for Browser-Based Applications, addresses the similarities between implementing
-OAuth clients as native applications and browser-based applications, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
-<span>[<a href="#RFC9700" class="cite xref">RFC9700</a>]</span> and browser-based applications are expected to follow those recommendations
+<p id="section-1-4">This specification, OAuth 2.0 for Browser-Based Applications, highlights how the security properties of browser-based applications are vastly different than those of native applications, as well as addresses the similarities between implementing OAuth clients as native applications and browser-based applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Many of these recommendations are derived from the Best Current Practice for OAuth 2.0 Security
+<span>[<a href="#RFC9700" class="cite xref">RFC9700</a>]</span>, as browser-based applications are expected to follow those recommendations
 as well. This document expands on and further restricts various recommendations given in <span>[<a href="#RFC9700" class="cite xref">RFC9700</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1421,7 +1420,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
         <dt id="section-3-4.1">"PKCE":</dt>
         <dd style="margin-left: 1.5em" id="section-3-4.2">
           <p id="section-3-4.2.1">PKCE refers to Proof Key for Code Exchange (PKCE) <span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span>, a mechanism
-to protect OAuth authorization codes.<a href="#section-3-4.2.1" class="pilcrow">¶</a></p>
+to prevent various attacks on OAuth authorization codes.<a href="#section-3-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-3-4.3">"DPoP":</dt>
@@ -1447,10 +1446,10 @@ to protect OAuth authorization codes.<a href="#section-3-4.2.1" class="pilcrow">
       <h2 id="name-history-of-oauth-20-in-brow">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-history-of-oauth-20-in-brow" class="section-name selfRef">History of OAuth 2.0 in Browser-Based Applications</a>
       </h2>
-<p id="section-4-1">At the time that OAuth 2.0 was initially specified in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> and <span>[<a href="#RFC6750" class="cite xref">RFC6750</a>]</span>, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit grant type, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See <a href="#implicit_flow" class="auto internal xref">Section 7.2</a> for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in <span>[<a href="#RFC9700" class="cite xref">RFC9700</a>]</span>.<a href="#section-4-2" class="pilcrow">¶</a></p>
-<p id="section-4-3">In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) <span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span> to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain applications.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-1">At the time that OAuth 2.0 was initially specified in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> and <span>[<a href="#RFC6750" class="cite xref">RFC6750</a>]</span>, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">However, there are several drawbacks to the Implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See <a href="#implicit_flow" class="auto internal xref">Section 7.2</a> for an analysis of these attacks and the drawbacks of using the Implicit flow in browsers. Additional attacks and security considerations can be found in <span>[<a href="#RFC9700" class="cite xref">RFC9700</a>]</span>.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">In modern web development, widespread adoption of Cross-Origin Resource Sharing (CORS) <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span> (which enables exceptions to the same-origin policy) allows browser-based applications to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) <span>[<a href="#RFC7636" class="cite xref">RFC7636</a>]</span> to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations which are discussed further in this document. Additional considerations apply for first-party common-domain applications.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="threats">
@@ -1459,30 +1458,43 @@ to protect OAuth authorization codes.<a href="#section-3-4.2.1" class="pilcrow">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-threat-of-malicious-jav" class="section-name selfRef">The Threat of Malicious JavaScript</a>
       </h2>
 <p id="section-5-1">Malicious JavaScript poses a significant risk to browser-based applications. Attack vectors, such as cross-site scripting (XSS) or the compromise of remote code files, give an attacker the capability to run arbitrary code in the application's execution context. This malicious code is not isolated from the main application's code in any way. Consequentially, the malicious code can not only take control of the running execution context, but can also perform actions within the application's origin. Concretely, this means that the malicious code can steal data from the current page, interact with other same-origin browsing contexts, send requests to a backend from within the application's origin, steal data from origin-based storage mechanisms (e.g., localStorage, IndexedDB), etc.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">First and foremost, it is crucial to take proactive measures to avoid the attacker from gaining a foothold in the first place. Doing so involves, but is not limited to:
-- Strictly applying context-sensitive output encoding and sanitization when handling untrusted data
-- Limiting or avoiding the loading of unchecked third-party resources
-- Using Subresource Integrity (TODO REF) to restrict valid scripts that can be loaded
-- Using a nonce-based or hash-based Content Security Policy (<span>[<a href="#W3C.CSP3" class="cite xref">W3C.CSP3</a>]</span>) to prevent the execution of unauthorized script code
-- Using origin isolation and HTML5 sandboxing to create boundaries between different parts of the application<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the <strong>malicious JavaScript code has the same privileges as the legitimate application code</strong>. All JS applications are exposed to this risk in some degree.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">Applications might obtain OAuth tokens that confer authorization
+<p id="section-5-2">First and foremost, it is crucial to take proactive measures to avoid the attacker from gaining a foothold in the first place. Doing so involves, but is not limited to:<a href="#section-5-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-3.1">
+          <p id="section-5-3.1.1">Strictly applying context-sensitive output encoding and sanitization when handling untrusted data<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.2">
+          <p id="section-5-3.2.1">Limiting or avoiding the loading of unchecked third-party resources<a href="#section-5-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.3">
+          <p id="section-5-3.3.1">Using Subresource Integrity <span>[<a href="#W3C.SRI" class="cite xref">W3C.SRI</a>]</span> to restrict valid scripts that can be loaded<a href="#section-5-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.4">
+          <p id="section-5-3.4.1">Using a nonce-based or hash-based Content Security Policy <span>[<a href="#W3C.CSP3" class="cite xref">W3C.CSP3</a>]</span> to prevent the execution of unauthorized script code<a href="#section-5-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-3.5">
+          <p id="section-5-3.5.1">Using origin isolation and HTML5 sandboxing to create boundaries between different parts of the application<a href="#section-5-3.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-5-4">Further recommendations can be found in the OWASP Cheat Sheet series <span>[<a href="#OWASPCheatSheet" class="cite xref">OWASPCheatSheet</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the <strong>malicious JavaScript code has the same privileges as the legitimate application code</strong>. All JS applications are exposed to this risk in some degree.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">Applications might obtain OAuth tokens that confer authorization
 necessary to their functioning. In combination, this effectively gives
 compromised code the ability to use that authorization for malicious ends
 Though the risk of attacker abuse of authorization is unavoidable, there are
 ways to limit the extent to which a compromised application can abuse that
 authorization. For instance, this access might be limited to times when the
 application is in active use, by limiting the type of tokens that might be obtained, or by binding
-the tokens to the browser.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth grant. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part (<a href="#attackscenarios" class="auto internal xref">Section 5.1</a>) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part (<a href="#consequences" class="auto internal xref">Section 5.2</a>) analyzes the impact of these attack scenarios on the OAuth client.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.<a href="#section-5-7" class="pilcrow">¶</a></p>
+the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">When the legitimate application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-8">The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part (<a href="#attackscenarios" class="auto internal xref">Section 5.1</a>) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part (<a href="#consequences" class="auto internal xref">Section 5.2</a>) analyzes the impact of these attack scenarios on the OAuth client.<a href="#section-5-8" class="pilcrow">¶</a></p>
+<p id="section-5-9">The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <div id="attackscenarios">
 <section id="section-5.1">
-        <h3 id="name-malicious-javascript-scenar">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-malicious-javascript-scenar" class="section-name selfRef">Malicious JavaScript Scenarios</a>
+        <h3 id="name-attack-scenarios">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-attack-scenarios" class="section-name selfRef">Attack Scenarios</a>
         </h3>
-<p id="section-5.1-1">This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and elaborate scenarios (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">This section presents several attack scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and elaborate scenarios (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <div id="scenario-single-theft">
 <section id="section-5.1.1">
           <h4 id="name-single-execution-token-thef">
@@ -1815,12 +1827,12 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <p id="section-6.1.2.4-2">When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.<a href="#section-6.1.2.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="practical-deployment-scenarios">
+<div id="practical-deployment-strategies">
 <section id="section-6.1.2.5">
-            <h5 id="name-practical-deployment-scenar">
-<a href="#section-6.1.2.5" class="section-number selfRef">6.1.2.5. </a><a href="#name-practical-deployment-scenar" class="section-name selfRef">Practical Deployment Scenarios</a>
+            <h5 id="name-practical-deployment-strate">
+<a href="#section-6.1.2.5" class="section-number selfRef">6.1.2.5. </a><a href="#name-practical-deployment-strate" class="section-name selfRef">Practical Deployment Strategies</a>
             </h5>
-<p id="section-6.1.2.5-1">Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).<a href="#section-6.1.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.5-1">Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployments, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).<a href="#section-6.1.2.5-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.5-2">Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.<a href="#section-6.1.2.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2005,7 +2017,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-summary">
 <a href="#section-6.1.4.3" class="section-number selfRef">6.1.4.3. </a><a href="#name-summary" class="section-name selfRef">Summary</a>
             </h5>
-<p id="section-6.1.4.3-1">The architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See <a href="#practical-deployment-scenarios" class="auto internal xref">Section 6.1.2.5</a> for additional notes if the BFF is acting as the resource server.<a href="#section-6.1.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.3-1">The architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See <a href="#practical-deployment-scenarios" class="auto internal xref">Section 6.2.2.6</a> for additional notes if the BFF is acting as the resource server.<a href="#section-6.1.4.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.3-2">However, because of the nature of the BFF architecture pattern, it offers strong security guarantees. Using a BFF also ensures that the application's attack surface does not increase by using OAuth. The only viable attack pattern is hijacking the client application in the user's browser, a problem inherent to web applications.<a href="#section-6.1.4.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.3-3">This architecture is strongly recommended for business applications, sensitive applications, and applications that handle personal data.<a href="#section-6.1.4.3-3" class="pilcrow">¶</a></p>
 </section>
@@ -2176,10 +2188,10 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <p id="section-6.2.2.5-1">Similar to a BFF, the token-mediating backend can choose to combine OAuth and OpenID Connect in a single flow. See <a href="#pattern-bff-oidc" class="auto internal xref">Section 6.1.2.4</a> for more details.<a href="#section-6.2.2.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="practical-deployment-scenarios-1">
+<div id="practical-deployment-scenarios">
 <section id="section-6.2.2.6">
-            <h5 id="name-practical-deployment-scenari">
-<a href="#section-6.2.2.6" class="section-number selfRef">6.2.2.6. </a><a href="#name-practical-deployment-scenari" class="section-name selfRef">Practical Deployment Scenarios</a>
+            <h5 id="name-practical-deployment-scenar">
+<a href="#section-6.2.2.6" class="section-number selfRef">6.2.2.6. </a><a href="#name-practical-deployment-scenar" class="section-name selfRef">Practical Deployment Scenarios</a>
             </h5>
 <p id="section-6.2.2.6-1">Serving the static JavaScript code is a separate responsibility from handling interactions with the authorization server. In the diagram presented above, the token-mediating backend and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the token-mediating backend serving the static JS code), as two separate services (i.e., a CDN and a token-mediating backend), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform). These deployment differences do not affect the relationships described in this pattern, but may impact other practicalities, such as the need to properly configure CORS to enable cross-origin communication.<a href="#section-6.2.2.6-1" class="pilcrow">¶</a></p>
 </section>
@@ -3311,6 +3323,10 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <dt id="W3C.IndexedDB">[W3C.IndexedDB]</dt>
         <dd>
 <span class="refTitle">"Indexed Database API"</span>, <span class="seriesInfo">W3C REC IndexedDB</span>, <span class="seriesInfo">W3C IndexedDB</span>, <span>&lt;<a href="https://www.w3.org/TR/IndexedDB/">https://www.w3.org/TR/IndexedDB/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="W3C.SRI">[W3C.SRI]</dt>
+        <dd>
+<span class="refTitle">"Subresource Integrity"</span>, <span class="seriesInfo">W3C REC SRI</span>, <span class="seriesInfo">W3C SRI</span>, <span>&lt;<a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="W3C.WebCryptoAPI">[W3C.WebCryptoAPI]</dt>
         <dd>
