@@ -1316,6 +1316,14 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-24
+
+* Addressed feedback from secdir review
+* Clarified mailicious JavaScript is the basis of the threat analysis earlier in the document
+* Ensure acronyms and other specifications are defined and referenced on first use
+* Clarified that the specific attacks described are the relevant ones for this document because they are OAuth-specific
+* Described the relationship to session fixation attacks
+
 -23
 
 * Addressed feedback from Gen-ART review
