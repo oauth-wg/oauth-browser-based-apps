@@ -124,6 +124,8 @@ Introduction {#introduction}
 
 This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns address these challenges.
 
+Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect for user authentication, after which they maintain the user's authentication state. Such a scenario, which only uses OAuth 2.0 as the underlying specification of OpenID Connect, is not within scope for this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same party.
+
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
 This document is formally known as {{RFC8252}} or BCP212, but often referred to as "AppAuth" after
@@ -187,9 +189,16 @@ The Threat of Malicious JavaScript {#threats}
 
 Malicious JavaScript poses a significant risk to browser-based applications. Attack vectors, such as cross-site scripting (XSS) or the compromise of remote code files, give an attacker the capability to run arbitrary code in the application's execution context. This malicious code is not isolated from the main application's code in any way. Consequentially, the malicious code can not only take control of the running execution context, but can also perform actions within the application's origin. Concretely, this means that the malicious code can steal data from the current page, interact with other same-origin browsing contexts, send requests to a backend from within the application's origin, steal data from origin-based storage mechanisms (e.g., localStorage, IndexedDB), etc.
 
-When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
+First and foremost, it is crucial to take proactive measures to avoid the attacker from gaining a foothold in the first place. Doing so involves, but is not limited to:
+- Strictly applying context-sensitive output encoding and sanitization when handling untrusted data
+- Limiting or avoiding the loading of unchecked third-party resources
+- Using Subresource Integrity (TODO REF) to restrict valid scripts that can be loaded
+- Using a nonce-based or hash-based Content Security Policy ({{-CSP3}}) to prevent the execution of unauthorized script code
+- Using origin isolation and HTML5 sandboxing to create boundaries between different parts of the application
 
-This section explores the threats malicious JS code poses to browser-based applications that assume the role of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
+Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
+
+The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth grant. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
 
 The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.
 
@@ -198,7 +207,7 @@ The remainder of this specification will refer back to these attack scenarios an
 Malicious JavaScript Scenarios {#attackscenarios}
 ------------------------------
 
-This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive and presented in no particular order.
+This section presents several malicious scenarios that an attacker can execute once they have found a vulnerability that allows the execution of malicious JavaScript code. The attack scenarios include trivial scenarios ({{scenario-single-theft}}) and elaborate scenarios ({{scenario-new-flow}}). Note that this enumeration is non-exhaustive, narrowly scoped to OAuth-specific features, and presented in no particular order.
 
 
 ### Single-Execution Token Theft {#scenario-single-theft}
@@ -294,9 +303,9 @@ The application can use DPoP to ensure its access tokens are bound to non-export
 
 ### Client Hijacking {#consequence-hijack}
 
-When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems.
+When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.
 
-Note that client hijacking is less powerful than directly abusing stolen tokens. In a client hijacking scenario, the attacker cannot directly control the tokens and is restricted by the security policies enforced on the client application. For example, a resource server running on `admin.example.org` can be configured with a CORS policy that rejects requests coming from a client running on `web.example.org`. Even if the access token used by the client would be accepted by the resource server, the resource server's strict CORS configuration does not allow such a request. A resource server without such a strict CORS policy can still be subject to adversarial requests coming from the compromised client application.
+Note that client hijacking is less powerful than directly abusing stolen user tokens. In a client hijacking scenario, the attacker cannot directly control the tokens and is restricted by the security policies enforced on the client application. For example, a resource server running on `admin.example.org` can be configured with a CORS policy that rejects requests coming from a client running on `web.example.org`. Even if the access token used by the client would be accepted by the resource server, the resource server's strict CORS configuration does not allow such a request. A resource server without such a strict CORS policy can still be subject to adversarial requests coming from the compromised client application.
 
 
 
@@ -415,7 +424,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{-draft-ietf-httpbis-rfc6265bis}})
 
-In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
+These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
 Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps ensure the  confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
 
@@ -425,7 +434,7 @@ For further guidance on cookie security best practices, we refer to the OWASP Ch
 
 #### Cross-Site Request Forgery Protections {#pattern-bff-csrf}
 
-The interactions between the JavaScript application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks.
+The interactions between the JavaScript application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could transform the BFF into a confused deputy, allowing the attacker's request to the BFF to trigger outgoing calls to a protected resource on behalf of the user.
 
 The BFF MUST implement a proper CSRF defense. The exact mechanism or combination of mechanisms depends on the exact domain where the BFF is deployed, as discussed below.
 
@@ -468,6 +477,15 @@ Note that this mechanism is not necessarily recommended over the CORS approach. 
 The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.
 
 When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.
+
+
+#### Proxy Restrictions {#pattern-bff-proxy}
+
+The BFF acts as a proxy by accepting requests from the frontend and forwarding them to the resource server. The inbound request carries a cookie, which the BFF translates into an access token on the outbound request. Apart from CSRF attacks, attackers may attempt to manipulate the BFF into forwarding requests to unintended hosts. If an attacker successfully exploits this, they could redirect the BFF to an arbitrary server, potentially exposing the user's access token.
+
+To mitigate this risk, the BFF MUST enforce strict outbound request controls by validating destination hosts before forwarding requests. This requires maintaining an explicit allowlist of approved resource servers, ensuring that requests are only proxied to predefined backends (e.g., `/bff/orders/create maps` exclusively to `https://order-api.example.com/create`). If dynamic routing based on paths (e.g., `/bff/orders/{id}`) is necessary, the BFF MUST apply strict validation to ensure that only authorized destinations are accessible. Additionally, restricting the allowed HTTP methods on a per-endpoint basis can further reduce attack vectors.
+
+When implementing a dynamically configurable proxy, the BFF MUST ensure that it only allows requests to explicitly permitted hosts and paths. Failure to enforce these restrictions can lead to unauthorized access and access token leakage.
 
 
 #### Advanced Security
