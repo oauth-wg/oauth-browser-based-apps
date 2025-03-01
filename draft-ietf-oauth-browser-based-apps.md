@@ -80,7 +80,7 @@ informative:
       - ins: C. Mortimore
   W3C.CSP3: CSP3
   W3C.IndexedDB: IndexedDB
-  W3C.SubresourceIntegrity: SubresourceIntegrity
+  W3C.SRI: SubresourceIntegrity
   W3C.WebCryptoAPI: WebCryptographyAPI
   WebStorage:
     title: HTML Living Standard - Web Storage
