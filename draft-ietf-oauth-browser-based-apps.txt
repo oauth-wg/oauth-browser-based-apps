@@ -2570,8 +2570,7 @@ Table of Contents
 11.1.  Normative References
 
    [Fetch]    whatwg, "Fetch", December 2024,
-              <https://fetch.spec.whatwg.org/commit-
-              snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/>.
+              <https://fetch.spec.whatwg.org/>.
 
    [I-D.ietf-httpbis-rfc6265bis]
               Bingler, S., West, M., and J. Wilander, "Cookies: HTTP
@@ -2627,8 +2626,7 @@ Table of Contents
 
    [WebMessaging]
               whatwg, "HTML - Cross-document messaging", January 2025,
-              <https://html.spec.whatwg.org/commit-snapshots/
-              b4233430fe410f67b7022ec8b28f55795dcc4110/#web-messaging>.
+              <https://html.spec.whatwg.org/#web-messaging>.
 
 11.2.  Informative References
 
@@ -2638,8 +2636,7 @@ Table of Contents
               CryptoKeyPair>.
 
    [HTML]     whatwg, "HTML", January 2025,
-              <https://html.spec.whatwg.org/commit-snapshots/
-              b4233430fe410f67b7022ec8b28f55795dcc4110/>.
+              <https://html.spec.whatwg.org/>.
 
    [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
               C. Mortimore, "OpenID Connect Core 1.0 incorporating
@@ -2674,13 +2671,11 @@ Table of Contents
 
    [WebStorage]
               whatwg, "HTML Living Standard - Web Storage", January
-              2025, <https://html.spec.whatwg.org/commit-snapshots/
-              b4233430fe410f67b7022ec8b28f55795dcc4110/#webstorage>.
+              2025, <https://html.spec.whatwg.org/#webstorage>.
 
    [WebWorker]
               whatwg, "HTML Living Standard - Web workers", January
-              2025, <https://html.spec.whatwg.org/commit-snapshots/
-              b4233430fe410f67b7022ec8b28f55795dcc4110/#toc-workers>.
+              2025, <https://html.spec.whatwg.org/#toc-workers>.
 
 Appendix A.  Document History
 
