@@ -264,7 +264,7 @@ For access tokens, the attacker now obtains the latest access token for as long 
 
 ### Acquisition and Extraction of New Tokens {#scenario-new-flow}
 
-In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent set of tokens. This scenario consists of the following steps:
+In this advanced attack scenario, the attacker completely disregards any tokens that the application has already obtained. Instead, the attacker takes advantage of the ability to run malicious code that is associated with the application's origin. With that ability, the attacker can inject a hidden iframe and launch a silent Authorization Code flow. This silent flow will reuse the user's existing session with the authorization server and result in the issuing of a new, independent access token (and optionally refresh token). This scenario consists of the following steps:
 
 - Execute malicious JS code
 - Set up a handler to obtain the authorization code from the iframe (e.g., by monitoring the frame's URL or via Web Messaging {{WebMessaging}})
@@ -317,7 +317,7 @@ The attack ends when the access token expires or when a token is revoked with th
 
 Note that the possession of the access token allows its unrestricted use by the attacker. The attacker can send arbitrary requests to resource servers, using any HTTP method, destination URL, header values, or body.
 
-The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in {{Section 11.4 of RFC9449}}. However, when the attacker obtains a fresh set of tokens, as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
+The application can use DPoP to ensure its access tokens are bound to non-exportable keys held by the browser. In that case, it becomes significantly harder for the attacker to abuse stolen access tokens. More specifically, with DPoP, the attacker can only abuse stolen application tokens by carrying out an online attack, where the proofs are calculated in the user's browser. This attack is described in detail in {{Section 11.4 of RFC9449}}. However, when the attacker obtains a fresh access token (and optionally refresh token), as described in {{scenario-new-flow}}, they can set up DPoP for these tokens using an attacker-controlled key pair. In that case, the attacker is again free to abuse this newly obtained access token without restrictions.
 
 
 
@@ -546,7 +546,7 @@ The other attack scenarios, listed below, are effectively mitigated by the BFF a
 
 The BFF counters the first two attack scenarios by not exposing any tokens to the browser-based application. Even when the attacker gains full control over the JavaScript application, there are simply no tokens to be stolen.
 
-The third scenario, where the attacker obtains a fresh set of tokens by running a silent flow, is mitigated by making the BFF a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials. Additionally, the use of PKCE prevents other attacks against the authorization code.
+The third scenario, where the attacker obtains a fresh access token (and optionally refresh token) by running a silent flow, is mitigated by making the BFF a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials. Additionally, the use of PKCE prevents other attacks against the authorization code.
 
 Since refresh and access tokens are managed by the BFF and not exposed to the browser, the following two consequences of potential attacks become irrelevant:
 
@@ -698,7 +698,7 @@ The other attack scenarios, listed below, are effectively mitigated by the token
 
 The token-mediating backend counters the first two attack scenarios by not exposing the refresh token to the browser-based application. Even when the attacker gains full control over the JavaScript application, there are simply no refresh tokens to be stolen.
 
-The third scenario, where the attacker obtains a fresh set of tokens by running a silent flow, is mitigated by making the token-mediating backend a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials.  Additionally, the use of PKCE prevents other attacks against the authorization code.
+The third scenario, where the attacker obtains a fresh access token (and optionally refresh token) by running a silent flow, is mitigated by making the token-mediating backend a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials.  Additionally, the use of PKCE prevents other attacks against the authorization code.
 
 Because of the nature of the token-mediating backend, the following consequences of potential attacks become irrelevant:
 
@@ -938,12 +938,12 @@ However, even a token storage mechanism that completely isolates the tokens from
 
 Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
-Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}). Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
+Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh access token (and optionally refresh token) {{scenario-new-flow}}. Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
 
 ##### Restricting Access to the Authorization Server
 
-The scenario where the attacker obtains a fresh set of tokens (See {{scenario-new-flow}}) relies on the ability to directly interact with the authorization server from within the browser. In theory, a defense that prevents the attacker from silently interacting with the authorization server could solve the most dangerous attack scenario. However, in practice, such defenses are ineffective or impractical.
+The scenario where the attacker obtains a fresh access token and (optionally refresh token) {{scenario-new-flow}} relies on the ability to directly interact with the authorization server from within the browser. In theory, a defense that prevents the attacker from silently interacting with the authorization server could solve the most dangerous attack scenario. However, in practice, such defenses are ineffective or impractical.
 
 For completeness, this BCP lists a few options below. Note that none of these defenses is recommended, as they do not offer practically usable security benefits.
 
@@ -1351,6 +1351,7 @@ Document History
 * Applied suggestions about scope of malicious JS code from Martin Thompson's review
 * Clarified "attacking the service worker" to be explicit that this is about the authorization code flow
 * Clarified the intent of storing the refresh token in a web worker
+* Mention explicitly access token and refresh token instead of "set of tokens" on first use per section
 
 -22
 
