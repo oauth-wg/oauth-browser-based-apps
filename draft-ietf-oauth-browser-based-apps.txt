@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 8 August 2025                                     Ping Identity
+Expires: 2 September 2025                                  Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                         4 February 2025
+                                                            1 March 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2025.
+   This Internet-Draft will expire on 2 September 2025.
 
 Copyright Notice
 
@@ -132,6 +132,21 @@ Table of Contents
    browser.  The specification outlines the security challenges for
    browser-based applications and analyzes how different patterns
    address these challenges.
+
+   Note that many web applications consist of a first-party frontend and
+   API, allowing for an architecture that does not rely on OAuth 2.0.
+   Such scenarios can rely on OpenID Connect for user authentication,
+   after which they maintain the user's authentication state.  Such a
+   scenario, which only uses OAuth 2.0 as the underlying specification
+   of OpenID Connect, is not within scope for this specification.  This
+   document focuses on JavaScript frontend applications acting as the
+   OAuth client, interacting with the Authorization server to obtain
+   access tokens and optionally refresh tokens.  The client uses the
+   access token to access protected resources on resource servers.  When
+   using OAuth 2.0, the client, authorization server, and resource
+   servers are all considered independent parties, either in a first-
+   party or third-party context, regardless of whether each is owned or
+   operated by the same party.
 
    For native application developers using OAuth 2.0 and OpenID Connect,
    an IETF BCP (best current practice) was published that guides
@@ -248,26 +263,46 @@ Table of Contents
    from within the application's origin, steal data from origin-based
    storage mechanisms (e.g., localStorage, IndexedDB), etc.
 
-   When analyzing the security of browser-based applications in light of
-   the presence of malicious JS, it is crucial to realize that the
-   *malicious JavaScript code has the same privileges as the legitimate
-   application code*. When the application code can access variables or
-   call functions, the malicious JS code can do exactly the same.
-   Furthermore, the malicious JS code can tamper with the regular
-   execution flow of the application, as well as with any application-
-   level defenses, since they are typically controlled from within the
-   application.  For example, the attacker can remove or override event
-   listeners, modify the behavior of built-in functions (prototype
-   pollution), and stop pages in frames from loading.
+   First and foremost, it is crucial to take proactive measures to avoid
+   the attacker from gaining a foothold in the first place.  Doing so
+   involves, but is not limited to: - Strictly applying context-
+   sensitive output encoding and sanitization when handling untrusted
+   data - Limiting or avoiding the loading of unchecked third-party
+   resources - Using Subresource Integrity (TODO REF) to restrict valid
+   scripts that can be loaded - Using a nonce-based or hash-based
+   Content Security Policy ([W3C.CSP3]) to prevent the execution of
+   unauthorized script code - Using origin isolation and HTML5
+   sandboxing to create boundaries between different parts of the
+   application
 
-   This section explores the threats malicious JS code poses to browser-
-   based applications that assume the role of an OAuth client.  The
-   first part (Section 5.1) discusses a few scenarios that attackers can
-   use once they have found a way to run malicious JavaScript code.
-   These scenarios paint a clear picture of the true power of the
-   attacker, which goes way beyond simple token exfiltration.  The
-   second part (Section 5.2) analyzes the impact of these attack
-   scenarios on the OAuth client.
+   Unfortunately, history shows that even when applying these security
+   guidelines, there remains a risk that the attacker finds a way to
+   trigger the execution of malicious JavaScript.  When analyzing the
+   security of browser-based applications in light of the presence of
+   malicious JS, it is crucial to realize that the *malicious JavaScript
+   code has the same privileges as the legitimate application code*.
+   When the application code can access variables or call functions, the
+   malicious JS code can do exactly the same.  Furthermore, the
+   malicious JS code can tamper with the regular execution flow of the
+   application, as well as with any application-level defenses, since
+   they are typically controlled from within the application.  For
+   example, the attacker can remove or override event listeners, modify
+   the behavior of built-in functions (prototype pollution), and stop
+   pages in frames from loading.
+
+   The impact of malicious JavaScript on browser-based applications is a
+   widely studied and well-understood topic.  However, the concrete
+   impact of malicious JavaScript on browser-based applications acting
+   as an OAuth client is quite unique, since the malicious JavaScript
+   can now impact the interactions during an OAuth grant.  This section
+   explores the threats malicious JS code poses to a browser-based
+   application with the responsibilities of an OAuth client.  The first
+   part (Section 5.1) discusses a few scenarios that attackers can use
+   once they have found a way to run malicious JavaScript code.  These
+   scenarios paint a clear picture of the true power of the attacker,
+   which goes way beyond simple token exfiltration.  The second part
+   (Section 5.2) analyzes the impact of these attack scenarios on the
+   OAuth client.
 
    The remainder of this specification will refer back to these attack
    scenarios and consequences to analyze the security properties of the
@@ -279,8 +314,9 @@ Table of Contents
    can execute once they have found a vulnerability that allows the
    execution of malicious JavaScript code.  The attack scenarios include
    trivial scenarios (Section 5.1.1) and elaborate scenarios
-   (Section 5.1.3).  Note that this enumeration is non-exhaustive and
-   presented in no particular order.
+   (Section 5.1.3).  Note that this enumeration is non-exhaustive,
+   narrowly scoped to OAuth-specific features, and presented in no
+   particular order.
 
 5.1.1.  Single-Execution Token Theft
 
@@ -505,11 +541,14 @@ Table of Contents
    user's browser.  This effectively allows the attacker to perform any
    operations that the legitimate client application can perform.
    Examples include inspecting data on the page, modifying the page, and
-   sending requests to backend systems.
+   sending requests to backend systems. alternatively, the attacker can
+   also abuse their access to the application to launch additional
+   attacks, such as tricking the client into acting on behalf of the
+   attacker using an attack such as session fixation.
 
    Note that client hijacking is less powerful than directly abusing
-   stolen tokens.  In a client hijacking scenario, the attacker cannot
-   directly control the tokens and is restricted by the security
+   stolen user tokens.  In a client hijacking scenario, the attacker
+   cannot directly control the tokens and is restricted by the security
    policies enforced on the client application.  For example, a resource
    server running on admin.example.org can be configured with a CORS
    policy that rejects requests coming from a client running on
@@ -816,9 +855,15 @@ Table of Contents
    *  The BFF SHOULD start the name of its cookies with the ___Host-_
       prefix ([I-D.ietf-httpbis-rfc6265bis])
 
-   In a typical BFF deployment scenario, there is no reason to use more
-   relaxed cookie security settings.  Deviating from these settings
-   requires proper motivation for the deployment scenario at hand.
+   These cookie security guidelines, combined with the use of HTTPS,
+   help counter attacks that directly target a cookie-based session.
+   Session hijacking is not possible, due to the Secure and HttpOnly
+   cookie flags.  The __Host prefix prevents the cookie from being
+   shared with subdomains, thereby countering subdomain-based session
+   hijacking or session fixation attacks.  In a typical BFF deployment
+   scenario, there is no reason to use more relaxed cookie security
+   settings.  Deviating from these settings requires proper motivation
+   for the deployment scenario at hand.
 
    Additionally, when using client-side sessions that contain access
    tokens, (as opposed to server-side sessions where the tokens only
@@ -841,7 +886,10 @@ Table of Contents
    The interactions between the JavaScript application and the BFF rely
    on cookies for authentication and authorization.  Similar to other
    cookie-based interactions, the BFF is required to account for Cross-
-   Site Request Forgery (CSRF) attacks.
+   Site Request Forgery (CSRF) attacks.  A successful CSRF attack could
+   transform the BFF into a confused deputy, allowing the attacker's
+   request to the BFF to trigger outgoing calls to a protected resource
+   on behalf of the user.
 
    The BFF MUST implement a proper CSRF defense.  The exact mechanism or
    combination of mechanisms depends on the exact domain where the BFF
@@ -951,7 +999,33 @@ Table of Contents
    hosted by a third party, this privacy impact needs to be taken into
    account.
 
-6.1.3.4.  Advanced Security
+6.1.3.4.  Proxy Restrictions
+
+   The BFF acts as a proxy by accepting requests from the frontend and
+   forwarding them to the resource server.  The inbound request carries
+   a cookie, which the BFF translates into an access token on the
+   outbound request.  Apart from CSRF attacks, attackers may attempt to
+   manipulate the BFF into forwarding requests to unintended hosts.  If
+   an attacker successfully exploits this, they could redirect the BFF
+   to an arbitrary server, potentially exposing the user's access token.
+
+   To mitigate this risk, the BFF MUST enforce strict outbound request
+   controls by validating destination hosts before forwarding requests.
+   This requires maintaining an explicit allowlist of approved resource
+   servers, ensuring that requests are only proxied to predefined
+   backends (e.g., /bff/orders/create maps exclusively to https://order-
+   api.example.com/create).  If dynamic routing based on paths (e.g.,
+   /bff/orders/{id}) is necessary, the BFF MUST apply strict validation
+   to ensure that only authorized destinations are accessible.
+   Additionally, restricting the allowed HTTP methods on a per-endpoint
+   basis can further reduce attack vectors.
+
+   When implementing a dynamically configurable proxy, the BFF MUST
+   ensure that it only allows requests to explicitly permitted hosts and
+   paths.  Failure to enforce these restrictions can lead to
+   unauthorized access and access token leakage.
+
+6.1.3.5.  Advanced Security
 
    In the BFF pattern, all OAuth responsibilities have been moved to the
    BFF, a server-side component acting as a confidential client.  Since
@@ -1457,9 +1531,9 @@ Table of Contents
 6.3.2.  Implementation Details
 
    Browser-based applications that are public clients and use the
-   Authorization Code grant type described in Section 4.1 of OAuth 2.0
-   [RFC6749] MUST also follow these additional requirements described in
-   this section.
+   Authorization Code grant type described in Section 4.1 of [RFC6749]
+   MUST also follow these additional requirements described in this
+   section.
 
 6.3.2.1.  The Authorization Code Grant
 
@@ -1561,7 +1635,7 @@ Table of Contents
    Since a browser-based application's source code is delivered to the
    end-user's browser, it is unfit to contain provisioned secrets.  As a
    consequence, browser-based applications are typically deployed as
-   public clients as defined by Section 2.1 of OAuth 2.0 [RFC6749].
+   public clients as defined by Section 2.1 of [RFC6749].
 
    Secrets that are statically included as part of an app distributed to
    multiple users should not be treated as confidential secrets, as one
@@ -1580,10 +1654,10 @@ Table of Contents
 
 6.3.3.2.  Client Impersonation
 
-   As stated in Section 10.2 of OAuth 2.0 [RFC6749], the authorization
-   server SHOULD NOT process authorization requests automatically
-   without user consent or interaction, except when the identity of the
-   client can be assured.
+   As stated in Section 10.2 of [RFC6749], the authorization server
+   SHOULD NOT process authorization requests automatically without user
+   consent or interaction, except when the identity of the client can be
+   assured.
 
    If authorization servers restrict redirect URIs to a fixed set of
    absolute HTTPS URIs, preventing the use of wildcard domains, wildcard
@@ -1775,7 +1849,7 @@ Table of Contents
    would significantly impact the user experience.
 
    The authorization server could opt to make user consent mandatory in
-   every Authorization Code flow (as described in Section 10.2 OAuth 2.0
+   every Authorization Code flow (as described in Section 10.2 of
    [RFC6749]), thus requiring user interaction before issuing an
    authorization code.  This approach would make it harder for an
    attacker to run a silent flow to obtain a fresh set of tokens.
@@ -1863,9 +1937,9 @@ Table of Contents
 
 7.2.  OAuth Implicit Grant
 
-   The OAuth 2.0 Implicit grant type (defined in Section 4.2 of OAuth
-   2.0 [RFC6749]) works by the authorization server issuing an access
-   token in the authorization response (front channel) without an
+   The OAuth 2.0 Implicit grant type (defined in Section 4.2 of
+   [RFC6749]) works by the authorization server issuing an access token
+   in the authorization response (front channel) without an
    authorization code exchange step.  In this case, the access token is
    returned in the fragment part of the redirect URI, providing an
    attacker with several opportunities to intercept and steal the access
