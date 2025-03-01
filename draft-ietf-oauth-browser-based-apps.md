@@ -274,7 +274,7 @@ In this advanced attack scenario, the attacker completely disregards any tokens 
 - Exchange the authorization code for a new set of tokens
 - Abuse the stolen tokens
 
-The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism with perfect security, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
+The most important takeaway from this scenario is that it runs a new OAuth flow instead of focusing on stealing existing tokens. In essence, even if the application finds a token storage mechanism that is able to completely isolate the stored tokens from the attacker, the attacker will still be able to request a new set of tokens. Note that because the attacker controls the application in the browser, the attacker's Authorization Code flow is indistinguishable from a legitimate Authorization Code flow.
 
 This attack scenario is possible because the security of public browser-based OAuth clients relies entirely on the redirect URI and application's origin. When the attacker executes malicious JavaScript code in the application's origin, they gain the capability to inspect same-origin frames. As a result, the attacker's code running in the main execution context can inspect the redirect URI loaded in the same-origin frame to extract the authorization code.
 
@@ -854,14 +854,14 @@ additional measures, such clients are subject to client impersonation
 
 As stated in {{Section 10.2 of RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
-without user consent or interaction, except when the identity of the
-client can be assured.
+without user consent or interaction, except when the authorization
+server can assure the the identity of the client application.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
 HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components,
 this exact match of registered absolute HTTPS URIs MAY be accepted by authorization servers as
 proof of identity of the client for the purpose of deciding whether to automatically
-process an authorization request when a previous request for the client_id
+process an authorization request when a previous request for the `client_id`
 has already been approved.
 
 
@@ -882,7 +882,7 @@ In these flows, the browser-based app holds control of the primary window, for i
 If the browser-based app and the authorization server are invoked in different frames, they have to use in-browser communication techniques like the postMessage API (a.k.a. {{WebMessaging}}) instead of top-level redirections.
 To guarantee confidentiality and authenticity of messages, both the initiator origin and receiver origin of a postMessage MUST be verified using the mechanisms inherently provided by the postMessage API (Section 9.3.2 in {{WebMessaging}}).
 
-{{Section 4.18. of RFC9700}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
+{{Section 4.18 of RFC9700}} provides additional details about the security of in-browser communication flows and the countermeasures that browser-based applications and authorization servers MUST apply to defend against these attacks.
 
 
 #### Cross-Origin Requests {#pattern-oauth-browser-cors}
@@ -911,7 +911,7 @@ If the attacker has the ability to execute malicious JavaScript code in the appl
 * Acquisition and Extraction of New Tokens ({{scenario-new-flow}})
 * Proxying Requests via the User's Browser ({{scenario-proxy}})
 
-The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a perfectly secure token storage mechanism, the attacker will still be able to obtain tokens from the authorization server.
+The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a way to completely isolate the tokens from the attacker, the attacker will still be able to obtain tokens from the authorization server.
 
 Note that these attack scenarios result in the following consequences:
 
@@ -931,7 +931,7 @@ When handling tokens directly, the application can choose different storage mech
 
 A practical implementation pattern can use a Web Worker {{WebWorker}} to isolate the refresh token, and provide the application with the access token making requests to resource servers.
 
-Note that even a perfect token storage mechanism does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
+Note that even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See {{scenario-new-flow}}).
 
 
 ##### Using Sender-Constrained Tokens
@@ -1195,7 +1195,7 @@ When discussing the security properties of browser-based token storage solutions
 1. The attacker obtaining tokens from storage
 2. The attacker obtaining tokens from the provider (e.g., the authorization server or the token-mediating backend)
 
-Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even the perfect token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.
+Since the attacker's code becomes indistinguishable from the legitimate application's code, the attacker will always be able to request tokens from the provider in exactly the same way as the legitimate application code. As a result, not even a completely isolated token storage solution can address the dangers of the second threat, where the attacker requests tokens from the provider.
 
 That said, the different security properties of browser-based storage solutions will impact the attacker's ability to obtain existing tokens from storage.
 
@@ -1264,7 +1264,7 @@ Note that the main difference between these patterns is the exposure of the data
 Filesystem Considerations for Browser Storage APIs {#filesystem-considerations}
 --------------------------------------------------
 
-In all cases, as of this writing, browsers ultimately store data in plain text on the filesystem. This behavior exposes tokens to attackers with the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and sessions, resulting in account takeover attacks.
+In all cases, as of this writing, there is no guarantee that browser storage is encrypted at rest. This behavior potentially exposes tokens to attackers that have the ability to read files on disk. While such attacks rely on capabilities that are well beyond the scope of browser-based applications, this topic highlights an important attack vector against modern applications. More and more malware is specifically created to crawl user's machines looking for browser profiles to obtain high-value tokens and session cookies, resulting in account takeover attacks.
 
 While the browser-based application is incapable of mitigating such attacks, the application can mitigate the consequences of such an attack by ensuring data confidentiality using encryption. The {{-WebCryptographyAPI}} provides a mechanism for JavaScript code to generate a secret key, as well as an option for that key to be non-exportable. A JavaScript application could then use this API to encrypt and decrypt tokens before storing them. However, the {{-WebCryptographyAPI}} specification only ensures that the key is not exportable to the browser code, but does not place any requirements on the underlying storage of the key itself with the operating system. As such, a non-exportable key cannot be relied on as a way to protect against exfiltration from the underlying filesystem.
 
