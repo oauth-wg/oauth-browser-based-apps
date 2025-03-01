@@ -50,7 +50,7 @@ normative:
       name: whatwg
       ins: whatwg
     date: December 19, 2024
-    target: https://fetch.spec.whatwg.org/commit-snapshots/5dfed9d6c57598afd969ddde663cb9693e0c149b/
+    target: https://fetch.spec.whatwg.org/
   W3C.service-workers: ServiceWorker
   WebMessaging:
     title: HTML - Cross-document messaging
@@ -58,7 +58,7 @@ normative:
       name: whatwg
       ins: whatwg
     date:  January 15, 2025
-    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#web-messaging
+    target: https://html.spec.whatwg.org/#web-messaging
 informative:
   RFC6819:
   HTML:
@@ -67,7 +67,7 @@ informative:
       name: whatwg
       ins: whatwg
     date: January 15, 2025
-    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/
+    target: https://html.spec.whatwg.org/
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0-errata2.html
@@ -88,14 +88,14 @@ informative:
       name: whatwg
       ins: whatwg
     date: January 15, 2025
-    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#webstorage
+    target: https://html.spec.whatwg.org/#webstorage
   WebWorker:
     title: HTML Living Standard - Web workers
     author:
       name: whatwg
       ins: whatwg
     date: January 15, 2025
-    target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/#toc-workers
+    target: https://html.spec.whatwg.org/#toc-workers
   Site:
     title: Site
     author:
