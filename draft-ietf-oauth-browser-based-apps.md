@@ -745,7 +745,7 @@ and receives the resource server's response (E).
 ### Implementation Details
 
 Browser-based applications that are public clients and use the Authorization Code grant type described in
-{{Section 4.1 RFC6749}} MUST also follow these additional requirements
+{{Section 4.1 of RFC6749}} MUST also follow these additional requirements
 described in this section.
 
 #### The Authorization Code Grant {#pattern-oauth-browser-flow}
@@ -831,7 +831,7 @@ additional measures, such clients are subject to client impersonation
 
 #### Client Impersonation {#client_impersonation}
 
-As stated in {{Section 10.2 RFC6749}}, the authorization
+As stated in {{Section 10.2 of RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
 without user consent or interaction, except when the identity of the
 client can be assured.
