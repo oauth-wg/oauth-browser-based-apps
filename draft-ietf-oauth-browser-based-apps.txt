@@ -1597,8 +1597,9 @@ Table of Contents
    *  using and verifying unique value for the OAuth state parameter to
       carry a CSRF token
 
-   *  if the application is using OpenID Connect, by using and verifying
-      the OpenID Connect nonce parameter as described in [OpenID]
+   *  if the application is also using OpenID Connect, by using and
+      verifying the OpenID Connect nonce parameter as described in
+      [OpenID]
 
    See Section 2.1 of [RFC9700] for additional details on selecting a
    proper CSRF defense for the Authorization Code flow.
