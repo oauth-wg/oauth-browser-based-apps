@@ -164,10 +164,20 @@ the following terms:
 : An application that is dynamically downloaded and executed in a web browser,
   usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
-This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document refers to "JavaScript applications" and to "malicious JavaScript" when discussing attack patterns. Note that the recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime. The same considerations apply to other languages and runtimes that allow malicious code to execute in the application's runtime in the browser.
+This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser.
 
+"PKCE":
+: PKCE refers to Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
+  to protect OAuth authorization codes.
 
+"DPoP":
+: DPoP {{RFC9449}} is a mechanism to restrict access tokens to be used only by the client they were issued to.
 
+"CORS":
+: CORS refers to Cross-Origin Resource Sharing {{Fetch}}, a mechanism that enables exceptions to the browser's same-origin policy.
+
+"CSP":
+: CSP refers to Content Security Policy {{-CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
 
 
 History of OAuth 2.0 in Browser-Based Applications
@@ -1283,11 +1293,11 @@ Sender-Constrained Tokens {#sender-constrained-tokens}
 
 As discussed throughout this document, the use of sender-constrained tokens does not solve the security limitations of browser-only OAuth clients. However, when the level of security offered by a token-mediating backend ({{pattern-tmb}}) or a browser-only OAuth client ({{pattern-oauth-browser}}) suffices for the use case at hand, sender-constrained tokens can be used to enhance the security of both access tokens and refresh tokens. One method of implementing sender-constrained tokens in a way that is usable from browser-based applications is DPoP {{RFC9449}}.
 
-When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the {{-WebCryptographyAPI}}. With an unencrypted token in localStorage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
+When using sender-constrained tokens, the OAuth client has to prove possession of a private key in order to use the token, such that the token isn't usable by itself. If a sender-constrained token is stolen, the attacker wouldn't be able to use the token directly, they would need to also steal the private key. In essence, one could say that using sender-constrained tokens shifts the challenge of securely storing the token to securely storing the private key. Ideally, the application should use a non-exportable private key, such as generating one with the {{-WebCryptographyAPI}}. With an unencrypted token in the browser storage protected by a non-exportable private key, an XSS attack would not be able to extract the key, so the token would not be usable by the attacker.
 
 If the application is unable to use an API that generates a non-exportable key, the application should take measures to isolate the private key from its own execution context. The techniques for doing so are similar to using a secure token storage mechanism, as discussed in {{token-storage}}.
 
-While a non-exportable key is protected from exfiltration from within JavaScript, the exfiltration of the underlying private key from the filesystem is still a concern. At the time of writing, there is no guarantee made by the {{-WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware.
+While a non-exportable key is protected from exfiltration from within the JavaScript context, the exfiltration of the underlying private key from the filesystem is still a potential attack vector. At the time of writing, there is no guarantee made by the {{-WebCryptographyAPI}} that a non-exportable key is actually protected by a Trusted Platform Module (TPM) or stored in an encrypted form on disk. Exfiltration of the non-exportable key from the underlying filesystem may still be possible if the attacker can get access to the filesystem of the user's machine, for example via malware. This effectively makes the potential attack vector equivalent to a session hijacking attack.
 
 
 
