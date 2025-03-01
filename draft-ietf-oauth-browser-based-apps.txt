@@ -2230,12 +2230,16 @@ Table of Contents
 
 8.  Token Storage in the Browser
 
-   When a browser-based application handles tokens directly, it becomes
-   responsible for ephemerally or persistently storing tokens.  As a
-   consequence, the application needs to decide how to manage tokens
-   (e.g., in-memory vs persistent storage), and which steps to take to
-   further isolate tokens from the main application code.  This section
-   discusses a few different storage mechanisms and their properties.
+   When a browser-based application handles OAuth access tokens or
+   refresh tokens directly, it becomes responsible for ephemerally or
+   persistently storing the tokens.  As a consequence, the application
+   needs to decide how to manage the tokens (e.g., in-memory vs
+   persistent storage), and which steps to take to further isolate the
+   tokens from the main application code.  This section discusses a few
+   different storage mechanisms and their properties.  These
+   recommendations take into account the unique properties of OAuth
+   tokens, some of which may overlap with general browser security
+   recommendations.
 
    When discussing the security properties of browser-based token
    storage solutions, it is important to understand the attacker's
@@ -2634,6 +2638,24 @@ Table of Contents
 Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -24
+
+   *  Addressed feedback from secdir review
+
+   *  Clarified mailicious JavaScript is the basis of the threat
+      analysis earlier in the document
+
+   *  Ensure acronyms and other specifications are defined and
+      referenced on first use
+
+   *  Clarified that the specific attacks described are the relevant
+      ones for this document because they are OAuth-specific
+
+   *  Described the relationship to session fixation attacks
+
+   *  Clarified that section 8 is talking about OAuth tokens
+      specifically
 
    -23
 
