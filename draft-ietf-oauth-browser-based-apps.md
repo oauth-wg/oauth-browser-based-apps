@@ -1169,7 +1169,7 @@ Finally, note that the use of a Service Worker by itself does not increase the a
 Token Storage in the Browser {#token-storage}
 ============================
 
-When a browser-based application handles tokens directly, it becomes responsible for ephemerally or persistently storing tokens. As a consequence, the application needs to decide how to manage tokens (e.g., in-memory vs persistent storage), and which steps to take to further isolate tokens from the main application code. This section discusses a few different storage mechanisms and their properties.
+When a browser-based application handles OAuth access tokens or refresh tokens directly, it becomes responsible for ephemerally or persistently storing the tokens. As a consequence, the application needs to decide how to manage the tokens (e.g., in-memory vs persistent storage), and which steps to take to further isolate the tokens from the main application code. This section discusses a few different storage mechanisms and their properties. These recommendations take into account the unique properties of OAuth tokens, some of which may overlap with general browser security recommendations.
 
 When discussing the security properties of browser-based token storage solutions, it is important to understand the attacker's capabilities when they compromise a browser-based application. Similar to previous discussions, two main attack scenarios should be taken into account:
 
@@ -1323,6 +1323,7 @@ Document History
 * Ensure acronyms and other specifications are defined and referenced on first use
 * Clarified that the specific attacks described are the relevant ones for this document because they are OAuth-specific
 * Described the relationship to session fixation attacks
+* Clarified that section 8 is talking about OAuth tokens specifically
 
 -23
 
