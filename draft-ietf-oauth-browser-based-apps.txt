@@ -2683,21 +2683,17 @@ Appendix A.  Document History
 
    -23
 
-   *  Addressed feedback from Gen-ART review
+   *  Ensure acronyms and other specifications are defined and
+      referenced on first use, and added to terminology
 
-   *  Addressed feedback from opsdir review
+   *  Clarified mailicious JavaScript is the basis of the threat
+      analysis earlier in the document
 
    *  Clarified why filesystem storage of private key is a concern
 
    *  Clarified JS runtimes in intro
 
    *  Addressed feedback from secdir review
-
-   *  Clarified mailicious JavaScript is the basis of the threat
-      analysis earlier in the document
-
-   *  Ensure acronyms and other specifications are defined and
-      referenced on first use, and added to terminology
 
    *  Clarified that the specific attacks described are the relevant
       ones for this document because they are OAuth-specific
@@ -2722,6 +2718,13 @@ Appendix A.  Document History
 
    *  Slightly rephrased Web Worker section to not sound like a
       recommendation
+
+   *  Editorial edits to remove the phrase "perfect storage mechanism"
+
+   *  Fixed references
+
+   *  Addressed all feedback from the genart, opsdir, artart, secdir,
+      and httpdir reviews
 
    -22
 
