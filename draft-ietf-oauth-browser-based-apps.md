@@ -68,7 +68,6 @@ informative:
       ins: whatwg
     date: January 15, 2025
     target: https://html.spec.whatwg.org/commit-snapshots/b4233430fe410f67b7022ec8b28f55795dcc4110/
-  W3C.WebCryptoAPI: WebCryptographyAPI
   OpenID:
     title: OpenID Connect Core 1.0 incorporating errata set 2
     target: https://openid.net/specs/openid-connect-core-1_0-errata2.html
@@ -80,6 +79,9 @@ informative:
       - ins: B. de Medeiros
       - ins: C. Mortimore
   W3C.CSP3: CSP3
+  W3C.IndexedDB: IndexedDB
+  W3C.SubresourceIntegrity: SubresourceIntegrity
+  W3C.WebCryptoAPI: WebCryptographyAPI
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
@@ -100,7 +102,6 @@ informative:
     - name: MDN Contributors
       org: Mozilla Developer Network
     target: https://developer.mozilla.org/en-US/docs/Glossary/Site
-  W3C.IndexedDB: IndexedDB
   OWASPCheatSheet:
     title: OWASP Cheat Sheet
     target: https://cheatsheetseries.owasp.org/
@@ -122,9 +123,9 @@ taken into account when developing browser-based applications that use OAuth 2.0
 Introduction {#introduction}
 ============
 
-This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns address these challenges.
+This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns can help address some of these challenges.
 
-Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect for user authentication, after which they maintain the user's authentication state. Such a scenario, which only uses OAuth 2.0 as the underlying specification of OpenID Connect, is not within scope for this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same party.
+Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect {{OpenID}} for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization Server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same entity.
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
@@ -133,11 +134,10 @@ the OpenID Foundation-sponsored set of libraries that assist developers in adopt
 these practices. {{RFC8252}} makes specific recommendations for how to securely implement OAuth clients in native
 applications, including incorporating additional OAuth extensions where needed.
 
-This specification, OAuth 2.0 for Browser-Based Applications, addresses the similarities between implementing
-OAuth clients as native applications and browser-based applications, but also highlights how the security properties of browser-based applications are vastly different than those of native applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.
+This specification, OAuth 2.0 for Browser-Based Applications, highlights how the security properties of browser-based applications are vastly different than those of native applications, as well as addresses the similarities between implementing OAuth clients as native applications and browser-based applications. This document is primarily focused on OAuth, except where OpenID Connect provides additional considerations.
 
-Many of these recommendations are derived from the OAuth 2.0 Security Best Current Practice
-{{RFC9700}} and browser-based applications are expected to follow those recommendations
+Many of these recommendations are derived from the Best Current Practice for OAuth 2.0 Security
+{{RFC9700}}, as browser-based applications are expected to follow those recommendations
 as well. This document expands on and further restricts various recommendations given in {{RFC9700}}.
 
 
@@ -168,7 +168,7 @@ This document discusses the security of browser-based applications, which are ex
 
 "PKCE":
 : PKCE refers to Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
-  to protect OAuth authorization codes.
+  to prevent various attacks on OAuth authorization codes.
 
 "DPoP":
 : DPoP {{RFC9449}} is a mechanism to restrict access tokens to be used only by the client they were issued to.
@@ -183,13 +183,13 @@ This document discusses the security of browser-based applications, which are ex
 History of OAuth 2.0 in Browser-Based Applications
 ==================================================
 
-At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}}, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit grant type, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}}, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
-However, there are several drawbacks to the Implicit grant type, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit grant type in browsers. Additional attacks and security considerations can be found in {{RFC9700}}.
+However, there are several drawbacks to the Implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit flow in browsers. Additional attacks and security considerations can be found in {{RFC9700}}.
 
-In recent years, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}}, which enables exceptions to the same-origin policy, allows browser-based applications to use the OAuth 2.0 Authorization Code grant type and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens for other types of clients, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In modern web development, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}} (which enables exceptions to the same-origin policy) allows browser-based applications to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
-For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations, discussed further in this document. Additional considerations apply for first-party common-domain applications.
+For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations which are discussed further in this document. Additional considerations apply for first-party common-domain applications.
 
 
 
@@ -200,11 +200,14 @@ The Threat of Malicious JavaScript {#threats}
 Malicious JavaScript poses a significant risk to browser-based applications. Attack vectors, such as cross-site scripting (XSS) or the compromise of remote code files, give an attacker the capability to run arbitrary code in the application's execution context. This malicious code is not isolated from the main application's code in any way. Consequentially, the malicious code can not only take control of the running execution context, but can also perform actions within the application's origin. Concretely, this means that the malicious code can steal data from the current page, interact with other same-origin browsing contexts, send requests to a backend from within the application's origin, steal data from origin-based storage mechanisms (e.g., localStorage, IndexedDB), etc.
 
 First and foremost, it is crucial to take proactive measures to avoid the attacker from gaining a foothold in the first place. Doing so involves, but is not limited to:
+
 - Strictly applying context-sensitive output encoding and sanitization when handling untrusted data
 - Limiting or avoiding the loading of unchecked third-party resources
-- Using Subresource Integrity (TODO REF) to restrict valid scripts that can be loaded
-- Using a nonce-based or hash-based Content Security Policy ({{-CSP3}}) to prevent the execution of unauthorized script code
+- Using Subresource Integrity {{-SubresourceIntegrity}} to restrict valid scripts that can be loaded
+- Using a nonce-based or hash-based Content Security Policy {{-CSP3}} to prevent the execution of unauthorized script code
 - Using origin isolation and HTML5 sandboxing to create boundaries between different parts of the application
+
+Further recommendations can be found in the OWASP Cheat Sheet series {{OWASPCheatSheet}}.
 
 Unfortunately, history shows that even when applying these security guidelines, there remains a risk that the attacker finds a way to trigger the execution of malicious JavaScript. When analyzing the security of browser-based applications in light of the presence of malicious JS, it is crucial to realize that the __malicious JavaScript code has the same privileges as the legitimate application code__. All JS applications are exposed to this risk in some degree.
 
@@ -217,9 +220,9 @@ authorization. For instance, this access might be limited to times when the
 application is in active use, by limiting the type of tokens that might be obtained, or by binding
 the tokens to the browser.
 
-When the application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
+When the legitimate application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
 
-The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth grant. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
+The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
 
 The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.
 
