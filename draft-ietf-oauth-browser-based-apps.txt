@@ -3016,12 +3016,12 @@ Appendix B.  Acknowledgements
    and formed the final specification:
 
    Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen,
-   Christian Mainka, Damien Bowden, Daniel Fett, Elar Lang, Emmanuel
-   Gautier, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
-   Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
-   Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill,
-   Louis Jannett, Marc Blanchet, Martin Thomson, Matthew Bocci, Mike
-   Jones, Qin Wu, Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer,
+   Christian Mainka, Damien Bowden, Daniel Fett, Deb Cooley, Elar Lang,
+   Emmanuel Gautier, Eva Sarafianou, Filip Skokan, George Fletcher,
+   Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
+   Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo
+   Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew Bocci,
+   Mike Jones, Qin Wu, Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer,
    Thomas Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio
    Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
