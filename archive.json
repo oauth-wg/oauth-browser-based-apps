@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-27T00:05:59.479354+00:00",
+  "timestamp": "2025-03-02T00:06:25.204570+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1050,16 +1050,24 @@
       "id": "I_kwDOCUe3lM6oncTl",
       "title": "Consider alternative phrasing for \"scenarios\"",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/68",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "From Thomas's review\n\n> One editorial nit regarding the use of the term \"scenario\" in sentences like:\n>\n>    \"scenarios that attackers can use\"\n>    \"[...] scenarios that an attacker can execute\"\n>\n> To my (non-native) ears, to \"use/execute a scenario\" sounds a bit\n> weird :-) Maybe \"attack _strategies_ that an attacker can _exploit_\"?\n",
       "createdAt": "2025-02-04T01:32:35Z",
-      "updatedAt": "2025-02-04T01:32:35Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-01T19:15:35Z",
+      "closedAt": "2025-03-01T19:15:34Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "rephrased in some earlier commits and c2ee3f5286a3efa4aa3b78516d88d7a85365b69b",
+          "createdAt": "2025-03-01T19:15:34Z",
+          "updatedAt": "2025-03-01T19:15:34Z"
+        }
+      ]
     },
     {
       "number": 69,
@@ -1071,9 +1079,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "- [ ] httpdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/) #73 \n- [ ] opsdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/) #71 \n- [ ] artart [mail](https://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/) #72 \n- [x] genart [mail](https://mailarchive.ietf.org/arch/msg/oauth/LZMIEjWy3o0Royfa4Opw6m8woyk/) #65 \n- [x] rtgdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/4PRDjLyQlZh5yr-De2XaNhUF4a8/) (no action needed)\n- [ ] secdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/) #70 \n- [x] iana \n\n",
+      "body": "- [x] httpdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/) #73 \n- [x] opsdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/) #71 \n- [x] artart [mail](https://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/) #72 \n- [x] genart [mail](https://mailarchive.ietf.org/arch/msg/oauth/LZMIEjWy3o0Royfa4Opw6m8woyk/) #65 \n- [x] rtgdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/4PRDjLyQlZh5yr-De2XaNhUF4a8/) (no action needed)\n- [x] secdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/) #70 \n- [x] iana \n\n",
       "createdAt": "2025-02-19T23:29:58Z",
-      "updatedAt": "2025-02-20T00:24:46Z",
+      "updatedAt": "2025-03-01T18:53:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1120,15 +1128,15 @@
       "id": "I_kwDOCUe3lM6qvsfp",
       "title": "opsdir review notes",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/71",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/\n\n- [x] clarify why filesystem storage of private key is a concern. (Question about whether there is another secure storage mechanism or remote server as a private storage mechanism)\n- [x] add PKCE to terminology section\n- [x] clarify that \"JavaScript applications\" and \"malicious JavaScript\" is talking about JS vs non-JS browser runtimes\n- [x] add reference to section 5.1 in \"when discussing attack patterns\"\n- [x] add CORS and CSP to terminology",
       "createdAt": "2025-02-19T23:44:21Z",
-      "updatedAt": "2025-02-20T00:52:02Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-01T18:03:37Z",
+      "closedAt": "2025-03-01T18:03:37Z",
       "comments": []
     },
     {
@@ -1152,15 +1160,15 @@
       "id": "I_kwDOCUe3lM6qv6k2",
       "title": "httpdir review notes",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/73",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Summarized action items based on httpdir review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/\n\n- [ ] clarify threat model up front (suggestion in email)\n- [x] clarify \"client\" is the application in 6.3.3.2 (the \"identity\" term is throwing this off)\n- [ ] Section 6.3.4.2.1 clarify how refresh token isolation helps\n- [x] Find an alternative to \"perfectly secure storage mechanism\"\n- [ ] make DPoP guidance more prominent (Section 6.3.4.2.2)\n- [ ] Section 6.3.4.2.3: Clarify why there is no distinguishing between refresh tokens and access tokens\n- [ ] Section 7.4.1.1: Clarify why this is relevant to the authorization code + PKCE flow, not just implicit\n- [ ] Section 8.3: TBD, see email\n- [ ] Section 8.5: Mention sync downside of LocalStorage to deemphasize it further\n- [x] Section 8.6: Change \"ultimately store data in plain text\" to \"cannot rely on encryption at rest\"\n- [ ] Expand on protections that CSP can provide\n- [x] cite first uses of PKCE, DPoP, etc\n- [x] fix references to \"section X of Y\" markup\n- [ ] Find stable reference to webstorage",
+      "body": "Summarized action items based on httpdir review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/\n\n- [x] clarify threat model up front (suggestion in email)\n- [x] clarify \"client\" is the application in 6.3.3.2 (the \"identity\" term is throwing this off)\n- [x] Section 6.3.4.2.1 clarify how refresh token isolation helps\n- [x] Find an alternative to \"perfectly secure storage mechanism\"\n- [x] make DPoP guidance more prominent (Section 6.3.4.2.2)\n- [x] Section 6.3.4.2.3: Clarify why there is no distinguishing between refresh tokens and access tokens\n- [x] Section 7.4.1.1: Clarify why this is relevant to the authorization code + PKCE flow, not just implicit\n- [x] Section 8.3: TBD, see email\n- [x] Section 8.5: Mention sync downside of LocalStorage to deemphasize it further\n- [x] Section 8.6: Change \"ultimately store data in plain text\" to \"cannot rely on encryption at rest\"\n- [x] Expand on protections that CSP can provide\n- [x] cite first uses of PKCE, DPoP, etc\n- [x] fix references to \"section X of Y\" markup\n- [x] Find stable reference to webstorage",
       "createdAt": "2025-02-20T00:24:34Z",
-      "updatedAt": "2025-02-23T16:35:25Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-01T20:17:07Z",
+      "closedAt": "2025-03-01T20:17:07Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -1182,6 +1190,27 @@
           "body": "Thanks, I agree with all that, it seems like what you wrote here would be sufficient as a CSP section in the security considerations, what do you think?",
           "createdAt": "2025-02-20T15:52:50Z",
           "updatedAt": "2025-02-20T15:52:50Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I have added a paragraph with a list of defenses that should be applied, giving proper context and including CSP. I think this is more useful that expanding on CSP",
+          "createdAt": "2025-02-28T17:30:43Z",
+          "updatedAt": "2025-02-28T17:30:43Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "> make DPoP guidance more prominent (Section 6.3.4.2.2)\n\nI actually don't think we should do this, since the point of including it in this list is that it doesn't prevent the attacker from getting new tokens with their own flow, which is why it's included in this section in the first place",
+          "createdAt": "2025-03-01T18:32:13Z",
+          "updatedAt": "2025-03-01T18:32:13Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Feedback sent to the mailing list:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/8rnRmT-h8G8W3MdpKYLy4LD7Ovc/",
+          "createdAt": "2025-03-01T20:17:07Z",
+          "updatedAt": "2025-03-01T20:17:07Z"
         }
       ]
     },
@@ -1206,15 +1235,15 @@
       "id": "I_kwDOCUe3lM6ra2u1",
       "title": "scope section 8 to OAuth tokens, mention that these recommendations are specific to OAuth but may overlap with general browser security recommendations",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/76",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-24T19:22:31Z",
-      "updatedAt": "2025-02-24T19:22:31Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-01T15:46:57Z",
+      "closedAt": "2025-03-01T15:46:57Z",
       "comments": []
     },
     {
@@ -1222,31 +1251,39 @@
       "id": "I_kwDOCUe3lM6ra22p",
       "title": "mention malicious javascript as the foundation of the threat analysis early in the document",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/77",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-24T19:22:37Z",
-      "updatedAt": "2025-02-24T19:22:37Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-01T15:33:18Z",
+      "closedAt": "2025-03-01T15:33:18Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This should be resolved with https://github.com/philippederyck/OAUTHWG-oauth-browser-based-apps/commit/2785574b3169ff550eac16762cdfd32175b91e0f",
+          "createdAt": "2025-02-28T17:15:32Z",
+          "updatedAt": "2025-02-28T17:15:32Z"
+        }
+      ]
     },
     {
       "number": 78,
       "id": "I_kwDOCUe3lM6riJM6",
       "title": "clarify that the resource server, application, and oauth server may be in separate domains",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/78",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-25T10:05:29Z",
-      "updatedAt": "2025-02-25T10:05:29Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-01T15:33:18Z",
+      "closedAt": "2025-03-01T15:33:18Z",
       "comments": []
     },
     {
@@ -1278,46 +1315,78 @@
       "id": "I_kwDOCUe3lM6riJmc",
       "title": "justify why the 5 specific attacks are the right ones as opposed to other things that might be possible with javascript injection",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/80",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-25T10:06:02Z",
-      "updatedAt": "2025-02-25T10:06:02Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-01T15:33:47Z",
+      "closedAt": "2025-03-01T15:33:47Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Clarified that we only focus on OAuth and not on other consequences (which are more broad and apply to all types of JS applications, regardless of OAuth).\n\nHope this suffices, especially because the attack scenarios are clearly marked as non-exhaustive. The consequences are pretty well-defined and scoped, so I think this should work.",
+          "createdAt": "2025-02-28T16:46:39Z",
+          "updatedAt": "2025-02-28T16:46:39Z"
+        }
+      ]
     },
     {
       "number": 81,
       "id": "I_kwDOCUe3lM6riJod",
       "title": "describe the confusion risk of adding the relaying server (section 6.1.3)",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/81",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-25T10:06:05Z",
-      "updatedAt": "2025-02-25T10:06:05Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-01T15:33:19Z",
+      "closedAt": "2025-03-01T15:33:19Z",
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "TBH, I'm not sure what to add here. The BFF does not have much authority to get abused as a confused deputy. CSRF would be a realistic attack pattern, but that one is covered in quite some depth. I did add a short section on being careful with the configuration of the proxy component, to avoid open proxies. I believe that this suffices to cover this comment.",
+          "createdAt": "2025-02-28T17:13:06Z",
+          "updatedAt": "2025-02-28T17:13:06Z"
+        }
+      ]
     },
     {
       "number": 82,
       "id": "I_kwDOCUe3lM6riJqf",
       "title": "describe relationship to session fixation attacks",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/82",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-02-25T10:06:08Z",
-      "updatedAt": "2025-02-25T10:06:08Z",
+      "updatedAt": "2025-03-01T15:33:18Z",
+      "closedAt": "2025-03-01T15:33:18Z",
+      "comments": []
+    },
+    {
+      "number": 85,
+      "id": "I_kwDOCUe3lM6sNGqK",
+      "title": "Permanent anchor requests",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/85",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Requested permanent anchors for subsections of HTML as per https://whatwg.org/working-mode#anchors as requested in #73 \n\nhttps://github.com/whatwg/html/issues/11089\n",
+      "createdAt": "2025-03-01T19:47:50Z",
+      "updatedAt": "2025-03-01T19:47:50Z",
       "closedAt": null,
       "comments": []
     }
@@ -4400,24 +4469,26 @@
       "id": "PR_kwDOCUe3lM6L0tZk",
       "title": "Changes to address opsdir review feedback",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/74",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "* Adds more terms to terminology section\r\n* Clarify JavaScript application meaning in terminology\r\n* Clarify the concern around filesystem storage of private key\r\n\r\nAddresses all feedback from opsdir review, closes #71",
       "createdAt": "2025-02-20T00:49:36Z",
-      "updatedAt": "2025-02-20T00:52:21Z",
+      "updatedAt": "2025-03-01T18:03:36Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "aa65c16926f64a4828a3fe0062ab6de7ab33524f",
       "headRepository": "oauth-wg/oauth-browser-based-apps",
       "headRefName": "opsdir-review",
       "headRefOid": "c70a62a13795391572c144017961dfbb4696b25d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-03-01T18:03:36Z",
+      "mergedAt": "2025-03-01T18:03:36Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "211fc2f55e238d2facbac78aba42ecfb1198898d"
+      },
       "comments": [
         {
           "author": "aaronpk",
@@ -4427,6 +4498,116 @@
           "updatedAt": "2025-02-20T00:51:54Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 83,
+      "id": "PR_kwDOCUe3lM6M98gA",
+      "title": "Pdr/addressing review comments",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/83",
+      "state": "MERGED",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addressing review comments and improvements",
+      "createdAt": "2025-02-28T17:16:52Z",
+      "updatedAt": "2025-03-01T15:33:17Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "2b351e5af0b9f2b28b96b70b37b07f945c110f1b",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/addressing-review-comments",
+      "headRefOid": "843d072f928611cc757ee0a6a44ec16de8003c71",
+      "closedAt": "2025-03-01T15:33:17Z",
+      "mergedAt": "2025-03-01T15:33:17Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "57e990262967dc1a5533910cfe842a3a10fc3688"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM6eGeWh",
+          "commit": {
+            "abbreviatedOid": "6ae94bf"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-01T15:22:03Z",
+          "updatedAt": "2025-03-01T15:22:04Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nNote that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect for user authentication, after which they maintain the user's authentication state. Such a scenario, which only uses OAuth 2.0 as the underlying specification of OpenID Connect, is not within scope for this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same party.\r\n```",
+              "createdAt": "2025-03-01T15:22:04Z",
+              "updatedAt": "2025-03-01T15:27:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOCUe3lM6eGeni",
+          "commit": {
+            "abbreviatedOid": "6ae94bf"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-03-01T15:29:20Z",
+          "updatedAt": "2025-03-01T15:29:20Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOCUe3lM6eGetJ",
+          "commit": {
+            "abbreviatedOid": "3d43529"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-03-01T15:31:52Z",
+          "updatedAt": "2025-03-01T15:31:52Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "```suggestion\r\nWhen stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.\r\n```",
+              "createdAt": "2025-03-01T15:31:52Z",
+              "updatedAt": "2025-03-01T15:31:52Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 84,
+      "id": "PR_kwDOCUe3lM6NCmeX",
+      "title": "changes for httpdir review",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/84",
+      "state": "MERGED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "* replace \"perfectly secure\" language\r\n* no guarantee of encryption at rest\r\n* clarify \"client\" is the application\"\r\n* fix refs",
+      "createdAt": "2025-03-01T18:05:13Z",
+      "updatedAt": "2025-03-01T18:05:57Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "211fc2f55e238d2facbac78aba42ecfb1198898d",
+      "headRepository": "oauth-wg/oauth-browser-based-apps",
+      "headRefName": "httpdir-review",
+      "headRefOid": "39cf40266831f26c24453e9310b3eef2f2255997",
+      "closedAt": "2025-03-01T18:05:33Z",
+      "mergedAt": "2025-03-01T18:05:33Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "787117cbc7f97fd82fdd496c20f0fff9afce5def"
+      },
+      "comments": [],
       "reviews": []
     }
   ]
