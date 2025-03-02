@@ -1532,7 +1532,7 @@ session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
 Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden,
-Daniel Fett, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
+Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
 Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Jones, Qin Wu,
