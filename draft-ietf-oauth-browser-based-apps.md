@@ -1338,6 +1338,10 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-24
+
+* Updated acknowledgements
+
 -23
 
 * Ensure acronyms and other specifications are defined and referenced on first use, and added to terminology
@@ -1530,9 +1534,10 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden,
 Daniel Fett, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
-Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett, Mike Jones,
-Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
-William Duncan, and Yannick Majoros.
+Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
+Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Jones, Qin Wu,
+Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
+Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
 
 --- fluff
