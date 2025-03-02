@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                          D. Waite
-Expires: 2 September 2025                                  Ping Identity
+Expires: 3 September 2025                                  Ping Identity
                                                               P. De Ryck
                                                   Pragmatic Web Security
-                                                            1 March 2025
+                                                            2 March 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2025.
+   This Internet-Draft will expire on 3 September 2025.
 
 Copyright Notice
 
@@ -2681,6 +2681,10 @@ Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
 
+   -24
+
+   *  Updated acknowledgements
+
    -23
 
    *  Ensure acronyms and other specifications are defined and
@@ -3016,9 +3020,10 @@ Appendix B.  Acknowledgements
    Gautier, Eva Sarafianou, Filip Skokan, George Fletcher, Hannes
    Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan, Justin
    Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill,
-   Louis Jannett, Mike Jones, Sean Kelleher, Thomas Broyer, Thomas
-   Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
-   William Duncan, and Yannick Majoros.
+   Louis Jannett, Marc Blanchet, Martin Thomson, Matthew Bocci, Mike
+   Jones, Qin Wu, Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer,
+   Thomas Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio
+   Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
 Authors' Addresses
 
