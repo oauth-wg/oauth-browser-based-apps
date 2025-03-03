@@ -167,17 +167,17 @@ the following terms:
 This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser.
 
 "PKCE":
-: PKCE refers to Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
+: Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
   to prevent various attacks on OAuth authorization codes.
 
 "DPoP":
-: DPoP {{RFC9449}} is a mechanism to restrict access tokens to be used only by the client they were issued to.
+: OAuth 2.0 Demonstrating of Proof of Possession (DPoP) {{RFC9449}} is a mechanism to restrict access tokens to be used only by the client they were issued to.
 
 "CORS":
-: CORS refers to Cross-Origin Resource Sharing {{Fetch}}, a mechanism that enables exceptions to the browser's same-origin policy.
+: Cross-Origin Resource Sharing {{Fetch}}, a mechanism that enables exceptions to the browser's same-origin policy.
 
 "CSP":
-: CSP refers to Content Security Policy {{-CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
+: Content Security Policy {{-CSP3}}, a mechanism of restricting which resources a particular web page can fetch or execute.
 
 
 History of OAuth 2.0 in Browser-Based Applications
@@ -213,7 +213,7 @@ Unfortunately, history shows that even when applying these security guidelines, 
 
 Applications might obtain OAuth tokens that confer authorization
 necessary to their functioning. In combination, this effectively gives
-compromised code the ability to use that authorization for malicious ends
+compromised code the ability to use that authorization for malicious ends.
 Though the risk of attacker abuse of authorization is unavoidable, there are
 ways to limit the extent to which a compromised application can abuse that
 authorization. For instance, this access might be limited to times when the
@@ -327,7 +327,7 @@ The application can use DPoP to ensure its access tokens are bound to non-export
 
 ### Client Hijacking {#consequence-hijack}
 
-When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.
+When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. Alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.
 
 Note that client hijacking is less powerful than directly abusing stolen user tokens. In a client hijacking scenario, the attacker cannot directly control the tokens and is restricted by the security policies enforced on the client application. For example, a resource server running on `admin.example.org` can be configured with a CORS policy that rejects requests coming from a client running on `web.example.org`. Even if the access token used by the client would be accepted by the resource server, the resource server's strict CORS configuration does not allow such a request. A resource server without such a strict CORS policy can still be subject to adversarial requests coming from the compromised client application.
 
@@ -1340,6 +1340,8 @@ Document History
 
 -24
 
+* Updated terminology definitions
+* Fixed typos
 * Updated acknowledgements
 
 -23
