@@ -4,11 +4,11 @@
 
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
-Intended status: Best Current Practice                          D. Waite
-Expires: 3 September 2025                                  Ping Identity
-                                                              P. De Ryck
-                                                  Pragmatic Web Security
-                                                            2 March 2025
+Intended status: Best Current Practice                        P. De Ryck
+Expires: 4 September 2025                         Pragmatic Web Security
+                                                                D. Waite
+                                                           Ping Identity
+                                                            3 March 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 September 2025.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
@@ -204,19 +204,18 @@ Table of Contents
    or its runtime, but also apply to other languages and runtime
    environments in the browser.
 
-   "PKCE":  PKCE refers to Proof Key for Code Exchange (PKCE) [RFC7636],
-      a mechanism to prevent various attacks on OAuth authorization
-      codes.
+   "PKCE":  Proof Key for Code Exchange (PKCE) [RFC7636], a mechanism to
+      prevent various attacks on OAuth authorization codes.
 
-   "DPoP":  DPoP [RFC9449] is a mechanism to restrict access tokens to
-      be used only by the client they were issued to.
+   "DPoP":  OAuth 2.0 Demonstrating of Proof of Possession (DPoP)
+      [RFC9449] is a mechanism to restrict access tokens to be used only
+      by the client they were issued to.
 
-   "CORS":  CORS refers to Cross-Origin Resource Sharing [Fetch], a
-      mechanism that enables exceptions to the browser's same-origin
-      policy.
+   "CORS":  Cross-Origin Resource Sharing [Fetch], a mechanism that
+      enables exceptions to the browser's same-origin policy.
 
-   "CSP":  CSP refers to Content Security Policy [W3C.CSP3], a mechanism
-      of restricting which resources a particular web page can fetch or
+   "CSP":  Content Security Policy [W3C.CSP3], a mechanism of
+      restricting which resources a particular web page can fetch or
       execute.
 
 4.  History of OAuth 2.0 in Browser-Based Applications
@@ -308,8 +307,8 @@ Table of Contents
    Applications might obtain OAuth tokens that confer authorization
    necessary to their functioning.  In combination, this effectively
    gives compromised code the ability to use that authorization for
-   malicious ends Though the risk of attacker abuse of authorization is
-   unavoidable, there are ways to limit the extent to which a
+   malicious ends.  Though the risk of attacker abuse of authorization
+   is unavoidable, there are ways to limit the extent to which a
    compromised application can abuse that authorization.  For instance,
    this access might be limited to times when the application is in
    active use, by limiting the type of tokens that might be obtained, or
@@ -577,7 +576,7 @@ Table of Contents
    user's browser.  This effectively allows the attacker to perform any
    operations that the legitimate client application can perform.
    Examples include inspecting data on the page, modifying the page, and
-   sending requests to backend systems. alternatively, the attacker can
+   sending requests to backend systems.  Alternatively, the attacker can
    also abuse their access to the application to launch additional
    attacks, such as tricking the client into acting on behalf of the
    attacker using an attack such as session fixation.
@@ -2683,6 +2682,10 @@ Appendix A.  Document History
 
    -24
 
+   *  Updated terminology definitions
+
+   *  Fixed typos
+
    *  Updated acknowledgements
 
    -23
@@ -3033,11 +3036,11 @@ Authors' Addresses
    URI:   https://aaronparecki.com
 
 
-   David Waite
-   Ping Identity
-   Email: david@alkaline-solutions.com
-
-
    Philippe De Ryck
    Pragmatic Web Security
    Email: philippe@pragmaticwebsecurity.com
+
+
+   David Waite
+   Ping Identity
+   Email: david@alkaline-solutions.com
