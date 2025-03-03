@@ -22,15 +22,15 @@ author:
     email: aaron@parecki.com
     uri: https://aaronparecki.com
   -
-    ins: D. Waite
-    name: David Waite
-    org: Ping Identity
-    email: david@alkaline-solutions.com
-  -
     ins: P. De Ryck
     name: Philippe De Ryck
     org: Pragmatic Web Security
     email: philippe@pragmaticwebsecurity.com
+  -
+    ins: D. Waite
+    name: David Waite
+    org: Ping Identity
+    email: david@alkaline-solutions.com
 
 
 normative:
