@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-02T00:06:25.204570+00:00",
+  "timestamp": "2025-03-04T00:06:06.383776+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1074,15 +1074,15 @@
       "id": "I_kwDOCUe3lM6qvoqV",
       "title": "Process last call reviews",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/69",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "- [x] httpdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/RZty9PDLAVNMyfvDoOeGCWG3TGE/) #73 \n- [x] opsdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/_vsDr-xTHDR9xL-HyUlQ-rkK4o8/) #71 \n- [x] artart [mail](https://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/) #72 \n- [x] genart [mail](https://mailarchive.ietf.org/arch/msg/oauth/LZMIEjWy3o0Royfa4Opw6m8woyk/) #65 \n- [x] rtgdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/4PRDjLyQlZh5yr-De2XaNhUF4a8/) (no action needed)\n- [x] secdir [mail](https://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/) #70 \n- [x] iana \n\n",
       "createdAt": "2025-02-19T23:29:58Z",
-      "updatedAt": "2025-03-01T18:53:26Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-02T02:23:35Z",
+      "closedAt": "2025-03-02T02:23:34Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -1101,9 +1101,16 @@
         {
           "author": "aaronpk",
           "authorAssociation": "MEMBER",
-          "body": "rtgdir: No action needed ",
+          "body": "rtgdir: No action needed. mailing list response: https://mailarchive.ietf.org/arch/msg/oauth/3nKfe-p96cZTfwD__KxgyBv4fk0/",
           "createdAt": "2025-02-20T00:09:05Z",
-          "updatedAt": "2025-02-20T00:09:05Z"
+          "updatedAt": "2025-03-02T02:23:06Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "All reviews have been incorporated and emails sent back to the reviewer and list with comments and thanks.",
+          "createdAt": "2025-03-02T02:23:34Z",
+          "updatedAt": "2025-03-02T02:23:34Z"
         }
       ]
     },
@@ -1112,16 +1119,24 @@
       "id": "I_kwDOCUe3lM6qvrLf",
       "title": "secdir review notes",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/70",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/Z-9Z1g8f5gu6gVdXpROTXvhPr_8/\n\n",
       "createdAt": "2025-02-19T23:39:11Z",
-      "updatedAt": "2025-02-25T10:06:08Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-02T02:03:45Z",
+      "closedAt": "2025-03-02T02:03:44Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Responded to feedback on the mailing list \n\nhttps://mailarchive.ietf.org/arch/msg/oauth/O_tpx5rdMOnFCNL9nC_wo1uMmWQ/",
+          "createdAt": "2025-03-02T02:03:44Z",
+          "updatedAt": "2025-03-02T02:03:44Z"
+        }
+      ]
     },
     {
       "number": 71,
@@ -1144,16 +1159,24 @@
       "id": "I_kwDOCUe3lM6qvzbN",
       "title": "artart review notes",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/72",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Summarized action items based on review:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/lyq7LLM5AFLayFsjG_bg4g6k0bs/\n\n- [x] expand PKCE reference in Section 4\n",
       "createdAt": "2025-02-20T00:08:26Z",
-      "updatedAt": "2025-02-24T19:22:38Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-03-02T02:18:43Z",
+      "closedAt": "2025-03-02T02:18:42Z",
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Responses posted to the list:\n\nhttps://mailarchive.ietf.org/arch/msg/oauth/p_JzBshJQbbzraZH7xabBwZ44x0/",
+          "createdAt": "2025-03-02T02:18:42Z",
+          "updatedAt": "2025-03-02T02:18:42Z"
+        }
+      ]
     },
     {
       "number": 73,
@@ -1226,9 +1249,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-02-24T19:21:59Z",
-      "updatedAt": "2025-02-24T19:23:19Z",
+      "updatedAt": "2025-03-02T02:15:12Z",
       "closedAt": "2025-02-24T19:23:19Z",
-      "comments": []
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Duplicate of #77 ",
+          "createdAt": "2025-03-02T02:15:11Z",
+          "updatedAt": "2025-03-02T02:15:11Z"
+        }
+      ]
     },
     {
       "number": 76,
@@ -1379,15 +1410,15 @@
       "id": "I_kwDOCUe3lM6sNGqK",
       "title": "Permanent anchor requests",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/85",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Requested permanent anchors for subsections of HTML as per https://whatwg.org/working-mode#anchors as requested in #73 \n\nhttps://github.com/whatwg/html/issues/11089\n",
       "createdAt": "2025-03-01T19:47:50Z",
-      "updatedAt": "2025-03-01T19:47:50Z",
-      "closedAt": null,
+      "updatedAt": "2025-03-03T16:00:38Z",
+      "closedAt": "2025-03-03T16:00:38Z",
       "comments": []
     }
   ],
@@ -4370,7 +4401,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-01-26T14:45:06Z",
-      "updatedAt": "2025-02-04T01:06:16Z",
+      "updatedAt": "2025-03-02T02:19:08Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "64eaa586f5a109ab8e6b731b88d757270758beab",
@@ -4390,6 +4421,13 @@
           "body": "Thanks so much Thomas!",
           "createdAt": "2025-02-04T01:06:15Z",
           "updatedAt": "2025-02-04T01:06:15Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Mailing list response https://mailarchive.ietf.org/arch/msg/oauth/eK-22dh72bKx7C42ZcMd1iA1LmY/",
+          "createdAt": "2025-03-02T02:19:07Z",
+          "updatedAt": "2025-03-02T02:19:07Z"
         }
       ],
       "reviews": [
