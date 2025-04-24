@@ -450,7 +450,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 
 These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
-Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure that tokens stored in cookies are never written to the user's hard drive in plaintext format. This security measure helps ensure the  confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
+Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure that tokens stored in cookies are never written to the user's local persistent storage in plaintext format. This security measure helps ensure the confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
 
 For further guidance on cookie security best practices, we refer to the OWASP Cheat Sheet series ({{OWASPCheatSheet}}).
 
@@ -1338,6 +1338,10 @@ Document History
 
 [[ To be removed from the final specification ]]
 
+-25
+
+* replaced "hard drive" with "local persistent storage"
+
 -24
 
 * Updated terminology definitions
@@ -1533,7 +1537,7 @@ and Torsten Lodderstedt, the attendees of the Internet Identity Workshop 27
 session at which this BCP was originally proposed, and the following individuals
 who contributed ideas, feedback, and wording that shaped and formed the final specification:
 
-Andy Barlow, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden,
+Andy Barlow, Andy Newton, Annabelle Backman, Brian Campbell, Brock Allen, Christian Mainka, Damien Bowden,
 Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
