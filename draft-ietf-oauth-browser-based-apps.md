@@ -222,7 +222,7 @@ the tokens to the browser.
 
 When the legitimate application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.
 
-The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part ({{attackscenarios}}) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part ({{consequences}}) analyzes the impact of these attack scenarios on the OAuth client.
+The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. {{attackscenarios}} discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. {{consequences}} analyzes the impact of these attack scenarios on the OAuth client.
 
 The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.
 
@@ -1340,7 +1340,8 @@ Document History
 
 -25
 
-* replaced "hard drive" with "local persistent storage"
+* Replaced "hard drive" with "local persistent storage"
+* Minor editorial nits
 
 -24
 
@@ -1541,7 +1542,7 @@ Andy Barlow, Andy Newton, Annabelle Backman, Brian Campbell, Brock Allen, Christ
 Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
-Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Jones, Qin Wu,
+Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Qin Wu,
 Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
 Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
