@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 26 October 2025                          Pragmatic Web Security
+Expires: 27 October 2025                          Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                           24 April 2025
+                                                           25 April 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 October 2025.
+   This Internet-Draft will expire on 27 October 2025.
 
 Copyright Notice
 
@@ -329,13 +329,12 @@ Table of Contents
    as an OAuth client is quite unique, since the malicious JavaScript
    can now impact the interactions during an OAuth flow.  This section
    explores the threats malicious JS code poses to a browser-based
-   application with the responsibilities of an OAuth client.  The first
-   part (Section 5.1) discusses a few scenarios that attackers can use
-   once they have found a way to run malicious JavaScript code.  These
+   application with the responsibilities of an OAuth client.
+   Section 5.1 discusses a few scenarios that attackers can use once
+   they have found a way to run malicious JavaScript code.  These
    scenarios paint a clear picture of the true power of the attacker,
-   which goes way beyond simple token exfiltration.  The second part
-   (Section 5.2) analyzes the impact of these attack scenarios on the
-   OAuth client.
+   which goes way beyond simple token exfiltration.  Section 5.2
+   analyzes the impact of these attack scenarios on the OAuth client.
 
    The remainder of this specification will refer back to these attack
    scenarios and consequences to analyze the security properties of the
@@ -2683,7 +2682,9 @@ Appendix A.  Document History
 
    -25
 
-   *  replaced "hard drive" with "local persistent storage"
+   *  Replaced "hard drive" with "local persistent storage"
+
+   *  Minor editorial nits
 
    -24
 
@@ -3029,9 +3030,10 @@ Appendix B.  Acknowledgements
    Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph
    Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen,
    Leo Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew
-   Bocci, Mike Jones, Qin Wu, Rifaat Shekh-Yusef, Sean Kelleher, Thomas
-   Broyer, Thomas Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio
-   Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
+   Bocci, Mike Bishop, Mike Jones, Qin Wu, Rifaat Shekh-Yusef, Sean
+   Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten
+   Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and
+   Yannick Majoros.
 
 Authors' Addresses
 

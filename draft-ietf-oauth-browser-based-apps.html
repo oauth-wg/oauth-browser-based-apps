@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Parecki, et al.</td>
-<td class="center">Expires 26 October 2025</td>
+<td class="center">Expires 27 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-oauth-browser-based-apps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-24" class="published">24 April 2025</time>
+<time datetime="2025-04-25" class="published">25 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-26">26 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-27">27 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1123,7 +1123,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1487,7 +1487,7 @@ authorization. For instance, this access might be limited to times when the
 application is in active use, by limiting the type of tokens that might be obtained, or by binding
 the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">When the legitimate application code can access variables or call functions, the malicious JS code can do exactly the same. Furthermore, the malicious JS code can tamper with the regular execution flow of the application, as well as with any application-level defenses, since they are typically controlled from within the application. For example, the attacker can remove or override event listeners, modify the behavior of built-in functions (prototype pollution), and stop pages in frames from loading.<a href="#section-5-7" class="pilcrow">¶</a></p>
-<p id="section-5-8">The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. The first part (<a href="#attackscenarios" class="auto internal xref">Section 5.1</a>) discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. The second part (<a href="#consequences" class="auto internal xref">Section 5.2</a>) analyzes the impact of these attack scenarios on the OAuth client.<a href="#section-5-8" class="pilcrow">¶</a></p>
+<p id="section-5-8">The impact of malicious JavaScript on browser-based applications is a widely studied and well-understood topic. However, the concrete impact of malicious JavaScript on browser-based applications acting as an OAuth client is quite unique, since the malicious JavaScript can now impact the interactions during an OAuth flow. This section explores the threats malicious JS code poses to a browser-based application with the responsibilities of an OAuth client. <a href="#attackscenarios" class="auto internal xref">Section 5.1</a> discusses a few scenarios that attackers can use once they have found a way to run malicious JavaScript code. These scenarios paint a clear picture of the true power of the attacker, which goes way beyond simple token exfiltration. <a href="#consequences" class="auto internal xref">Section 5.2</a> analyzes the impact of these attack scenarios on the OAuth client.<a href="#section-5-8" class="pilcrow">¶</a></p>
 <p id="section-5-9">The remainder of this specification will refer back to these attack scenarios and consequences to analyze the security properties of the different architectural patterns.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <div id="attackscenarios">
 <section id="section-5.1">
@@ -3354,7 +3354,10 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <p id="appendix-A-2">-25<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">
-          <p id="appendix-A-3.1.1">replaced "hard drive" with "local persistent storage"<a href="#appendix-A-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-A-3.1.1">Replaced "hard drive" with "local persistent storage"<a href="#appendix-A-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.2">
+          <p id="appendix-A-3.2.1">Minor editorial nits<a href="#appendix-A-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-A-4">-24<a href="#appendix-A-4" class="pilcrow">¶</a></p>
@@ -3782,7 +3785,7 @@ who contributed ideas, feedback, and wording that shaped and formed the final sp
 Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
-Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Jones, Qin Wu,
+Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Qin Wu,
 Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
 Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 </section>
