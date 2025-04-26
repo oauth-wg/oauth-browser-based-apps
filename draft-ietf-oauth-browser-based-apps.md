@@ -930,7 +930,7 @@ While this architecture is inherently vulnerable to malicious JavaScript code, t
 
 ##### Secure Token Storage
 
-When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage* {{WebStorage}}, are easier to access from malicious JavaScript than highly isolated storage areas, such as a *Web Worker* {{WebWorker}}. {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
+When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as *Local Storage* {{WebStorage}}, are easier to access from malicious JavaScript than more isolated storage areas, such as a *Web Worker* {{WebWorker}}. {{token-storage}} discusses different storage mechanisms with their trade-off in more detail.
 
 A practical implementation pattern can use a Web Worker {{WebWorker}} to isolate the refresh token, and provide the application with the access token making requests to resource servers. This prevents an attacker from using the application's refresh token to obtain new tokens.
 
@@ -1259,7 +1259,7 @@ localStorage persists between page reloads as well as is shared across all tabs.
 
 sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.
 
-IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.
+IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers. Additionally, IndexedDB is an asynchronous API, which is preferred over the synchronous localStorage API.
 
 Note that the main difference between these patterns is the exposure of the data, but that none of these options can fully mitigate token exfiltration when the attacker can execute malicious code in the application's execution environment.
 
