@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-01T00:07:12.608235+00:00",
+  "timestamp": "2025-04-27T00:07:09.626982+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -42,6 +42,16 @@
       "name": "wontfix",
       "description": "This will not be worked on",
       "color": "ffffff"
+    },
+    {
+      "name": "iesg-feedback",
+      "description": "",
+      "color": "1d76db"
+    },
+    {
+      "name": "discuss",
+      "description": "",
+      "color": "B60205"
     }
   ],
   "issues": [
@@ -1420,6 +1430,432 @@
       "updatedAt": "2025-03-03T16:00:38Z",
       "closedAt": "2025-03-03T16:00:38Z",
       "comments": []
+    },
+    {
+      "number": 86,
+      "id": "I_kwDOCUe3lM6z7TDX",
+      "title": "Consistency of Terms",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/86",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback",
+        "discuss"
+      ],
+      "body": "from Andy Newton's review\nhttps://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/\n\n```\n188        \"Browser-based application\":  An application that is dynamically\n189           downloaded and executed in a web browser, usually written in\n190           JavaScript.  Also sometimes referred to as a \"single-page\n191           application\", or \"SPA\".\n\nThis draft introduces the term \"Browser-based application\" which is used\nin some places, but it also uses the term \"Javascript application\" in\nmany more places. Here is an example where the two terms are used\ntogether and to mean the same thing (I think).\n\n1436       The token-mediating backend counters the first two attack scenarios\n1437       by not exposing the refresh token to the browser-based application.\n1438       Even when the attacker gains full control over the JavaScript\n1439       application, there are simply no refresh tokens to be stolen.\n\nIs a JavaScript application the same thing as a browser-based application\nin this document? I also noticed a few places where the term SPA or single\npage application were used. If these are all the same term, can one term\nbe used instead of many? And if they are separate terms, can their definitions\nall be given even if quoting from a reference?\n\n1737       In this scenario, the application sends JavaScript-based requests to\n1738       the authorization server and the resource server.  Given the nature\n\nWhat is a Javascript-based request? Is this a request for data in JSON format\nor is it a request being made by code of the JavaScript application (or\nbrowser-based application)?\n```",
+      "createdAt": "2025-04-24T23:41:27Z",
+      "updatedAt": "2025-04-25T00:57:09Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Also called out by Mike Bishop\n\n```\nThe document states, \"Given the popularity of this scenario, this document uses the term \"JavaScript\" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser.\" I understand the temptation because of how we often speak about browser code, but that seems like a recipe for confusion -- how about not doing that? Use JavaScript when you actually mean JavaScript itself, and use \"browser-based apps\" when you're more general (which is most of the time).\n\nPlease also be consistent in your usage of JavaScript versus JS. We can afford the extra characters unless you're referring to the standard file extension.\n```",
+          "createdAt": "2025-04-25T00:21:54Z",
+          "updatedAt": "2025-04-25T00:21:54Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Also called out by \u00c9ric Vyncke\n\n> `this document uses the term \"JavaScript\" to refer to all mechanisms ` is rather an abuse of language... Anyway, if I am the only one to complain, then ignore this comment.\n",
+          "createdAt": "2025-04-25T00:57:07Z",
+          "updatedAt": "2025-04-25T00:57:07Z"
+        }
+      ]
+    },
+    {
+      "number": 87,
+      "id": "I_kwDOCUe3lM6z7Ta1",
+      "title": "BFF as an HTTP Proxy",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/87",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback",
+        "discuss"
+      ],
+      "body": "From Andy Newton's review\nhttps://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/\n\n```\nFrom the description of the BFF with respect to the browser-based application\nand the resource server, it appears to act as an HTTP proxy as defined in\nSection 3.7 of RFC 9110. Should this document make note of this\nand reference the message forwarding requirements of Section 7.6 in RFC 9110?\n```",
+      "createdAt": "2025-04-24T23:43:25Z",
+      "updatedAt": "2025-04-26T06:51:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I don't believe the intent is for the BFF to be an HTTP proxy as defined in RFC 9110. @philippederyck can you confirm?",
+          "createdAt": "2025-04-24T23:43:48Z",
+          "updatedAt": "2025-04-24T23:43:48Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I confirm that the BFF is __not__ an HTTP proxy. Its behavior would more closely align with a gateway/reverse proxy, except for the fact that the BFF is a client component (as in part of the client application, not client-side) and not a resource server / API component. \n\nI've coarsely looked through RFC9110, but I don't immediately see a section we can refer to that would map onto the behavior of the BFF. \n\nIt may be useful to clarlify that the BFF is not a proxy component, but a service that is explicitly and deliberately called by the browser-based component of the client.",
+          "createdAt": "2025-04-26T06:51:05Z",
+          "updatedAt": "2025-04-26T06:51:05Z"
+        }
+      ]
+    },
+    {
+      "number": 88,
+      "id": "I_kwDOCUe3lM6z7TwP",
+      "title": "BFF Operational Considerations",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/88",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "From Andy Newton's review\n\n```\nAs the BFF is forwarding/proxying all requests to the resource server,\nI wonder if there are any operational issues to consider. If a resource\nserver is rate limiting requests based on IP addresses, might it start\nblocking requests as it would appear many users are originating from\none or a few sources?\n```",
+      "createdAt": "2025-04-24T23:45:03Z",
+      "updatedAt": "2025-04-26T06:54:31Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Sounds like a reasonable concern, should we add a mention of this and recommend configuring rate limits appropriately to allow this?",
+          "createdAt": "2025-04-24T23:45:46Z",
+          "updatedAt": "2025-04-24T23:45:46Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, depending on the deployment model of the BFF, this could play a role. If the BFF is implemented as a single continuously running service, multiple browser-based apps will use a single BFF. However, if the BFF is implemented as a serverless function, I assume this would be less of an issue.",
+          "createdAt": "2025-04-26T06:54:30Z",
+          "updatedAt": "2025-04-26T06:54:30Z"
+        }
+      ]
+    },
+    {
+      "number": 89,
+      "id": "I_kwDOCUe3lM6z7T9x",
+      "title": "\"hard drive\"",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/89",
+      "state": "CLOSED",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Andy Newton's review\n\n```\n905        cookies are never written to the user's hard drive in plaintext\n\nMost users today probably do not use equipment with hard drives.\nThis is probably better said as \"local, persistent storage\".\n```",
+      "createdAt": "2025-04-24T23:46:07Z",
+      "updatedAt": "2025-04-24T23:50:44Z",
+      "closedAt": "2025-04-24T23:50:40Z",
+      "comments": []
+    },
+    {
+      "number": 90,
+      "id": "I_kwDOCUe3lM6z7a2K",
+      "title": "Address IESG Reviews",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/90",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "aaronpk"
+      ],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "* [ ] [Andy Newton](https://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/) (DISCUSS)\n  * #86 \n  * #87 \n  * #88 \n  * #89 \n* [x] [Erik Kline](https://mailarchive.ietf.org/arch/msg/oauth/ss-P0wdw2YgdS3qmIxuo2FowyD4/)\n* [ ] [Mike Bishop](https://mailarchive.ietf.org/arch/msg/oauth/hdjcwxEa_JXguKBloNjhGO6c6HE/)\n  * #86 \n  * [x] Nit: \"The first part\"\n* [ ] [Mohamed Boucadair](https://mailarchive.ietf.org/arch/msg/oauth/hoF6THpXR4-jzxyJIUHwrtqo2sk/)\n  * #91\n* [ ] [Orie Steele](https://mailarchive.ietf.org/arch/msg/oauth/pIbdoREHQP_k5rXcYcgaDA2ALxI/)\n  * #92\n  * #93\n  * #94\n  * #95\n  * #96\n  * #97\n  * #98\n  * #99\n* [ ] [Roman Danyliw](https://mailarchive.ietf.org/arch/msg/oauth/5UUVHhKv2a015ilPZHPSzQBewL8/)\n  * #100\n  * #101\n  * #102\n* [ ] [\u00c9ric Vyncke](https://mailarchive.ietf.org/arch/msg/oauth/iGez4kMnWZdoHDUKkRB9sBzPC6M/)\n  * #86\n  * #103",
+      "createdAt": "2025-04-25T00:17:20Z",
+      "updatedAt": "2025-04-26T07:17:25Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "FYI I am planning on tackling these other than the ones I tagged @philippederyck in",
+          "createdAt": "2025-04-25T01:01:52Z",
+          "updatedAt": "2025-04-25T01:01:52Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've gone through all of them and added feedback in the comments where relevant. LMK if you need more input.",
+          "createdAt": "2025-04-26T07:17:24Z",
+          "updatedAt": "2025-04-26T07:17:24Z"
+        }
+      ]
+    },
+    {
+      "number": 91,
+      "id": "I_kwDOCUe3lM6z7dLt",
+      "title": "Add more references to terminology when used",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/91",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "From Mohamed Boucadair's review\n\n> # Heavy use of field specific concept without introducing them\n\n> It was difficult to got through the text as I had check other OAUTH specifications to find and understand some statements and also digest some concepts. The text does not provide pointers to help readers find where to look at. A non-exhaustive list of points that require companion citations are: OAuth 2.0  clients, first-party context, third-party context, resource servers, Implicit flow, public clients, private clients, and so on. Please consider fixing that.\n",
+      "createdAt": "2025-04-25T00:26:41Z",
+      "updatedAt": "2025-04-25T00:30:43Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 92,
+      "id": "I_kwDOCUe3lM6z7eXH",
+      "title": "Rearrange intro",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/92",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> The ordering of the introduction feels a bit awkward, you might consider starting with:\n>\n> ```\n> This document focuses on JavaScript frontend applications acting as the OAuth client,...\n> ```\n> \n> Then relate to \"OAuth 2.0 for Native Apps\" and then end with the comment about OpenID Connect:\n> \n> ```\n> Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification.\n> ```\n",
+      "createdAt": "2025-04-25T00:30:34Z",
+      "updatedAt": "2025-04-25T00:30:34Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 93,
+      "id": "I_kwDOCUe3lM6z7emr",
+      "title": "Clarify \"first-party frontend\" in the intro",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/93",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "From Orie Steele's review\n\n> I was not familiar with the term \"first-party frontend\" before.\n> \n> Having read the full document, I might try to more clearly distinguish this case from BFF up front.\n",
+      "createdAt": "2025-04-25T00:31:33Z",
+      "updatedAt": "2025-04-25T00:31:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 94,
+      "id": "I_kwDOCUe3lM6z7hFi",
+      "title": "Add reference for session fixation",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/94",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> ```\n> 576\t   sending requests to backend systems.  Alternatively, the attacker can\n> 577\t   also abuse their access to the application to launch additional\n> 578\t   attacks, such as tricking the client into acting on behalf of the\n> 579\t   attacker using an attack such as session fixation.\n> ```\n> \n> Consider a reference for session fixation, possibly OWASP.\n",
+      "createdAt": "2025-04-25T00:42:18Z",
+      "updatedAt": "2025-04-26T06:55:34Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This one seems fine: https://owasp.org/www-community/attacks/Session_fixation",
+          "createdAt": "2025-04-26T06:55:33Z",
+          "updatedAt": "2025-04-26T06:55:33Z"
+        }
+      ]
+    },
+    {
+      "number": 95,
+      "id": "I_kwDOCUe3lM6z7hXG",
+      "title": "Add reference for \"confidential client\"",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/95",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> Consider a reference or definition for \"confidential client\".\n",
+      "createdAt": "2025-04-25T00:43:35Z",
+      "updatedAt": "2025-04-25T00:43:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 96,
+      "id": "I_kwDOCUe3lM6z7hg8",
+      "title": "Cookie security, why NOT MUST",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/96",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> This section contains several SHOULDs and SHOULD NOTs.\n>\n> While it is nice that the guidance is so compact, it raises the question of why these are not MUSTs, and under which conditions they ought to be required.\n>\n> Consider providing a reference if the answer lies elsewhere, or a brief comment after the compact list.\n",
+      "createdAt": "2025-04-25T00:44:17Z",
+      "updatedAt": "2025-04-26T07:11:20Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@philippederyck I'd appreciate your help on this one",
+          "createdAt": "2025-04-25T00:44:25Z",
+          "updatedAt": "2025-04-25T00:44:25Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We've had this discussion before: https://mailarchive.ietf.org/arch/browse/oauth/?q=draft-ietf-oauth-browser-based-apps-20\n\nIf you are starting from scratch and build a BFF, making all of these SHOULDs MUSTs is not going to be a big problem. However, if we make this a MUST across the board, it is not unlikely that someone will encounter a scenario where they are not able to enforce this, due to some architecture specific properties, quirks or legacy components.\n\nThe text already explains all of the specific requirements and addresses potential deviations by stating that normal scenarios should not stray from the best practices:\n\n```\nIn a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.\n```\n\nGiven that the BFF merely uses cookies, a core building block of the web, I don't believe this document is the place to flesh out why certain cookie attributes are necessary. I consider this comparable to other core building blocks, such as the use of HTTPS, without going into specific definitions or security requirements (e.g., the use of HSTS).",
+          "createdAt": "2025-04-26T07:11:20Z",
+          "updatedAt": "2025-04-26T07:11:20Z"
+        }
+      ]
+    },
+    {
+      "number": 97,
+      "id": "I_kwDOCUe3lM6z7hyD",
+      "title": "add reference for refresh token rotation",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/97",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> ```\n> 367\t   reduce the scope and lifetime of the token.  For refresh tokens, the\n> 368\t   use of refresh token rotation offers a detection and correction\n> 369\t   mechanism.  Sender-constrained tokens (Section 9.2) offer an\n> ```\n> \n> A few extra words here, or a pointer might make it clearer what recommendation is being made wrt refresh tokens.\n>\n> Are you recommending a specific refresh token rotation policy here ?\n>\n> Later you have:\n>\n> ```\n> 410\t   is not sufficient to prevent abuse of a refresh token.  An attacker\n> 411\t   can easily wait until the user closes the application or their\n> 412\t   browser goes offline before using the latest refresh token, thereby\n> 413\t   ensuring that the latest refresh token is not reused.\n> ```\n\n> Consider forshadowing this comment.",
+      "createdAt": "2025-04-25T00:45:17Z",
+      "updatedAt": "2025-04-25T00:46:41Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 98,
+      "id": "I_kwDOCUe3lM6z7iTf",
+      "title": "add reference for confused deputy",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/98",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n",
+      "createdAt": "2025-04-25T00:47:19Z",
+      "updatedAt": "2025-04-25T00:47:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 99,
+      "id": "I_kwDOCUe3lM6z7ioL",
+      "title": "Extracting CryptoKeyPair",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/99",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Orie Steele's review\n\n> ```\n> 1851\t   extractable [CryptoKeyPair] is stored using [W3C.IndexedDB]).  As a\n> 1852\t   result, the use of DPoP effectively prevents scenarios where the\n> 1853\t   attacker exfiltrates the application's tokens (See Section 5.1.1 and\n> 1854\t   Section 5.1.2).\n> ```\n>\n> IIRC, the non extractable crypto key pair could potentially still be extracted by other processes running on the same machine.\n> The context makes it clear you are referring to attackers with the ability to execute javascript in the browser, but there are other kinds of attackers.\n> \n> I see you comment on this later in Section 8.6 & 9.2, consider if you want to make the text here a little more narrowly focused on attackers with XSS capabilities.",
+      "createdAt": "2025-04-25T00:48:46Z",
+      "updatedAt": "2025-04-25T00:48:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 100,
+      "id": "I_kwDOCUe3lM6z7jr4",
+      "title": "add reference for OpenID Scopes",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/100",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Roman's review\n\nin Section 6.1.2.4",
+      "createdAt": "2025-04-25T00:51:25Z",
+      "updatedAt": "2025-04-25T00:51:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 101,
+      "id": "I_kwDOCUe3lM6z7kav",
+      "title": "clarify \"previous recommendations\" in Section 7 intro",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/101",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Roman's review\n\n> Whose \u201crecommendations\u201d is this referencing?\n",
+      "createdAt": "2025-04-25T00:54:10Z",
+      "updatedAt": "2025-04-25T00:54:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 102,
+      "id": "I_kwDOCUe3lM6z7kjX",
+      "title": "Remove references to Facebook and Twitter",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/102",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from Roman's review\n\n> Consider if the explicit reference to \u201cFacebook or Twitter\u201d will age well, since \u201cTwitter\u201d doesn\u2019t exist by that name anymore.  Perhaps \u201csocial media \u2018like\u2019 button\u201d instead?\n",
+      "createdAt": "2025-04-25T00:54:46Z",
+      "updatedAt": "2025-04-25T00:54:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 103,
+      "id": "I_kwDOCUe3lM6z7lpn",
+      "title": "Level of detail of sections 6.1 / 6.2 / 6.3",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/103",
+      "state": "OPEN",
+      "author": "aaronpk",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "iesg-feedback"
+      ],
+      "body": "from \u00c9ric Vyncke's review\n\n> Section 6.1\n> It seems that this section goes in way more details/depth than sections 6.2 and 6.3. Is there a reason for this ? e.g., more complex or more deployed ? (just curious)\n",
+      "createdAt": "2025-04-25T00:59:33Z",
+      "updatedAt": "2025-04-26T07:16:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "@philippederyck could you review this?",
+          "createdAt": "2025-04-25T00:59:51Z",
+          "updatedAt": "2025-04-25T00:59:51Z"
+        },
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Section 6.1 introduces a new component into the architecture, and requires a lot of details on how to integrate this component. Section 6.2 is a variation of 6.1, so it re-uses a lot of the context that was defined earlier. 6.3 does not have a server-side component, making the architecture simpler (but also less secure). \n\nA good comparison to make this clear would be to look at the content discussing OAuth client behavior. In 6.3, the browser-based app acts as the client directly, while 6.1 and 6.2 require an additional component to take that role. I believe that in all sections the Oauth-specific content is fairly comparable in length. It's mostly the stuff around it that requires detailed discussion.",
+          "createdAt": "2025-04-26T07:16:26Z",
+          "updatedAt": "2025-04-26T07:16:26Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -4645,6 +5081,32 @@
       "mergeCommit": {
         "oid": "787117cbc7f97fd82fdd496c20f0fff9afce5def"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 104,
+      "id": "PR_kwDOCUe3lM6T_5kF",
+      "title": "Minor edits from mails",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/104",
+      "state": "OPEN",
+      "author": "philippederyck",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Minor changes to the text to address comments from Elar Lang and Martin Thomson delivered via email. Each mail is handled in a separate commit.",
+      "createdAt": "2025-04-26T09:17:25Z",
+      "updatedAt": "2025-04-26T09:17:26Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "7d72df77b94b62a6a8141ffb4e6ae32fb6745dfd",
+      "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
+      "headRefName": "pdr/minor-edits-from-mails",
+      "headRefOid": "007b60438e939c0b7e7e0dfbf7d208fc16c0b011",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
