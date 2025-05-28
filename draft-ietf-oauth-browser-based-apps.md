@@ -82,7 +82,7 @@ informative:
   W3C.IndexedDB: IndexedDB
   W3C.SRI: SubresourceIntegrity
   W3C.WebCryptoAPI: WebCryptographyAPI
-  W3C.WASM: WASM
+  W3C.wasm-core-2: WASM
   WebStorage:
     title: HTML Living Standard - Web Storage
     author:
