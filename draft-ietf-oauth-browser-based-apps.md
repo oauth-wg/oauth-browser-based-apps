@@ -501,6 +501,9 @@ Note that this mechanism is not necessarily recommended over the CORS approach. 
 The BFF pattern requires that the browser-based application forwards all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between the application and a resource server, which can have a considerable privacy impact.
 
 When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.
+#### Operational Considerations
+
+As the BFF is forwarding all requests to the resource server on behalf of the frontend, care should be taken to ensure the resource server is aware of this component and uses appropriate policies for rate limiting and other anti-abuse measures. For example, if the BFF is deployed as a single-instance service, and the resource server is rate limiting requests based on IP address, it might start blocking requests as many users' browsers will appear to be coming from the single IP address of the BFF.
 
 
 #### Proxy Restrictions {#pattern-bff-proxy}
@@ -1341,6 +1344,7 @@ Document History
 -25
 
 * Replaced "hard drive" with "local persistent storage"
+* Added a note about operational considerations for the BFF pattern
 * "Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies
 * Minor editorial nits
 
