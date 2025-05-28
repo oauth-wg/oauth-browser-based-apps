@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 27 October 2025                          Pragmatic Web Security
+Expires: 29 November 2025                         Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                           25 April 2025
+                                                             28 May 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 October 2025.
+   This Internet-Draft will expire on 29 November 2025.
 
 Copyright Notice
 
@@ -202,7 +202,8 @@ Table of Contents
    runtime in the browser.  The recommendations and considerations in
    this document are not exclusively linked to the JavaScript language
    or its runtime, but also apply to other languages and runtime
-   environments in the browser.
+   environments in the browser, such as Web Assembly
+   ([W3C.wasm-core-2]).
 
    "PKCE":  Proof Key for Code Exchange (PKCE) [RFC7636], a mechanism to
       prevent various attacks on OAuth authorization codes.
@@ -595,19 +596,19 @@ Table of Contents
 6.  Application Architecture Patterns
 
    There are three main architectural patterns available when building
-   browser-based JavaScript applications that rely on OAuth for
-   accessing protected resources.
+   browser-based applications that rely on OAuth for accessing protected
+   resources.
 
-   *  A JavaScript application that relies on a backend component for
-      handling OAuth responsibilities and proxies all requests through
+   *  A browser-based application that relies on a backend component for
+      handling OAuth responsibilities and forwards all requests through
       the backend component (Backend-For-Frontend or BFF)
 
-   *  A JavaScript application that relies on a backend component for
+   *  A browser-based application that relies on a backend component for
       handling OAuth responsibilities, but calls resource servers
       directly using the access token (Token-Mediating Backend)
 
-   *  A JavaScript application acting as the client, handling all OAuth
-      responsibilities in the browser (Browser-based OAuth Client)
+   *  A browser-based application acting as the client, handling all
+      OAuth responsibilities in the browser (Browser-based OAuth Client)
 
    Each of these architectural patterns offers a different trade-off
    between security and simplicity.  The patterns in this section are
@@ -615,8 +616,8 @@ Table of Contents
 
 6.1.  Backend For Frontend (BFF)
 
-   This section describes the architecture of a JavaScript application
-   that relies on a backend component to handle all OAuth
+   This section describes the architecture of a browser-based
+   application that relies on a backend component to handle all OAuth
    responsibilities and API interactions.  The BFF has three core
    responsibilities:
 
@@ -625,9 +626,9 @@ Table of Contents
 
    2.  The BFF manages OAuth access and refresh tokens in the context of
        a cookie-based session, avoiding the direct exposure of any
-       tokens to the JavaScript application
+       tokens to the browser-based application
 
-   3.  The BFF proxies all requests to a resource server, augmenting
+   3.  The BFF forwards all requests to a resource server, augmenting
        them with the correct access token before forwarding them to the
        resource server
 
@@ -637,15 +638,15 @@ Table of Contents
    proxies, it is important to keep in mind that the BFF becomes the
    OAuth client for the frontend application.
 
-   If an attacker is able to execute malicious code within the
-   JavaScript application, the application architecture is able to
-   withstand most of the attack scenarios discussed before.  Since
-   tokens are only available to the BFF, there are no tokens available
-   to extract from JavaScript (Single-Execution Token Theft
-   (Section 5.1.1) and Persistent Token Theft (Section 5.1.2)).  The BFF
-   is a confidential client, which prevents the attacker from running a
-   new flow within the browser (Acquisition and Extraction of New Tokens
-   (Section 5.1.3)).  Since the malicious JavaScript code still runs
+   If an attacker is able to execute malicious code within the browser-
+   based application, the application architecture is able to withstand
+   most of the attack scenarios discussed before.  Since tokens are only
+   available to the BFF, there are no tokens available to extract from
+   the browser (Single-Execution Token Theft (Section 5.1.1) and
+   Persistent Token Theft (Section 5.1.2)).  The BFF is a confidential
+   client, which prevents the attacker from running a new flow within
+   the browser (Acquisition and Extraction of New Tokens
+   (Section 5.1.3)).  Since the malicious browser-based code still runs
    within the application's origin, the attacker is able to send
    requests to the BFF from within the user's browser (Proxying Requests
    via the User's Browser (Section 5.1.4)).  Note that the use of
@@ -684,21 +685,21 @@ Table of Contents
 
                     Figure 1: OAuth 2.0 BFF Pattern
 
-   In this architecture, the JavaScript code is first loaded from a
-   static web host into the browser (A), and the application then runs
-   in the browser.  The application checks with the BFF if there is an
-   active session by calling a "check session" API endpoint (B).  If an
-   active session is found, the application resumes its authenticated
-   state and skips forward to step J.
+   In this architecture, the browser code (typically JavaScript) is
+   first loaded from a static web host into the browser (A), and the
+   application then runs in the browser.  The application checks with
+   the BFF if there is an active session by calling a "check session"
+   API endpoint (B).  If an active session is found, the application
+   resumes its authenticated state and skips forward to step J.
 
-   When no active session is found, the JavaScript application triggers
-   a navigation to the BFF (C) to initiate the Authorization Code flow
-   with the PKCE extension (described in Section 6.1.3.1), to which the
-   BFF responds by redirecting the browser to the authorization endpoint
-   (D).  When the user is redirected back, the browser delivers the
-   authorization code to the BFF (E), where the BFF can then exchange it
-   for tokens at the token endpoint (F) using its client credentials and
-   PKCE code verifier.
+   When no active session is found, the browser-based application
+   triggers a navigation to the BFF (C) to initiate the Authorization
+   Code flow with the PKCE extension (described in Section 6.1.3.1), to
+   which the BFF responds by redirecting the browser to the
+   authorization endpoint (D).  When the user is redirected back, the
+   browser delivers the authorization code to the BFF (E), where the BFF
+   can then exchange it for tokens at the token endpoint (F) using its
+   client credentials and PKCE code verifier.
 
    The BFF associates the obtained tokens with the user's session (See
    Section 6.1.2.3) and sets a cookie in the response to keep track of
@@ -709,17 +710,17 @@ Table of Contents
    server (H).  Note that step (H) is identical to step (A), which
    likely means that the requested resources can be loaded from the
    browser's cache.  When the frontend loads, it will check with the BFF
-   for an existing session (I), allowing the JavaScript application to
-   resume its authenticated state.
+   for an existing session (I), allowing the application to resume its
+   authenticated state.
 
-   When the JavaScript application in the browser wants to make a
-   request to the resource server, it sends a request to the
-   corresponding endpoint on the BFF (J).  This request will include the
-   cookie set in step G, allowing the BFF to obtain the proper tokens
-   for this user's session.  The BFF removes the cookie from the
-   request, attaches the user's access token to the request, and
-   forwards it to the actual resource server (K).  The BFF then forwards
-   the response back to the browser-based application (L).
+   When the application in the browser wants to make a request to the
+   resource server, it sends a request to the corresponding endpoint on
+   the BFF (J).  This request will include the cookie set in step G,
+   allowing the BFF to obtain the proper tokens for this user's session.
+   The BFF removes the cookie from the request, attaches the user's
+   access token to the request, and forwards it to the actual resource
+   server (K).  The BFF then forwards the response back to the browser-
+   based application (L).
 
 6.1.2.  Implementation Details
 
@@ -739,30 +740,29 @@ Table of Contents
    information about the authenticated user.
 
    The endpoint that initiates the Authorization Code flow (step C) is
-   contacted by the browser through a navigation.  When the JavaScript
-   application detects an unauthenticated state after checking the
-   session (step B), it can navigate the browser to this endpoint.
-   Doing so allows the BFF to respond with a redirect, which takes the
-   browser to the authorization server.  The endpoint to initiate this
-   flow is typically included as the "login" endpoint by libraries that
-   support OAuth 2.0 for confidential clients running on a web server.
-   Note that it is also possible for the BFF to initiate the
-   Authorization Code flow in step B, when it detects the absence of an
-   active session.  In that case, the BFF would return the authorization
-   URI in the response and expect the JavaScript application to trigger
-   a navigation event with this URI.  However, this scenario requires a
-   custom implementation and makes it harder to use standard OAuth
-   libraries.
+   contacted by the browser through a navigation.  When the application
+   detects an unauthenticated state after checking the session (step B),
+   it can navigate the browser to this endpoint.  Doing so allows the
+   BFF to respond with a redirect, which takes the browser to the
+   authorization server.  The endpoint to initiate this flow is
+   typically included as the "login" endpoint by libraries that support
+   OAuth 2.0 for confidential clients running on a web server.  Note
+   that it is also possible for the BFF to initiate the Authorization
+   Code flow in step B, when it detects the absence of an active
+   session.  In that case, the BFF would return the authorization URI in
+   the response and expect the application to trigger a navigation event
+   with this URI.  However, this scenario requires a custom
+   implementation and makes it harder to use standard OAuth libraries.
 
    The endpoint that receives the authorization code (step E) is called
    by a navigation event from within the browser.  At this point, the
-   JavaScript application is not loaded and not in a position to handle
-   the redirect.  Similar to the initiation of the flow, the endpoint to
+   application is not loaded and not in a position to handle the
+   redirect.  Similar to the initiation of the flow, the endpoint to
    handle the redirect is offered by standard OAuth libraries.  The BFF
    can respond to this request with a redirect that triggers the browser
-   to load the JavaScript application.
+   to load the application.
 
-   Finally, the BFF can also offer a "logout" endpoint to the JavaScript
+   Finally, the BFF can also offer a "logout" endpoint to the
    application, which is not depicted in the diagram above.  The exact
    behavior of the logout endpoint depends on the application
    requirements.  Note that standard OAuth libraries typically also
@@ -829,7 +829,7 @@ Table of Contents
    with OpenID Connect by including the necessary OpenID Connect scopes
    in the authorization request (C).  In that case, the BFF will receive
    an ID Token in step F.  The BFF can associate the information from
-   the ID Token with the user's session and provide it to the JavaScript
+   the ID Token with the user's session and provide it to the
    application in step B or I.
 
    When needed, the BFF can use the access token associated with the
@@ -838,7 +838,7 @@ Table of Contents
 6.1.2.5.  Practical Deployment Strategies
 
    Serving the static JavaScript code is a separate responsibility from
-   handling OAuth tokens and proxying requests.  In the diagram
+   handling OAuth tokens and forwarding requests.  In the diagram
    presented above, the BFF and static web host are shown as two
    separate entities.  In real-world deployments, these components can
    be deployed as a single service (i.e., the BFF serving the static JS
@@ -851,7 +851,7 @@ Table of Contents
    both internal and external resource servers can choose to host the
    internal resource server alongside the BFF.  In that scenario,
    requests to the internal resource server are handled directly at the
-   BFF, without the need to proxy requests over the network.
+   BFF, without the need to forward requests over the network.
    Authorization from the point of view of the resource server does not
    change, as the user's session is internally translated to the access
    token and its claims.
@@ -918,13 +918,13 @@ Table of Contents
 
 6.1.3.3.  Cross-Site Request Forgery Protections
 
-   The interactions between the JavaScript application and the BFF rely
-   on cookies for authentication and authorization.  Similar to other
-   cookie-based interactions, the BFF is required to account for Cross-
-   Site Request Forgery (CSRF) attacks.  A successful CSRF attack could
-   transform the BFF into a confused deputy, allowing the attacker's
-   request to the BFF to trigger outgoing calls to a protected resource
-   on behalf of the user.
+   The interactions between the browser-based application and the BFF
+   rely on cookies for authentication and authorization.  Similar to
+   other cookie-based interactions, the BFF is required to account for
+   Cross-Site Request Forgery (CSRF) attacks.  A successful CSRF attack
+   could transform the BFF into a confused deputy, allowing the
+   attacker's request to the BFF to trigger outgoing calls to a
+   protected resource on behalf of the user.
 
    The BFF MUST implement a proper CSRF defense.  The exact mechanism or
    combination of mechanisms depends on the exact domain where the BFF
@@ -956,8 +956,8 @@ Table of Contents
 
    The BFF can rely on CORS as a CSRF defense mechanism.  CORS is a
    security mechanism implemented by browsers that restricts cross-
-   origin JavaScript-based requests, unless the server explicitly
-   approves such a request by setting the proper CORS headers.
+   origin requests, unless the server explicitly approves such a request
+   by setting the proper CORS headers.
 
    Browsers typically restrict cross-origin HTTP requests initiated from
    scripts.  CORS can remove this restriction if the target server
@@ -988,19 +988,19 @@ Table of Contents
    no preflight request and no CSRF defense.
 
    To avoid such bypasses against the CORS policy, the BFF SHOULD
-   require that the JavaScript application includes a custom request
+   require that the browser-based application includes a custom request
    header.  Cross-origin requests with a custom request header always
    require a preflight, which makes CORS an effective CSRF defense.
    When this mechanism is used, the BFF MUST ensure that every incoming
    request carries this static header.  The exact naming of this header
-   is at the discretion of the JavaScript application and BFF.  A sample
+   is at the discretion of the application and BFF.  A sample
    configuration would be a request header with a static value, such as
    My-Static-Header: 1.
 
-   It is also possible to deploy the JavaScript application on the same
-   origin as the BFF.  This ensures that legitimate interactions between
-   the frontend and the BFF do not require any preflights, so there's no
-   additional overhead.
+   It is also possible to deploy the browser-based application on the
+   same origin as the BFF.  This ensures that legitimate interactions
+   between the frontend and the BFF do not require any preflights, so
+   there's no additional overhead.
 
 6.1.3.3.3.  Use anti-forgery/double submit cookies
 
@@ -1020,29 +1020,42 @@ Table of Contents
    mechanism, it can serve as a low-effort alternative to protect
    against CSRF.
 
-6.1.3.3.4.  Privacy considerations in the BFF architecture
+6.1.3.4.  Privacy considerations in the BFF architecture
 
-   The BFF pattern requires that the JavaScript application proxies all
-   requests to a resource server through a backend BFF component.  As a
-   consequence, the BFF component is able to observe all requests and
-   responses between a JavaScript application and a resource server,
-   which can have a considerable privacy impact.
+   The BFF pattern requires that the browser-based application forwards
+   all requests to a resource server through a backend BFF component.
+   As a consequence, the BFF component is able to observe all requests
+   and responses between the application and a resource server, which
+   can have a considerable privacy impact.
 
-   When the JavaScript application and BFF are built and deployed by the
-   same party, the privacy impact is likely minimal.  However, when this
-   pattern is implemented using a BFF component that is provided or
+   When the browser-based application and BFF are built and deployed by
+   the same party, the privacy impact is likely minimal.  However, when
+   this pattern is implemented using a BFF component that is provided or
    hosted by a third party, this privacy impact needs to be taken into
    account.
 
-6.1.3.4.  Proxy Restrictions
+6.1.3.5.  Operational Considerations
 
-   The BFF acts as a proxy by accepting requests from the frontend and
-   forwarding them to the resource server.  The inbound request carries
-   a cookie, which the BFF translates into an access token on the
-   outbound request.  Apart from CSRF attacks, attackers may attempt to
-   manipulate the BFF into forwarding requests to unintended hosts.  If
-   an attacker successfully exploits this, they could redirect the BFF
-   to an arbitrary server, potentially exposing the user's access token.
+   As the BFF is forwarding all requests to the resource server on
+   behalf of the frontend, care should be taken to ensure the resource
+   server is aware of this component and uses appropriate policies for
+   rate limiting and other anti-abuse measures.  For example, if the BFF
+   is deployed as a single-instance service, and the resource server is
+   rate limiting requests based on IP address, it might start blocking
+   requests as many users' browsers will appear to be coming from the
+   single IP address of the BFF.
+
+6.1.3.6.  Proxy Restrictions
+
+   The BFF acts as a proxy service by accepting requests from the
+   frontend and forwarding them to the resource server.  The inbound
+   request carries a cookie, which the BFF translates into an access
+   token on the outbound request.  (Note that this makes it more like an
+   application-layer reverse proxy than an HTTP proxy.)  Apart from CSRF
+   attacks, attackers may attempt to manipulate the BFF into forwarding
+   requests to unintended hosts.  If an attacker successfully exploits
+   this, they could redirect the BFF to an arbitrary server, potentially
+   exposing the user's access token.
 
    To mitigate this risk, the BFF MUST enforce strict outbound request
    controls by validating destination hosts before forwarding requests.
@@ -1060,7 +1073,7 @@ Table of Contents
    paths.  Failure to enforce these restrictions can lead to
    unauthorized access and access token leakage.
 
-6.1.3.5.  Advanced Security
+6.1.3.7.  Advanced Security
 
    In the BFF pattern, all OAuth responsibilities have been moved to the
    BFF, a server-side component acting as a confidential client.  Since
@@ -1076,9 +1089,9 @@ Table of Contents
 
 6.1.4.1.  Attack Scenarios and Consequences
 
-   If the attacker has the ability to execute malicious JavaScript code
-   in the application's execution context, the following attack
-   scenarios become relevant:
+   If the attacker has the ability to execute malicious code (e.g.
+   JavaScript or WASM) in the application's execution context, the
+   following attack scenarios become relevant:
 
    *  Proxying Requests via the User's Browser (Section 5.1.4)
 
@@ -1089,10 +1102,10 @@ Table of Contents
    Note that client hijacking is an attack scenario that is inherent to
    the nature of browser-based applications.  As a result, nothing will
    be able to prevent such attacks apart from stopping the execution of
-   malicious JavaScript code in the first place.  Techniques that can
-   help to achieve this are following secure coding guidelines, code
-   analysis, and deploying defense-in-depth mechanisms such as Content
-   Security Policy ([W3C.CSP3]).
+   malicious code in the first place.  Techniques that can help to
+   achieve this are following secure coding guidelines, code analysis,
+   and deploying defense-in-depth mechanisms such as Content Security
+   Policy ([W3C.CSP3]).
 
    In this architecture, the BFF is a key component handling various
    security-specific responsibilities and proxy-based behavior.  While
@@ -1102,7 +1115,7 @@ Table of Contents
    impact on the application.
 
    Finally, the BFF is uniquely placed to observe all traffic between
-   the JavaScript application and the resource servers.  If a high-
+   the browser-based application and the resource servers.  If a high-
    security application would prefer to implement anomaly detection or
    rate limiting, such a BFF would be the ideal place to do so.  Such
    restrictions can further help to mitigate the consequences of client
@@ -1121,8 +1134,8 @@ Table of Contents
 
    The BFF counters the first two attack scenarios by not exposing any
    tokens to the browser-based application.  Even when the attacker
-   gains full control over the JavaScript application, there are simply
-   no tokens to be stolen.
+   gains full control over the application, there are simply no tokens
+   to be stolen.
 
    The third scenario, where the attacker obtains a fresh access token
    (and optionally refresh token) by running a silent flow, is mitigated
@@ -1145,11 +1158,11 @@ Table of Contents
    The architecture of a BFF is significantly more complicated than a
    browser-only application.  It requires deploying and operating a
    server-side BFF component.  Additionally, this pattern requires all
-   interactions between the JavaScript application and the resource
-   servers to be proxied by the BFF.  Depending on the deployment
-   pattern, this proxy behavior can add a significant burden on the
-   server-side components.  See Section 6.2.2.6 for additional notes if
-   the BFF is acting as the resource server.
+   interactions between the application and the resource servers to be
+   proxied by the BFF.  Depending on the deployment pattern, this proxy
+   behavior can add a significant burden on the server-side components.
+   See Section 6.2.2.6 for additional notes if the BFF is acting as the
+   resource server.
 
    However, because of the nature of the BFF architecture pattern, it
    offers strong security guarantees.  Using a BFF also ensures that the
@@ -1162,34 +1175,33 @@ Table of Contents
 
 6.2.  Token-Mediating Backend
 
-   This section describes the architecture of a JavaScript application
-   that relies on a backend component to handle OAuth responsibilities
-   for obtaining tokens as a confidential client.  The backend component
-   then provides the JavaScript application with the access token to
-   directly interact with resource servers.
+   This section describes the architecture of a browser-based
+   application that relies on a backend component to handle OAuth
+   responsibilities for obtaining tokens as a confidential client.  The
+   backend component then provides the application with the access token
+   to directly interact with resource servers.
 
    The token-mediating backend pattern is more lightweight than the BFF
    pattern (See Section 6.1), since it does not require the proxying of
-   all requests and responses between the JavaScript application and the
-   resource server.  From a security perspective, the token-mediating
-   backend is less secure than a BFF, but still offers significant
-   advantages over an OAuth client application running directly in the
-   browser.
+   all requests and responses between the application and the resource
+   server.  From a security perspective, the token-mediating backend is
+   less secure than a BFF, but still offers significant advantages over
+   an OAuth client application running directly in the browser.
 
    If an attacker is able to execute malicious code within the
-   JavaScript application, the application architecture is able to
-   prevent the attacker from abusing refresh tokens (Single-Execution
-   Token Theft (Section 5.1.1) and Persistent Token Theft
-   (Section 5.1.2)) or obtaining a fresh set of tokens (Acquisition and
-   Extraction of New Tokens (Section 5.1.3)).  However, since the access
-   token is directly exposed to the JavaScript application, the attacker
-   can steal the token from client-side storage (Single-Execution Token
-   Theft (Section 5.1.1) and Persistent Token Theft (Section 5.1.2)), or
-   request a fresh token from the token-mediating backend (Proxying
-   Requests via the User's Browser (Section 5.1.4)).  Note that the use
-   of HttpOnly cookies prevents the attacker from directly accessing the
-   session state, which prevents the escalation from access token theft
-   to session hijacking.
+   application, the application architecture is able to prevent the
+   attacker from abusing refresh tokens (Single-Execution Token Theft
+   (Section 5.1.1) and Persistent Token Theft (Section 5.1.2)) or
+   obtaining a fresh set of tokens (Acquisition and Extraction of New
+   Tokens (Section 5.1.3)).  However, since the access token is directly
+   exposed to the application, the attacker can steal the token from
+   client-side storage (Single-Execution Token Theft (Section 5.1.1) and
+   Persistent Token Theft (Section 5.1.2)), or request a fresh token
+   from the token-mediating backend (Proxying Requests via the User's
+   Browser (Section 5.1.4)).  Note that the use of HttpOnly cookies
+   prevents the attacker from directly accessing the session state,
+   which prevents the escalation from access token theft to session
+   hijacking.
 
 6.2.1.  Application Architecture
 
@@ -1222,15 +1234,16 @@ Table of Contents
 
                     Figure 2: OAuth 2.0 TMB Pattern
 
-   In this architecture, the JavaScript code is first loaded from a
-   static web host into the browser (A), and the application then runs
-   in the browser.  The application checks with the token-mediating
-   backend if there is an active session (B).  If an active session is
-   found, the application receives the corresponding access token,
-   resumes its authenticated state, and skips forward to step J.
+   In this architecture, the browser-based code (e.g. JavaScript or
+   WASM) is first loaded from a static web host into the browser (A),
+   and the application then runs in the browser.  The application checks
+   with the token-mediating backend if there is an active session (B).
+   If an active session is found, the application receives the
+   corresponding access token, resumes its authenticated state, and
+   skips forward to step J.
 
-   When no active session is found, the JavaScript application triggers
-   a navigation to the token-mediating backend (C) to initiate the
+   When no active session is found, the application triggers a
+   navigation to the token-mediating backend (C) to initiate the
    Authorization Code flow with the PKCE extension (described in
    Section 6.2.3.1), to which the token-mediating backend responds by
    redirecting the browser to the authorization endpoint (D).  When the
@@ -1242,15 +1255,14 @@ Table of Contents
    The token-mediating backend associates the obtained tokens with the
    user's session (See Section 6.2.2.4) and sets a cookie in the
    response to keep track of this session (G).  This response to the
-   browser will also trigger the reloading of the JavaScript application
-   (H).  When this application reloads, it will check with the token-
-   mediating backend for an existing session (I), allowing the
-   JavaScript application to resume its authenticated state and obtain
-   the access token from the token-mediating backend.
+   browser will also trigger the reloading of the application (H).  When
+   this application reloads, it will check with the token-mediating
+   backend for an existing session (I), allowing the application to
+   resume its authenticated state and obtain the access token from the
+   token-mediating backend.
 
-   The JavaScript application in the browser can use the access token
-   obtained in step I to directly make requests to the resource server
-   (J).
+   The application in the browser can use the access token obtained in
+   step I to directly make requests to the resource server (J).
 
 6.2.2.  Implementation Details
 
@@ -1287,14 +1299,13 @@ Table of Contents
    the token-mediating backend obtains the refresh token in step F and
    associates it with the user's session.
 
-   If the resource server rejects the access token, the JavaScript
-   application can contact the token-mediating backend to request a new
-   access token.  The token-mediating backend relies on the cookies
-   associated with this request to look up the user's refresh token, and
-   makes a token request using the refresh token.  These steps are not
-   shown in the diagram.  Note that this Refresh Token request is from
-   the backend, a confidential client, and thus requires client
-   authentication.
+   If the resource server rejects the access token, the application can
+   contact the token-mediating backend to request a new access token.
+   The token-mediating backend relies on the cookies associated with
+   this request to look up the user's refresh token, and makes a token
+   request using the refresh token.  These steps are not shown in the
+   diagram.  Note that this Refresh Token request is from the backend, a
+   confidential client, and thus requires client authentication.
 
    When the refresh token expires, there is no way to obtain a valid
    access token without starting an entirely new Authorization Code
@@ -1308,15 +1319,15 @@ Table of Contents
 6.2.2.3.  Access Token Scopes
 
    Depending on the resource servers being accessed and the
-   configuration of scopes at the authorization server, the JavaScript
-   application may wish to request access tokens with different scope
-   configurations.  This behavior would allow the JavaScript application
-   to follow the best practice of using minimally-scoped access tokens.
+   configuration of scopes at the authorization server, the application
+   may wish to request access tokens with different scope
+   configurations.  This behavior would allow the application to follow
+   the best practice of using minimally-scoped access tokens.
 
-   The JavaScript application can inform the token-mediating backend of
-   the desired scopes when it checks for the active session (Step A/I).
-   It is up to the token-mediating backend to decide if previously
-   obtained access tokens fall within the desired scope criteria.
+   The application can inform the token-mediating backend of the desired
+   scopes when it checks for the active session (Step A/I).  It is up to
+   the token-mediating backend to decide if previously obtained access
+   tokens fall within the desired scope criteria.
 
    It should be noted that this access token caching mechanism at the
    token-mediating backend can cause scope elevation risks when applied
@@ -1347,18 +1358,18 @@ Table of Contents
 
 6.2.2.6.  Practical Deployment Scenarios
 
-   Serving the static JavaScript code is a separate responsibility from
-   handling interactions with the authorization server.  In the diagram
-   presented above, the token-mediating backend and static web host are
-   shown as two separate entities.  In real-world deployment scenarios,
-   these components can be deployed as a single service (i.e., the
-   token-mediating backend serving the static JS code), as two separate
-   services (i.e., a CDN and a token-mediating backend), or as two
-   components in a single service (i.e., static hosting and serverless
-   functions on a cloud platform).  These deployment differences do not
-   affect the relationships described in this pattern, but may impact
-   other practicalities, such as the need to properly configure CORS to
-   enable cross-origin communication.
+   Serving the static JavaScript or WASM code is a separate
+   responsibility from handling interactions with the authorization
+   server.  In the diagram presented above, the token-mediating backend
+   and static web host are shown as two separate entities.  In real-
+   world deployment scenarios, these components can be deployed as a
+   single service (i.e., the token-mediating backend serving the static
+   code), as two separate services (i.e., a CDN and a token-mediating
+   backend), or as two components in a single service (i.e., static
+   hosting and serverless functions on a cloud platform).  These
+   deployment differences do not affect the relationships described in
+   this pattern, but may impact other practicalities, such as the need
+   to properly configure CORS to enable cross-origin communication.
 
 6.2.3.  Security Considerations
 
@@ -1380,7 +1391,7 @@ Table of Contents
 
 6.2.3.3.  Cross-Site Request Forgery Protections
 
-   The interactions between the JavaScript application and the token-
+   The interactions between the browser-based application and the token-
    mediating backend rely on cookies for authentication and
    authorization.  Just like a BFF, the token-mediating backend is
    required to account for Cross-Site Request Forgery (CSRF) attacks.
@@ -1388,7 +1399,7 @@ Table of Contents
    Section 6.1.3.3 outlines the nuances of various mitigation strategies
    against CSRF attacks.  Specifically for a token-mediating backend,
    these CSRF defenses only apply to the endpoint or endpoints where the
-   JavaScript application can obtain its access tokens.
+   application can obtain its access tokens.
 
 6.2.3.4.  Advanced OAuth Security
 
@@ -1404,9 +1415,9 @@ Table of Contents
 
 6.2.4.1.  Attack Scenarios and Consequences
 
-   If the attacker has the ability to execute malicious JavaScript code
-   in the application's execution context, the following attack
-   scenarios become relevant:
+   If the attacker has the ability to execute malicious code in the
+   application's execution context, the following attack scenarios
+   become relevant:
 
    *  Single-Execution Token Theft (Section 5.1.1) for access tokens
 
@@ -1421,10 +1432,10 @@ Table of Contents
 
    *  Client Hijacking (Section 5.2.3)
 
-   Exposing the access token to the JavaScript application is the core
-   idea behind the architecture pattern of the token-mediating backend.
-   As a result, the access token becomes vulnerable to token theft by
-   malicious JavaScript.
+   Exposing the access token to the browser-based application is the
+   core idea behind the architecture pattern of the token-mediating
+   backend.  As a result, the access token becomes vulnerable to token
+   theft by malicious browser-based code.
 
 6.2.4.2.  Mitigated Attack Scenarios
 
@@ -1439,8 +1450,8 @@ Table of Contents
 
    The token-mediating backend counters the first two attack scenarios
    by not exposing the refresh token to the browser-based application.
-   Even when the attacker gains full control over the JavaScript
-   application, there are simply no refresh tokens to be stolen.
+   Even when the attacker gains full control over the application, there
+   are simply no refresh tokens to be stolen.
 
    The third scenario, where the attacker obtains a fresh access token
    (and optionally refresh token) by running a silent flow, is mitigated
@@ -1471,7 +1482,7 @@ Table of Contents
    in the browser.
 
    Be aware that even when the access token is stored out of reach of
-   malicious JavaScript code, the malicious code can still mimic the
+   malicious browser-based code, the malicious code can still mimic the
    legitimate application and send a request to the token-mediation
    backend to obtain the latest access token.
 
@@ -1480,8 +1491,8 @@ Table of Contents
    Using sender-constrained access tokens is not trivial in this
    architecture.  The token-mediating backend is responsible for
    exchanging an authorization code or refresh token for an access
-   token, but the JavaScript application will use the access token.
-   Using a mechanism such as DPoP [RFC9449] would require splitting
+   token, but the application will use the access token.  Using a
+   mechanism such as DPoP [RFC9449] would require splitting
    responsibilities over two parties, which is not a scenario defined by
    the specification.  Use of DPoP in such a scenario is out of the
    scope of this document.
@@ -1507,13 +1518,13 @@ Table of Contents
 
 6.3.  Browser-based OAuth 2.0 client
 
-   This section describes the architecture of a JavaScript application
-   that acts as the OAuth client, handling all OAuth responsibilities in
-   the browser.  As a result, the browser-based application obtains
-   tokens from the authorization server, without the involvement of a
-   backend component.
+   This section describes the architecture of a browser-based
+   application that acts as the OAuth client, handling all OAuth
+   responsibilities in the browser.  As a result, the browser-based
+   application obtains tokens from the authorization server, without the
+   involvement of a backend component.
 
-   If an attacker is able to execute malicious JavaScript code, this
+   If an attacker is able to execute malicious code in the browser, this
    application architecture is vulnerable to all attack scenarios
    discussed earlier (Section 5.1).  In essence, the attacker will be
    able to obtain access tokens and refresh tokens from the
@@ -1544,26 +1555,26 @@ Table of Contents
 
               Figure 3: Browser-based OAuth 2.0 Client Pattern
 
-   In this architecture, the JavaScript code is first loaded from a
-   static web host into the browser (A), and the application then runs
-   in the browser.  In this scenario, the browser-based application is
-   considered a public client, which does not possess client credentials
-   to authenticate to the authorization server.
+   In this architecture, the code is first loaded from a static web host
+   into the browser (A), and the application then runs in the browser.
+   In this scenario, the browser-based application is considered a
+   public client, which does not possess client credentials to
+   authenticate to the authorization server.
 
    The application obtains an authorization code (B) by initiating the
    Authorization Code flow with the PKCE extension (described in
-   Section 6.3.2.1).  The application exchanges the authorization code
-   for tokens via a JavaScript-based POST request to the token endpoint
-   (C).
+   Section 6.3.2.1).  The application uses a browser API (e.g. [Fetch])
+   to make a POST request to the token endpoint (C) to exchange the
+   authorization code for tokens.
 
    The application is then responsible for storing the access token and
    optional refresh token as securely as possible using appropriate
    browser APIs, described in Section 8.
 
-   When the JavaScript application in the browser wants to make a
-   request to the resource server, it can interact with the resource
-   server directly.  The application includes the access token in the
-   request (D) and receives the resource server's response (E).
+   When the application in the browser wants to make a request to the
+   resource server, it can interact with the resource server directly.
+   The application includes the access token in the request (D) and
+   receives the resource server's response (E).
 
 6.3.2.  Implementation Details
 
@@ -1739,12 +1750,12 @@ Table of Contents
 
 6.3.3.4.  Cross-Origin Requests
 
-   In this scenario, the application sends JavaScript-based requests to
-   the authorization server and the resource server.  Given the nature
-   of OAuth 2.0, these requests are typically cross-origin, subjecting
-   them to browser-enforced restrictions on cross-origin communication.
-   The authorization server and the resource server MUST send necessary
-   CORS headers (defined in [Fetch]) to enable the JavaScript
+   In this scenario, the application uses a browser API to send requests
+   to the authorization server and the resource server.  Given the
+   nature of OAuth 2.0, these requests are typically cross-origin,
+   subjecting them to browser-enforced restrictions on cross-origin
+   communication.  The authorization server and the resource server MUST
+   send necessary CORS headers (defined in [Fetch]) to enable the
    application to make the necessary cross-origin requests.  Note that
    in the extraordinary scenario where the browser-based OAuth client
    runs in the same origin as the authorization server or resource
@@ -1791,9 +1802,9 @@ Table of Contents
 
 6.3.4.1.  Attack Scenarios and Consequences
 
-   If the attacker has the ability to execute malicious JavaScript code
-   in the application's execution context, the following attack
-   scenarios become relevant:
+   If the attacker has the ability to execute malicious code in the
+   application's execution context, the following attack scenarios
+   become relevant:
 
    *  Single-Execution Token Theft (Section 5.1.1)
 
@@ -1806,10 +1817,10 @@ Table of Contents
    The most dangerous attack scenario is the acquisition and extraction
    of new tokens.  In this attack scenario, the attacker only interacts
    with the authorization server, which makes the actual implementation
-   details of the OAuth functionality in the JavaScript client
-   irrelevant.  Even if the legitimate client application finds a way to
-   completely isolate the tokens from the attacker, the attacker will
-   still be able to obtain tokens from the authorization server.
+   details of the OAuth functionality in the client irrelevant.  Even if
+   the legitimate client application finds a way to completely isolate
+   the tokens from the attacker, the attacker will still be able to
+   obtain tokens from the authorization server.
 
    Note that these attack scenarios result in the following
    consequences:
@@ -1823,10 +1834,10 @@ Table of Contents
 6.3.4.2.  Additional Defenses
 
    While this architecture is inherently vulnerable to malicious
-   JavaScript code, there are some additional defenses that can help to
-   increase the security posture of the application.  Note that none of
-   these defenses address or fix the underlying problem that allows the
-   attacker to run a new flow to obtain tokens.
+   browser-based code, there are some additional defenses that can help
+   to increase the security posture of the application.  Note that none
+   of these defenses address or fix the underlying problem that allows
+   the attacker to run a new flow to obtain tokens.
 
 6.3.4.2.1.  Secure Token Storage
 
@@ -2120,9 +2131,9 @@ Table of Contents
       Limiting the authorization server to just the Authorization Code
       grant type reduces the attack surface of the implementation.
 
-   *  If the JavaScript application gets wrapped into a native app, then
-      [RFC8252] also requires the use of the Authorization Code grant
-      type with PKCE anyway.
+   *  If the browser-based application gets wrapped into a native app,
+      then [RFC8252] also requires the use of the Authorization Code
+      grant type with PKCE anyway.
 
 7.3.  Resource Owner Password Grant
 
@@ -2330,7 +2341,7 @@ Table of Contents
 
    Note that this practice is different from the use of cookies in a BFF
    (discussed in Section 6.1.3.2), where the cookie is inaccessible to
-   JavaScript and is supposed to be sent to the backend.
+   JavaScript and is intended to be sent to the backend.
 
 8.2.  Token Storage in a Service Worker
 
@@ -2416,9 +2427,9 @@ Table of Contents
 
 8.5.  Persistent Token Storage
 
-   The persistent storage APIs currently available as of this writing
-   are localStorage ([WebStorage]), sessionStorage ([WebStorage]), and
-   [W3C.IndexedDB].
+   The persistent storage APIs currently available in browsers as of
+   this writing are localStorage ([WebStorage]), sessionStorage
+   ([WebStorage]), and [W3C.IndexedDB].
 
    localStorage persists between page reloads as well as is shared
    across all tabs.  This storage is accessible to the entire origin,
@@ -2664,6 +2675,10 @@ Table of Contents
    [W3C.SRI]  "Subresource Integrity", W3C REC SRI, W3C SRI,
               <https://www.w3.org/TR/SRI/>.
 
+   [W3C.wasm-core-2]
+              "WebAssembly Core Specification", W3C CR wasm-core-2, W3C 
+              wasm-core-2, <https://www.w3.org/TR/wasm-core-2/>.
+
    [W3C.WebCryptoAPI]
               "Web Cryptography API", W3C REC WebCryptoAPI,
               W3C WebCryptoAPI, <https://www.w3.org/TR/WebCryptoAPI/>.
@@ -2682,7 +2697,15 @@ Appendix A.  Document History
 
    -25
 
+   *  Use consistent terminology for "browser-based application", and
+      use JavaScript only when explicitly needed
+
    *  Replaced "hard drive" with "local persistent storage"
+
+   *  Added a note about operational considerations for the BFF pattern
+
+   *  "Forwarding" instead of "Proxying" to avoid confusion with HTTP
+      proxies
 
    *  Minor editorial nits
 

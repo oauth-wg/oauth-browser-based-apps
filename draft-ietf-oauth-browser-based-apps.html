@@ -23,7 +23,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.7
+    platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">OAuth 2.0 for Browser-Based Applications</td>
-<td class="right">April 2025</td>
+<td class="right">May 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Parecki, et al.</td>
-<td class="center">Expires 27 October 2025</td>
+<td class="center">Expires 29 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-oauth-browser-based-apps-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-25" class="published">25 April 2025</time>
+<time datetime="2025-05-28" class="published">28 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Best Current Practice</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-27">27 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-29">29 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1123,7 +1123,7 @@ taken into account when developing browser-based applications that use OAuth 2.0
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1415,7 +1415,7 @@ usually written in JavaScript. Also sometimes referred to as a "single-page appl
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-3">This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-3">This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser, such as Web Assembly (<span>[<a href="#W3C.wasm-core-2" class="cite xref">W3C.wasm-core-2</a>]</span>).<a href="#section-3-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3-4">
         <dt id="section-3-4.1">"PKCE":</dt>
         <dd style="margin-left: 1.5em" id="section-3-4.2">
@@ -1649,16 +1649,16 @@ the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
       <h2 id="name-application-architecture-pa">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-application-architecture-pa" class="section-name selfRef">Application Architecture Patterns</a>
       </h2>
-<p id="section-6-1">There are three main architectural patterns available when building browser-based JavaScript applications that rely on OAuth for accessing protected resources.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">There are three main architectural patterns available when building browser-based applications that rely on OAuth for accessing protected resources.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-2.1">
-          <p id="section-6-2.1.1">A JavaScript application that relies on a backend component for handling OAuth responsibilities and proxies all requests through the backend component (Backend-For-Frontend or BFF)<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.1.1">A browser-based application that relies on a backend component for handling OAuth responsibilities and forwards all requests through the backend component (Backend-For-Frontend or BFF)<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-2.2">
-          <p id="section-6-2.2.1">A JavaScript application that relies on a backend component for handling OAuth responsibilities, but calls resource servers directly using the access token (Token-Mediating Backend)<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.2.1">A browser-based application that relies on a backend component for handling OAuth responsibilities, but calls resource servers directly using the access token (Token-Mediating Backend)<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-2.3">
-          <p id="section-6-2.3.1">A JavaScript application acting as the client, handling all OAuth responsibilities in the browser (Browser-based OAuth Client)<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-6-2.3.1">A browser-based application acting as the client, handling all OAuth responsibilities in the browser (Browser-based OAuth Client)<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-6-3">Each of these architectural patterns offers a different trade-off between security and simplicity. The patterns in this section are presented in decreasing order of security.<a href="#section-6-3" class="pilcrow">¶</a></p>
@@ -1667,20 +1667,20 @@ the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
         <h3 id="name-backend-for-frontend-bff">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-backend-for-frontend-bff" class="section-name selfRef">Backend For Frontend (BFF)</a>
         </h3>
-<p id="section-6.1-1">This section describes the architecture of a JavaScript application that relies on a backend component to handle all OAuth responsibilities and API interactions. The BFF has three core responsibilities:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">This section describes the architecture of a browser-based application that relies on a backend component to handle all OAuth responsibilities and API interactions. The BFF has three core responsibilities:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.1-2">
 <li id="section-6.1-2.1">
             <p id="section-6.1-2.1.1">The BFF interacts with the authorization server as a confidential OAuth client<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.2">
-            <p id="section-6.1-2.2.1">The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the JavaScript application<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.2.1">The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the browser-based application<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.1-2.3">
-            <p id="section-6.1-2.3.1">The BFF proxies all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-2.3.1">The BFF forwards all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="section-6.1-3">In this architecture, the BFF runs as a server-side component, but it is a component of the frontend application. To avoid confusion with other architectural concepts, such as API gateways and reverse proxies, it is important to keep in mind that the BFF becomes the OAuth client for the frontend application.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1-4">If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to withstand most of the attack scenarios discussed before. Since tokens are only available to the BFF, there are no tokens available to extract from JavaScript (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)). The BFF is a confidential client, which prevents the attacker from running a new flow within the browser (Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)). Since the malicious JavaScript code still runs within the application's origin, the attacker is able to send requests to the BFF from within the user's browser (Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)). Note that the use of HttpOnly cookies prevents the attacker from directly accessing the session state, which prevents the escalation from client hijacking to session hijacking.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">If an attacker is able to execute malicious code within the browser-based application, the application architecture is able to withstand most of the attack scenarios discussed before. Since tokens are only available to the BFF, there are no tokens available to extract from the browser (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)). The BFF is a confidential client, which prevents the attacker from running a new flow within the browser (Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)). Since the malicious browser-based code still runs within the application's origin, the attacker is able to send requests to the BFF from within the user's browser (Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)). Note that the use of HttpOnly cookies prevents the attacker from directly accessing the session state, which prevents the escalation from client hijacking to session hijacking.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 <div id="application-architecture">
 <section id="section-6.1.1">
           <h4 id="name-application-architecture">
@@ -1773,11 +1773,11 @@ the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <a href="#name-oauth-20-bff-pattern" class="selfRef">OAuth 2.0 BFF Pattern</a>
             </figcaption></figure>
 </div>
-<p id="section-6.1.1-2">In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the BFF if there is an active session by calling a "check session" API endpoint (B). If an active session is found, the application resumes its authenticated state and skips forward to step J.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-3">When no active session is found, the JavaScript application triggers a navigation to the BFF (C) to initiate the Authorization Code flow with the PKCE
+<p id="section-6.1.1-2">In this architecture, the browser code (typically JavaScript) is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the BFF if there is an active session by calling a "check session" API endpoint (B). If an active session is found, the application resumes its authenticated state and skips forward to step J.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-3">When no active session is found, the browser-based application triggers a navigation to the BFF (C) to initiate the Authorization Code flow with the PKCE
 extension (described in <a href="#pattern-bff-flow" class="auto internal xref">Section 6.1.3.1</a>), to which the BFF responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the BFF (E), where the BFF can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-4">The BFF associates the obtained tokens with the user's session (See <a href="#pattern-bff-sessions" class="auto internal xref">Section 6.1.2.3</a>) and sets a cookie in the response to keep track of this session (G). At this point, the redirect-based Authorization Code flow has been completed, so the BFF can hand control back to the frontend application. It does so by including a redirect in the response (G), triggering the browser to fetch the frontend from the server (H). Note that step (H) is identical to step (A), which likely means that the requested resources can be loaded from the browser's cache. When the frontend loads, it will check with the BFF for an existing session (I), allowing the JavaScript application to resume its authenticated state.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-5">When the JavaScript application in the browser wants to make a request to the resource server, it sends a request to the corresponding endpoint on the BFF (J). This request will include the cookie set in step G, allowing the BFF to obtain the proper tokens for this user's session. The BFF removes the cookie from the request, attaches the user's access token to the request, and forwards it to the actual resource server (K). The BFF then forwards the response back to the browser-based application (L).<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-4">The BFF associates the obtained tokens with the user's session (See <a href="#pattern-bff-sessions" class="auto internal xref">Section 6.1.2.3</a>) and sets a cookie in the response to keep track of this session (G). At this point, the redirect-based Authorization Code flow has been completed, so the BFF can hand control back to the frontend application. It does so by including a redirect in the response (G), triggering the browser to fetch the frontend from the server (H). Note that step (H) is identical to step (A), which likely means that the requested resources can be loaded from the browser's cache. When the frontend loads, it will check with the BFF for an existing session (I), allowing the application to resume its authenticated state.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-5">When the application in the browser wants to make a request to the resource server, it sends a request to the corresponding endpoint on the BFF (J). This request will include the cookie set in step G, allowing the BFF to obtain the proper tokens for this user's session. The BFF removes the cookie from the request, attaches the user's access token to the request, and forwards it to the actual resource server (K). The BFF then forwards the response back to the browser-based application (L).<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-details">
@@ -1792,9 +1792,9 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             </h5>
 <p id="section-6.1.2.1-1">The BFF provides a set of endpoints that are crucial to implement the interactions between the browser-based application and the BFF. This section discusses these endpoints in a bit more detail to clarify their purpose and use cases.<a href="#section-6.1.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.1-2">The "check session" endpoint (Steps B and I in the diagram above) is an API endpoint called by the browser-based application. The request will carry session information when available, allowing the BFF to check for an active session. The response should indicate to the browser-based application whether the session is active. Additionally, the BFF can include other information, such as identity information about the authenticated user.<a href="#section-6.1.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1.2.1-3">The endpoint that initiates the Authorization Code flow (step C) is contacted by the browser through a navigation. When the JavaScript application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initiate this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initiate the Authorization Code flow in step B, when it detects the absence of an active session. In that case, the BFF would return the authorization URI in the response and expect the JavaScript application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.<a href="#section-6.1.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.2.1-4">The endpoint that receives the authorization code (step E) is called by a navigation event from within the browser. At this point, the JavaScript application is not loaded and not in a position to handle the redirect. Similar to the initiation of the flow, the endpoint to handle the redirect is offered by standard OAuth libraries. The BFF can respond to this request with a redirect that triggers the browser to load the  JavaScript application.<a href="#section-6.1.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1.2.1-5">Finally, the BFF can also offer a "logout" endpoint to the JavaScript application, which is not depicted in the diagram above. The exact behavior of the logout endpoint depends on the application requirements. Note that standard OAuth libraries typically also offer an implementation of the "logout" endpoint.<a href="#section-6.1.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.1-3">The endpoint that initiates the Authorization Code flow (step C) is contacted by the browser through a navigation. When the application detects an unauthenticated state after checking the session (step B), it can navigate the browser to this endpoint. Doing so allows the BFF to respond with a redirect, which takes the browser to the authorization server. The endpoint to initiate this flow is typically included as the "login" endpoint by libraries that support OAuth 2.0 for confidential clients running on a web server. Note that it is also possible for the BFF to initiate the Authorization Code flow in step B, when it detects the absence of an active session. In that case, the BFF would return the authorization URI in the response and expect the application to trigger a navigation event with this URI. However, this scenario requires a custom implementation and makes it harder to use standard OAuth libraries.<a href="#section-6.1.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.1-4">The endpoint that receives the authorization code (step E) is called by a navigation event from within the browser. At this point, the application is not loaded and not in a position to handle the redirect. Similar to the initiation of the flow, the endpoint to handle the redirect is offered by standard OAuth libraries. The BFF can respond to this request with a redirect that triggers the browser to load the application.<a href="#section-6.1.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.1-5">Finally, the BFF can also offer a "logout" endpoint to the application, which is not depicted in the diagram above. The exact behavior of the logout endpoint depends on the application requirements. Note that standard OAuth libraries typically also offer an implementation of the "logout" endpoint.<a href="#section-6.1.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="refresh-tokens">
@@ -1823,7 +1823,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-combining-oauth-and-openid-">
 <a href="#section-6.1.2.4" class="section-number selfRef">6.1.2.4. </a><a href="#name-combining-oauth-and-openid-" class="section-name selfRef">Combining OAuth and OpenID Connect</a>
             </h5>
-<p id="section-6.1.2.4-1">The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the JavaScript application in step B or I.<a href="#section-6.1.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.4-1">The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the application in step B or I.<a href="#section-6.1.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.4-2">When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.<a href="#section-6.1.2.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1832,8 +1832,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-practical-deployment-strate">
 <a href="#section-6.1.2.5" class="section-number selfRef">6.1.2.5. </a><a href="#name-practical-deployment-strate" class="section-name selfRef">Practical Deployment Strategies</a>
             </h5>
-<p id="section-6.1.2.5-1">Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployments, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).<a href="#section-6.1.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.2.5-2">Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.<a href="#section-6.1.2.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.5-1">Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and forwarding requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployments, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).<a href="#section-6.1.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2.5-2">Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to forward requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.<a href="#section-6.1.2.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1888,7 +1888,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-cross-site-request-forgery-">
 <a href="#section-6.1.3.3" class="section-number selfRef">6.1.3.3. </a><a href="#name-cross-site-request-forgery-" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
             </h5>
-<p id="section-6.1.3.3-1">The interactions between the JavaScript application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could transform the BFF into a confused deputy, allowing the attacker's request to the BFF to trigger outgoing calls to a protected resource on behalf of the user.<a href="#section-6.1.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3-1">The interactions between the browser-based application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could transform the BFF into a confused deputy, allowing the attacker's request to the BFF to trigger outgoing calls to a protected resource on behalf of the user.<a href="#section-6.1.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3-2">The BFF MUST implement a proper CSRF defense. The exact mechanism or combination of mechanisms depends on the exact domain where the BFF is deployed, as discussed below.<a href="#section-6.1.3.3-2" class="pilcrow">¶</a></p>
 <div id="samesite-cookie-attribute">
 <section id="section-6.1.3.3.1">
@@ -1905,13 +1905,13 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
               <h6 id="name-cross-origin-resource-shari">
 <a href="#section-6.1.3.3.2" class="section-number selfRef">6.1.3.3.2. </a><a href="#name-cross-origin-resource-shari" class="section-name selfRef">Cross-Origin Resource Sharing</a>
               </h6>
-<p id="section-6.1.3.3.2-1">The BFF can rely on CORS as a CSRF defense mechanism. CORS is a security mechanism implemented by browsers that restricts cross-origin JavaScript-based requests, unless the server explicitly approves such a request by setting the proper CORS headers.<a href="#section-6.1.3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3.2-1">The BFF can rely on CORS as a CSRF defense mechanism. CORS is a security mechanism implemented by browsers that restricts cross-origin requests, unless the server explicitly approves such a request by setting the proper CORS headers.<a href="#section-6.1.3.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3.2-2">Browsers typically restrict cross-origin HTTP requests initiated from scripts. CORS can remove this restriction if the target server approves the request, which is checked through an initial "preflight" request. Unless the preflight response explicitly approves the request, the browser will refuse to send the full request.<a href="#section-6.1.3.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3.2-3">Because of this property, the BFF can rely on CORS as a CSRF defense. When the attacker tries to launch a cross-origin request to the BFF from the user's browser, the BFF will not approve the request in the preflight response, causing the browser to block the actual request. Note that the attacker can always launch the request from their own machine, but then the request will not carry the user's cookies, so the attack will fail.<a href="#section-6.1.3.3.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3.2-4">When relying on CORS as a CSRF defense, it is important to realize that certain requests are possible without a preflight. For such requests, named "CORS-safelisted Requests", the browser will simply send the request and prevent access to the response if the server did not send the proper CORS headers. This behavior is enforced for requests that can be triggered via other means than JavaScript, such as a GET request or a form-based POST request.<a href="#section-6.1.3.3.2-4" class="pilcrow">¶</a></p>
 <p id="section-6.1.3.3.2-5">The consequence of this behavior is that certain endpoints of the resource server could become vulnerable to CSRF, even with CORS enabled as a defense. For example, if the resource server is an API that exposes an endpoint to a body-less POST request, there will be no preflight request and no CSRF defense.<a href="#section-6.1.3.3.2-5" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.3.2-6">To avoid such bypasses against the CORS policy, the BFF SHOULD require that the JavaScript application includes a custom request header. Cross-origin requests with a custom request header always require a preflight, which makes CORS an effective CSRF defense. When this mechanism is used, the BFF MUST ensure that every incoming request carries this static header. The exact naming of this header is at the discretion of the JavaScript application and BFF. A sample configuration would be a request header with a static value, such as <code>My-Static-Header: 1</code>.<a href="#section-6.1.3.3.2-6" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.3.2-7">It is also possible to deploy the JavaScript application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.<a href="#section-6.1.3.3.2-7" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3.2-6">To avoid such bypasses against the CORS policy, the BFF SHOULD require that the browser-based application includes a custom request header. Cross-origin requests with a custom request header always require a preflight, which makes CORS an effective CSRF defense. When this mechanism is used, the BFF MUST ensure that every incoming request carries this static header. The exact naming of this header is at the discretion of the application and BFF. A sample configuration would be a request header with a static value, such as <code>My-Static-Header: 1</code>.<a href="#section-6.1.3.3.2-6" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.3.2-7">It is also possible to deploy the browser-based application on the same origin as the BFF. This ensures that legitimate interactions between the frontend and the BFF do not require any preflights, so there's no additional overhead.<a href="#section-6.1.3.3.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="use-anti-forgerydouble-submit-cookies">
@@ -1923,33 +1923,41 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <p id="section-6.1.3.3.3-2">Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.<a href="#section-6.1.3.3.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="privacy-considerations-in-the-bff-architecture">
-<section id="section-6.1.3.3.4">
-              <h6 id="name-privacy-considerations-in-t">
-<a href="#section-6.1.3.3.4" class="section-number selfRef">6.1.3.3.4. </a><a href="#name-privacy-considerations-in-t" class="section-name selfRef">Privacy considerations in the BFF architecture</a>
-              </h6>
-<p id="section-6.1.3.3.4-1">The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.<a href="#section-6.1.3.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.3.4-2">When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.<a href="#section-6.1.3.3.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="privacy-considerations-in-the-bff-architecture">
+<section id="section-6.1.3.4">
+            <h5 id="name-privacy-considerations-in-t">
+<a href="#section-6.1.3.4" class="section-number selfRef">6.1.3.4. </a><a href="#name-privacy-considerations-in-t" class="section-name selfRef">Privacy considerations in the BFF architecture</a>
+            </h5>
+<p id="section-6.1.3.4-1">The BFF pattern requires that the browser-based application forwards all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between the application and a resource server, which can have a considerable privacy impact.<a href="#section-6.1.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.4-2">When the browser-based application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.<a href="#section-6.1.3.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="operational-considerations">
+<section id="section-6.1.3.5">
+            <h5 id="name-operational-considerations">
+<a href="#section-6.1.3.5" class="section-number selfRef">6.1.3.5. </a><a href="#name-operational-considerations" class="section-name selfRef">Operational Considerations</a>
+            </h5>
+<p id="section-6.1.3.5-1">As the BFF is forwarding all requests to the resource server on behalf of the frontend, care should be taken to ensure the resource server is aware of this component and uses appropriate policies for rate limiting and other anti-abuse measures. For example, if the BFF is deployed as a single-instance service, and the resource server is rate limiting requests based on IP address, it might start blocking requests as many users' browsers will appear to be coming from the single IP address of the BFF.<a href="#section-6.1.3.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pattern-bff-proxy">
-<section id="section-6.1.3.4">
+<section id="section-6.1.3.6">
             <h5 id="name-proxy-restrictions">
-<a href="#section-6.1.3.4" class="section-number selfRef">6.1.3.4. </a><a href="#name-proxy-restrictions" class="section-name selfRef">Proxy Restrictions</a>
+<a href="#section-6.1.3.6" class="section-number selfRef">6.1.3.6. </a><a href="#name-proxy-restrictions" class="section-name selfRef">Proxy Restrictions</a>
             </h5>
-<p id="section-6.1.3.4-1">The BFF acts as a proxy by accepting requests from the frontend and forwarding them to the resource server. The inbound request carries a cookie, which the BFF translates into an access token on the outbound request. Apart from CSRF attacks, attackers may attempt to manipulate the BFF into forwarding requests to unintended hosts. If an attacker successfully exploits this, they could redirect the BFF to an arbitrary server, potentially exposing the user's access token.<a href="#section-6.1.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.4-2">To mitigate this risk, the BFF MUST enforce strict outbound request controls by validating destination hosts before forwarding requests. This requires maintaining an explicit allowlist of approved resource servers, ensuring that requests are only proxied to predefined backends (e.g., <code>/bff/orders/create maps</code> exclusively to <code>https://order-api.example.com/create</code>). If dynamic routing based on paths (e.g., <code>/bff/orders/{id}</code>) is necessary, the BFF MUST apply strict validation to ensure that only authorized destinations are accessible. Additionally, restricting the allowed HTTP methods on a per-endpoint basis can further reduce attack vectors.<a href="#section-6.1.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.1.3.4-3">When implementing a dynamically configurable proxy, the BFF MUST ensure that it only allows requests to explicitly permitted hosts and paths. Failure to enforce these restrictions can lead to unauthorized access and access token leakage.<a href="#section-6.1.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.6-1">The BFF acts as a proxy service by accepting requests from the frontend and forwarding them to the resource server. The inbound request carries a cookie, which the BFF translates into an access token on the outbound request. (Note that this makes it more like an application-layer reverse proxy than an HTTP proxy.) Apart from CSRF attacks, attackers may attempt to manipulate the BFF into forwarding requests to unintended hosts. If an attacker successfully exploits this, they could redirect the BFF to an arbitrary server, potentially exposing the user's access token.<a href="#section-6.1.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.6-2">To mitigate this risk, the BFF MUST enforce strict outbound request controls by validating destination hosts before forwarding requests. This requires maintaining an explicit allowlist of approved resource servers, ensuring that requests are only proxied to predefined backends (e.g., <code>/bff/orders/create maps</code> exclusively to <code>https://order-api.example.com/create</code>). If dynamic routing based on paths (e.g., <code>/bff/orders/{id}</code>) is necessary, the BFF MUST apply strict validation to ensure that only authorized destinations are accessible. Additionally, restricting the allowed HTTP methods on a per-endpoint basis can further reduce attack vectors.<a href="#section-6.1.3.6-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.6-3">When implementing a dynamically configurable proxy, the BFF MUST ensure that it only allows requests to explicitly permitted hosts and paths. Failure to enforce these restrictions can lead to unauthorized access and access token leakage.<a href="#section-6.1.3.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="advanced-security">
-<section id="section-6.1.3.5">
+<section id="section-6.1.3.7">
             <h5 id="name-advanced-security">
-<a href="#section-6.1.3.5" class="section-number selfRef">6.1.3.5. </a><a href="#name-advanced-security" class="section-name selfRef">Advanced Security</a>
+<a href="#section-6.1.3.7" class="section-number selfRef">6.1.3.7. </a><a href="#name-advanced-security" class="section-name selfRef">Advanced Security</a>
             </h5>
-<p id="section-6.1.3.5-1">In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications run in a more controlled environment than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.<a href="#section-6.1.3.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.3.7-1">In the BFF pattern, all OAuth responsibilities have been moved to the BFF, a server-side component acting as a confidential client. Since server-side applications run in a more controlled environment than browser-based applications, it becomes easier to adopt advanced OAuth security practices. Examples include key-based client authentication and sender-constrained tokens.<a href="#section-6.1.3.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1965,7 +1973,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-attack-scenarios-and-conseq">
 <a href="#section-6.1.4.1" class="section-number selfRef">6.1.4.1. </a><a href="#name-attack-scenarios-and-conseq" class="section-name selfRef">Attack Scenarios and Consequences</a>
             </h5>
-<p id="section-6.1.4.1-1">If the attacker has the ability to execute malicious JavaScript code in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.1.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.1-1">If the attacker has the ability to execute malicious code (e.g. JavaScript or WASM) in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.1.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.4.1-2.1">
                 <p id="section-6.1.4.1-2.1.1">Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)<a href="#section-6.1.4.1-2.1.1" class="pilcrow">¶</a></p>
@@ -1977,9 +1985,9 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.1.4.1-4.1.1">Client Hijacking (<a href="#consequence-hijack" class="auto internal xref">Section 5.2.3</a>)<a href="#section-6.1.4.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.1.4.1-5">Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious JavaScript code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy (<span>[<a href="#W3C.CSP3" class="cite xref">W3C.CSP3</a>]</span>).<a href="#section-6.1.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.1-5">Note that client hijacking is an attack scenario that is inherent to the nature of browser-based applications. As a result, nothing will be able to prevent such attacks apart from stopping the execution of malicious code in the first place. Techniques that can help to achieve this are following secure coding guidelines, code analysis, and deploying defense-in-depth mechanisms such as Content Security Policy (<span>[<a href="#W3C.CSP3" class="cite xref">W3C.CSP3</a>]</span>).<a href="#section-6.1.4.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.1-6">In this architecture, the BFF is a key component handling various security-specific responsibilities and proxy-based behavior. While it is out of the scope of this document to discuss a secure implementation of proxy-based applications, it is crucial to note that security vulnerabilities in the BFF can have a significant impact on the application.<a href="#section-6.1.4.1-6" class="pilcrow">¶</a></p>
-<p id="section-6.1.4.1-7">Finally, the BFF is uniquely placed to observe all traffic between the JavaScript application and the resource servers. If a high-security application would prefer to implement anomaly detection or rate limiting, such a BFF would be the ideal place to do so. Such restrictions can further help to mitigate the consequences of client hijacking.<a href="#section-6.1.4.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.1-7">Finally, the BFF is uniquely placed to observe all traffic between the browser-based application and the resource servers. If a high-security application would prefer to implement anomaly detection or rate limiting, such a BFF would be the ideal place to do so. Such restrictions can further help to mitigate the consequences of client hijacking.<a href="#section-6.1.4.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigated-attack-scenarios">
@@ -1999,7 +2007,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.1.4.2-2.3.1">Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)<a href="#section-6.1.4.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.1.4.2-3">The BFF counters the first two attack scenarios by not exposing any tokens to the browser-based application. Even when the attacker gains full control over the JavaScript application, there are simply no tokens to be stolen.<a href="#section-6.1.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.2-3">The BFF counters the first two attack scenarios by not exposing any tokens to the browser-based application. Even when the attacker gains full control over the application, there are simply no tokens to be stolen.<a href="#section-6.1.4.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.2-4">The third scenario, where the attacker obtains a fresh access token (and optionally refresh token) by running a silent flow, is mitigated by making the BFF a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials. Additionally, the use of PKCE prevents other attacks against the authorization code.<a href="#section-6.1.4.2-4" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.2-5">Since refresh and access tokens are managed by the BFF and not exposed to the browser, the following two consequences of potential attacks become irrelevant:<a href="#section-6.1.4.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2017,7 +2025,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-summary">
 <a href="#section-6.1.4.3" class="section-number selfRef">6.1.4.3. </a><a href="#name-summary" class="section-name selfRef">Summary</a>
             </h5>
-<p id="section-6.1.4.3-1">The architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the JavaScript application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See <a href="#practical-deployment-scenarios" class="auto internal xref">Section 6.2.2.6</a> for additional notes if the BFF is acting as the resource server.<a href="#section-6.1.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.4.3-1">The architecture of a BFF is significantly more complicated than a browser-only application. It requires deploying and operating a server-side BFF component. Additionally, this pattern requires all interactions between the application and the resource servers to be proxied by the BFF. Depending on the deployment pattern, this proxy behavior can add a significant burden on the server-side components. See <a href="#practical-deployment-scenarios" class="auto internal xref">Section 6.2.2.6</a> for additional notes if the BFF is acting as the resource server.<a href="#section-6.1.4.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.3-2">However, because of the nature of the BFF architecture pattern, it offers strong security guarantees. Using a BFF also ensures that the application's attack surface does not increase by using OAuth. The only viable attack pattern is hijacking the client application in the user's browser, a problem inherent to web applications.<a href="#section-6.1.4.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.4.3-3">This architecture is strongly recommended for business applications, sensitive applications, and applications that handle personal data.<a href="#section-6.1.4.3-3" class="pilcrow">¶</a></p>
 </section>
@@ -2031,9 +2039,9 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
         <h3 id="name-token-mediating-backend">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-token-mediating-backend" class="section-name selfRef">Token-Mediating Backend</a>
         </h3>
-<p id="section-6.2-1">This section describes the architecture of a JavaScript application that relies on a backend component to handle OAuth responsibilities for obtaining tokens as a confidential client. The backend component then provides the JavaScript application with the access token to directly interact with resource servers.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">The token-mediating backend pattern is more lightweight than the BFF pattern (See <a href="#pattern-bff" class="auto internal xref">Section 6.1</a>), since it does not require the proxying of all requests and responses between the JavaScript application and the resource server. From a security perspective, the token-mediating backend is less secure than a BFF, but still offers significant advantages over an OAuth client application running directly in the browser.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<p id="section-6.2-3">If an attacker is able to execute malicious code within the JavaScript application, the application architecture is able to prevent the attacker from abusing refresh tokens (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)) or obtaining a fresh set of tokens (Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)). However, since the access token is directly exposed to the JavaScript application, the attacker can steal the token from client-side storage (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)), or request a fresh token from the token-mediating backend (Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)). Note that the use of HttpOnly cookies prevents the attacker from directly accessing the session state, which prevents the escalation from access token theft to session hijacking.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">This section describes the architecture of a browser-based application that relies on a backend component to handle OAuth responsibilities for obtaining tokens as a confidential client. The backend component then provides the application with the access token to directly interact with resource servers.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">The token-mediating backend pattern is more lightweight than the BFF pattern (See <a href="#pattern-bff" class="auto internal xref">Section 6.1</a>), since it does not require the proxying of all requests and responses between the application and the resource server. From a security perspective, the token-mediating backend is less secure than a BFF, but still offers significant advantages over an OAuth client application running directly in the browser.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">If an attacker is able to execute malicious code within the application, the application architecture is able to prevent the attacker from abusing refresh tokens (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)) or obtaining a fresh set of tokens (Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)). However, since the access token is directly exposed to the application, the attacker can steal the token from client-side storage (Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) and Persistent Token Theft (<a href="#scenario-persistent-theft" class="auto internal xref">Section 5.1.2</a>)), or request a fresh token from the token-mediating backend (Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)). Note that the use of HttpOnly cookies prevents the attacker from directly accessing the session state, which prevents the escalation from access token theft to session hijacking.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <div id="application-architecture-1">
 <section id="section-6.2.1">
           <h4 id="name-application-architecture-2">
@@ -2118,10 +2126,10 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <a href="#name-oauth-20-tmb-pattern" class="selfRef">OAuth 2.0 TMB Pattern</a>
             </figcaption></figure>
 </div>
-<p id="section-6.2.1-2">In this architecture, the JavaScript code is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the token-mediating backend if there is an active session (B). If an active session is found, the application receives the corresponding access token, resumes its authenticated state, and skips forward to step J.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-3">When no active session is found, the JavaScript application triggers a navigation to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in <a href="#pattern-tmb-flow" class="auto internal xref">Section 6.2.3.1</a>), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-4">The token-mediating backend associates the obtained tokens with the user's session (See <a href="#pattern-tmb-sessions" class="auto internal xref">Section 6.2.2.4</a>) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the JavaScript application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the JavaScript application to resume its authenticated state and obtain the access token from the token-mediating backend.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">The JavaScript application in the browser can use the access token obtained in step I to directly make requests to the resource server (J).<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">In this architecture, the browser-based code (e.g. JavaScript or WASM) is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the token-mediating backend if there is an active session (B). If an active session is found, the application receives the corresponding access token, resumes its authenticated state, and skips forward to step J.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-3">When no active session is found, the application triggers a navigation to the token-mediating backend (C) to initiate the Authorization Code flow with the PKCE extension (described in <a href="#pattern-tmb-flow" class="auto internal xref">Section 6.2.3.1</a>), to which the token-mediating backend responds by redirecting the browser to the authorization endpoint (D). When the user is redirected back, the browser delivers the authorization code to the token-mediating backend (E), where the token-mediating backend can then exchange it for tokens at the token endpoint (F) using its client credentials and PKCE code verifier.<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-4">The token-mediating backend associates the obtained tokens with the user's session (See <a href="#pattern-tmb-sessions" class="auto internal xref">Section 6.2.2.4</a>) and sets a cookie in the response to keep track of this session (G). This response to the browser will also trigger the reloading of the application (H). When this application reloads, it will check with the token-mediating backend for an existing session (I), allowing the application to resume its authenticated state and obtain the access token from the token-mediating backend.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-5">The application in the browser can use the access token obtained in step I to directly make requests to the resource server (J).<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-details-1">
@@ -2157,7 +2165,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <a href="#section-6.2.2.2" class="section-number selfRef">6.2.2.2. </a><a href="#name-refresh-tokens-2" class="section-name selfRef">Refresh Tokens</a>
             </h5>
 <p id="section-6.2.2.2-1">When using refresh tokens, as described in <span><a href="https://rfc-editor.org/rfc/rfc9700#section-4.14" class="relref">Section 4.14</a> of [<a href="#RFC9700" class="cite xref">RFC9700</a>]</span>, the token-mediating backend obtains the refresh token in step F and associates it with the user's session.<a href="#section-6.2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2.2-2">If the resource server rejects the access token, the JavaScript application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, and thus requires client authentication.<a href="#section-6.2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.2-2">If the resource server rejects the access token, the application can contact the token-mediating backend to request a new access token. The token-mediating backend relies on the cookies associated with this request to look up the user's refresh token, and makes a token request using the refresh token. These steps are not shown in the diagram. Note that this Refresh Token request is from the backend, a confidential client, and thus requires client authentication.<a href="#section-6.2.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.2-3">When the refresh token expires, there is no way to obtain a valid access token without starting an entirely new Authorization Code grant. Therefore, it makes sense to configure the lifetime of the cookie-based session to be equal to the maximum lifetime of the refresh token if such information is known upfront. Additionally, when the token-mediating backend learns that a refresh token for an active session is no longer valid, it makes sense to invalidate the session.<a href="#section-6.2.2.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2166,8 +2174,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-access-token-scopes">
 <a href="#section-6.2.2.3" class="section-number selfRef">6.2.2.3. </a><a href="#name-access-token-scopes" class="section-name selfRef">Access Token Scopes</a>
             </h5>
-<p id="section-6.2.2.3-1">Depending on the resource servers being accessed and the configuration of scopes at the authorization server, the JavaScript application may wish to request access tokens with different scope configurations. This behavior would allow the JavaScript application to follow the best practice of using minimally-scoped access tokens.<a href="#section-6.2.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.2.3-2">The JavaScript application can inform the token-mediating backend of the desired scopes when it checks for the active session (Step A/I). It is up to the token-mediating backend to decide if previously obtained access tokens fall within the desired scope criteria.<a href="#section-6.2.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.3-1">Depending on the resource servers being accessed and the configuration of scopes at the authorization server, the application may wish to request access tokens with different scope configurations. This behavior would allow the application to follow the best practice of using minimally-scoped access tokens.<a href="#section-6.2.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.3-2">The application can inform the token-mediating backend of the desired scopes when it checks for the active session (Step A/I). It is up to the token-mediating backend to decide if previously obtained access tokens fall within the desired scope criteria.<a href="#section-6.2.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.3-3">It should be noted that this access token caching mechanism at the token-mediating backend can cause scope elevation risks when applied indiscriminately. If the cached access token features a superset of the scopes requested by the frontend, the token-mediating backend SHOULD NOT return it to the frontend; instead, it SHOULD use the refresh token to request an access token with the smaller set of scopes from the authorization server. Note that support of such an access token downscoping mechanism is at the discretion of the authorization server.<a href="#section-6.2.2.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.2.3-4">The token-mediating backend can use a similar mechanism to downscoping when relying on <span>[<a href="#RFC8707" class="cite xref">RFC8707</a>]</span> to obtain access token for a specific resource server.<a href="#section-6.2.2.3-4" class="pilcrow">¶</a></p>
 </section>
@@ -2193,7 +2201,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-practical-deployment-scenar">
 <a href="#section-6.2.2.6" class="section-number selfRef">6.2.2.6. </a><a href="#name-practical-deployment-scenar" class="section-name selfRef">Practical Deployment Scenarios</a>
             </h5>
-<p id="section-6.2.2.6-1">Serving the static JavaScript code is a separate responsibility from handling interactions with the authorization server. In the diagram presented above, the token-mediating backend and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the token-mediating backend serving the static JS code), as two separate services (i.e., a CDN and a token-mediating backend), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform). These deployment differences do not affect the relationships described in this pattern, but may impact other practicalities, such as the need to properly configure CORS to enable cross-origin communication.<a href="#section-6.2.2.6-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.2.6-1">Serving the static JavaScript or WASM code is a separate responsibility from handling interactions with the authorization server. In the diagram presented above, the token-mediating backend and static web host are shown as two separate entities. In real-world deployment scenarios, these components can be deployed as a single service (i.e., the token-mediating backend serving the static code), as two separate services (i.e., a CDN and a token-mediating backend), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform). These deployment differences do not affect the relationships described in this pattern, but may impact other practicalities, such as the need to properly configure CORS to enable cross-origin communication.<a href="#section-6.2.2.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2224,8 +2232,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-cross-site-request-forgery-p">
 <a href="#section-6.2.3.3" class="section-number selfRef">6.2.3.3. </a><a href="#name-cross-site-request-forgery-p" class="section-name selfRef">Cross-Site Request Forgery Protections</a>
             </h5>
-<p id="section-6.2.3.3-1">The interactions between the JavaScript application and the token-mediating backend rely on cookies for authentication and authorization. Just like a BFF, the token-mediating backend is required to account for Cross-Site Request Forgery (CSRF) attacks.<a href="#section-6.2.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.3.3-2"><a href="#pattern-bff-csrf" class="auto internal xref">Section 6.1.3.3</a> outlines the nuances of various mitigation strategies against CSRF attacks. Specifically for a token-mediating backend, these CSRF defenses only apply to the endpoint or endpoints where the JavaScript application can obtain its access tokens.<a href="#section-6.2.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.3.3-1">The interactions between the browser-based application and the token-mediating backend rely on cookies for authentication and authorization. Just like a BFF, the token-mediating backend is required to account for Cross-Site Request Forgery (CSRF) attacks.<a href="#section-6.2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.3.3-2"><a href="#pattern-bff-csrf" class="auto internal xref">Section 6.1.3.3</a> outlines the nuances of various mitigation strategies against CSRF attacks. Specifically for a token-mediating backend, these CSRF defenses only apply to the endpoint or endpoints where the application can obtain its access tokens.<a href="#section-6.2.3.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="advanced-oauth-security">
@@ -2249,7 +2257,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
             <h5 id="name-attack-scenarios-and-consequ">
 <a href="#section-6.2.4.1" class="section-number selfRef">6.2.4.1. </a><a href="#name-attack-scenarios-and-consequ" class="section-name selfRef">Attack Scenarios and Consequences</a>
             </h5>
-<p id="section-6.2.4.1-1">If the attacker has the ability to execute malicious JavaScript code in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.2.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.1-1">If the attacker has the ability to execute malicious code in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.2.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.4.1-2.1">
                 <p id="section-6.2.4.1-2.1.1">Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>) for access tokens<a href="#section-6.2.4.1-2.1.1" class="pilcrow">¶</a></p>
@@ -2270,7 +2278,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.2.4.1-4.2.1">Client Hijacking (<a href="#consequence-hijack" class="auto internal xref">Section 5.2.3</a>)<a href="#section-6.2.4.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.2.4.1-5">Exposing the access token to the JavaScript application is the core idea behind the architecture pattern of the token-mediating backend. As a result, the access token becomes vulnerable to token theft by malicious JavaScript.<a href="#section-6.2.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.1-5">Exposing the access token to the browser-based application is the core idea behind the architecture pattern of the token-mediating backend. As a result, the access token becomes vulnerable to token theft by malicious browser-based code.<a href="#section-6.2.4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mitigated-attack-scenarios-1">
@@ -2290,7 +2298,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
                 <p id="section-6.2.4.2-2.3.1">Acquisition and Extraction of New Tokens (<a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>)<a href="#section-6.2.4.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.2.4.2-3">The token-mediating backend counters the first two attack scenarios by not exposing the refresh token to the browser-based application. Even when the attacker gains full control over the JavaScript application, there are simply no refresh tokens to be stolen.<a href="#section-6.2.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.2-3">The token-mediating backend counters the first two attack scenarios by not exposing the refresh token to the browser-based application. Even when the attacker gains full control over the application, there are simply no refresh tokens to be stolen.<a href="#section-6.2.4.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.4.2-4">The third scenario, where the attacker obtains a fresh access token (and optionally refresh token) by running a silent flow, is mitigated by making the token-mediating backend a confidential client. Even when the attacker manages to obtain an authorization code, they are prevented from exchanging this code due to the lack of client credentials.  Additionally, the use of PKCE prevents other attacks against the authorization code.<a href="#section-6.2.4.2-4" class="pilcrow">¶</a></p>
 <p id="section-6.2.4.2-5">Because of the nature of the token-mediating backend, the following consequences of potential attacks become irrelevant:<a href="#section-6.2.4.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2312,7 +2320,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <a href="#section-6.2.4.3.1" class="section-number selfRef">6.2.4.3.1. </a><a href="#name-secure-token-storage" class="section-name selfRef">Secure Token Storage</a>
               </h6>
 <p id="section-6.2.4.3.1-1">Given the nature of the token-mediating backend pattern, there is no need for persistent token storage in the browser. When needed, the application can always use its cookie-based session to obtain an access token from the token-mediating backend. <a href="#token-storage" class="auto internal xref">Section 8</a> provides more details on the security properties of various storage mechanisms in the browser.<a href="#section-6.2.4.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.4.3.1-2">Be aware that even when the access token is stored out of reach of malicious JavaScript code, the malicious code can still mimic the legitimate application and send a request to the token-mediation backend to obtain the latest access token.<a href="#section-6.2.4.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.3.1-2">Be aware that even when the access token is stored out of reach of malicious browser-based code, the malicious code can still mimic the legitimate application and send a request to the token-mediation backend to obtain the latest access token.<a href="#section-6.2.4.3.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="using-sender-constrained-tokens">
@@ -2320,7 +2328,7 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
               <h6 id="name-using-sender-constrained-to">
 <a href="#section-6.2.4.3.2" class="section-number selfRef">6.2.4.3.2. </a><a href="#name-using-sender-constrained-to" class="section-name selfRef">Using Sender-Constrained Tokens</a>
               </h6>
-<p id="section-6.2.4.3.2-1">Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the JavaScript application will use the access token. Using a mechanism such as DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of the scope of this document.<a href="#section-6.2.4.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.4.3.2-1">Using sender-constrained access tokens is not trivial in this architecture. The token-mediating backend is responsible for exchanging an authorization code or refresh token for an access token, but the application will use the access token. Using a mechanism such as DPoP <span>[<a href="#RFC9449" class="cite xref">RFC9449</a>]</span> would require splitting responsibilities over two parties, which is not a scenario defined by the specification. Use of DPoP in such a scenario is out of the scope of this document.<a href="#section-6.2.4.3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2344,8 +2352,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
         <h3 id="name-browser-based-oauth-20-clie">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-browser-based-oauth-20-clie" class="section-name selfRef">Browser-based OAuth 2.0 client</a>
         </h3>
-<p id="section-6.3-1">This section describes the architecture of a JavaScript application that acts as the OAuth client, handling all OAuth responsibilities in the browser. As a result, the browser-based application obtains tokens from the authorization server, without the involvement of a backend component.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">If an attacker is able to execute malicious JavaScript code, this application architecture is vulnerable to all attack scenarios discussed earlier (<a href="#attackscenarios" class="auto internal xref">Section 5.1</a>). In essence, the attacker will be able to obtain access tokens and refresh tokens from the authorization server, potentially giving them long-term access to protected resources on behalf of the user.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">This section describes the architecture of a browser-based application that acts as the OAuth client, handling all OAuth responsibilities in the browser. As a result, the browser-based application obtains tokens from the authorization server, without the involvement of a backend component.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">If an attacker is able to execute malicious code in the browser, this application architecture is vulnerable to all attack scenarios discussed earlier (<a href="#attackscenarios" class="auto internal xref">Section 5.1</a>). In essence, the attacker will be able to obtain access tokens and refresh tokens from the authorization server, potentially giving them long-term access to protected resources on behalf of the user.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 <div id="application-architecture-2">
 <section id="section-6.3.1">
           <h4 id="name-application-architecture-3">
@@ -2405,14 +2413,14 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 <a href="#name-browser-based-oauth-20-clien" class="selfRef">Browser-based OAuth 2.0 Client Pattern</a>
             </figcaption></figure>
 </div>
-<p id="section-6.3.1-2">In this architecture, the JavaScript code is first loaded from a static web host into
+<p id="section-6.3.1-2">In this architecture, the code is first loaded from a static web host into
 the browser (A), and the application then runs in the browser. In this scenario, the browser-based application is considered a public
 client, which does not possess client credentials to authenticate to the authorization server.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-3">The application obtains an authorization code (B) by initiating the Authorization Code flow with the PKCE
-extension (described in <a href="#pattern-oauth-browser-flow" class="auto internal xref">Section 6.3.2.1</a>). The application exchanges the authorization code for tokens via a JavaScript-based POST request to the token endpoint (C).<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
+extension (described in <a href="#pattern-oauth-browser-flow" class="auto internal xref">Section 6.3.2.1</a>). The application uses a browser API (e.g. <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to make a POST request to the token endpoint (C) to exchange the authorization code for tokens.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-4">The application is then responsible for storing
 the access token and optional refresh token as securely as possible using appropriate browser APIs, described in <a href="#token-storage" class="auto internal xref">Section 8</a>.<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-5">When the JavaScript application in the browser wants to make a request to the resource server,
+<p id="section-6.3.1-5">When the application in the browser wants to make a request to the resource server,
 it can interact with the resource server directly. The application includes the access token in the request (D)
 and receives the resource server's response (E).<a href="#section-6.3.1-5" class="pilcrow">¶</a></p>
 </section>
@@ -2580,7 +2588,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
             <h5 id="name-cross-origin-requests">
 <a href="#section-6.3.3.4" class="section-number selfRef">6.3.3.4. </a><a href="#name-cross-origin-requests" class="section-name selfRef">Cross-Origin Requests</a>
             </h5>
-<p id="section-6.3.3.4-1">In this scenario, the application sends JavaScript-based requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send necessary CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to enable the JavaScript application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.3.4-1">In this scenario, the application uses a browser API to send requests to the authorization server and the resource server. Given the nature of OAuth 2.0, these requests are typically cross-origin, subjecting them to browser-enforced restrictions on cross-origin communication. The authorization server and the resource server MUST send necessary CORS headers (defined in <span>[<a href="#Fetch" class="cite xref">Fetch</a>]</span>) to enable the application to make the necessary cross-origin requests. Note that in the extraordinary scenario where the browser-based OAuth client runs in the same origin as the authorization server or resource server, a CORS policy is not needed to enable the necessary interaction.<a href="#section-6.3.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.4-2">For the authorization server, the CORS configuration is relevant for the token endpoint, where the browser-based application exchanges the authorization code for tokens. Additionally, if the authorization server provides additional endpoints to the application, such as discovery metadata URLs, JSON Web Key Sets, dynamic client registration, revocation, introspection or user info endpoints, these endpoints may also be accessed by the browser-based application. Consequentially, the authorization server is responsible for supporting CORS on these endpoints.<a href="#section-6.3.3.4-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.4-3">This specification does not include guidelines for deciding the concrete CORS policy implementation, which can consist of a wildcard origin or a more restrictive configuration. Note that CORS has two modes of operation with different security properties. The first mode applies to CORS-safelisted requests, formerly known as simple requests, where the browser sends the request and uses the CORS response headers to decide if the response can be exposed to the client-side execution context. For non-CORS-safelisted requests, such as a request with a custom request header, the browser will first check the CORS policy using a preflight. The browser will only send the actual request when the server sends its approval in the preflight response.<a href="#section-6.3.3.4-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.3.4-4">Note that due to the authorization server's specific configuration, it is possible that the CORS response to a preflight is different from the CORS response to the actual request. During the preflight, the authorization server can only verify the provided origin, but during an actual request, the authorization server has the full request data, such as the client ID. Consequentially, the authorization server can approve a known origin during the preflight, but reject the actual request after comparing the origin to this specific client's list of pre-registered origins.<a href="#section-6.3.3.4-4" class="pilcrow">¶</a></p>
@@ -2599,7 +2607,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
             <h5 id="name-attack-scenarios-and-conseque">
 <a href="#section-6.3.4.1" class="section-number selfRef">6.3.4.1. </a><a href="#name-attack-scenarios-and-conseque" class="section-name selfRef">Attack Scenarios and Consequences</a>
             </h5>
-<p id="section-6.3.4.1-1">If the attacker has the ability to execute malicious JavaScript code in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.3.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.1-1">If the attacker has the ability to execute malicious code in the application's execution context, the following attack scenarios become relevant:<a href="#section-6.3.4.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.4.1-2.1">
                 <p id="section-6.3.4.1-2.1.1">Single-Execution Token Theft (<a href="#scenario-single-theft" class="auto internal xref">Section 5.1.1</a>)<a href="#section-6.3.4.1-2.1.1" class="pilcrow">¶</a></p>
@@ -2614,7 +2622,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
                 <p id="section-6.3.4.1-2.4.1">Proxying Requests via the User's Browser (<a href="#scenario-proxy" class="auto internal xref">Section 5.1.4</a>)<a href="#section-6.3.4.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-6.3.4.1-3">The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the JavaScript client irrelevant. Even if the legitimate client application finds a way to completely isolate the tokens from the attacker, the attacker will still be able to obtain tokens from the authorization server.<a href="#section-6.3.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.1-3">The most dangerous attack scenario is the acquisition and extraction of new tokens. In this attack scenario, the attacker only interacts with the authorization server, which makes the actual implementation details of the OAuth functionality in the client irrelevant. Even if the legitimate client application finds a way to completely isolate the tokens from the attacker, the attacker will still be able to obtain tokens from the authorization server.<a href="#section-6.3.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.1-4">Note that these attack scenarios result in the following consequences:<a href="#section-6.3.4.1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.4.1-5.1">
@@ -2634,7 +2642,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
             <h5 id="name-additional-defenses-2">
 <a href="#section-6.3.4.2" class="section-number selfRef">6.3.4.2. </a><a href="#name-additional-defenses-2" class="section-name selfRef">Additional Defenses</a>
             </h5>
-<p id="section-6.3.4.2-1">While this architecture is inherently vulnerable to malicious JavaScript code, there are some additional defenses that can help to increase the security posture of the application. Note that none of these defenses address or fix the underlying problem that allows the attacker to run a new flow to obtain tokens.<a href="#section-6.3.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2-1">While this architecture is inherently vulnerable to malicious browser-based code, there are some additional defenses that can help to increase the security posture of the application. Note that none of these defenses address or fix the underlying problem that allows the attacker to run a new flow to obtain tokens.<a href="#section-6.3.4.2-1" class="pilcrow">¶</a></p>
 <div id="secure-token-storage-1">
 <section id="section-6.3.4.2.1">
               <h6 id="name-secure-token-storage-2">
@@ -2881,7 +2889,7 @@ authorization server to just the Authorization Code grant type reduces the attac
 of the implementation.<a href="#section-7.2.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-7.2.4-2.4">
-              <p id="section-7.2.4-2.4.1">If the JavaScript application gets wrapped into a native app, then <span>[<a href="#RFC8252" class="cite xref">RFC8252</a>]</span>
+              <p id="section-7.2.4-2.4.1">If the browser-based application gets wrapped into a native app, then <span>[<a href="#RFC8252" class="cite xref">RFC8252</a>]</span>
 also requires the use of the Authorization Code grant type with PKCE anyway.<a href="#section-7.2.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
@@ -3097,7 +3105,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <p id="section-8.1-1">Browser cookies are both a storage mechanism and a transport mechanism. The browser automatically supports both through the corresponding request and response headers, resulting in the storage of cookies in the browser and the automatic inclusion of cookies on outgoing requests given it matches the cookie's domain, path, or other properties.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">Next to header-based control over cookies, browsers also offer a JavaScript Cookie API to get and set cookies. This Cookie API is often mistaken as an easy way to store data in the browser. In such a scenario, the JavaScript code stores a token in a cookie, with the intent to retrieve the token for later inclusion in the Authorization header of an API call. However, since the cookie is associated with the domain of the browser-based application, the browser will also send the cookie containing the token when making a request to the server running on this domain. One example of such a request is the browser loading the application after a previous visit to the application (step A in the diagram of <a href="#pattern-oauth-browser" class="auto internal xref">Section 6.3</a>).<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">Because of these unintentional side effects of using cookies for JavaScript-based storage, this practice is NOT RECOMMENDED.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">Note that this practice is different from the use of cookies in a BFF (discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>), where the cookie is inaccessible to JavaScript and is supposed to be sent to the backend.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">Note that this practice is different from the use of cookies in a BFF (discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>), where the cookie is inaccessible to JavaScript and is intended to be sent to the backend.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="token-storage-service-worker">
@@ -3136,7 +3144,7 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
         <h3 id="name-persistent-token-storage">
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-persistent-token-storage" class="section-name selfRef">Persistent Token Storage</a>
         </h3>
-<p id="section-8.5-1">The persistent storage APIs currently available as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#W3C.IndexedDB" class="cite xref">W3C.IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-1">The persistent storage APIs currently available in browsers as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#W3C.IndexedDB" class="cite xref">W3C.IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
 <p id="section-8.5-2">localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage. Additionally, localStorage is a synchronous API, blocking other JavaScript until the operation completes.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.5-3">sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
 <p id="section-8.5-4">IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
@@ -3328,6 +3336,10 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
         <dd>
 <span class="refTitle">"Subresource Integrity"</span>, <span class="seriesInfo">W3C REC SRI</span>, <span class="seriesInfo">W3C SRI</span>, <span>&lt;<a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="W3C.wasm-core-2">[W3C.wasm-core-2]</dt>
+        <dd>
+<span class="refTitle">"WebAssembly Core Specification"</span>, <span class="seriesInfo">W3C CR wasm-core-2</span>, <span class="seriesInfo">W3C wasm-core-2</span>, <span>&lt;<a href="https://www.w3.org/TR/wasm-core-2/">https://www.w3.org/TR/wasm-core-2/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="W3C.WebCryptoAPI">[W3C.WebCryptoAPI]</dt>
         <dd>
 <span class="refTitle">"Web Cryptography API"</span>, <span class="seriesInfo">W3C REC WebCryptoAPI</span>, <span class="seriesInfo">W3C WebCryptoAPI</span>, <span>&lt;<a href="https://www.w3.org/TR/WebCryptoAPI/">https://www.w3.org/TR/WebCryptoAPI/</a>&gt;</span>. </dd>
@@ -3354,10 +3366,19 @@ and the countermeasures mentioned above.<a href="#section-9.3-1" class="pilcrow"
 <p id="appendix-A-2">-25<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-A-3.1">
-          <p id="appendix-A-3.1.1">Replaced "hard drive" with "local persistent storage"<a href="#appendix-A-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-A-3.1.1">Use consistent terminology for "browser-based application", and use JavaScript only when explicitly needed<a href="#appendix-A-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-A-3.2">
-          <p id="appendix-A-3.2.1">Minor editorial nits<a href="#appendix-A-3.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-A-3.2.1">Replaced "hard drive" with "local persistent storage"<a href="#appendix-A-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.3">
+          <p id="appendix-A-3.3.1">Added a note about operational considerations for the BFF pattern<a href="#appendix-A-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.4">
+          <p id="appendix-A-3.4.1">"Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies<a href="#appendix-A-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-A-3.5">
+          <p id="appendix-A-3.5.1">Minor editorial nits<a href="#appendix-A-3.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-A-4">-24<a href="#appendix-A-4" class="pilcrow">¶</a></p>
