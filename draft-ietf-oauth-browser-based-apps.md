@@ -165,7 +165,7 @@ the following terms:
 : An application that is dynamically downloaded and executed in a web browser,
   usually written in JavaScript. Also sometimes referred to as a "single-page application", or "SPA".
 
-This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser, such as Web Assembly ({{WASM}}).
+This document discusses the security of browser-based applications, which are executed by the browser in a runtime environment. In most scenarios, these applications are JavaScript (JS) applications running in a JavaScript execution environment. Given the popularity of this scenario, this document uses the term "JavaScript" to refer to all mechanisms that allow code to execute in the application's runtime in the browser. The recommendations and considerations in this document are not exclusively linked to the JavaScript language or its runtime, but also apply to other languages and runtime environments in the browser, such as Web Assembly ({{-WASM}}).
 
 "PKCE":
 : Proof Key for Code Exchange (PKCE) {{RFC7636}}, a mechanism
