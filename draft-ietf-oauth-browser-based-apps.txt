@@ -364,13 +364,14 @@ Table of Contents
 
    *  Send the tokens to a server controlled by the attacker
 
-   *  Store/abuse the stolen tokens
+   *  Store or abuse the stolen tokens
 
-   The recommended defensive strategy to protect access tokens is to
-   reduce the scope and lifetime of the token.  For refresh tokens, the
-   use of refresh token rotation offers a detection and correction
-   mechanism.  Sender-constrained tokens (Section 9.2) offer an
-   additional layer of protection against stolen access tokens.
+   The recommended defensive strategy to decrease the risk associated
+   with a compromised access tokens is to reduce the scope and lifetime
+   of the token.  For refresh tokens, the use of refresh token rotation
+   offers a detection and correction mechanism.  Sender-constrained
+   tokens (Section 9.2) offer an additional layer of protection against
+   stolen access tokens.
 
    Note that this attack scenario is trivial and often used to
    illustrate the dangers of malicious JavaScript.  When discussing the
@@ -411,9 +412,13 @@ Table of Contents
    For access tokens, the attacker now obtains the latest access token
    for as long as the user's browser is online.  Refresh token rotation
    is not sufficient to prevent abuse of a refresh token.  An attacker
-   can easily wait until the user closes the application or their
-   browser goes offline before using the latest refresh token, thereby
-   ensuring that the latest refresh token is not reused.
+   can easily ensure that the application will not use the latest
+   refresh token.  For example, the attacker could clear the
+   application's tokens after stealing them, wait until the user closes
+   the application, or wait until the user's browser goes offline.
+   Since the application will not use the latest refresh token, there
+   will be no detectable refresh token reuse, giving the attacker full
+   control over the stolen refresh token.
 
 5.1.3.  Acquisition and Extraction of New Tokens
 
@@ -793,7 +798,7 @@ Table of Contents
    refresh token for an active session is no longer valid, it also makes
    sense to invalidate the session.
 
-6.1.2.3.  Cookie-based Session Management
+6.1.2.3.  Cookie-based Session State
 
    The BFF relies on browser cookies ([I-D.ietf-httpbis-rfc6265bis]) to
    keep track of the user's session, which is used to access the user's
@@ -1343,7 +1348,7 @@ Table of Contents
    downscoping when relying on [RFC8707] to obtain access token for a
    specific resource server.
 
-6.2.2.4.  Cookie-based Session Management
+6.2.2.4.  Cookie-based Session State
 
    Similar to the BFF, the token-mediating backend relies on browser
    cookies to keep track of the user's session.  The same implementation
@@ -1845,7 +1850,7 @@ Table of Contents
    storage mechanisms to store access tokens and refresh tokens.
    Universally accessible storage areas, such as _Local Storage_
    [WebStorage], are easier to access from malicious JavaScript than
-   highly isolated storage areas, such as a _Web Worker_ [WebWorker].
+   more isolated storage areas, such as a _Web Worker_ [WebWorker].
    Section 8 discusses different storage mechanisms with their trade-off
    in more detail.
 
@@ -1951,9 +1956,9 @@ Table of Contents
    application's architecture and development.  However, the use of
    OAuth for governing access between the frontend and the backend is
    often not needed.  Instead of using access tokens, the application
-   can rely on traditional cookie-based session management to keep track
-   of the user's authentication status.  The security guidelines to
-   protect the session cookie are discussed in Section 6.1.3.2.
+   can rely on traditional cookie-based session state to keep track of
+   the user's authentication status.  The security guidelines to protect
+   the session cookie are discussed in Section 6.1.3.2.
 
    While the advice to not use OAuth seems out-of-place in this
    document, it is important to note that OAuth was originally created
@@ -2433,11 +2438,12 @@ Table of Contents
 
    localStorage persists between page reloads as well as is shared
    across all tabs.  This storage is accessible to the entire origin,
-   and persists longer term. localStorage does not protect against XSS
-   attacks, as the attacker would be running code within the same
-   origin, and as such, would be able to read the contents of the
-   localStorage.  Additionally, localStorage is a synchronous API,
-   blocking other JavaScript until the operation completes.
+   and persists longer term. localStorage does not protect against
+   unauthorized access from malicious JavaScript, as the attacker would
+   be running code within the same origin, and as such, would be able to
+   read the contents of the localStorage.  Additionally, localStorage is
+   a synchronous API, blocking other JavaScript until the operation
+   completes.
 
    sessionStorage is similar to localStorage, except that the lifetime
    of sessionStorage is linked to the lifetime of a browser tab.
@@ -2447,7 +2453,8 @@ Table of Contents
 
    IndexedDB is a persistent storage mechanism like localStorage, but is
    shared between multiple tabs as well as between the browsing context
-   and Service Workers.
+   and Service Workers.  Additionally, IndexedDB is an asynchronous API,
+   which is preferred over the synchronous localStorage API.
 
    Note that the main difference between these patterns is the exposure
    of the data, but that none of these options can fully mitigate token

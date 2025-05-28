@@ -1512,10 +1512,10 @@ the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
               <p id="section-5.1.1-2.3.1">Send the tokens to a server controlled by the attacker<a href="#section-5.1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.1.1-2.4">
-              <p id="section-5.1.1-2.4.1">Store/abuse the stolen tokens<a href="#section-5.1.1-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.1.1-2.4.1">Store or abuse the stolen tokens<a href="#section-5.1.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.1.1-3">The recommended defensive strategy to protect access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism. Sender-constrained tokens (<a href="#sender-constrained-tokens" class="auto internal xref">Section 9.2</a>) offer an additional layer of protection against stolen access tokens.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">The recommended defensive strategy to decrease the risk associated with a compromised access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism. Sender-constrained tokens (<a href="#sender-constrained-tokens" class="auto internal xref">Section 9.2</a>) offer an additional layer of protection against stolen access tokens.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-4">Note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. When discussing the security of browser-based applications, it is crucial to avoid limiting the attacker's capabilities to the attack discussed in this scenario.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1548,7 +1548,7 @@ the tokens to the browser.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-5.1.2-3">The crucial difference in this scenario is that the attacker always has access to the latest tokens used by the application. This slight variation in the attack scenario already suffices to counter typical defenses against token theft, such as short lifetimes or refresh token rotation.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-4">For access tokens, the attacker now obtains the latest access token for as long as the user's browser is online. Refresh token rotation is not sufficient to prevent abuse of a refresh token. An attacker can easily wait until the user closes the application or their browser goes offline before using the latest refresh token, thereby ensuring that the latest refresh token is not reused.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-4">For access tokens, the attacker now obtains the latest access token for as long as the user's browser is online. Refresh token rotation is not sufficient to prevent abuse of a refresh token. An attacker can easily ensure that the application will not use the latest refresh token. For example, the attacker could clear the application's tokens after stealing them, wait until the user closes the application, or wait until the user's browser goes offline. Since the application will not use the latest refresh token, there will be no detectable refresh token reuse, giving the attacker full control over the stolen refresh token.<a href="#section-5.1.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scenario-new-flow">
@@ -1809,8 +1809,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 </div>
 <div id="pattern-bff-sessions">
 <section id="section-6.1.2.3">
-            <h5 id="name-cookie-based-session-manage">
-<a href="#section-6.1.2.3" class="section-number selfRef">6.1.2.3. </a><a href="#name-cookie-based-session-manage" class="section-name selfRef">Cookie-based Session Management</a>
+            <h5 id="name-cookie-based-session-state">
+<a href="#section-6.1.2.3" class="section-number selfRef">6.1.2.3. </a><a href="#name-cookie-based-session-state" class="section-name selfRef">Cookie-based Session State</a>
             </h5>
 <p id="section-6.1.2.3-1">The BFF relies on browser cookies (<span>[<a href="#I-D.ietf-httpbis-rfc6265bis" class="cite xref">I-D.ietf-httpbis-rfc6265bis</a>]</span>) to keep track of the user's session, which is used to access the user's tokens. Cookie-based sessions, both server-side and client-side, have some downsides.<a href="#section-6.1.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2.3-2">Server-side sessions expose only a session identifier and keep all data on the server. Doing so ensures a great level of control over active sessions, along with the possibility to revoke any session at will. The downside of this approach is the impact on scalability, requiring solutions such as "sticky sessions", or "session replication". Given these downsides, using server-side sessions with a BFF is only recommended in small-scale scenarios.<a href="#section-6.1.2.3-2" class="pilcrow">¶</a></p>
@@ -2182,8 +2182,8 @@ extension (described in <a href="#pattern-bff-flow" class="auto internal xref">S
 </div>
 <div id="pattern-tmb-sessions">
 <section id="section-6.2.2.4">
-            <h5 id="name-cookie-based-session-managem">
-<a href="#section-6.2.2.4" class="section-number selfRef">6.2.2.4. </a><a href="#name-cookie-based-session-managem" class="section-name selfRef">Cookie-based Session Management</a>
+            <h5 id="name-cookie-based-session-state-2">
+<a href="#section-6.2.2.4" class="section-number selfRef">6.2.2.4. </a><a href="#name-cookie-based-session-state-2" class="section-name selfRef">Cookie-based Session State</a>
             </h5>
 <p id="section-6.2.2.4-1">Similar to the BFF, the token-mediating backend relies on browser cookies to keep track of the user's session. The same implementation guidelines and security considerations as for a BFF apply, as discussed in <a href="#pattern-bff-sessions" class="auto internal xref">Section 6.1.2.3</a>.<a href="#section-6.2.2.4-1" class="pilcrow">¶</a></p>
 </section>
@@ -2648,7 +2648,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
               <h6 id="name-secure-token-storage-2">
 <a href="#section-6.3.4.2.1" class="section-number selfRef">6.3.4.2.1. </a><a href="#name-secure-token-storage-2" class="section-name selfRef">Secure Token Storage</a>
               </h6>
-<p id="section-6.3.4.2.1-1">When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as <em>Local Storage</em> <span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>, are easier to access from malicious JavaScript than highly isolated storage areas, such as a <em>Web Worker</em> <span>[<a href="#WebWorker" class="cite xref">WebWorker</a>]</span>. <a href="#token-storage" class="auto internal xref">Section 8</a> discusses different storage mechanisms with their trade-off in more detail.<a href="#section-6.3.4.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4.2.1-1">When handling tokens directly, the application can choose different storage mechanisms to store access tokens and refresh tokens. Universally accessible storage areas, such as <em>Local Storage</em> <span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>, are easier to access from malicious JavaScript than more isolated storage areas, such as a <em>Web Worker</em> <span>[<a href="#WebWorker" class="cite xref">WebWorker</a>]</span>. <a href="#token-storage" class="auto internal xref">Section 8</a> discusses different storage mechanisms with their trade-off in more detail.<a href="#section-6.3.4.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.1-2">A practical implementation pattern can use a Web Worker <span>[<a href="#WebWorker" class="cite xref">WebWorker</a>]</span> to isolate the refresh token, and provide the application with the access token making requests to resource servers. This prevents an attacker from using the application's refresh token to obtain new tokens.<a href="#section-6.3.4.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.4.2.1-3">However, even a token storage mechanism that completely isolates the tokens from the attacker does not prevent the attacker from running a new flow to obtain a fresh set of tokens (See <a href="#scenario-new-flow" class="auto internal xref">Section 5.1.3</a>).<a href="#section-6.3.4.2.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -2703,7 +2703,7 @@ To guarantee confidentiality and authenticity of messages, both the initiator or
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-single-domain-browser-based" class="section-name selfRef">Single-Domain Browser-Based Applications (not using OAuth)</a>
         </h3>
 <p id="section-7.1-1">Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simplify the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session management to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">In such an application, the use of OpenID connect to offload user authentication to a dedicated provider can significantly simplify the application's architecture and development. However, the use of OAuth for governing access between the frontend and the backend is often not needed. Instead of using access tokens, the application can rely on traditional cookie-based session state to keep track of the user's authentication status. The security guidelines to protect the session cookie are discussed in <a href="#pattern-bff-cookie-security" class="auto internal xref">Section 6.1.3.2</a>.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">While the advice to not use OAuth seems out-of-place in this document, it is important to note that OAuth was originally created for third-party or federated access to APIs, so it may not be the best solution in a single common-domain deployment. That said, there are still some advantages in using OAuth even in a common-domain architecture:<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-4.1">
@@ -3145,9 +3145,9 @@ as described in this document.<a href="#section-7.3-2" class="pilcrow">¶</a></p
 <a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-persistent-token-storage" class="section-name selfRef">Persistent Token Storage</a>
         </h3>
 <p id="section-8.5-1">The persistent storage APIs currently available in browsers as of this writing are localStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), sessionStorage (<span>[<a href="#WebStorage" class="cite xref">WebStorage</a>]</span>), and <span>[<a href="#W3C.IndexedDB" class="cite xref">W3C.IndexedDB</a>]</span>.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
-<p id="section-8.5-2">localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against XSS attacks, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage. Additionally, localStorage is a synchronous API, blocking other JavaScript until the operation completes.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">localStorage persists between page reloads as well as is shared across all tabs. This storage is accessible to the entire origin, and persists longer term. localStorage does not protect against unauthorized access from malicious JavaScript, as the attacker would be running code within the same origin, and as such, would be able to read the contents of the localStorage. Additionally, localStorage is a synchronous API, blocking other JavaScript until the operation completes.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 <p id="section-8.5-3">sessionStorage is similar to localStorage, except that the lifetime of sessionStorage is linked to the lifetime of a browser tab. Additionally, sessionStorage is not shared between multiple tabs open to pages on the same origin, which slightly reduces the exposure of the tokens in sessionStorage.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
-<p id="section-8.5-4">IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
+<p id="section-8.5-4">IndexedDB is a persistent storage mechanism like localStorage, but is shared between multiple tabs as well as between the browsing context and Service Workers. Additionally, IndexedDB is an asynchronous API, which is preferred over the synchronous localStorage API.<a href="#section-8.5-4" class="pilcrow">¶</a></p>
 <p id="section-8.5-5">Note that the main difference between these patterns is the exposure of the data, but that none of these options can fully mitigate token exfiltration when the attacker can execute malicious code in the application's execution environment.<a href="#section-8.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
