@@ -352,8 +352,8 @@ Backend For Frontend (BFF) {#pattern-bff}
 This section describes the architecture of a JavaScript application that relies on a backend component to handle all OAuth responsibilities and API interactions. The BFF has three core responsibilities:
 
 1. The BFF interacts with the authorization server as a confidential OAuth client
-2. The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the JavaScript application
-3. The BFF proxies all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server
+2. The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the browser-based application
+3. The BFF forwards all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server
 
 In this architecture, the BFF runs as a server-side component, but it is a component of the frontend application. To avoid confusion with other architectural concepts, such as API gateways and reverse proxies, it is important to keep in mind that the BFF becomes the OAuth client for the frontend application.
 
@@ -424,7 +424,7 @@ When needed, the BFF can use the access token associated with the user's session
 
 Serving the static JavaScript code is a separate responsibility from handling OAuth tokens and proxying requests. In the diagram presented above, the BFF and static web host are shown as two separate entities. In real-world deployments, these components can be deployed as a single service (i.e., the BFF serving the static JS code), as two separate services (i.e., a CDN and a BFF), or as two components in a single service (i.e., static hosting and serverless functions on a cloud platform).
 
-Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to proxy requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.
+Note that it is possible to further customize this architecture to tailor to specific scenarios. For example, an application relying on both internal and external resource servers can choose to host the internal resource server alongside the BFF. In that scenario, requests to the internal resource server are handled directly at the BFF, without the need to forward requests over the network. Authorization from the point of view of the resource server does not change, as the user's session is internally translated to the access token and its claims.
 
 
 
@@ -496,16 +496,16 @@ Some technology stacks and frameworks have built-in CRSF protection using anti-f
 Note that this mechanism is not necessarily recommended over the CORS approach. However, if a framework offers built-in support for this mechanism, it can serve as a low-effort alternative to protect against CSRF.
 
 
-##### Privacy considerations in the BFF architecture
+#### Privacy considerations in the BFF architecture
 
-The BFF pattern requires that the JavaScript application proxies all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between a JavaScript application and a resource server, which can have a considerable privacy impact.
+The BFF pattern requires that the browser-based application forwards all requests to a resource server through a backend BFF component. As a consequence, the BFF component is able to observe all requests and responses between the application and a resource server, which can have a considerable privacy impact.
 
 When the JavaScript application and BFF are built and deployed by the same party, the privacy impact is likely minimal. However, when this pattern is implemented using a BFF component that is provided or hosted by a third party, this privacy impact needs to be taken into account.
 
 
 #### Proxy Restrictions {#pattern-bff-proxy}
 
-The BFF acts as a proxy by accepting requests from the frontend and forwarding them to the resource server. The inbound request carries a cookie, which the BFF translates into an access token on the outbound request. Apart from CSRF attacks, attackers may attempt to manipulate the BFF into forwarding requests to unintended hosts. If an attacker successfully exploits this, they could redirect the BFF to an arbitrary server, potentially exposing the user's access token.
+The BFF acts as a proxy service by accepting requests from the frontend and forwarding them to the resource server. The inbound request carries a cookie, which the BFF translates into an access token on the outbound request. (Note that this makes it more like an application-layer reverse proxy than an HTTP proxy.) Apart from CSRF attacks, attackers may attempt to manipulate the BFF into forwarding requests to unintended hosts. If an attacker successfully exploits this, they could redirect the BFF to an arbitrary server, potentially exposing the user's access token.
 
 To mitigate this risk, the BFF MUST enforce strict outbound request controls by validating destination hosts before forwarding requests. This requires maintaining an explicit allowlist of approved resource servers, ensuring that requests are only proxied to predefined backends (e.g., `/bff/orders/create maps` exclusively to `https://order-api.example.com/create`). If dynamic routing based on paths (e.g., `/bff/orders/{id}`) is necessary, the BFF MUST apply strict validation to ensure that only authorized destinations are accessible. Additionally, restricting the allowed HTTP methods on a per-endpoint basis can further reduce attack vectors.
 
@@ -1341,6 +1341,7 @@ Document History
 -25
 
 * Replaced "hard drive" with "local persistent storage"
+* "Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies
 * Minor editorial nits
 
 -24
