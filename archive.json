@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-27T00:07:09.626982+00:00",
+  "timestamp": "2025-05-29T00:06:38.607555+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1480,7 +1480,7 @@
       ],
       "body": "From Andy Newton's review\nhttps://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/\n\n```\nFrom the description of the BFF with respect to the browser-based application\nand the resource server, it appears to act as an HTTP proxy as defined in\nSection 3.7 of RFC 9110. Should this document make note of this\nand reference the message forwarding requirements of Section 7.6 in RFC 9110?\n```",
       "createdAt": "2025-04-24T23:43:25Z",
-      "updatedAt": "2025-04-26T06:51:06Z",
+      "updatedAt": "2025-05-28T14:39:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -1496,6 +1496,13 @@
           "body": "I confirm that the BFF is __not__ an HTTP proxy. Its behavior would more closely align with a gateway/reverse proxy, except for the fact that the BFF is a client component (as in part of the client application, not client-side) and not a resource server / API component. \n\nI've coarsely looked through RFC9110, but I don't immediately see a section we can refer to that would map onto the behavior of the BFF. \n\nIt may be useful to clarlify that the BFF is not a proxy component, but a service that is explicitly and deliberately called by the browser-based component of the client.",
           "createdAt": "2025-04-26T06:51:05Z",
           "updatedAt": "2025-04-26T06:51:05Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "I think using \"forwards\" instead of \"proxies\" will help avoid this confusion in the future.",
+          "createdAt": "2025-05-28T14:39:20Z",
+          "updatedAt": "2025-05-28T14:39:20Z"
         }
       ]
     },
@@ -1564,9 +1571,9 @@
       "labels": [
         "iesg-feedback"
       ],
-      "body": "* [ ] [Andy Newton](https://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/) (DISCUSS)\n  * #86 \n  * #87 \n  * #88 \n  * #89 \n* [x] [Erik Kline](https://mailarchive.ietf.org/arch/msg/oauth/ss-P0wdw2YgdS3qmIxuo2FowyD4/)\n* [ ] [Mike Bishop](https://mailarchive.ietf.org/arch/msg/oauth/hdjcwxEa_JXguKBloNjhGO6c6HE/)\n  * #86 \n  * [x] Nit: \"The first part\"\n* [ ] [Mohamed Boucadair](https://mailarchive.ietf.org/arch/msg/oauth/hoF6THpXR4-jzxyJIUHwrtqo2sk/)\n  * #91\n* [ ] [Orie Steele](https://mailarchive.ietf.org/arch/msg/oauth/pIbdoREHQP_k5rXcYcgaDA2ALxI/)\n  * #92\n  * #93\n  * #94\n  * #95\n  * #96\n  * #97\n  * #98\n  * #99\n* [ ] [Roman Danyliw](https://mailarchive.ietf.org/arch/msg/oauth/5UUVHhKv2a015ilPZHPSzQBewL8/)\n  * #100\n  * #101\n  * #102\n* [ ] [\u00c9ric Vyncke](https://mailarchive.ietf.org/arch/msg/oauth/iGez4kMnWZdoHDUKkRB9sBzPC6M/)\n  * #86\n  * #103",
+      "body": "* [ ] [Andy Newton](https://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/) (DISCUSS)\n  * #86 \n  * #87 \n  * #88 \n  * #89 \n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/keYPnJfFrEBS1oJaNUkdqo_BOLk/\n* [x] [Erik Kline](https://mailarchive.ietf.org/arch/msg/oauth/ss-P0wdw2YgdS3qmIxuo2FowyD4/)\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/SMqKKN3Y4vrp5vKFjNXwg7n5SQg/\n* [x] [Mike Bishop](https://mailarchive.ietf.org/arch/msg/oauth/hdjcwxEa_JXguKBloNjhGO6c6HE/)\n  * #86 \n  * [x] Nit: \"The first part\"\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/_X0mGUbeNrwmtAupB4nNiz0zQQ4/\n* [ ] [Mohamed Boucadair](https://mailarchive.ietf.org/arch/msg/oauth/hoF6THpXR4-jzxyJIUHwrtqo2sk/)\n  * #91\n* [ ] [Orie Steele](https://mailarchive.ietf.org/arch/msg/oauth/pIbdoREHQP_k5rXcYcgaDA2ALxI/)\n  * #92\n  * #93\n  * #94\n  * #95\n  * #96\n  * #97\n  * #98\n  * #99\n* [ ] [Roman Danyliw](https://mailarchive.ietf.org/arch/msg/oauth/5UUVHhKv2a015ilPZHPSzQBewL8/)\n  * #100\n  * #101\n  * #102\n* [ ] [\u00c9ric Vyncke](https://mailarchive.ietf.org/arch/msg/oauth/iGez4kMnWZdoHDUKkRB9sBzPC6M/)\n  * #86\n  * #103",
       "createdAt": "2025-04-25T00:17:20Z",
-      "updatedAt": "2025-04-26T07:17:25Z",
+      "updatedAt": "2025-05-28T16:06:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -5089,24 +5096,26 @@
       "id": "PR_kwDOCUe3lM6T_5kF",
       "title": "Minor edits from mails",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/104",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "philippederyck",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Minor changes to the text to address comments from Elar Lang and Martin Thomson delivered via email. Each mail is handled in a separate commit.",
       "createdAt": "2025-04-26T09:17:25Z",
-      "updatedAt": "2025-04-26T09:17:26Z",
+      "updatedAt": "2025-05-28T16:08:45Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "7d72df77b94b62a6a8141ffb4e6ae32fb6745dfd",
       "headRepository": "philippederyck/OAUTHWG-oauth-browser-based-apps",
       "headRefName": "pdr/minor-edits-from-mails",
       "headRefOid": "007b60438e939c0b7e7e0dfbf7d208fc16c0b011",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-05-28T16:08:45Z",
+      "mergedAt": "2025-05-28T16:08:45Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "a8a4d40425d46300a6dd5d6f08396ba05047bc21"
+      },
       "comments": [],
       "reviews": []
     }
