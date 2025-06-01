@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-29T00:06:38.607555+00:00",
+  "timestamp": "2025-06-01T00:08:34.955257+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1441,12 +1441,11 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [
-        "iesg-feedback",
-        "discuss"
+        "iesg-feedback"
       ],
       "body": "from Andy Newton's review\nhttps://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/\n\n```\n188        \"Browser-based application\":  An application that is dynamically\n189           downloaded and executed in a web browser, usually written in\n190           JavaScript.  Also sometimes referred to as a \"single-page\n191           application\", or \"SPA\".\n\nThis draft introduces the term \"Browser-based application\" which is used\nin some places, but it also uses the term \"Javascript application\" in\nmany more places. Here is an example where the two terms are used\ntogether and to mean the same thing (I think).\n\n1436       The token-mediating backend counters the first two attack scenarios\n1437       by not exposing the refresh token to the browser-based application.\n1438       Even when the attacker gains full control over the JavaScript\n1439       application, there are simply no refresh tokens to be stolen.\n\nIs a JavaScript application the same thing as a browser-based application\nin this document? I also noticed a few places where the term SPA or single\npage application were used. If these are all the same term, can one term\nbe used instead of many? And if they are separate terms, can their definitions\nall be given even if quoting from a reference?\n\n1737       In this scenario, the application sends JavaScript-based requests to\n1738       the authorization server and the resource server.  Given the nature\n\nWhat is a Javascript-based request? Is this a request for data in JSON format\nor is it a request being made by code of the JavaScript application (or\nbrowser-based application)?\n```",
       "createdAt": "2025-04-24T23:41:27Z",
-      "updatedAt": "2025-04-25T00:57:09Z",
+      "updatedAt": "2025-05-29T03:26:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -1470,7 +1469,7 @@
       "id": "I_kwDOCUe3lM6z7Ta1",
       "title": "BFF as an HTTP Proxy",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/87",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1480,8 +1479,8 @@
       ],
       "body": "From Andy Newton's review\nhttps://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/\n\n```\nFrom the description of the BFF with respect to the browser-based application\nand the resource server, it appears to act as an HTTP proxy as defined in\nSection 3.7 of RFC 9110. Should this document make note of this\nand reference the message forwarding requirements of Section 7.6 in RFC 9110?\n```",
       "createdAt": "2025-04-24T23:43:25Z",
-      "updatedAt": "2025-05-28T14:39:21Z",
-      "closedAt": null,
+      "updatedAt": "2025-05-29T03:25:57Z",
+      "closedAt": "2025-05-29T03:25:52Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -1503,6 +1502,13 @@
           "body": "I think using \"forwards\" instead of \"proxies\" will help avoid this confusion in the future.",
           "createdAt": "2025-05-28T14:39:20Z",
           "updatedAt": "2025-05-28T14:39:20Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Resolved https://mailarchive.ietf.org/arch/msg/oauth/rMZoJodaMH3G-ZjQzs0WHEZ4-BU/",
+          "createdAt": "2025-05-29T03:25:52Z",
+          "updatedAt": "2025-05-29T03:25:56Z"
         }
       ]
     },
@@ -1511,7 +1517,7 @@
       "id": "I_kwDOCUe3lM6z7TwP",
       "title": "BFF Operational Considerations",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/88",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aaronpk",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1520,8 +1526,8 @@
       ],
       "body": "From Andy Newton's review\n\n```\nAs the BFF is forwarding/proxying all requests to the resource server,\nI wonder if there are any operational issues to consider. If a resource\nserver is rate limiting requests based on IP addresses, might it start\nblocking requests as it would appear many users are originating from\none or a few sources?\n```",
       "createdAt": "2025-04-24T23:45:03Z",
-      "updatedAt": "2025-04-26T06:54:31Z",
-      "closedAt": null,
+      "updatedAt": "2025-05-29T03:25:42Z",
+      "closedAt": "2025-05-29T03:25:41Z",
       "comments": [
         {
           "author": "aaronpk",
@@ -1536,6 +1542,13 @@
           "body": "Yes, depending on the deployment model of the BFF, this could play a role. If the BFF is implemented as a single continuously running service, multiple browser-based apps will use a single BFF. However, if the BFF is implemented as a serverless function, I assume this would be less of an issue.",
           "createdAt": "2025-04-26T06:54:30Z",
           "updatedAt": "2025-04-26T06:54:30Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Resolved https://mailarchive.ietf.org/arch/msg/oauth/rMZoJodaMH3G-ZjQzs0WHEZ4-BU/",
+          "createdAt": "2025-05-29T03:25:41Z",
+          "updatedAt": "2025-05-29T03:25:41Z"
         }
       ]
     },
@@ -1571,9 +1584,9 @@
       "labels": [
         "iesg-feedback"
       ],
-      "body": "* [ ] [Andy Newton](https://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/) (DISCUSS)\n  * #86 \n  * #87 \n  * #88 \n  * #89 \n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/keYPnJfFrEBS1oJaNUkdqo_BOLk/\n* [x] [Erik Kline](https://mailarchive.ietf.org/arch/msg/oauth/ss-P0wdw2YgdS3qmIxuo2FowyD4/)\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/SMqKKN3Y4vrp5vKFjNXwg7n5SQg/\n* [x] [Mike Bishop](https://mailarchive.ietf.org/arch/msg/oauth/hdjcwxEa_JXguKBloNjhGO6c6HE/)\n  * #86 \n  * [x] Nit: \"The first part\"\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/_X0mGUbeNrwmtAupB4nNiz0zQQ4/\n* [ ] [Mohamed Boucadair](https://mailarchive.ietf.org/arch/msg/oauth/hoF6THpXR4-jzxyJIUHwrtqo2sk/)\n  * #91\n* [ ] [Orie Steele](https://mailarchive.ietf.org/arch/msg/oauth/pIbdoREHQP_k5rXcYcgaDA2ALxI/)\n  * #92\n  * #93\n  * #94\n  * #95\n  * #96\n  * #97\n  * #98\n  * #99\n* [ ] [Roman Danyliw](https://mailarchive.ietf.org/arch/msg/oauth/5UUVHhKv2a015ilPZHPSzQBewL8/)\n  * #100\n  * #101\n  * #102\n* [ ] [\u00c9ric Vyncke](https://mailarchive.ietf.org/arch/msg/oauth/iGez4kMnWZdoHDUKkRB9sBzPC6M/)\n  * #86\n  * #103",
+      "body": "* [x] [Andy Newton](https://mailarchive.ietf.org/arch/msg/oauth/QkDFJoo076G572D2v4G0Su2_KDE/) (DISCUSS)\n  * #86 \n  * #87 \n  * #88 \n  * #89 \n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/keYPnJfFrEBS1oJaNUkdqo_BOLk/\n  * Resolved: https://mailarchive.ietf.org/arch/msg/oauth/rMZoJodaMH3G-ZjQzs0WHEZ4-BU/\n* [x] [Erik Kline](https://mailarchive.ietf.org/arch/msg/oauth/ss-P0wdw2YgdS3qmIxuo2FowyD4/)\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/SMqKKN3Y4vrp5vKFjNXwg7n5SQg/\n* [x] [Mike Bishop](https://mailarchive.ietf.org/arch/msg/oauth/hdjcwxEa_JXguKBloNjhGO6c6HE/)\n  * #86 \n  * [x] Nit: \"The first part\"\n  * Response: https://mailarchive.ietf.org/arch/msg/oauth/_X0mGUbeNrwmtAupB4nNiz0zQQ4/\n* [ ] [Mohamed Boucadair](https://mailarchive.ietf.org/arch/msg/oauth/hoF6THpXR4-jzxyJIUHwrtqo2sk/)\n  * #91\n* [ ] [Orie Steele](https://mailarchive.ietf.org/arch/msg/oauth/pIbdoREHQP_k5rXcYcgaDA2ALxI/)\n  * #92\n  * #93\n  * #94\n  * #95\n  * #96\n  * #97\n  * #98\n  * #99\n* [ ] [Roman Danyliw](https://mailarchive.ietf.org/arch/msg/oauth/5UUVHhKv2a015ilPZHPSzQBewL8/)\n  * #100\n  * #101\n  * #102\n* [ ] [\u00c9ric Vyncke](https://mailarchive.ietf.org/arch/msg/oauth/iGez4kMnWZdoHDUKkRB9sBzPC6M/)\n  * #86\n  * #103",
       "createdAt": "2025-04-25T00:17:20Z",
-      "updatedAt": "2025-05-28T16:06:09Z",
+      "updatedAt": "2025-05-29T03:26:19Z",
       "closedAt": null,
       "comments": [
         {
