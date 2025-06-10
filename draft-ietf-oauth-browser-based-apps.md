@@ -589,7 +589,7 @@ If an attacker is able to execute malicious code within the application, the app
 ~~~ aasvg
 {::include art/bbapp-pattern-tmb.ascii-art}
 ~~~
-{: #fig-bbapp-pattern-tmb title="OAuth 2.0 TMB Pattern" }
+{: #fig-bbapp-pattern-tmb title="OAuth 2.0 Token-Mediating Backend Pattern" }
 
 
 In this architecture, the browser-based code (e.g. JavaScript or WASM) is first loaded from a static web host into the browser (A), and the application then runs in the browser. The application checks with the token-mediating backend if there is an active session (B). If an active session is found, the application receives the corresponding access token, resumes its authenticated state, and skips forward to step J.
