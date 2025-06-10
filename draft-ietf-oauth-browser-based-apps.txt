@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 29 November 2025                         Pragmatic Web Security
+Expires: 12 December 2025                         Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                             28 May 2025
+                                                            10 June 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2025.
+   This Internet-Draft will expire on 12 December 2025.
 
 Copyright Notice
 
@@ -1237,7 +1237,7 @@ Table of Contents
  |                 |         |                                         |
  +-----------------+         +-----------------------------------------+
 
-                    Figure 2: OAuth 2.0 TMB Pattern
+          Figure 2: OAuth 2.0 Token-Mediating Backend Pattern
 
    In this architecture, the browser-based code (e.g. JavaScript or
    WASM) is first loaded from a static web host into the browser (A),
