@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-10T00:06:56.011696+00:00",
+  "timestamp": "2025-06-12T00:06:46.810400+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -5147,6 +5147,48 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 106,
+      "id": "PR_kwDOCUe3lM6Z630s",
+      "title": "change figure 2 description",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/106",
+      "state": "MERGED",
+      "author": "panva",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "TMB is not term that is used anywhere else in the document.\r\n\r\nFound this out when responding to the \"[OAUTH-WG] Deferred Key Binding / TMB\" WG thread.",
+      "createdAt": "2025-06-10T19:50:10Z",
+      "updatedAt": "2025-06-10T19:53:19Z",
+      "baseRepository": "oauth-wg/oauth-browser-based-apps",
+      "baseRefName": "main",
+      "baseRefOid": "a8a4d40425d46300a6dd5d6f08396ba05047bc21",
+      "headRepository": null,
+      "headRefName": "rename-figure-2",
+      "headRefOid": "abfaedc9772f449bc74708138ad70156abdd5c60",
+      "closedAt": "2025-06-10T19:51:26Z",
+      "mergedAt": "2025-06-10T19:51:26Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "051c22b3120cd5d12ca953b442f99d97d342d04d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOCUe3lM6tvWat",
+          "commit": {
+            "abbreviatedOid": "abfaedc"
+          },
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-10T19:51:22Z",
+          "updatedAt": "2025-06-10T19:51:22Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
