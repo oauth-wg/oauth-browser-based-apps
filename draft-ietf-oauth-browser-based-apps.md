@@ -126,7 +126,7 @@ Introduction {#introduction}
 
 This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns can help address some of these challenges.
 
-Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect {{OpenID}} for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client, interacting with the Authorization Server to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers. When using OAuth 2.0, the client, authorization server, and resource servers are all considered independent parties, either in a first-party or third-party context, regardless of whether each is owned or operated by the same entity.
+Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect {{OpenID}} for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client (defined in {{Section 1.1 of RFC6749}}), interacting with the authorization server ({{Section 1.1 of RFC6749}}) to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers ({{Section 1.1 of RFC6749}}). When using OAuth, the client, authorization server, and resource servers are all considered independent parties, regardless of whether each is owned or operated by the same entity.
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
@@ -184,11 +184,11 @@ This document discusses the security of browser-based applications, which are ex
 History of OAuth 2.0 in Browser-Based Applications
 ==================================================
 
-At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}}, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit flow, which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
+At the time that OAuth 2.0 was initially specified in {{RFC6749}} and {{RFC6750}}, browser-based JavaScript applications needed a solution that strictly complied with the same-origin policy. Common deployments of OAuth 2.0 involved an application running on a different domain than the authorization server, so it was historically not possible to use the Authorization Code grant type ({{Section 4.1 of RFC6749}}) which would require a cross-origin POST request. This limitation was one of the motivations for the definition of the Implicit flow ({{Section 4.2 of RFC6749}}), which returns the access token in the front channel via the fragment part of the URL, bypassing the need for a cross-origin POST request.
 
 However, there are several drawbacks to the Implicit flow, generally involving vulnerabilities associated with the exposure of the access token in the URL. See {{implicit_flow}} for an analysis of these attacks and the drawbacks of using the Implicit flow in browsers. Additional attacks and security considerations can be found in {{RFC9700}}.
 
-In modern web development, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}} (which enables exceptions to the same-origin policy) allows browser-based applications to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
+In modern web development, widespread adoption of Cross-Origin Resource Sharing (CORS) {{Fetch}} (which enables exceptions to the same-origin policy) allows browser-based applications to use the OAuth 2.0 Authorization Code flow and make a POST request to exchange the authorization code for an access token at the token endpoint. Since the Authorization Code grant type enables the use of refresh tokens, this behavior has been adopted for browser-based clients as well, even though these clients are still public clients (defined in {{Section 2.1 of RFC6749}}) with limited to no access to secure storage. Furthermore, adding Proof Key for Code Exchange (PKCE) {{RFC7636}} to the flow prevents authorization code injection, as well as ensures that even if an authorization code is intercepted, it is unusable by an attacker.
 
 For this reason, and from other lessons learned, the current best practice for browser-based applications is to use the OAuth 2.0 Authorization Code grant type with PKCE. There are various architectural patterns for deploying browser-based applications, both with and without a corresponding server-side component. Each of these architectures has specific trade-offs and considerations which are discussed further in this document. Additional considerations apply for first-party common-domain applications.
 
@@ -288,7 +288,7 @@ There are no practical security mechanisms for frontend applications that counte
 
 ### Proxying Requests via the User's Browser {#scenario-proxy}
 
-This attack scenario involves the attacker sending requests to the resource server directly from within the OAuth client application running in the user's browser. In this scenario, there is no need for the attacker to abuse the application to obtain tokens, since the browser will include its own cookies or tokens along in the request. The requests to the resource server sent by the attacker are indistinguishable from requests sent by the legitimate application, since the attacker is running code in the same context as the legitimate application. This scenario consists of the following steps:
+This attack scenario involves the attacker sending requests to the OAuth resource server directly from within the OAuth client application running in the user's browser. In this scenario, there is no need for the attacker to abuse the application to obtain tokens, since the browser will include its own cookies or tokens along in the request. The requests to the resource server sent by the attacker are indistinguishable from requests sent by the legitimate application, since the attacker is running code in the same context as the legitimate application. This scenario consists of the following steps:
 
 - Execute malicious JS code
 - Send a request to a resource server and process the response
@@ -352,7 +352,7 @@ Backend For Frontend (BFF) {#pattern-bff}
 
 This section describes the architecture of a browser-based application that relies on a backend component to handle all OAuth responsibilities and API interactions. The BFF has three core responsibilities:
 
-1. The BFF interacts with the authorization server as a confidential OAuth client
+1. The BFF interacts with the authorization server as a confidential OAuth client (as defined in {{Section 2.1 of RFC6749}})
 2. The BFF manages OAuth access and refresh tokens in the context of a cookie-based session, avoiding the direct exposure of any tokens to the browser-based application
 3. The BFF forwards all requests to a resource server, augmenting them with the correct access token before forwarding them to the resource server
 
@@ -576,7 +576,7 @@ This architecture is strongly recommended for business applications, sensitive a
 Token-Mediating Backend {#pattern-tmb}
 -----------------------
 
-This section describes the architecture of a browser-based application that relies on a backend component to handle OAuth responsibilities for obtaining tokens as a confidential client. The backend component then provides the application with the access token to directly interact with resource servers.
+This section describes the architecture of a browser-based application that relies on a backend component to handle OAuth responsibilities for obtaining tokens as a confidential client (as defined in {{Section 2.1 of RFC6749}}). The backend component then provides the application with the access token to directly interact with resource servers.
 
 The token-mediating backend pattern is more lightweight than the BFF pattern (See {{pattern-bff}}), since it does not require the proxying of all requests and responses between the application and the resource server. From a security perspective, the token-mediating backend is less secure than a BFF, but still offers significant advantages over an OAuth client application running directly in the browser.
 
@@ -773,7 +773,7 @@ and receives the resource server's response (E).
 
 ### Implementation Details
 
-Browser-based applications that are public clients and use the Authorization Code grant type described in
+Browser-based applications that are public clients ({{Section 2.1 of RFC6749}}) and use the Authorization Code grant type described in
 {{Section 4.1 of RFC6749}} MUST also follow these additional requirements
 described in this section.
 
@@ -840,8 +840,7 @@ Authorization servers SHOULD link the lifetime of the refresh token to the user'
 #### Client Authentication {#client_authentication}
 
 Since a browser-based application's source code is delivered to the end-user's
-browser, it is unfit to contain provisioned secrets. As a consequence, browser-based applications are typically deployed as public clients as defined by {{Section 2.1
-of RFC6749}}.
+browser, it is unfit to contain provisioned secrets. As a consequence, browser-based applications are typically deployed as public clients as defined by {{Section 2.1 of RFC6749}}.
 
 Secrets that are statically included as part of an app distributed to
 multiple users should not be treated as confidential secrets, as one
