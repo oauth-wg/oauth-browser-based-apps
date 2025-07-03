@@ -1551,7 +1551,7 @@ Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
 Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu,
-Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
+Rifaat Shekh-Yusef, Roman Danyliw, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
 Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
 
