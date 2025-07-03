@@ -416,7 +416,7 @@ Best practices to secure the session cookie are discussed in {{pattern-bff-cooki
 
 #### Combining OAuth and OpenID Connect {#pattern-bff-oidc}
 
-The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the application in step B or I.
+The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C) (At least the scope `openid` as defined in Section 3.1.2.1 of {{OpenID}}). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the application in step B or I.
 
 When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.
 
@@ -972,7 +972,7 @@ This architecture is not recommended for business applications, sensitive applic
 Discouraged and Deprecated Architecture Patterns
 ================================================
 
-Client applications and backend applications have evolved significantly over the last two decades, along with threats, attacker models, and a general understanding of modern application security. As a result, previous recommendations are often no longer recommended and proposed solutions often fall short of meeting the expected security requirements.
+Client applications and backend applications have evolved significantly over the last two decades, along with threats, attacker models, and a general understanding of modern application security. As a result, previous recommendations generally accepted in the industry as well as published by the OAuth Working Group are often no longer recommended, and proposed solutions often fall short of meeting the expected security requirements.
 
 This section discusses a few alternative architecture patterns, which are not recommended for use in modern browser-based OAuth applications. This section discusses each of the patterns, along with a threat analysis that investigates the attack scenarios and consequences when relevant.
 
@@ -1094,7 +1094,7 @@ end up being stored.
 #### Access Token Leak to Third-Party Scripts
 
 It is relatively common to use third-party scripts in browser-based applications, such as
-analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
+analytics tools, crash reporting, and even things like a social media "like" button.
 In these situations, the author of the application may not be able to be fully aware
 of the entirety of the code running in the application. When an access token is
 returned in the fragment, it is visible to any third-party scripts on the page.
