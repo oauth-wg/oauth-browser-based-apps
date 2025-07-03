@@ -155,6 +155,8 @@ appear in all capitals, as shown here.
 Terminology
 ===========
 
+This specification uses the terms "access token", "authorization endpoint", "authorization grant", "authorization server", "client", "client identifier" (client ID), "protected resource", "refresh token", "resource owner", "resource server", and "token endpoint" defined by OAuth 2.0 {{RFC6749}}, and "bearer token" defined by {{RFC6750}}.
+
 In addition to the terms defined in referenced specifications, this document uses
 the following terms:
 
