@@ -2722,6 +2722,8 @@ Appendix A.  Document History
 
    *  Minor editorial nits
 
+   *  Added more references to terminology on first use
+
    -24
 
    *  Updated terminology definitions
@@ -3066,10 +3068,10 @@ Appendix B.  Acknowledgements
    Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph
    Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen,
    Leo Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew
-   Bocci, Mike Bishop, Mike Jones, Qin Wu, Rifaat Shekh-Yusef, Sean
-   Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten
-   Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and
-   Yannick Majoros.
+   Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu, Rifaat
+   Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek
+   Stojecki, Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd,
+   William Duncan, and Yannick Majoros.
 
 Authors' Addresses
 
