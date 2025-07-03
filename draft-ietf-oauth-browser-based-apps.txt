@@ -183,6 +183,13 @@ Table of Contents
 
 3.  Terminology
 
+   This specification uses the terms "access token", "authorization
+   endpoint", "authorization grant", "authorization server", "client",
+   "client identifier" (client ID), "protected resource", "refresh
+   token", "resource owner", "resource server", and "token endpoint"
+   defined by OAuth 2.0 [RFC6749], and "bearer token" defined by
+   [RFC6750].
+
    In addition to the terms defined in referenced specifications, this
    document uses the following terms:
 
@@ -3069,9 +3076,9 @@ Appendix B.  Acknowledgements
    Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen,
    Leo Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew
    Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu, Rifaat
-   Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek
-   Stojecki, Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd,
-   William Duncan, and Yannick Majoros.
+   Shekh-Yusef, Roman Danyliw, Sean Kelleher, Thomas Broyer, Thomas
+   Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
+   Watson Ladd, William Duncan, and Yannick Majoros.
 
 Authors' Addresses
 
