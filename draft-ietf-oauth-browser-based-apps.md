@@ -864,7 +864,7 @@ additional measures, such clients are subject to client impersonation
 As stated in {{Section 10.2 of RFC6749}}, the authorization
 server SHOULD NOT process authorization requests automatically
 without user consent or interaction, except when the authorization
-server can assure the the identity of the client application.
+server can assure the identity of the client application.
 
 If authorization servers restrict redirect URIs to a fixed set of absolute
 HTTPS URIs, preventing the use of wildcard domains, wildcard paths, or wildcard query string components,
