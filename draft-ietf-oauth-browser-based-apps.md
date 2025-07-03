@@ -1094,7 +1094,7 @@ end up being stored.
 #### Access Token Leak to Third-Party Scripts
 
 It is relatively common to use third-party scripts in browser-based applications, such as
-analytics tools, crash reporting, and even things like a Facebook or Twitter "like" button.
+analytics tools, crash reporting, and even things like a social media "like" button.
 In these situations, the author of the application may not be able to be fully aware
 of the entirety of the code running in the application. When an access token is
 returned in the fragment, it is visible to any third-party scripts on the page.
