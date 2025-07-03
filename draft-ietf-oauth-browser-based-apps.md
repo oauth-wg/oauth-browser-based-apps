@@ -972,7 +972,7 @@ This architecture is not recommended for business applications, sensitive applic
 Discouraged and Deprecated Architecture Patterns
 ================================================
 
-Client applications and backend applications have evolved significantly over the last two decades, along with threats, attacker models, and a general understanding of modern application security. As a result, previous recommendations are often no longer recommended and proposed solutions often fall short of meeting the expected security requirements.
+Client applications and backend applications have evolved significantly over the last two decades, along with threats, attacker models, and a general understanding of modern application security. As a result, previous recommendations generally accepted in the industry as well as published by the OAuth Working Group are often no longer recommended, and proposed solutions often fall short of meeting the expected security requirements.
 
 This section discusses a few alternative architecture patterns, which are not recommended for use in modern browser-based OAuth applications. This section discusses each of the patterns, along with a threat analysis that investigates the attack scenarios and consequences when relevant.
 
