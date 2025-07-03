@@ -140,13 +140,14 @@ Table of Contents
    authentication state.  Such a scenario, (which only uses OAuth 2.0 as
    the underlying specification of OpenID Connect), is not within scope
    of this specification.  This document focuses on JavaScript frontend
-   applications acting as the OAuth client, interacting with the
-   Authorization Server to obtain access tokens and optionally refresh
-   tokens.  The client uses the access token to access protected
-   resources on resource servers.  When using OAuth 2.0, the client,
-   authorization server, and resource servers are all considered
-   independent parties, either in a first-party or third-party context,
-   regardless of whether each is owned or operated by the same entity.
+   applications acting as the OAuth client (defined in Section 1.1 of
+   [RFC6749]), interacting with the authorization server (Section 1.1 of
+   [RFC6749]) to obtain access tokens and optionally refresh tokens.
+   The client uses the access token to access protected resources on
+   resource servers (Section 1.1 of [RFC6749]).  When using OAuth, the
+   client, authorization server, and resource servers are all considered
+   independent parties, regardless of whether each is owned or operated
+   by the same entity.
 
    For native application developers using OAuth 2.0 and OpenID Connect,
    an IETF BCP (best current practice) was published that guides
@@ -227,8 +228,9 @@ Table of Contents
    deployments of OAuth 2.0 involved an application running on a
    different domain than the authorization server, so it was
    historically not possible to use the Authorization Code grant type
-   which would require a cross-origin POST request.  This limitation was
-   one of the motivations for the definition of the Implicit flow, which
+   (Section 4.1 of [RFC6749]) which would require a cross-origin POST
+   request.  This limitation was one of the motivations for the
+   definition of the Implicit flow (Section 4.2 of [RFC6749]), which
    returns the access token in the front channel via the fragment part
    of the URL, bypassing the need for a cross-origin POST request.
 
@@ -245,11 +247,12 @@ Table of Contents
    the authorization code for an access token at the token endpoint.
    Since the Authorization Code grant type enables the use of refresh
    tokens, this behavior has been adopted for browser-based clients as
-   well, even though these clients are still public clients with limited
-   to no access to secure storage.  Furthermore, adding Proof Key for
-   Code Exchange (PKCE) [RFC7636] to the flow prevents authorization
-   code injection, as well as ensures that even if an authorization code
-   is intercepted, it is unusable by an attacker.
+   well, even though these clients are still public clients (defined in
+   Section 2.1 of [RFC6749]) with limited to no access to secure
+   storage.  Furthermore, adding Proof Key for Code Exchange (PKCE)
+   [RFC7636] to the flow prevents authorization code injection, as well
+   as ensures that even if an authorization code is intercepted, it is
+   unusable by an attacker.
 
    For this reason, and from other lessons learned, the current best
    practice for browser-based applications is to use the OAuth 2.0
@@ -488,15 +491,15 @@ Table of Contents
 5.1.4.  Proxying Requests via the User's Browser
 
    This attack scenario involves the attacker sending requests to the
-   resource server directly from within the OAuth client application
-   running in the user's browser.  In this scenario, there is no need
-   for the attacker to abuse the application to obtain tokens, since the
-   browser will include its own cookies or tokens along in the request.
-   The requests to the resource server sent by the attacker are
-   indistinguishable from requests sent by the legitimate application,
-   since the attacker is running code in the same context as the
-   legitimate application.  This scenario consists of the following
-   steps:
+   OAuth resource server directly from within the OAuth client
+   application running in the user's browser.  In this scenario, there
+   is no need for the attacker to abuse the application to obtain
+   tokens, since the browser will include its own cookies or tokens
+   along in the request.  The requests to the resource server sent by
+   the attacker are indistinguishable from requests sent by the
+   legitimate application, since the attacker is running code in the
+   same context as the legitimate application.  This scenario consists
+   of the following steps:
 
    *  Execute malicious JS code
 
@@ -627,7 +630,7 @@ Table of Contents
    responsibilities:
 
    1.  The BFF interacts with the authorization server as a confidential
-       OAuth client
+       OAuth client (as defined in Section 2.1 of [RFC6749])
 
    2.  The BFF manages OAuth access and refresh tokens in the context of
        a cookie-based session, avoiding the direct exposure of any
@@ -1183,9 +1186,10 @@ Table of Contents
 
    This section describes the architecture of a browser-based
    application that relies on a backend component to handle OAuth
-   responsibilities for obtaining tokens as a confidential client.  The
-   backend component then provides the application with the access token
-   to directly interact with resource servers.
+   responsibilities for obtaining tokens as a confidential client (as
+   defined in Section 2.1 of [RFC6749]).  The backend component then
+   provides the application with the access token to directly interact
+   with resource servers.
 
    The token-mediating backend pattern is more lightweight than the BFF
    pattern (See Section 6.1), since it does not require the proxying of
@@ -1584,10 +1588,10 @@ Table of Contents
 
 6.3.2.  Implementation Details
 
-   Browser-based applications that are public clients and use the
-   Authorization Code grant type described in Section 4.1 of [RFC6749]
-   MUST also follow these additional requirements described in this
-   section.
+   Browser-based applications that are public clients (Section 2.1 of
+   [RFC6749]) and use the Authorization Code grant type described in
+   Section 4.1 of [RFC6749] MUST also follow these additional
+   requirements described in this section.
 
 6.3.2.1.  The Authorization Code Grant
 
@@ -2718,6 +2722,8 @@ Appendix A.  Document History
 
    *  Minor editorial nits
 
+   *  Added more references to terminology on first use
+
    -24
 
    *  Updated terminology definitions
@@ -3062,10 +3068,10 @@ Appendix B.  Acknowledgements
    Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph
    Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen,
    Leo Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew
-   Bocci, Mike Bishop, Mike Jones, Qin Wu, Rifaat Shekh-Yusef, Sean
-   Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten
-   Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and
-   Yannick Majoros.
+   Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu, Rifaat
+   Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek
+   Stojecki, Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd,
+   William Duncan, and Yannick Majoros.
 
 Authors' Addresses
 
