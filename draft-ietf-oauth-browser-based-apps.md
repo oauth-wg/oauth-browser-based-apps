@@ -416,7 +416,7 @@ Best practices to secure the session cookie are discussed in {{pattern-bff-cooki
 
 #### Combining OAuth and OpenID Connect {#pattern-bff-oidc}
 
-The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the application in step B or I.
+The OAuth flow used by this application architecture can be combined with OpenID Connect by including the necessary OpenID Connect scopes in the authorization request (C) (At least the scope `openid` as defined in Section 3.1.2.1 of {{OpenID}}). In that case, the BFF will receive an ID Token in step F. The BFF can associate the information from the ID Token with the user's session and provide it to the application in step B or I.
 
 When needed, the BFF can use the access token associated with the user's session to make requests to the UserInfo endpoint.
 
