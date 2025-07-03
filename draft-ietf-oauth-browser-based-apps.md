@@ -1349,6 +1349,7 @@ Document History
 * Added a note about operational considerations for the BFF pattern
 * "Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies
 * Minor editorial nits
+* Added more references to terminology on first use
 
 -24
 
@@ -1549,7 +1550,7 @@ Andy Barlow, Andy Newton, Annabelle Backman, Brian Campbell, Brock Allen, Christ
 Daniel Fett, Deb Cooley, Elar Lang, Emmanuel Gautier, Eva Sarafianou,
 Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph Heenan,
 Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen, Leo Tohill, Louis Jannett,
-Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Qin Wu,
+Marc Blanchet, Martin Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu,
 Rifaat Shekh-Yusef, Sean Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki,
 Torsten Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and Yannick Majoros.
 
