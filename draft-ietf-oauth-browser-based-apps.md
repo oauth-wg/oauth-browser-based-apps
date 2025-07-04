@@ -468,7 +468,7 @@ For further guidance on cookie security best practices, we refer to the OWASP Ch
 
 #### Cross-Site Request Forgery Protections {#pattern-bff-csrf}
 
-The interactions between the browser-based application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could transform the BFF into a confused deputy, allowing the attacker's request to the BFF to trigger outgoing calls to a protected resource on behalf of the user.
+The interactions between the browser-based application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could allow the attacker's request to the BFF to trigger outgoing calls to a protected resource.
 
 The BFF MUST implement a proper CSRF defense. The exact mechanism or combination of mechanisms depends on the exact domain where the BFF is deployed, as discussed below.
 
