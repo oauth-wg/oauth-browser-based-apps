@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 4 January 2026                           Pragmatic Web Security
+Expires: 5 January 2026                           Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                             3 July 2025
+                                                             4 July 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2026.
+   This Internet-Draft will expire on 5 January 2026.
 
 Copyright Notice
 
@@ -1723,7 +1723,7 @@ Table of Contents
    As stated in Section 10.2 of [RFC6749], the authorization server
    SHOULD NOT process authorization requests automatically without user
    consent or interaction, except when the authorization server can
-   assure the the identity of the client application.
+   assure the identity of the client application.
 
    If authorization servers restrict redirect URIs to a fixed set of
    absolute HTTPS URIs, preventing the use of wildcard domains, wildcard
