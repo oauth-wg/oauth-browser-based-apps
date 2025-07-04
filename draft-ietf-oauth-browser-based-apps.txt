@@ -907,7 +907,7 @@ Table of Contents
 
    *  The BFF SHOULD NOT set the _Domain_ attribute for cookies
 
-   *  The BFF SHOULD start the name of its cookies with the ___Host-_
+   *  The BFF SHOULD start the name of its cookies with the __Host
       prefix ([I-D.ietf-httpbis-rfc6265bis])
 
    Note: In new deployments, all of the above requirements are likely to
@@ -3087,14 +3087,15 @@ Appendix B.  Acknowledgements
 
    Andy Barlow, Andy Newton, Annabelle Backman, Brian Campbell, Brock
    Allen, Christian Mainka, Damien Bowden, Daniel Fett, Deb Cooley, Elar
-   Lang, Emmanuel Gautier, Eva Sarafianou, Filip Skokan, George
-   Fletcher, Hannes Tschofenig, Janak Amarasena, John Bradley, Joseph
-   Heenan, Justin Richer, Karl McGuinness, Karsten Meyer zu Selhausen,
-   Leo Tohill, Louis Jannett, Marc Blanchet, Martin Thomson, Matthew
-   Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair, Qin Wu, Rifaat
-   Shekh-Yusef, Roman Danyliw, Sean Kelleher, Thomas Broyer, Thomas
-   Fossati, Tomek Stojecki, Torsten Lodderstedt, Vittorio Bertocci,
-   Watson Ladd, William Duncan, and Yannick Majoros.
+   Lang, Emmanuel Gautier, Eric Vyncke, Erik Kline, Eva Sarafianou,
+   Filip Skokan, George Fletcher, Hannes Tschofenig, Janak Amarasena,
+   John Bradley, Joseph Heenan, Justin Richer, Karl McGuinness, Karsten
+   Meyer zu Selhausen, Leo Tohill, Louis Jannett, Marc Blanchet, Martin
+   Thomson, Matthew Bocci, Mike Bishop, Mike Jones, Mohamed Boucadair,
+   Orie Steele, Qin Wu, Rifaat Shekh-Yusef, Roman Danyliw, Sean
+   Kelleher, Thomas Broyer, Thomas Fossati, Tomek Stojecki, Torsten
+   Lodderstedt, Vittorio Bertocci, Watson Ladd, William Duncan, and
+   Yannick Majoros.
 
 Authors' Addresses
 
