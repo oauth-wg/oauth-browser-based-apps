@@ -133,21 +133,24 @@ Table of Contents
    browser-based applications and analyzes how different patterns can
    help address some of these challenges.
 
-   Note that many web applications consist of a first-party frontend and
-   API, allowing for an architecture that does not rely on OAuth 2.0.
-   Such scenarios can rely on OpenID Connect [OpenID] for user
+   This document focuses on JavaScript frontend applications acting as
+   the OAuth client (defined in Section 1.1 of [RFC6749]), interacting
+   with the authorization server (Section 1.1 of [RFC6749]) to obtain
+   access tokens and optionally refresh tokens.  The client uses the
+   access token to access protected resources on resource servers
+   (Section 1.1 of [RFC6749]).  When using OAuth, the client,
+   authorization server, and resource servers are all considered
+   independent parties, regardless of whether each is owned or operated
+   by the same entity.
+
+   Note that many web applications consist of a frontend and API running
+   on a common domain, allowing for an architecture that does not rely
+   on OAuth 2.0.  This is described in more detail in Section 7.1 Such
+   scenarios can rely on OpenID Connect [OpenID] for federated user
    authentication, after which the application maintains the user's
    authentication state.  Such a scenario, (which only uses OAuth 2.0 as
    the underlying specification of OpenID Connect), is not within scope
-   of this specification.  This document focuses on JavaScript frontend
-   applications acting as the OAuth client (defined in Section 1.1 of
-   [RFC6749]), interacting with the authorization server (Section 1.1 of
-   [RFC6749]) to obtain access tokens and optionally refresh tokens.
-   The client uses the access token to access protected resources on
-   resource servers (Section 1.1 of [RFC6749]).  When using OAuth, the
-   client, authorization server, and resource servers are all considered
-   independent parties, regardless of whether each is owned or operated
-   by the same entity.
+   of this specification.
 
    For native application developers using OAuth 2.0 and OpenID Connect,
    an IETF BCP (best current practice) was published that guides
@@ -594,7 +597,8 @@ Table of Contents
    sending requests to backend systems.  Alternatively, the attacker can
    also abuse their access to the application to launch additional
    attacks, such as tricking the client into acting on behalf of the
-   attacker using an attack such as session fixation.
+   attacker using an attack such as session fixation
+   ([SessionFixation]).
 
    Note that client hijacking is less powerful than directly abusing
    stolen user tokens.  In a client hijacking scenario, the attacker
@@ -878,9 +882,10 @@ Table of Contents
 
    The main benefit of using a BFF is the BFF's ability to act as a
    confidential client.  Therefore, the BFF MUST act as a confidential
-   client.  Furthermore, the BFF MUST use the OAuth 2.0 Authorization
-   Code grant as described in Section 2.1.1 of [RFC9700] to initiate a
-   request for an access token.
+   client by establishing credentials with the authorization server.
+   Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant
+   as described in Section 2.1.1 of [RFC9700] to initiate a request for
+   an access token.
 
 6.1.3.2.  Cookie Security
 
@@ -905,6 +910,11 @@ Table of Contents
    *  The BFF SHOULD start the name of its cookies with the ___Host-_
       prefix ([I-D.ietf-httpbis-rfc6265bis])
 
+   Note: In new deployments, all of the above requirements are likely to
+   be straightforward to implement.  The "SHOULD" items are only not
+   "MUSTs" so that existing architectures can be compliant.  The
+   implications of these requirements are listed below.
+
    These cookie security guidelines, combined with the use of HTTPS,
    help counter attacks that directly target a cookie-based session.
    Session hijacking is not possible, due to the Secure and HttpOnly
@@ -912,8 +922,9 @@ Table of Contents
    shared with subdomains, thereby countering subdomain-based session
    hijacking or session fixation attacks.  In a typical BFF deployment
    scenario, there is no reason to use more relaxed cookie security
-   settings.  Deviating from these settings requires proper motivation
-   for the deployment scenario at hand.
+   settings than the requirements listed above.  Deviating from these
+   settings requires proper motivation for the deployment scenario at
+   hand.
 
    Additionally, when using client-side sessions that contain access
    tokens, (as opposed to server-side sessions where the tokens only
@@ -938,9 +949,8 @@ Table of Contents
    rely on cookies for authentication and authorization.  Similar to
    other cookie-based interactions, the BFF is required to account for
    Cross-Site Request Forgery (CSRF) attacks.  A successful CSRF attack
-   could transform the BFF into a confused deputy, allowing the
-   attacker's request to the BFF to trigger outgoing calls to a
-   protected resource on behalf of the user.
+   could allow the attacker's request to the BFF to trigger outgoing
+   calls to a protected resource.
 
    The BFF MUST implement a proper CSRF defense.  The exact mechanism or
    combination of mechanisms depends on the exact domain where the BFF
@@ -1883,7 +1893,7 @@ Table of Contents
    sender-constrained tokens.  In such an implementation, the private
    key used to sign DPoP proofs is handled by the browser (a non-
    extractable [CryptoKeyPair] is stored using [W3C.IndexedDB]).  As a
-   result, the use of DPoP effectively prevents scenarios where the
+   result, the use of DPoP effectively prevents scenarios where the XSS
    attacker exfiltrates the application's tokens (See Section 5.1.1 and
    Section 5.1.2).
 
@@ -2682,6 +2692,10 @@ Table of Contents
               DOI 10.17487/RFC6819, January 2013,
               <https://www.rfc-editor.org/info/rfc6819>.
 
+   [SessionFixation]
+              "Session Fixation", n.d., <https://owasp.org/www-
+              community/attacks/Session_fixation>.
+
    [Site]     Contributors, M., "Site", n.d.,
               <https://developer.mozilla.org/en-US/docs/Glossary/Site>.
 
@@ -2730,6 +2744,8 @@ Appendix A.  Document History
    *  Minor editorial nits
 
    *  Added more references to terminology on first use
+
+   *  Added a reference for Session Fixation
 
    -24
 
