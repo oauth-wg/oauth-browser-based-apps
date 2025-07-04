@@ -126,7 +126,9 @@ Introduction {#introduction}
 
 This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns can help address some of these challenges.
 
-Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect {{OpenID}} for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client (defined in {{Section 1.1 of RFC6749}}), interacting with the authorization server ({{Section 1.1 of RFC6749}}) to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers ({{Section 1.1 of RFC6749}}). When using OAuth, the client, authorization server, and resource servers are all considered independent parties, regardless of whether each is owned or operated by the same entity.
+This document focuses on JavaScript frontend applications acting as the OAuth client (defined in {{Section 1.1 of RFC6749}}), interacting with the authorization server ({{Section 1.1 of RFC6749}}) to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers ({{Section 1.1 of RFC6749}}). When using OAuth, the client, authorization server, and resource servers are all considered independent parties, regardless of whether each is owned or operated by the same entity.
+
+Note that many web applications consist of a frontend and API running on a common domain, allowing for an architecture that does not rely on OAuth 2.0. This is described in more detail in {{single-domain-apps}} Such scenarios can rely on OpenID Connect {{OpenID}} for federated user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification.
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
@@ -979,7 +981,7 @@ This section discusses a few alternative architecture patterns, which are not re
 
 
 
-Single-Domain Browser-Based Applications (not using OAuth)
+Single-Domain Browser-Based Applications (not using OAuth) {#single-domain-apps}
 --------------------------------------------------
 
 Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.
