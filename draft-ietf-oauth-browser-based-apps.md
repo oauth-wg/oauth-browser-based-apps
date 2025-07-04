@@ -952,7 +952,7 @@ However, even a token storage mechanism that completely isolates the tokens from
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
+Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the XSS attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
 Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh access token (and optionally refresh token) {{scenario-new-flow}}. Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
