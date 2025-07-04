@@ -440,7 +440,7 @@ Note that it is possible to further customize this architecture to tailor to spe
 
 #### The Authorization Code Grant {#pattern-bff-flow}
 
-The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
+The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client by establishing credentials with the authorization server. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
 
 
 #### Cookie Security {#pattern-bff-cookie-security}
