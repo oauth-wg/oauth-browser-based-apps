@@ -106,6 +106,9 @@ informative:
   OWASPCheatSheet:
     title: OWASP Cheat Sheet
     target: https://cheatsheetseries.owasp.org/
+  SessionFixation:
+    title: Session Fixation
+    target: https://owasp.org/www-community/attacks/Session_fixation
   CryptoKeyPair:
     title: CryptoKeyPair
     author:
@@ -126,7 +129,9 @@ Introduction {#introduction}
 
 This specification describes different architectural patterns for implementing OAuth 2.0 clients in applications executing in a browser. The specification outlines the security challenges for browser-based applications and analyzes how different patterns can help address some of these challenges.
 
-Note that many web applications consist of a first-party frontend and API, allowing for an architecture that does not rely on OAuth 2.0. Such scenarios can rely on OpenID Connect {{OpenID}} for user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification. This document focuses on JavaScript frontend applications acting as the OAuth client (defined in {{Section 1.1 of RFC6749}}), interacting with the authorization server ({{Section 1.1 of RFC6749}}) to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers ({{Section 1.1 of RFC6749}}). When using OAuth, the client, authorization server, and resource servers are all considered independent parties, regardless of whether each is owned or operated by the same entity.
+This document focuses on JavaScript frontend applications acting as the OAuth client (defined in {{Section 1.1 of RFC6749}}), interacting with the authorization server ({{Section 1.1 of RFC6749}}) to obtain access tokens and optionally refresh tokens. The client uses the access token to access protected resources on resource servers ({{Section 1.1 of RFC6749}}). When using OAuth, the client, authorization server, and resource servers are all considered independent parties, regardless of whether each is owned or operated by the same entity.
+
+Note that many web applications consist of a frontend and API running on a common domain, allowing for an architecture that does not rely on OAuth 2.0. This is described in more detail in {{single-domain-apps}} Such scenarios can rely on OpenID Connect {{OpenID}} for federated user authentication, after which the application maintains the user's authentication state. Such a scenario, (which only uses OAuth 2.0 as the underlying specification of OpenID Connect), is not within scope of this specification.
 
 For native application developers using OAuth 2.0 and OpenID Connect, an IETF BCP
 (best current practice) was published that guides integration of these technologies.
@@ -246,7 +251,7 @@ This scenario covers a simple token exfiltration attack, where the attacker obta
 - Send the tokens to a server controlled by the attacker
 - Store or abuse the stolen tokens
 
-The recommended defensive strategy to decrease the risk associated with a compromised access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation offers a detection and correction mechanism. Sender-constrained tokens ({{sender-constrained-tokens}}) offer an additional layer of protection against stolen access tokens.
+The recommended defensive strategy to decrease the risk associated with a compromised access tokens is to reduce the scope and lifetime of the token. For refresh tokens, the use of refresh token rotation (as defined in {{Section 4.14.2 of RFC9700}}) offers a detection and correction mechanism. Sender-constrained tokens ({{sender-constrained-tokens}}) offer an additional layer of protection against stolen access tokens.
 
 Note that this attack scenario is trivial and often used to illustrate the dangers of malicious JavaScript. When discussing the security of browser-based applications, it is crucial to avoid limiting the attacker's capabilities to the attack discussed in this scenario.
 
@@ -330,7 +335,7 @@ The application can use DPoP to ensure its access tokens are bound to non-export
 
 ### Client Hijacking {#consequence-hijack}
 
-When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. Alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.
+When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. Alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation ({{SessionFixation}}).
 
 Note that client hijacking is less powerful than directly abusing stolen user tokens. In a client hijacking scenario, the attacker cannot directly control the tokens and is restricted by the security policies enforced on the client application. For example, a resource server running on `admin.example.org` can be configured with a CORS policy that rejects requests coming from a client running on `web.example.org`. Even if the access token used by the client would be accepted by the resource server, the resource server's strict CORS configuration does not allow such a request. A resource server without such a strict CORS policy can still be subject to adversarial requests coming from the compromised client application.
 
@@ -435,7 +440,7 @@ Note that it is possible to further customize this architecture to tailor to spe
 
 #### The Authorization Code Grant {#pattern-bff-flow}
 
-The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
+The main benefit of using a BFF is the BFF's ability to act as a confidential client. Therefore, the BFF MUST act as a confidential client by establishing credentials with the authorization server. Furthermore, the BFF MUST use the OAuth 2.0 Authorization Code grant as described in {{Section 2.1.1 of RFC9700}} to initiate a request for an access token.
 
 
 #### Cookie Security {#pattern-bff-cookie-security}
@@ -451,7 +456,9 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
 - The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{-draft-ietf-httpbis-rfc6265bis}})
 
-These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings. Deviating from these settings requires proper motivation for the deployment scenario at hand.
+Note: In new deployments, all of the above requirements are likely to be straightforward to implement. The "SHOULD" items are only not "MUSTs" so that existing architectures can be compliant. The implications of these requirements are listed below.
+
+These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings than the requirements listed above. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
 Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure that tokens stored in cookies are never written to the user's local persistent storage in plaintext format. This security measure helps ensure the confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
 
@@ -461,7 +468,7 @@ For further guidance on cookie security best practices, we refer to the OWASP Ch
 
 #### Cross-Site Request Forgery Protections {#pattern-bff-csrf}
 
-The interactions between the browser-based application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could transform the BFF into a confused deputy, allowing the attacker's request to the BFF to trigger outgoing calls to a protected resource on behalf of the user.
+The interactions between the browser-based application and the BFF rely on cookies for authentication and authorization. Similar to other cookie-based interactions, the BFF is required to account for Cross-Site Request Forgery (CSRF) attacks. A successful CSRF attack could allow the attacker's request to the BFF to trigger outgoing calls to a protected resource.
 
 The BFF MUST implement a proper CSRF defense. The exact mechanism or combination of mechanisms depends on the exact domain where the BFF is deployed, as discussed below.
 
@@ -945,7 +952,7 @@ However, even a token storage mechanism that completely isolates the tokens from
 
 ##### Using Sender-Constrained Tokens
 
-Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
+Browser-based OAuth clients can implement DPoP {{RFC9449}} to transition from bearer access tokens and bearer refresh tokens to sender-constrained tokens. In such an implementation, the private key used to sign DPoP proofs is handled by the browser (a non-extractable {{CryptoKeyPair}} is stored using {{-IndexedDB}}). As a result, the use of DPoP effectively prevents scenarios where the XSS attacker exfiltrates the application's tokens (See {{scenario-single-theft}} and {{scenario-persistent-theft}}).
 
 Note that the use of DPoP does not prevent the attacker from running a new flow to obtain a fresh access token (and optionally refresh token) {{scenario-new-flow}}. Even when DPoP is mandatory, the attacker can bind the fresh set of tokens to a key pair under their control, allowing them to exfiltrate the sender-constrained tokens and use them by relying on the attacker-controlled key to calculate the necessary DPoP proofs.
 
@@ -979,7 +986,7 @@ This section discusses a few alternative architecture patterns, which are not re
 
 
 
-Single-Domain Browser-Based Applications (not using OAuth)
+Single-Domain Browser-Based Applications (not using OAuth) {#single-domain-apps}
 --------------------------------------------------
 
 Too often, simple applications are made needlessly complex by using OAuth to replace the concept of session management. A typical example is the modern incarnation of a server-side MVC application, which now consists of a browser-based frontend backed by a server-side API.
@@ -1352,6 +1359,7 @@ Document History
 * "Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies
 * Minor editorial nits
 * Added more references to terminology on first use
+* Added a reference for Session Fixation
 
 -24
 
