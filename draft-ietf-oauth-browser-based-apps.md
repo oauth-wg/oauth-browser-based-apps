@@ -454,7 +454,7 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD enable the *SameSite=Strict* flag for its cookies
 - The BFF SHOULD set its cookie path to */*
 - The BFF SHOULD NOT set the *Domain* attribute for cookies
-- The BFF SHOULD start the name of its cookies with the *__Host-* prefix ({{-draft-ietf-httpbis-rfc6265bis}})
+- The BFF SHOULD start the name of its cookies with the `__Host` prefix ({{-draft-ietf-httpbis-rfc6265bis}})
 
 Note: In new deployments, all of the above requirements are likely to be straightforward to implement. The "SHOULD" items are only not "MUSTs" so that existing architectures can be compliant. The implications of these requirements are listed below.
 
