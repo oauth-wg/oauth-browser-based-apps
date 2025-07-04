@@ -106,6 +106,9 @@ informative:
   OWASPCheatSheet:
     title: OWASP Cheat Sheet
     target: https://cheatsheetseries.owasp.org/
+  SessionFixation:
+    title: Session Fixation
+    target: https://owasp.org/www-community/attacks/Session_fixation
   CryptoKeyPair:
     title: CryptoKeyPair
     author:
@@ -332,7 +335,7 @@ The application can use DPoP to ensure its access tokens are bound to non-export
 
 ### Client Hijacking {#consequence-hijack}
 
-When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. Alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation.
+When stealing tokens is not possible or desirable, the attacker can also choose to hijack the OAuth client application running in the user's browser. This effectively allows the attacker to perform any operations that the legitimate client application can perform. Examples include inspecting data on the page, modifying the page, and sending requests to backend systems. Alternatively, the attacker can also abuse their access to the application to launch additional attacks, such as tricking the client into acting on behalf of the attacker using an attack such as session fixation ({{SessionFixation}}).
 
 Note that client hijacking is less powerful than directly abusing stolen user tokens. In a client hijacking scenario, the attacker cannot directly control the tokens and is restricted by the security policies enforced on the client application. For example, a resource server running on `admin.example.org` can be configured with a CORS policy that rejects requests coming from a client running on `web.example.org`. Even if the access token used by the client would be accepted by the resource server, the resource server's strict CORS configuration does not allow such a request. A resource server without such a strict CORS policy can still be subject to adversarial requests coming from the compromised client application.
 
@@ -1354,6 +1357,7 @@ Document History
 * "Forwarding" instead of "Proxying" to avoid confusion with HTTP proxies
 * Minor editorial nits
 * Added more references to terminology on first use
+* Added a reference for Session Fixation
 
 -24
 
