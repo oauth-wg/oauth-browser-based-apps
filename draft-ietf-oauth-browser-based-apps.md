@@ -371,7 +371,32 @@ If an attacker is able to execute malicious code within the browser-based applic
 ### Application Architecture
 
 ~~~ aasvg
-{::include art/bbapp-pattern-bff.ascii-art}
+                      +---------------+      +----------+  +----------+
+                      |               |      |          |  |          |
+                      | Authorization |      |  Token   |  | Resource |
+                      |   Endpoint    |      | Endpoint |  |  Server  |
+                      |               |      |          |  |          |
+                      +---------------+      +----------+  +----------+
+
+                               ^                   ^            ^
+                               |                (F)|         (K)|
+                               |                   v            v
+                               |
+                               |   +------------------------------+
+                               |   |                              |
+                               |   |  Backend for Frontend (BFF)  |
+                            (D)|   |                              |
+                               |   +------------------------------+
+                               |
+                               |       ^     ^     ^     +     ^  +
+                               |  (B,I)|  (C)|  (E)|  (G)|  (J)|  |(L)
+                               v       v     v     +     v     +  v
+
++-----------------+         +-----------------------------------------+
+|                 |  (A,H)  |                                         |
+| Static Web Host | +-----> |                 Browser                 |
+|                 |         |                                         |
++-----------------+         +-----------------------------------------+
 ~~~
 {: #fig-bbapp-pattern-bff title="OAuth 2.0 BFF Pattern" }
 
@@ -596,7 +621,32 @@ If an attacker is able to execute malicious code within the application, the app
 ### Application Architecture
 
 ~~~ aasvg
-{::include art/bbapp-pattern-tmb.ascii-art}
+                      +---------------+      +----------+  +----------+
+                      |               |      |          |  |          |
+                      | Authorization |      |  Token   |  | Resource |
+                      |   Endpoint    |      | Endpoint |  |  Server  |
+                      |               |      |          |  |          |
+                      +---------------+      +----------+  +----------+
+
+                               ^                   ^              ^
+                               |                (F)|              |
+                               |                   v              |
+                               |                                  |
+                               |   +---------------------------+  |
+                               |   |                           |  |
+                               |   |  Token-Mediating Backend  |  |(J)
+                            (D)|   |                           |  |
+                               |   +---------------------------+  |
+                               |                                  |
+                               |       ^     ^     ^     +        |
+                               |  (B,I)|  (C)|  (E)|  (G)|        |
+                               v       v     v     +     v        v
+
++-----------------+         +-----------------------------------------+
+|                 |  (A,H)  |                                         |
+| Static Web Host | +-----> |                 Browser                 |
+|                 |         |                                         |
++-----------------+         +-----------------------------------------+
 ~~~
 {: #fig-bbapp-pattern-tmb title="OAuth 2.0 Token-Mediating Backend Pattern" }
 
@@ -761,7 +811,25 @@ If an attacker is able to execute malicious code in the browser, this applicatio
 ### Application Architecture
 
 ~~~ aasvg
-{::include art/bbapp-pattern-standalone.ascii-art}
+                      +---------------+         +--------------+
+                      |               |         |              |
+                      | Authorization |         |   Resource   |
+                      |    Server     |         |    Server    |
+                      |               |         |              |
+                      +---------------+         +--------------+
+
+                             ^     ^                 ^     +
+                             |     |                 |     |
+                             |(B)  |(C)              |(D)  |(E)
+                             |     |                 |     |
+                             |     |                 |     |
+                             +     v                 +     v
+
++-----------------+         +-------------------------------+
+|                 |   (A)   |                               |
+| Static Web Host | +-----> |           Browser             |
+|                 |         |                               |
++-----------------+         +-------------------------------+
 ~~~
 {: #fig-bbapp-pattern-standalone title="Browser-based OAuth 2.0 Client Pattern" }
 
@@ -1155,7 +1223,30 @@ In an attempt to limit the attacker's ability to extract existing tokens or acqu
 The sequence diagram included below illustrates the interactions between the client, the Service Worker, the authorization server, and the resource server.
 
 ~~~ aasvg
-{::include art/bbapp-pattern-serviceworker.ascii-art}
+                          Service             Resource     Authorization
+  User      Application   Worker               Server         Server
+   |            |            |                    |              |
+   |   browse   |            |                    |              |
+   |----------->|            |                    |              |
+   |            |----------->|                    |   /authorize |
+   |            |            |---------------------------------->|
+   |            |            |  redirect w/ authorization code   |
+   |            |            |< - - - - - - - - - - - - - - - - -|
+   |            |            |                    |              |
+   |            |            |    token request   |              |
+   |            |            |    w/ auth code    |       /token |
+   |            |            |---------------------------------->|
+   |            |            |< - - - - - - - - - - - - - - - - -|
+   |            |            |                    |              |
+   |            |  resource  |                    |              |
+   |            |  request   |                    |              |
+   |            |----------->|                    |              |
+   |            |            |  resource request  |              |
+   |            |            |  w/ access token   |              |
+   |            |            |------------------->|              |
+   |            |            |                    |              |
+  User      Application   Service             Resource     Authorization
+                          Worker               Server         Server
 ~~~
 {: #fig-bbapp-pattern-serviceworker title="OAuth 2.0 Service Worker Pattern" }
 
