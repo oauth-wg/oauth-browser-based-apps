@@ -449,11 +449,11 @@ The BFF uses cookies to create a user session, which is directly associated with
 
 The following cookie security guidelines are relevant for this particular BFF architecture:
 
-- The BFF MUST enable the *Secure* flag for its cookies
-- The BFF MUST enable the *HttpOnly* flag for its cookies
-- The BFF SHOULD enable the *SameSite=Strict* flag for its cookies
-- The BFF SHOULD set its cookie path to */*
-- The BFF SHOULD NOT set the *Domain* attribute for cookies
+- The BFF MUST enable the `Secure` flag for its cookies
+- The BFF MUST enable the `HttpOnly` flag for its cookies
+- The BFF SHOULD enable the `SameSite=Strict` flag for its cookies
+- The BFF SHOULD set its cookie path to `/`
+- The BFF SHOULD NOT set the `Domain` attribute for cookies
 - The BFF SHOULD start the name of its cookies with the `__Host` prefix ({{-draft-ietf-httpbis-rfc6265bis}})
 
 Note: In new deployments, all of the above requirements are likely to be straightforward to implement. The "SHOULD" items are only not "MUSTs" so that existing architectures can be compliant. The implications of these requirements are listed below.
@@ -475,7 +475,7 @@ The BFF MUST implement a proper CSRF defense. The exact mechanism or combination
 
 ##### SameSite Cookie Attribute
 
-Configuring the cookies with the *SameSite=Strict* attribute (See {{pattern-bff-cookie-security}}) ensures that the BFF's cookies are only included on same-site requests, and not on potentially malicious cross-site requests.
+Configuring the cookies with the `SameSite=Strict` attribute (See {{pattern-bff-cookie-security}}) ensures that the BFF's cookies are only included on same-site requests, and not on potentially malicious cross-site requests.
 
 This defense is adequate if the BFF is never considered to be same-site with any other applications. However, it falls short when the BFF is hosted alongside other applications within the same site, defined as the eTLD+1 (See this definition of {{Site}} for more details).
 
@@ -1259,7 +1259,7 @@ Another option is keeping tokens in memory, without using any persistent storage
 
 In a JavaScript execution environment, the security of in-memory token storage can be further enhanced by using a closure variable to effectively shield the token from direct access. By using closures, the token is only accessible to the pre-defined functions inside the closure, such as a function to make a request to the resource server.
 
-While closures work well in simple, isolated environments, they are tricky to secure in a complex environment like the browser's execution environment. For example, a closure relies on a variety of outside functions to execute its operations, such as *toString* functions or networking APIs. Using prototype poisoning, an attacker can substitute these functions with malicious versions, causing the closure's future operations to use these malicious versions. Inside the malicious function, the attacker can gain access to the function arguments, which may expose the tokens from within the closure to the attacker.
+While closures work well in simple, isolated environments, they are tricky to secure in a complex environment like the browser's execution environment. For example, a closure relies on a variety of outside functions to execute its operations, such as `toString` functions or networking APIs. Using prototype poisoning, an attacker can substitute these functions with malicious versions, causing the closure's future operations to use these malicious versions. Inside the malicious function, the attacker can gain access to the function arguments, which may expose the tokens from within the closure to the attacker.
 
 
 
@@ -1350,6 +1350,10 @@ Document History
 ================
 
 [[ To be removed from the final specification ]]
+
+-26
+
+* Change to fixed-width formatting for cookie attributes
 
 -25
 
