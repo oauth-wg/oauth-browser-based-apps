@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 5 January 2026                           Pragmatic Web Security
+Expires: 7 June 2026                              Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                             4 July 2025
+                                                         4 December 2025
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2026.
+   This Internet-Draft will expire on 7 June 2026.
 
 Copyright Notice
 
@@ -897,15 +897,15 @@ Table of Contents
    The following cookie security guidelines are relevant for this
    particular BFF architecture:
 
-   *  The BFF MUST enable the _Secure_ flag for its cookies
+   *  The BFF MUST enable the Secure flag for its cookies
 
-   *  The BFF MUST enable the _HttpOnly_ flag for its cookies
+   *  The BFF MUST enable the HttpOnly flag for its cookies
 
-   *  The BFF SHOULD enable the _SameSite=Strict_ flag for its cookies
+   *  The BFF SHOULD enable the SameSite=Strict flag for its cookies
 
-   *  The BFF SHOULD set its cookie path to _/_
+   *  The BFF SHOULD set its cookie path to /
 
-   *  The BFF SHOULD NOT set the _Domain_ attribute for cookies
+   *  The BFF SHOULD NOT set the Domain attribute for cookies
 
    *  The BFF SHOULD start the name of its cookies with the __Host
       prefix ([I-D.ietf-httpbis-rfc6265bis])
@@ -958,7 +958,7 @@ Table of Contents
 
 6.1.3.3.1.  SameSite Cookie Attribute
 
-   Configuring the cookies with the _SameSite=Strict_ attribute (See
+   Configuring the cookies with the SameSite=Strict attribute (See
    Section 6.1.3.2) ensures that the BFF's cookies are only included on
    same-site requests, and not on potentially malicious cross-site
    requests.
@@ -2445,7 +2445,7 @@ Table of Contents
    While closures work well in simple, isolated environments, they are
    tricky to secure in a complex environment like the browser's
    execution environment.  For example, a closure relies on a variety of
-   outside functions to execute its operations, such as _toString_
+   outside functions to execute its operations, such as toString
    functions or networking APIs.  Using prototype poisoning, an attacker
    can substitute these functions with malicious versions, causing the
    closure's future operations to use these malicious versions.  Inside
@@ -2615,9 +2615,9 @@ Table of Contents
    [I-D.ietf-httpbis-rfc6265bis]
               Bingler, S., West, M., and J. Wilander, "Cookies: HTTP
               State Management Mechanism", Work in Progress, Internet-
-              Draft, draft-ietf-httpbis-rfc6265bis-20, 17 March 2025,
+              Draft, draft-ietf-httpbis-rfc6265bis-22, 1 December 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
-              rfc6265bis-20>.
+              rfc6265bis-22>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2728,6 +2728,10 @@ Table of Contents
 Appendix A.  Document History
 
    [[ To be removed from the final specification ]]
+
+   -26
+
+   *  Change to fixed-width formatting for cookie attributes
 
    -25
 
