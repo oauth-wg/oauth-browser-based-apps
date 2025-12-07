@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-28T00:06:29.169778+00:00",
+  "timestamp": "2025-12-07T00:08:02.139740+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -5301,24 +5301,26 @@
       "id": "PR_kwDOCUe3lM6vxAC1",
       "title": "fix closing backtick position",
       "url": "https://github.com/oauth-wg/oauth-browser-based-apps/pull/110",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "teraa",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The word `maps` which is a part of the sentence following the intended code section is incorrectly included in the code section itself.",
       "createdAt": "2025-10-26T19:41:55Z",
-      "updatedAt": "2025-10-26T19:41:56Z",
+      "updatedAt": "2025-12-04T02:18:10Z",
       "baseRepository": "oauth-wg/oauth-browser-based-apps",
       "baseRefName": "main",
       "baseRefOid": "dd1d7aaa6449b7ef71151da6312678a00c6c5b25",
       "headRepository": "teraa/oauth-browser-based-apps",
       "headRefName": "patch-1",
       "headRefOid": "11d2ad388caa65b179c8af166cc9b3b91df62ae9",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-12-04T02:18:09Z",
+      "mergedAt": "2025-12-04T02:18:09Z",
+      "mergedBy": "aaronpk",
+      "mergeCommit": {
+        "oid": "cf258fcb97e850ce2711fc13a5102bfaeb2a6fa8"
+      },
       "comments": [],
       "reviews": []
     }
