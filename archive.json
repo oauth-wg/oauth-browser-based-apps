@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-07T00:08:02.139740+00:00",
+  "timestamp": "2026-01-08T00:07:13.400160+00:00",
   "repo": "oauth-wg/oauth-browser-based-apps",
   "labels": [
     {
@@ -1914,6 +1914,44 @@
       "updatedAt": "2025-06-09T00:30:14Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 111,
+      "id": "I_kwDOCUe3lM7hoYw3",
+      "title": "Terminology concern: \u201cBackend for Frontend (BFF)\u201d",
+      "url": "https://github.com/oauth-wg/oauth-browser-based-apps/issues/111",
+      "state": "OPEN",
+      "author": "tillsc",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft uses the term \u201cBackend for Frontend (BFF)\u201d for a component that terminates OAuth, manages tokens and sessions, and forwards requests to downstream APIs.\n\nThe concern is not the pattern itself, but the terminology.\n\nIn [common architectural usage](https://samnewman.io/patterns/architectural/bff/), a BFF is intentionally application- or frontend-specific, tightly coupled to a single UI, and not generic or reusable infrastructure.\n\nThe pattern described here is different:\n\n- no UI- or application-specific logic  \n- stable, security-driven responsibilities  \n- realistically reusable across multiple frontends   \n- suitable for implementation as off-the-shelf API gateway functionality  \n\nWhile a BFF can perform these functions, they are not distinguishing characteristics: the same responsibilities can equally be fulfilled by a generic, reusable proxy component. As such, the described component no longer matches the defining property of a BFF.\n\nThis terminology mismatch may cause confusion around architecture, ownership, and responsibilities.\n\nPossible mitigations:\n- explicitly clarify that this is a security-focused, proxy-style pattern and not a UI-specific backend  \n- note the difference from the common architectural meaning of BFF  \n- consider more precise terminology (e.g. \"frontend-facing OAuth proxy\" or simply \"proxy\")\n\nThis would improve clarity without changing the technical substance of the draft.",
+      "createdAt": "2026-01-06T15:05:51Z",
+      "updatedAt": "2026-01-06T16:20:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "philippederyck",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't see it this way. While it is true that the BFF does not contain application-specific logic, it does contain an application-specific configuration. Each BFF instance will be configured with OAuth client credentials, and with a mapping for proxying endpoints to APIs. Furthermore, if you already have an application- or UI-specific BFF in place, you can easily augment it with these security responsiblities.\n\nComparing an OAuth BFF to an API gateway is tricky, since the BFF is decoupled from the APIs. An API gateway can be hit by numerous clients, so making this gateway act as a BFF to all of them would not make sense. ",
+          "createdAt": "2026-01-06T15:46:01Z",
+          "updatedAt": "2026-01-06T15:46:01Z"
+        },
+        {
+          "author": "aaronpk",
+          "authorAssociation": "MEMBER",
+          "body": "Agreed with Philippe. Additionally, \"proxy\" is also far too overloaded of a term that doesn't convey enough of the properties of what we are trying to describe in this document.",
+          "createdAt": "2026-01-06T16:02:12Z",
+          "updatedAt": "2026-01-06T16:02:12Z"
+        },
+        {
+          "author": "tillsc",
+          "authorAssociation": "NONE",
+          "body": "Thanks, I understand the concern about terminology being overloaded.\n\nHowever, my point is not that \u201cproxy\u201d would be a perfect or complete description of all properties discussed in the document. It is that the properties currently used to justify the term \u201cBFF\u201d are not distinguishing either.\n\nApplication-specific configuration (OAuth credentials, routing mappings, policies) is common for many infrastructure components and does not make a component application-specific in the architectural sense. Reverse proxies, API gateways, and identity components are routinely configured per application or frontend without being considered BFFs.\n\nFrom an application architecture perspective, a BFF typically contains domain-specific logic tailored to the frontend's needs: aggregating data, transforming responses, or implementing frontend-specific business rules. The pattern described here contains none of these characteristics.\n\nLikewise, the fact that an existing UI-specific BFF can be augmented with these security responsibilities reinforces the point that these responsibilities are orthogonal to what defines a BFF, not constitutive of it.\n\nThe concern, therefore, is not about finding a single perfect replacement term, but about avoiding the use of \u201cBFF\u201d for a pattern whose defining characteristics are generic, reusable, and infrastructure-oriented. Even if \u201cproxy\u201d is overloaded, using a term that implies frontend- or application-specific backend logic where none is required risks greater confusion.",
+          "createdAt": "2026-01-06T16:20:06Z",
+          "updatedAt": "2026-01-06T16:20:06Z"
+        }
+      ]
     }
   ],
   "pulls": [
