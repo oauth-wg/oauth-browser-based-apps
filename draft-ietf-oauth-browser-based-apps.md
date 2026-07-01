@@ -43,8 +43,6 @@ normative:
   RFC8707:
   RFC9449:
   RFC9700:
-  I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
-  I-D.ietf-httpbis-layered-cookies: draft-ietf-httpbis-layered-cookies
   Fetch:
     title: Fetch
     author:
@@ -62,6 +60,8 @@ normative:
     target: https://html.spec.whatwg.org/#web-messaging
 informative:
   RFC6819:
+  I-D.ietf-httpbis-layered-cookies: draft-ietf-httpbis-layered-cookies
+  I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
   HTML:
     title: HTML
     author:
