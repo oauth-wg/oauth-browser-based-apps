@@ -43,7 +43,6 @@ normative:
   RFC8707:
   RFC9449:
   RFC9700:
-  I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
   Fetch:
     title: Fetch
     author:
@@ -61,6 +60,8 @@ normative:
     target: https://html.spec.whatwg.org/#web-messaging
 informative:
   RFC6819:
+  I-D.ietf-httpbis-layered-cookies: draft-ietf-httpbis-layered-cookies
+  I-D.ietf-httpbis-rfc6265bis: draft-ietf-httpbis-rfc6265bis
   HTML:
     title: HTML
     author:
@@ -479,11 +480,11 @@ The following cookie security guidelines are relevant for this particular BFF ar
 - The BFF SHOULD enable the `SameSite=Strict` flag for its cookies
 - The BFF SHOULD set its cookie path to `/`
 - The BFF SHOULD NOT set the `Domain` attribute for cookies
-- The BFF SHOULD start the name of its cookies with the `__Host` prefix ({{-draft-ietf-httpbis-rfc6265bis}})
+- The BFF SHOULD start the name of its cookies with a prefix indicating the cookie was set via HTTP, for example by using the `__Host-Http-` prefix defined in {{-draft-ietf-httpbis-layered-cookies}}
 
 Note: In new deployments, all of the above requirements are likely to be straightforward to implement. The "SHOULD" items are only not "MUSTs" so that existing architectures can be compliant. The implications of these requirements are listed below.
 
-These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings than the requirements listed above. Deviating from these settings requires proper motivation for the deployment scenario at hand.
+These cookie security guidelines, combined with the use of HTTPS, help counter attacks that directly target a cookie-based session. Session hijacking is not possible, due to the `Secure` and `HttpOnly` cookie flags. The `__Host-Http-` prefix prevents the cookie from being shared with subdomains, thereby countering subdomain-based session hijacking or session fixation attacks. In a typical BFF deployment scenario, there is no reason to use more relaxed cookie security settings than the requirements listed above. Deviating from these settings requires proper motivation for the deployment scenario at hand.
 
 Additionally, when using client-side sessions that contain access tokens, (as opposed to server-side sessions where the tokens only live on the server), the BFF SHOULD encrypt its cookie contents. While the use of cookie encryption does not affect the security properties of the BFF pattern, it does ensure that tokens stored in cookies are never written to the user's local persistent storage in plaintext format. This security measure helps ensure the confidentiality of the tokens in case an attacker is able to read cookies from the hard drive. Such an attack can be launched through malware running on the victim's computer. Note that while encrypting the cookie contents prevents direct access to embedded tokens, it still allows the attacker to use the encrypted cookie in a session hijacking attack.
 
