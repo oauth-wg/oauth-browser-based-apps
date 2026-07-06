@@ -5,10 +5,10 @@
 Web Authorization Protocol                                    A. Parecki
 Internet-Draft                                                      Okta
 Intended status: Best Current Practice                        P. De Ryck
-Expires: 7 June 2026                              Pragmatic Web Security
+Expires: 7 January 2027                           Pragmatic Web Security
                                                                 D. Waite
                                                            Ping Identity
-                                                         4 December 2025
+                                                             6 July 2026
 
 
                 OAuth 2.0 for Browser-Based Applications
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 June 2026.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -907,8 +907,9 @@ Table of Contents
 
    *  The BFF SHOULD NOT set the Domain attribute for cookies
 
-   *  The BFF SHOULD start the name of its cookies with the __Host
-      prefix ([I-D.ietf-httpbis-rfc6265bis])
+   *  The BFF SHOULD start the name of its cookies with a prefix
+      indicating the cookie was set via HTTP, for example by using the
+      __Host-Http- prefix defined in [I-D.ietf-httpbis-layered-cookies]
 
    Note: In new deployments, all of the above requirements are likely to
    be straightforward to implement.  The "SHOULD" items are only not
@@ -918,7 +919,7 @@ Table of Contents
    These cookie security guidelines, combined with the use of HTTPS,
    help counter attacks that directly target a cookie-based session.
    Session hijacking is not possible, due to the Secure and HttpOnly
-   cookie flags.  The __Host prefix prevents the cookie from being
+   cookie flags.  The __Host-Http- prefix prevents the cookie from being
    shared with subdomains, thereby countering subdomain-based session
    hijacking or session fixation attacks.  In a typical BFF deployment
    scenario, there is no reason to use more relaxed cookie security
@@ -2612,13 +2613,6 @@ Table of Contents
    [Fetch]    whatwg, "Fetch", December 2024,
               <https://fetch.spec.whatwg.org/>.
 
-   [I-D.ietf-httpbis-rfc6265bis]
-              Bingler, S., West, M., and J. Wilander, "Cookies: HTTP
-              State Management Mechanism", Work in Progress, Internet-
-              Draft, draft-ietf-httpbis-rfc6265bis-22, 1 December 2025,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
-              rfc6265bis-22>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -2677,6 +2671,20 @@ Table of Contents
 
    [HTML]     whatwg, "HTML", January 2025,
               <https://html.spec.whatwg.org/>.
+
+   [I-D.ietf-httpbis-layered-cookies]
+              van Kesteren, A. and J. Hofmann, "Cookies: HTTP State
+              Management Mechanism", Work in Progress, Internet-Draft,
+              draft-ietf-httpbis-layered-cookies-02, 21 May 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
+              layered-cookies-02>.
+
+   [I-D.ietf-httpbis-rfc6265bis]
+              Bingler, S., West, M., and J. Wilander, "Cookies: HTTP
+              State Management Mechanism", Work in Progress, Internet-
+              Draft, draft-ietf-httpbis-rfc6265bis-22, 1 December 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-
+              rfc6265bis-22>.
 
    [OpenID]   Sakimura, N., Bradley, J., Jones, M., de Medeiros, B., and
               C. Mortimore, "OpenID Connect Core 1.0 incorporating
